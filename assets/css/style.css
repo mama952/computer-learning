@@ -1432,4 +1432,210 @@ html, body {
   .modal-mask { padding: 10px; align-items: flex-end; }
   .modal { max-height: 78vh; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
   .toast { bottom: calc(24px + env(safe-area-inset-bottom)); }
+}/* ============================================================
+   章节导航：上一章 / 下一章
+   ============================================================ */
+.lesson-nav {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  margin: 36px 0 8px;
+}
+.lesson-nav-btn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 14px 18px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--dur) var(--ease);
+}
+.lesson-nav-btn:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary-soft-2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.lesson-nav-btn .nav-dir {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.02em;
+}
+.lesson-nav-btn .nav-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.45;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.nav-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+.nav-count {
+  font-size: 12px;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+.nav-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+/* ============================================================
+   二进制转换器（首页底部）
+   ============================================================ */
+.conv-card {
+  margin: 48px 0 24px;
+  padding: 26px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.conv-head { margin-bottom: 16px; }
+.conv-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.conv-desc {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.conv-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.conv-tab {
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-soft);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.conv-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.conv-input-row { display: flex; gap: 14px; align-items: stretch; }
+.conv-input {
+  flex: 1;
+  resize: vertical;
+  min-height: 96px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px;
+  line-height: 1.6;
+  transition: border-color var(--dur);
+}
+.conv-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.conv-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: flex-start;
+}
+.conv-actions .run-btn { height: 38px; padding: 0 20px; white-space: nowrap; }
+.conv-actions .tool-btn { height: 38px; white-space: nowrap; }
+.conv-results {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.conv-result {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  overflow-x: auto;
+}
+.conv-rt {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.conv-bits {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text);
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+.conv-hex {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  word-break: break-all;
+}
+.conv-text {
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.7;
+  word-break: break-all;
+}
+.conv-note {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.conv-empty {
+  font-size: 13.5px;
+  color: var(--text-faint);
+  padding: 8px 2px;
+}
+.conv-warn {
+  font-size: 13px;
+  color: var(--warning);
+}
+
+/* 转换器 / 导航 移动端适配 */
+@media (max-width: 640px) {
+  .lesson-nav { flex-direction: column; gap: 8px; }
+  .nav-center { padding: 0; }
+  .conv-card { padding: 18px 14px; margin: 32px 0 16px; }
+  .conv-input-row { flex-direction: column; gap: 10px; }
+  .conv-actions { flex-direction: row; }
+  .conv-actions .run-btn, .conv-actions .tool-btn { flex: 1; }
 }

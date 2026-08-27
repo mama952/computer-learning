@@ -27,9 +27,12 @@ function roughCount(src) {
 }
 
 const files = [
-  'languages', 'python-full', 'c-full', 'cpp-full', 'go-full', 'rust-full',
-  'sql-full', 'shell-full', 'cs-fundamentals', 'cs-advanced',
-  'toolchain', 'errors', 'cookbook', 'tools'
+  'languages', 'python-full', 'javascript-full', 'htmlcss-full', 'java-full',
+  'c-full', 'cpp-full', 'go-full', 'rust-full', 'sql-full', 'shell-full',
+  'csharp-full', 'typescript-full', 'ruby-full', 'php-full',
+  'mobile-full', 'node-full', 'dart-full', 'lua-full',
+  'rlang-full', 'scala-full', 'julia-full', 'others-full', 'funclangs-full',
+  'cs-fundamentals', 'cs-advanced', 'toolchain', 'errors', 'cookbook', 'tools'
 ];
 
 let grandChars = 0;

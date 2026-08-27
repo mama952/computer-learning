@@ -1017,6 +1017,136 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     );
   }
 
+  /* ============================================================
+     二进制转换器：文字 ↔ 二进制，多编码（UTF-8/UTF-16BE/UTF-16LE/ASCII）多结果
+     ============================================================ */
+  function strToUtf8Bytes(str) {
+    return Array.from(new TextEncoder().encode(str));
+  }
+  function strToUtf16Bytes(str, le) {
+    const bytes = [];
+    for (let i = 0; i < str.length; i++) {
+      const c = str.charCodeAt(i);
+      if (le) bytes.push(c & 0xff, (c >> 8) & 0xff);
+      else bytes.push((c >> 8) & 0xff, c & 0xff);
+    }
+    return bytes;
+  }
+  function asciiBytesOf(str) {
+    const bytes = [];
+    for (let i = 0; i < str.length; i++) {
+      const c = str.charCodeAt(i);
+      if (c > 127) return null;
+      bytes.push(c);
+    }
+    return bytes;
+  }
+  function bytesToBin(bytes) {
+    return bytes.map((b) => b.toString(2).padStart(8, "0")).join(" ");
+  }
+  function bytesToHex(bytes) {
+    return bytes.map((b) => b.toString(16).padStart(2, "0").toUpperCase()).join(" ");
+  }
+  function binToBytes(bin) {
+    const clean = String(bin).replace(/\s+/g, "");
+    const bytes = [];
+    for (let i = 0; i + 8 <= clean.length; i += 8) bytes.push(parseInt(clean.slice(i, i + 8), 2));
+    return bytes;
+  }
+  function utf8BytesToStr(bytes) {
+    try {
+      return new TextDecoder("utf-8").decode(new Uint8Array(bytes));
+    } catch (e) {
+      return "";
+    }
+  }
+  function utf16BytesToStr(bytes, le) {
+    const u16 = [];
+    for (let i = 0; i + 1 < bytes.length; i += 2) {
+      u16.push(le ? bytes[i] | (bytes[i + 1] << 8) : (bytes[i] << 8) | bytes[i + 1]);
+    }
+    let s = "";
+    for (const c of u16) s += String.fromCharCode(c);
+    return s;
+  }
+  function asciiBytesToStr(bytes) {
+    let s = "";
+    for (const b of bytes) {
+      if (b < 32 || b > 126) return "";
+      s += String.fromCharCode(b);
+    }
+    return s;
+  }
+  function renderTextToBin(text) {
+    const utf8 = strToUtf8Bytes(text);
+    const be = strToUtf16Bytes(text, false);
+    const le = strToUtf16Bytes(text, true);
+    const ascii = asciiBytesOf(text);
+    const block = (name, bytes) => {
+      if (!bytes) return null;
+      return (
+        '<div class="conv-result"><div class="conv-rt">' +
+        name +
+        "（" +
+        bytes.length +
+        " 字节）</div><div class=\"conv-bits\">" +
+        bytesToBin(bytes) +
+        '</div><div class="conv-hex">HEX：' +
+        bytesToHex(bytes) +
+        "</div></div>"
+      );
+    };
+    return (
+      '<div class="conv-note">共 ' +
+      text.length +
+      " 个字符（UTF-8 编码下 " +
+      utf8.length +
+      " 字节）</div>" +
+      (block("UTF-8", utf8) || "") +
+      (block("UTF-16BE", be) || "") +
+      (block("UTF-16LE", le) || "") +
+      (ascii
+        ? block("ASCII", ascii)
+        : '<div class="conv-result"><div class="conv-rt">ASCII</div><div class="conv-warn">包含非 ASCII 字符，无法用 ASCII 编码表示</div></div>')
+    );
+  }
+  function renderBinToText(bin) {
+    const bytes = binToBytes(bin);
+    if (!bytes.length) return '<div class="conv-empty">未识别到二进制数据，请检查输入</div>';
+    const utf8 = utf8BytesToStr(bytes);
+    const be = utf16BytesToStr(bytes, false);
+    const le = utf16BytesToStr(bytes, true);
+    const ascii = asciiBytesToStr(bytes);
+    const block = (name, s) => {
+      if (!s) return null;
+      return (
+        '<div class="conv-result"><div class="conv-rt">' +
+        name +
+        '</div><div class="conv-text">' +
+        escapeHtml(s) +
+        "</div></div>"
+      );
+    };
+    const clean = String(bin).replace(/\s+/g, "");
+    const remainder = clean.length % 8;
+    return (
+      '<div class="conv-note">解析出 ' +
+      bytes.length +
+      " 个字节（共 " +
+      clean.length +
+      " 位" +
+      (remainder ? "，末尾 " + remainder + " 位不足 8 位已忽略" : "") +
+      "）</div>" +
+      (block("UTF-8", utf8) || "") +
+      (block("UTF-16BE", be) || "") +
+      (block("UTF-16LE", le) || "") +
+      (block("ASCII", ascii) || "") +
+      (!utf8 && !be && !le && !ascii
+        ? '<div class="conv-warn">未能用任何编码解析为可读文字（字节数可能不是 2 的倍数）</div>'
+        : "")
+    );
+  }
+
   function renderHome() {
     const totalLessons = flatLessons.length;
     const totalSubjects = CATALOG.reduce((a, c) => a + (c.children || []).length, 0);
@@ -1064,6 +1194,26 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
       });
       html += "</div>";
     });
+
+    /* 二进制转换器（首页底部） */
+    html += '<div class="conv-card">';
+    html += '<div class="conv-head">';
+    html += '<div class="conv-title">二进制转换器</div>';
+    html += '<div class="conv-desc">在「文字」与「二进制」之间互转，同时给出 UTF-8 / UTF-16BE / UTF-16LE / ASCII 多种编码结果，支持中文、英文、Emoji 等任意文本。</div>';
+    html += "</div>";
+    html += '<div class="conv-tabs">';
+    html += '<button class="conv-tab active" data-conv-mode="to">文字 → 二进制</button>';
+    html += '<button class="conv-tab" data-conv-mode="from">二进制 → 文字</button>';
+    html += "</div>";
+    html += '<div class="conv-input-row">';
+    html += '<textarea id="convInput" class="conv-input" rows="4" spellcheck="false" placeholder="输入文字，或输入二进制串（如 01001000 01101001，可带空格）"></textarea>';
+    html += '<div class="conv-actions">';
+    html += '<button class="run-btn" id="convRun">转换</button>';
+    html += '<button class="tool-btn" id="convClear">清空</button>';
+    html += "</div></div>";
+    html += '<div class="conv-results" id="convResults"></div>';
+    html += "</div>";
+
     return html;
   }
 
@@ -1153,7 +1303,49 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
 
     html += renderBlocks(blocks, ctx);
 
+    html += renderLessonNav(cat, sub, lesson);
+
     return html;
+  }
+
+  /* 章节导航：上一章 / 下一章（跨分类连续阅读） */
+  function renderLessonNav(cat, sub, lesson) {
+    const idx = flatLessons.findIndex((f) => f.lessonId === lesson.id);
+    if (idx < 0) return "";
+    const prev = idx > 0 ? flatLessons[idx - 1] : null;
+    const next = idx < flatLessons.length - 1 ? flatLessons[idx + 1] : null;
+    const btn = (rec, dir, empty) => {
+      if (!rec) return '<div class="nav-empty">' + empty + "</div>";
+      return (
+        '<button class="lesson-nav-btn" data-nav="' +
+        rec.catId +
+        "/" +
+        rec.subjectId +
+        "/" +
+        rec.lessonId +
+        '">' +
+        '<span class="nav-dir">' +
+        dir +
+        "</span>" +
+        '<span class="nav-title">' +
+        rec.subject.name +
+        " · " +
+        rec.lesson.title +
+        "</span>" +
+        "</button>"
+      );
+    };
+    return (
+      '<div class="lesson-nav">' +
+      btn(prev, "← 上一章", "已是第一章") +
+      '<div class="nav-center"><span class="nav-count">第 ' +
+      (idx + 1) +
+      " / " +
+      flatLessons.length +
+      " 章</span></div>" +
+      btn(next, "下一章 →", "已是最后一章") +
+      "</div>"
+    );
   }
 
   function render() {
@@ -1235,6 +1427,38 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
       }
     } else {
       editorTitle.textContent = "在线编辑器";
+    }
+
+    // 二进制转换器交互
+    const convInput = contentInner.querySelector("#convInput");
+    const convModeTabs = contentInner.querySelectorAll(".conv-tab");
+    const convRun = contentInner.querySelector("#convRun");
+    const convClear = contentInner.querySelector("#convClear");
+    const convResults = contentInner.querySelector("#convResults");
+    if (convRun && convInput) {
+      let convMode = "to";
+      convModeTabs.forEach((t) => {
+        t.addEventListener("click", () => {
+          convMode = t.getAttribute("data-conv-mode");
+          convModeTabs.forEach((x) => x.classList.toggle("active", x === t));
+        });
+      });
+      const runConv = () => {
+        const val = convInput.value;
+        if (!val.trim()) {
+          convResults.innerHTML = '<div class="conv-empty">请先输入文字或二进制内容</div>';
+          return;
+        }
+        convResults.innerHTML = convMode === "to" ? renderTextToBin(val) : renderBinToText(val);
+      };
+      convRun.addEventListener("click", runConv);
+      convClear.addEventListener("click", () => {
+        convInput.value = "";
+        convResults.innerHTML = "";
+      });
+      convInput.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") runConv();
+      });
     }
 
     renderSidebar();
