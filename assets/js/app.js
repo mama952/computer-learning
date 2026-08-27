@@ -5,6 +5,20 @@
   "use strict";
 
   /* ---------- 数据汇总 ---------- */
+  /* 合并语言完整课程：data/*-full.js 会把课程 push 到 window.LANGUAGE_EXTRA，
+     这里按 id 覆盖 languages.js 里的同名子项，或追加为新子项。 */
+  (function mergeLangExtra() {
+    const extra = window.LANGUAGE_EXTRA || [];
+    if (!extra.length) return;
+    const langCat = window.LANGUAGE_DATA;
+    if (!langCat) return;
+    extra.forEach((sub) => {
+      const i = (langCat.children || []).findIndex((s) => s.id === sub.id);
+      if (i >= 0) langCat.children[i] = sub;
+      else langCat.children.push(sub);
+    });
+  })();
+
   const CATALOG = [
     window.LANGUAGE_DATA,
     window.CS_FUNDAMENTALS,
@@ -12,6 +26,7 @@
     window.TOOLCHAIN,
     window.ERRORS_DATA,
     window.COOKBOOK_DATA,
+    window.TOOLS_DATA,
   ].filter(Boolean);
 
   /* 扁平索引 */

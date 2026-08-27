@@ -20,3 +20,6 @@ Thumbs.db
 !.vscode/settings.json
 *.swp
 *.swo
+
+# Cloudflare Wrangler 缓存
+.wrangler/
