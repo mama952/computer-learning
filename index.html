@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>计算机知识库 · 从零开始的计算机专业学习手册</title>
+  <meta name="description" content="一个汇集编程语言、数据结构、算法、计算机网络、操作系统、数据库、工程化等全部计算机专业知识的交互式学习网站，内置在线编辑器与代码模板，新手友好。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234f46e5'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>&lt;/&gt;</text></svg>" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- CodeMirror 5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/eclipse.min.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部栏 -->
+    <header class="topbar">
+      <button class="icon-btn menu-toggle" id="menuToggle" title="菜单" aria-label="菜单">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="brand" id="brandHome">
+        <div class="brand-logo">&lt;/&gt;</div>
+        <span>计算机知识库</span>
+        <span class="brand-badge">CS 手册</span>
+      </div>
+
+      <div class="search-wrap">
+        <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input class="search-input" id="searchInput" type="text" placeholder="搜索语言、知识点、命令…（如 python、排序、git、http）" autocomplete="off" />
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="icon-btn" id="toggleSidebar" title="收起/展开目录" aria-label="目录">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20M2 9h12M2 14h20M2 19h12"/></svg>
+        </button>
+        <button class="icon-btn" id="toggleEditor" title="编辑器 / 教程视图" aria-label="编辑器">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </button>
+        <button class="icon-btn" id="goHome" title="返回首页" aria-label="首页">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="main">
+      <!-- 侧边栏 -->
+      <aside class="sidebar" id="sidebar"></aside>
+
+      <!-- 内容区 -->
+      <main class="content" id="content">
+        <div class="content-inner" id="contentInner"></div>
+      </main>
+
+      <!-- 编辑器面板 -->
+      <section class="editor-panel hidden" id="editorPanel">
+        <div class="editor-head">
+          <div class="eh-title">
+            <span id="editorTitle">在线编辑器</span>
+          </div>
+          <div class="eh-actions">
+            <select class="tpl-select" id="tplSelect" title="内置模板"></select>
+            <button class="run-btn" id="runBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20"/></svg>
+              <span id="runBtnText">运行</span>
+            </button>
+          </div>
+        </div>
+        <div class="editor-body">
+          <textarea id="codeEditor"></textarea>
+          <div class="editor-output">
+            <div class="out-head"><span class="dot" id="outDot"></span> 输出</div>
+            <div class="out-body empty" id="outBody">点击「运行」查看代码执行结果（支持 JavaScript / HTML / CSS 实时运行）。</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- CodeMirror 5 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/shell/shell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sass/sass.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/yaml/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/markdown/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/lua/lua.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/haskell/haskell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/commonlisp/commonlisp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clojure/clojure.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/r/r.min.js"></script>
+
+  <!-- 数据 -->
+  <script src="data/languages.js"></script>
+  <script src="data/cs-fundamentals.js"></script>
+  <script src="data/cs-advanced.js"></script>
+  <script src="data/toolchain.js"></script>
+  <script src="data/errors.js"></script>
+  <script src="data/cookbook.js"></script>
+
+  <!-- 应用 -->
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
