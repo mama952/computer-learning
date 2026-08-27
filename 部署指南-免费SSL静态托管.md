@@ -81,6 +81,36 @@ git push -u origin main
 
 ---
 
+## 方式三：用 Cloudflare Pages 命令行部署（Wrangler，无需连接 Git）
+
+> 适合已经在本地的静态项目，直接用命令上传，生成 `xxx.pages.dev` 免费域名 + 免费 SSL。
+> 国内访问节点多，通常比 github.io 更稳。
+
+### 步骤
+1. 安装 Node.js（https://nodejs.org），然后安装 wrangler：
+   ```bash
+   npm install -g wrangler
+   ```
+2. 登录 Cloudflare（会打开浏览器授权，需 Cloudflare 账号）：
+   ```bash
+   npx wrangler login
+   ```
+3. 创建 Pages 项目（只需第一次）：
+   ```bash
+   cd d:/computer-learning
+   npx wrangler pages project create computer-learning --production-branch main
+   ```
+4. 部署（以后每次更新内容都跑这条）：
+   ```bash
+   npx wrangler pages deploy . --project-name computer-learning --branch main
+   ```
+5. 完成后访问：`https://computer-learning.pages.dev`（自动免费 SSL）。
+
+> 提示：登录时若浏览器页面加载慢（国内访问 dash.cloudflare.com 偶发不稳），
+> 耐心等待或刷新即可；只要命令行出现 `Successfully logged in` 就算成功。
+
+---
+
 ## 开始前：本地预览
 
 在本地先体验网站效果：
