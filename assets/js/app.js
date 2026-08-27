@@ -96,7 +96,18 @@
     return MODE_MAP[(lang || "text").toLowerCase()] || "javascript";
   }
 
+  /* 可运行语言：
+     browser = 浏览器 iframe 直接运行
+     pyodide = 浏览器内通过 Pyodide(WASM) 运行 Python
+     sqljs   = 浏览器内通过 sql.js(WASM) 运行 SQL
+     local   = 需本地编译器（有 run-server.js 时可用，可读取本机工具链） */
   const RUNNABLE = new Set(["javascript", "js", "typescript", "node", "html", "htmlcss", "css"]);
+  const PYODIDE_LANGS = new Set(["python", "py"]);
+  const SQLJS_LANGS = new Set(["sql"]);
+  const LOCAL_LANGS = new Set(["c", "cpp", "c++", "go", "rust", "shell", "bash", "sh", "java"]);
+
+  /* 本地运行服务状态（run-server.js，仅当通过本地服务器打开时可用） */
+  const LOCAL = { available: false, env: null };
 
   /* ---------- DOM ---------- */
   const $ = (sel) => document.querySelector(sel);
@@ -112,6 +123,30 @@
   const runBtnText = $("#runBtnText");
   const outBody = $("#outBody");
   const outDot = $("#outDot");
+
+  /* 新增 UI 元素 */
+  const ehLang = $("#ehLang");
+  const statusLang = $("#statusLang");
+  const statusPos = $("#statusPos");
+  const statusHint = $("#statusHint");
+  const statusMode = $("#statusMode");
+  const toolStatus = $("#toolStatus");
+  const envModal = $("#envModal");
+  const envBody = $("#envBody");
+  const toast = $("#toast");
+
+  /* ---------- 轻提示 ---------- */
+  let toastTimer = null;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.remove("hidden");
+    requestAnimationFrame(() => toast.classList.add("show"));
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => toast.classList.add("hidden"), 300);
+    }, 1800);
+  }
 
   /* ---------- 编辑器 ---------- */
   let cm = null;
@@ -130,7 +165,19 @@
       autoCloseBrackets: true,
       matchBrackets: true,
       styleActiveLine: true,
+      extraKeys: {
+        "Ctrl-Enter": runCode,
+        "Cmd-Enter": runCode,
+        "Ctrl-S": () => {
+          saveDraft(true);
+        },
+      },
     });
+    cm.on("cursorActivity", () => {
+      const cur = cm.getCursor();
+      statusPos.textContent = (cur.line + 1) + ":" + (cur.ch + 1);
+    });
+    cm.on("change", () => scheduleDraftSave());
   }
 
   function setEditorCode(code, lang) {
@@ -139,6 +186,48 @@
     cm.setValue(code || "");
     cm.setOption("mode", cmMode(currentLang));
     cm.refresh();
+    updateEditorStatus();
+  }
+
+  /* 更新语言 / 运行方式状态指示 */
+  function runModeOf(lang) {
+    const l = (lang || "").toLowerCase();
+    if (RUNNABLE.has(l)) return "browser";
+    if (PYODIDE_LANGS.has(l)) return "pyodide";
+    if (SQLJS_LANGS.has(l)) return "sqljs";
+    if (LOCAL_LANGS.has(l)) return "local";
+    return "none";
+  }
+
+  function updateEditorStatus() {
+    const l = (currentLang || "javascript").toLowerCase();
+    const disp = l === "c++" ? "C++" : l;
+    ehLang.textContent = disp;
+    statusLang.textContent = disp;
+    const m = runModeOf(l);
+    if (m === "browser") {
+      statusMode.textContent = "在线运行";
+      statusMode.className = "es-mode";
+      statusHint.textContent = "Ctrl/⌘+Enter 运行 · 自动保存";
+    } else if (m === "pyodide" || m === "sqljs") {
+      statusMode.textContent = "WASM 在线";
+      statusMode.className = "es-mode";
+      statusHint.textContent = "浏览器内引擎（首次运行需加载）";
+    } else if (m === "local") {
+      if (LOCAL.available) {
+        statusMode.textContent = "本地编译";
+        statusMode.className = "es-mode local";
+        statusHint.textContent = "已连接本地 run-server 工具链";
+      } else {
+        statusMode.textContent = "需本地";
+        statusMode.className = "es-mode";
+        statusHint.textContent = "需本机编译器，可点「环境」查看方案";
+      }
+    } else {
+      statusMode.textContent = "展示";
+      statusMode.className = "es-mode";
+      statusHint.textContent = "演示代码，可复制到本地运行";
+    }
   }
 
   /* ---------- 模板 ---------- */
@@ -146,7 +235,7 @@
 
   function loadTemplates(lang, templates) {
     currentTemplates = templates || [];
-    const runnable = RUNNABLE.has((lang || "").toLowerCase());
+    const runnable = runModeOf(lang) !== "none";
     const placeholder = runnable ? "空白（从零开始）" : "当前为演示代码，不含可编辑模板";
     templateOptions = [{ name: placeholder, code: null }, ...currentTemplates];
 
@@ -240,17 +329,32 @@
       return;
     }
 
-    if (!RUNNABLE.has(lang)) {
-      clearOutput();
-      appendOutput("当前语言「" + currentLang + "」无法在浏览器内直接运行。", false);
-      appendOutput("请将代码复制到本地环境（如 Python 解释器、GCC、JDK）运行。", false);
-      appendOutput("支持在线运行的语言：JavaScript / TypeScript / HTML / CSS。", false);
-      outDot.className = "dot err";
-      return;
+    const mode = runModeOf(lang);
+    if (mode === "browser") {
+      runInBrowser(code, lang);
+    } else if (mode === "pyodide") {
+      runPythonWasm(code);
+    } else if (mode === "sqljs") {
+      runSQLWasm(code);
+    } else if (mode === "local" && LOCAL.available) {
+      runLocally(code, lang);
+    } else {
+      showNotRunnable(lang, mode);
     }
+  }
 
-    runBtn.classList.add("running");
-    runBtnText.textContent = "运行中…";
+  function setRunning(on) {
+    runBtn.classList.toggle("running", on);
+    runBtnText.textContent = on ? "运行中…" : "运行";
+  }
+
+  function finishRun() {
+    setRunning(false);
+    outDot.className = hadError ? "dot err" : "dot ok";
+  }
+
+  function runInBrowser(code, lang) {
+    setRunning(true);
     clearOutput();
 
     const iframe = document.createElement("iframe");
@@ -279,26 +383,153 @@
       clearTimeout(timer);
       window.removeEventListener("message", onMsg);
       iframe.remove();
-      runBtn.classList.remove("running");
-      runBtnText.textContent = "运行";
-      outDot.className = hadError ? "dot err" : "dot ok";
+      finishRun();
     };
 
-    // 超时保护
     const timer = setTimeout(() => {
       appendOutput("执行超时（可能死循环），已终止。", true);
       finish();
     }, 5000);
 
     iframe.onload = () => {
-      // 稍等脚本执行
-      setTimeout(() => {
-        finish();
-      }, 600);
+      setTimeout(() => finish(), 600);
     };
 
-    let doc = buildRunDoc(code, lang);
-    iframe.srcdoc = doc;
+    iframe.srcdoc = buildRunDoc(code, lang);
+  }
+
+  function showNotRunnable(lang, mode) {
+    clearOutput();
+    appendOutput("当前语言「" + currentLang + "」无法在纯网页环境直接运行。", false);
+    if (LOCAL_LANGS.has(lang)) {
+      appendOutput("方案一：在本机启动本地运行服务（run-server.js），即可读取本机编译器联动运行。", false);
+      appendOutput("方案二：手机/平板可安装安卓编程环境：Termux、Dcoder、AIDE、Spck 等（见「工具下载推荐 → 安卓学习工具」）。", false);
+      appendOutput("方案三：电脑上安装官方编译器（见对应语言第 1 章）。", false);
+    } else {
+      appendOutput("请将代码复制到本地对应语言的官方环境中运行。", false);
+    }
+    outDot.className = "dot err";
+  }
+
+  /* ---------- 动态加载脚本 ---------- */
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector('script[data-src="' + src + '"]')) {
+        resolve();
+        return;
+      }
+      const s = document.createElement("script");
+      s.setAttribute("data-src", src);
+      s.src = src;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error("加载失败: " + src));
+      document.head.appendChild(s);
+    });
+  }
+
+  /* ---------- Python 在线运行（Pyodide / WASM） ---------- */
+  let pyodidePromise = null;
+  const PYODIDE_BASE = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/";
+
+  function getPyodide() {
+    if (!pyodidePromise) {
+      pyodidePromise = (async () => {
+        await loadScript(PYODIDE_BASE + "pyodide.js");
+        const py = await window.loadPyodide({ indexURL: PYODIDE_BASE });
+        py.setStdout({ batched: (s) => appendOutput(String(s)) });
+        py.setStderr({ batched: (s) => appendOutput(String(s), true) });
+        return py;
+      })();
+    }
+    return pyodidePromise;
+  }
+
+  async function runPythonWasm(code) {
+    setRunning(true);
+    clearOutput();
+    appendOutput("正在加载 Python 运行环境（首次约需 10-30 秒，之后秒开）…", false);
+    try {
+      const py = await getPyodide();
+      clearOutput();
+      const t0 = performance.now();
+      await py.runPythonAsync(code);
+      appendOutput("执行完成（耗时 " + ((performance.now() - t0) / 1000).toFixed(2) + " 秒）", false);
+    } catch (err) {
+      appendOutput("Python 运行出错：" + (err && err.message ? err.message : String(err)), true);
+    }
+    finishRun();
+  }
+
+  /* ---------- SQL 在线运行（sql.js / WASM） ---------- */
+  let sqljsPromise = null;
+  const SQLJS_BASE = "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.12.0/";
+
+  function getSQLJS() {
+    if (!sqljsPromise) {
+      sqljsPromise = (async () => {
+        await loadScript(SQLJS_BASE + "sql-wasm.js");
+        const SQL = await window.initSqlJs({ locateFile: (f) => SQLJS_BASE + f });
+        return SQL;
+      })();
+    }
+    return sqljsPromise;
+  }
+
+  async function runSQLWasm(code) {
+    setRunning(true);
+    clearOutput();
+    appendOutput("正在加载 SQL 引擎（首次约需几秒）…", false);
+    try {
+      const SQL = await getSQLJS();
+      clearOutput();
+      const db = new SQL.Database();
+      const t0 = performance.now();
+      try {
+        const results = db.exec(code);
+        if (results.length === 0) {
+          appendOutput("执行成功，影响行数：" + db.getRowsModified(), false);
+        } else {
+          results.forEach((r) => {
+            appendOutput("-- 结果集：列 = [" + r.columns.join(", ") + "]", false);
+            r.values.forEach((row) => appendOutput(row.join(" | "), false));
+            appendOutput("（共 " + r.values.length + " 行）", false);
+          });
+        }
+        appendOutput("执行完成（耗时 " + ((performance.now() - t0) / 1000).toFixed(2) + " 秒）", false);
+      } finally {
+        db.close();
+      }
+    } catch (err) {
+      appendOutput("SQL 执行出错：" + (err && err.message ? err.message : String(err)), true);
+    }
+    finishRun();
+  }
+
+  /* ---------- 本地运行（run-server.js） ---------- */
+  async function runLocally(code, lang) {
+    setRunning(true);
+    clearOutput();
+    appendOutput("正在调用本地编译器「" + lang + "」…", false);
+    try {
+      const res = await fetch("/api/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lang: lang, code: code }),
+      });
+      const data = await res.json();
+      clearOutput();
+      if (data.stdout) appendOutput(data.stdout, false);
+      if (data.stderr) appendOutput(data.stderr, true);
+      if (data.exitCode !== 0) {
+        appendOutput("退出码：" + data.exitCode, data.exitCode !== 0);
+      } else {
+        appendOutput("执行完成（耗时 " + (data.duration || 0) + " ms）", false);
+      }
+    } catch (err) {
+      appendOutput("本地运行失败：" + (err && err.message ? err.message : String(err)), true);
+      appendOutput("请确认已在本机启动 run-server.js（node run-server.js）。", false);
+    }
+    finishRun();
   }
 
   function buildRunDoc(code, lang) {
@@ -356,6 +587,201 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   }
 
   runBtn.addEventListener("click", runCode);
+
+  /* ---------- 编辑器增强：工具条 / 自动保存 / 主题 / 字号 ---------- */
+  let editorFontSize = parseInt(localStorage.getItem("cs_font") || "", 10) || 13.5;
+  let editorTheme = localStorage.getItem("cs_theme") || "eclipse";
+
+  function applyEditorTheme() {
+    if (!cm) return;
+    cm.setOption("theme", editorTheme);
+    document.body.classList.toggle("editor-dark", editorTheme !== "eclipse");
+  }
+
+  function applyEditorFont() {
+    if (!cm) return;
+    cm.getWrapperElement().style.fontSize = editorFontSize + "px";
+  }
+
+  function syncToolStatus(text) {
+    toolStatus.textContent = text || "";
+  }
+
+  let draftTimer = null;
+  function scheduleDraftSave() {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(() => saveDraft(false), 800);
+  }
+  function saveDraft(silent) {
+    if (!cm) return;
+    try {
+      localStorage.setItem("cs_draft_" + (currentLang || "javascript"), cm.getValue());
+      if (!silent) {
+        syncToolStatus("已自动保存 " + new Date().toLocaleTimeString("zh-CN", { hour12: false }));
+      } else {
+        showToast("草稿已保存");
+      }
+    } catch (e) {}
+  }
+
+  $("#copyCodeBtn").addEventListener("click", () => {
+    ensureEditor();
+    copyText(cm.getValue());
+    showToast("代码已复制");
+  });
+
+  $("#downloadBtn").addEventListener("click", () => {
+    ensureEditor();
+    const l = (currentLang || "javascript").toLowerCase();
+    const ext = { python: "py", py: "py", javascript: "js", js: "js", html: "html", htmlcss: "html", css: "css", c: "c", cpp: "cpp", "c++": "cpp", go: "go", rust: "rs", sql: "sql", shell: "sh", bash: "sh", sh: "sh", java: "java" }[l] || "txt";
+    const blob = new Blob([cm.getValue()], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "code." + ext;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    }, 100);
+    showToast("已下载 code." + ext);
+  });
+
+  $("#resetBtn").addEventListener("click", () => {
+    ensureEditor();
+    const tpl = templateOptions.find((t) => t.code != null);
+    if (tpl && tpl.code != null) {
+      setEditorCode(tpl.code, currentLang);
+      showToast("已恢复模板");
+    } else {
+      setEditorCode("", currentLang);
+      showToast("已清空（无模板）");
+    }
+  });
+
+  const clearOut = () => clearOutput("输出已清空。");
+  $("#clearOutBtn").addEventListener("click", clearOut);
+  $("#outClearBtn").addEventListener("click", clearOut);
+
+  $("#fontDec").addEventListener("click", () => {
+    editorFontSize = Math.max(10, editorFontSize - 1);
+    localStorage.setItem("cs_font", String(editorFontSize));
+    applyEditorFont();
+  });
+  $("#fontInc").addEventListener("click", () => {
+    editorFontSize = Math.min(24, editorFontSize + 1);
+    localStorage.setItem("cs_font", String(editorFontSize));
+    applyEditorFont();
+  });
+
+  $("#themeBtn").addEventListener("click", () => {
+    editorTheme = editorTheme === "eclipse" ? "dracula" : "eclipse";
+    localStorage.setItem("cs_theme", editorTheme);
+    applyEditorTheme();
+    showToast(editorTheme === "dracula" ? "已切换深色主题" : "已切换浅色主题");
+  });
+
+  /* ---------- 环境检测 ---------- */
+  function detectOS() {
+    const ua = navigator.userAgent;
+    if (/android/i.test(ua)) return "Android";
+    if (/iPad|iPhone|iPod/i.test(ua)) return "iOS";
+    if (/Windows/i.test(ua)) return "Windows";
+    if (/Mac OS X/i.test(ua)) return "macOS";
+    if (/Linux/i.test(ua)) return "Linux";
+    return "未知";
+  }
+  function detectBrowser() {
+    const ua = navigator.userAgent;
+    if (/Edg\//.test(ua)) return "Edge";
+    if (/Chrome\//.test(ua)) return "Chrome";
+    if (/Firefox\//.test(ua)) return "Firefox";
+    if (/Safari\//.test(ua)) return "Safari";
+    return "未知浏览器";
+  }
+
+  const TOOL_NAMES = { gcc: "GCC(C)", gpp: "G++(C++)", python: "Python", node: "Node.js", go: "Go", rustc: "Rust", bash: "Bash", sqlite3: "SQLite", java: "Java" };
+
+  function envRow(k, v, cls) {
+    return '<div class="env-row"><span class="ek">' + k + '</span><span class="ev ' + (cls || "") + '">' + v + "</span></div>";
+  }
+
+  function buildEnvHTML() {
+    const wasm = typeof WebAssembly === "object" && WebAssembly !== null;
+    const touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    let html = "";
+    html += '<div class="env-block"><h4>当前设备</h4>';
+    html += envRow("操作系统", detectOS());
+    html += envRow("浏览器", detectBrowser());
+    html += envRow("触摸屏设备", touch ? "是（适配手机/平板）" : "否");
+    html += envRow("WebAssembly", wasm ? '<span class="env-ok">支持 ✓</span>' : '<span class="env-miss">不支持</span>');
+    html += envRow("本地存储", (function () { try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); return "可用"; } catch (e) { return "不可用（无痕模式）"; } })());
+    html += "</div>";
+
+    html += '<div class="env-block"><h4>在线可直接运行</h4>';
+    html += '<div><span class="env-badge ok">JavaScript</span><span class="env-badge ok">TypeScript</span><span class="env-badge ok">HTML/CSS</span>' +
+      (wasm ? '<span class="env-badge ok">Python(WASM)</span><span class="env-badge ok">SQL(WASM)</span>' : "") +
+      "</div></div>";
+
+    html += '<div class="env-block"><h4>本地编译器联动（run-server.js）</h4>';
+    if (LOCAL.available) {
+      html += '<div style="margin-bottom:6px;color:var(--success);font-weight:700">✓ 已连接本地运行服务</div>';
+      const tools = LOCAL.env || {};
+      const names = ["gcc", "gpp", "python", "node", "go", "rustc", "bash", "sqlite3", "java"];
+      html += "<div>";
+      names.forEach((t) => {
+        const on = !!tools[t];
+        html += '<span class="env-badge ' + (on ? "ok" : "miss") + '">' + (TOOL_NAMES[t] || t) + (on ? " ✓" : " ✗") + "</span>";
+      });
+      html += "</div>";
+    } else {
+      html += '<p style="color:var(--text-muted)">当前为静态托管（GitHub Pages / Cloudflare Pages）。<br/>在本机执行 <code class="inline">node run-server.js</code> 后访问 <a href="http://localhost:8000" target="_blank" rel="noopener">localhost:8000</a>，即可让 C / C++ / Go / Rust / Java / Shell 联动本机编译器运行，并在此看到检测到的工具链。</p>';
+    }
+    html += "</div>";
+
+    html += '<div class="env-block"><h4>安卓设备学编程</h4>';
+    html += '<p style="color:var(--text-muted)">手机/平板可安装免费安卓编程工具，详见「工具下载推荐 → 安卓学习工具」章节。推荐 Termux（可在手机上装 gcc / python / go 等）、Dcoder、AIDE、Spck。</p>';
+    html += "</div>";
+    return html;
+  }
+
+  function openEnvModal() {
+    envBody.innerHTML = buildEnvHTML();
+    envModal.classList.remove("hidden");
+  }
+  function closeEnvModal() {
+    envModal.classList.add("hidden");
+  }
+  $("#envBtn").addEventListener("click", openEnvModal);
+  $("#envClose").addEventListener("click", closeEnvModal);
+  envModal.addEventListener("click", (e) => {
+    if (e.target === envModal) closeEnvModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeEnvModal();
+  });
+
+  /* ---------- 本地运行服务探测 ---------- */
+  async function probeLocalServer() {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 2500);
+      const res = await fetch("/api/env", { cache: "no-store", signal: ctrl.signal });
+      clearTimeout(timer);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          LOCAL.available = true;
+          LOCAL.env = data.tools || {};
+          statusMode.textContent = "本地联动";
+          statusMode.className = "es-mode local";
+          if (currentLang && LOCAL_LANGS.has(currentLang.toLowerCase())) updateEditorStatus();
+        }
+      }
+    } catch (e) {
+      /* 静态托管，无需处理 */
+    }
+  }
 
   /* ---------- 侧边栏渲染 ---------- */
   function renderSidebar() {
@@ -964,9 +1390,22 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
 
   /* ---------- 初始化 ---------- */
   window.addEventListener("hashchange", render);
+
+  // 恢复编辑器偏好
+  applyEditorTheme();
+  applyEditorFont();
+
   ensureEditor();
-  setEditorCode('// 在这里输入代码，点击「运行」查看结果\nconsole.log("[只在浏览器内输出] " + "你好，计算机知识库！");', "javascript");
+  // 恢复默认编辑器草稿（仅首页初始状态），否则用示例代码
+  let initCode = '// 在这里输入代码，点击「运行」查看结果\nconsole.log("[只在浏览器内输出] " + "你好，计算机知识库！");';
+  try {
+    const draft = localStorage.getItem("cs_draft_javascript");
+    if (draft != null && draft.trim()) initCode = draft;
+  } catch (e) {}
+  setEditorCode(initCode, "javascript");
   loadTemplates("javascript", []);
   render();
-  clearOutput("点击「运行」查看代码执行结果（支持 JavaScript / HTML / CSS）。");
+  updateEditorStatus();
+  clearOutput("点击「运行」查看代码执行结果（支持 JavaScript / HTML / CSS / Python / SQL，更多语言可联动本地编译器）。");
+  probeLocalServer();
 })();

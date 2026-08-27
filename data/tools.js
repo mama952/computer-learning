@@ -69,6 +69,115 @@ window.TOOLS_DATA = {
       ],
     },
 
+    /* ============ 安卓学习工具 ============ */
+    {
+      id: "android",
+      name: "安卓学习工具",
+      icon: "机",
+      tagline: "手机/平板也能写代码跑程序，下面这些免费安卓 App 全覆盖。",
+      intro:
+        "没带电脑也没关系。这里推荐的安卓 App 全部免费，装上就能在手机上写代码、看结果。最推荐 **Termux**：它把真正的 Linux 环境装进手机，可以安装 gcc、clang、Python、Go、Rust 等真实编译器，本网站的 C/C++/Go/Rust/Shell 代码都能在手机上直接编译运行。",
+      meta: { 定位: "移动端（安卓）", 推荐: "Termux 最全能", 费用: "全部免费" },
+      lessons: [
+        {
+          id: "android-1",
+          title: "Termux：把 Linux 终端装进手机（最推荐）",
+          summary: "安卓上最强大的终端环境，可安装 gcc/clang/Python/Go/Rust 等真实编译器，离线本地编译无限制。",
+          difficulty: "入门",
+          blocks: [
+            { type: "p", text: "Termux 是安卓上最强大的终端 App，自带软件包管理器（类似 Linux 的 apt），一条命令就能安装**真实的编译器**。本网站 C、C++、Go、Rust、Shell 课程的代码，都可以原封不动在手机上编译运行。" },
+            { type: "h", text: "官方下载地址" },
+            { type: "list", items: ["Google Play 搜索 Termux：<a href='https://play.google.com/store/apps/details?id=com.termux' target='_blank' rel='noopener'>play.google.com/store/apps/details?id=com.termux</a>", "官方维护、推荐优先：F-Droid <a href='https://f-droid.org/en/packages/com.termux/' target='_blank' rel='noopener'>f-droid.org/en/packages/com.termux</a>", "GitHub Releases 下载 APK：<a href='https://github.com/termux/termux-app/releases' target='_blank' rel='noopener'>github.com/termux/termux-app/releases</a>"] },
+            { type: "h", text: "装完先装编译器" },
+            { type: "list", items: ["更新源：<code.inline>pkg update -y</code.inline> 然后 <code.inline>pkg upgrade -y</code.inline>", "一次性装常用语言：<code.inline>pkg install clang python nodejs golang rust</code.inline>", "验证：<code.inline>gcc --version</code.inline>、<code.inline>python --version</code.inline>、<code.inline>go version</code.inline>", "编译运行 C 程序：<code.inline>gcc hello.c -o hello && ./hello</code.inline>"] },
+            { type: "tip", title: "为什么最推荐", text: "其他 App 大多是云端编译（需联网、有次数限制），Termux 是在**手机本地真实编译**，离线可用、无次数限制，体验最接近电脑。" },
+            { type: "warn", title: "注意来源", text: "请从 F-Droid、GitHub 官网或 Google Play 下载，避免第三方渠道捆绑广告。Termux 要求安卓 7.0 及以上。" },
+            { type: "keypoints", items: ["Termux = 手机里的 Linux 终端，可装真实编译器", "官方下载：F-Droid / GitHub Releases / Google Play", "pkg install clang python nodejs golang rust 一键装语言", "C/C++/Go/Rust/Shell 课程代码都能在手机上跑"] },
+          ],
+          templates: [{ name: "C 程序（在 Termux 里跑）", code: "#include <stdio.h>\nint main() {\n    printf(\"你好，Termux！\\n\");\n    return 0;\n}" }],
+        },
+        {
+          id: "android-2",
+          title: "Dcoder：手机上写 C/C++/Java/Python 的多语言 IDE",
+          summary: "不用装编译器，Dcoder 自带云端编译，支持 C、C++、Java、Python、JS 等 30+ 语言。",
+          difficulty: "入门",
+          blocks: [
+            { type: "p", text: "Dcoder 是一款开箱即用的移动编程 IDE，内置 30 多种语言的编译器（云端执行，无需在手机装编译器），适合刚上手、想快速验证代码片段的同学。" },
+            { type: "h", text: "官方下载" },
+            { type: "list", items: ["Google Play：<a href='https://play.google.com/store/apps/details?id=com.paprbit.dcoder' target='_blank' rel='noopener'>play.google.com/store/apps/details?id=com.paprbit.dcoder</a>", "官网：<a href='http://dcoder.tech/' target='_blank' rel='noopener'>dcoder.tech</a>", "打开后新建文件、选择语言，点运行即可看到结果"] },
+            { type: "tip", title: "适用场景", text: "适合快速练习算法、验证小代码段。注意它是云端编译、需要联网；代码量大的项目建议改用 Termux。" },
+            { type: "keypoints", items: ["Dcoder 内置云端编译器，支持 30+ 语言", "官方下载：Google Play 搜 Dcoder 或官网 dcoder.tech", "开箱即用，适合新手快速验证代码"] },
+          ],
+          templates: [{ name: "Python 模板", code: "print('你好，Dcoder！')" }],
+        },
+        {
+          id: "android-3",
+          title: "AIDE：安卓上开发 Java / Android 应用",
+          summary: "在手机上完整开发 Android App 的 IDE，内置 SDK 与代码补全，还能生成 APK。",
+          difficulty: "入门",
+          blocks: [
+            { type: "p", text: "AIDE 是安卓上老牌的专业开发 IDE，自带精简版 Android SDK，可以在手机上完成 Java / Android 应用的编写、编译、调试，甚至生成 APK 安装包。" },
+            { type: "h", text: "官方下载" },
+            { type: "list", items: ["Google Play：<a href='https://play.google.com/store/apps/details?id=com.aide.ui' target='_blank' rel='noopener'>play.google.com/store/apps/details?id=com.aide.ui</a>", "官网：<a href='https://android-ide.com/' target='_blank' rel='noopener'>android-ide.com</a>", "免费版即可编写、编译、运行 Java / Android 程序"] },
+            { type: "keypoints", items: ["AIDE 专攻 Java / Android 应用开发", "官方下载：Google Play 或官网 android-ide.com", "内置 Android SDK，能直接生成 APK"] },
+          ],
+          templates: [{ name: "Java 模板", code: "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"你好，AIDE！\");\n    }\n}" }],
+        },
+        {
+          id: "android-4",
+          title: "Spck Editor：手机上写网页（HTML/CSS/JS）",
+          summary: "轻量前端编辑器，带实时预览、TypeScript 补全和 Git 集成。",
+          difficulty: "入门",
+          blocks: [
+            { type: "p", text: "Spck Editor 专注于前端开发，支持 HTML / CSS / JavaScript / TypeScript，有代码补全、实时预览和 Git 集成，做网页练手非常顺手。" },
+            { type: "h", text: "官方下载" },
+            { type: "list", items: ["Google Play：<a href='https://play.google.com/store/apps/details?id=io.spck' target='_blank' rel='noopener'>play.google.com/store/apps/details?id=io.spck</a>", "官网：<a href='https://spck.io/' target='_blank' rel='noopener'>spck.io</a>", "新建 HTML 文件，点预览即可在手机浏览器里看效果"] },
+            { type: "keypoints", items: ["Spck 专注前端三件套 + TypeScript", "官方下载：Google Play 或官网 spck.io", "支持实时预览与 Git 集成"] },
+          ],
+          templates: [{ name: "网页模板", code: "<h1>你好，Spck！</h1>\n<p>在手机上写网页。</p>" }],
+        },
+        {
+          id: "android-5",
+          title: "Pydroid 3：安卓上最流行的 Python 开发环境",
+          summary: "自带 Python 3 解释器与常用科学计算库，支持 pip，离线运行 Python。",
+          difficulty: "入门",
+          blocks: [
+            { type: "p", text: "Pydroid 3 是安卓上最流行的 Python IDE，内置完整 Python 3 解释器，支持 pip 安装库（numpy、matplotlib 等），离线也能运行 Python 程序。" },
+            { type: "h", text: "官方下载" },
+            { type: "list", items: ["Google Play：<a href='https://play.google.com/store/apps/details?id=ru.iiec.pydroid3' target='_blank' rel='noopener'>play.google.com/store/apps/details?id=ru.iiec.pydroid3</a>", "搜索「Pydroid 3」下载安装", "打开后新建文件、选 Python 3，即可运行"] },
+            { type: "keypoints", items: ["Pydroid 3 = 安卓上最流行的 Python IDE", "内置 Python 3 解释器，支持 pip 装库", "官方下载：Google Play 搜 Pydroid 3"] },
+          ],
+          templates: [{ name: "Python 模板", code: "print('你好，Pydroid 3！')\nprint(1 + 2 + 3)" }],
+        },
+        {
+          id: "android-6",
+          title: "Acode：轻量强大的通用代码编辑器",
+          summary: "小巧但功能全：语法高亮、代码补全、多文件、内置终端与插件系统。",
+          difficulty: "入门",
+          blocks: [
+            { type: "p", text: "Acode 是一款轻量但功能强大的安卓代码编辑器：支持语法高亮、代码补全、多标签页、内置终端和插件系统，从编写到运行都能在手机上完成。" },
+            { type: "h", text: "官方下载" },
+            { type: "list", items: ["Google Play：<a href='https://play.google.com/store/apps/details?id=com.foxdebug.acode' target='_blank' rel='noopener'>play.google.com/store/apps/details?id=com.foxdebug.acode</a>", "F-Droid（开源免费版）：<a href='https://f-droid.org/en/packages/com.foxdebug.acode/' target='_blank' rel='noopener'>f-droid.org/en/packages/com.foxdebug.acode</a>", "官网：<a href='https://acode.app/' target='_blank' rel='noopener'>acode.app</a>"] },
+            { type: "keypoints", items: ["Acode 轻量但功能全面，可当主力编辑器", "官方下载：Google Play / F-Droid / 官网 acode.app", "带内置终端与插件系统"] },
+          ],
+          templates: [{ name: "JS 模板", code: "console.log('你好，Acode！');" }],
+        },
+        {
+          id: "android-7",
+          title: "SoloLearn：边学边练的编程学习 App",
+          summary: "像玩游戏一样学编程：课程 + 闯关 + 社区，内置代码编辑器可运行练习。",
+          difficulty: "入门",
+          blocks: [
+            { type: "p", text: "SoloLearn 是知名移动学习平台，提供 Python、JavaScript、C++、SQL、HTML/CSS 等大量免费课程，每节课都可以直接在 App 里写代码并运行，适合零基础入门和碎片时间学习。" },
+            { type: "h", text: "官方下载" },
+            { type: "list", items: ["Google Play：<a href='https://play.google.com/store/apps/details?id=com.sololearn' target='_blank' rel='noopener'>play.google.com/store/apps/details?id=com.sololearn</a>", "官网：<a href='https://www.sololearn.com/' target='_blank' rel='noopener'>sololearn.com</a>", "注册账号后选择课程，即可边看边练"] },
+            { type: "keypoints", items: ["SoloLearn = 免费编程课程 + 在线练习", "覆盖 Python / JS / C++ / SQL 等主流语言", "官方下载：Google Play 或官网 sololearn.com"] },
+          ],
+          templates: [{ name: "SQL 练习", code: "SELECT '你好，SoloLearn！';" }],
+        },
+      ],
+    },
+
     /* ============ 各语言官方环境 ============ */
     {
       id: "lang-envs",
