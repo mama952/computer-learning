@@ -36,6 +36,7 @@
   CATALOG.forEach((cat) => {
     (cat.children || []).forEach((sub) => {
       (sub.lessons || []).forEach((lesson) => {
+        if (!lesson || !lesson.id) return; // Skip invalid lessons
         flatLessons.push({
           cat,
           catId: cat.id,
