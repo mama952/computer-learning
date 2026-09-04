@@ -2078,4 +2078,9 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   updateEditorStatus();
   clearOutput("点击「运行」查看代码执行结果（支持 JavaScript / HTML / CSS / Python / SQL，更多语言可联动本地编译器）。");
   probeLocalServer();
+
+  // 标记应用已加载
+  window.__csAppReady = true;
+  document.getElementById('loadingOverlay').style.display = 'none';
+  document.getElementById('app').classList.add('loaded');
 })();
