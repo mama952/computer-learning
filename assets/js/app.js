@@ -1018,28 +1018,22 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   }
 
   /* ============================================================
-     二进制转换器：文字 ↔ 二进制，多编码（UTF-8/UTF-16BE/UTF-16LE/ASCII）多结果
+     二进制转换器：全面升级
+     支持：二进制↔文字(7种编码)、Base64、十六进制、URL编码、
+     Unicode转义、ROT13、以及中文多编码解码展示
      ============================================================ */
-  function strToUtf8Bytes(str) {
-    return Array.from(new TextEncoder().encode(str));
-  }
-  function strToUtf16Bytes(str, le) {
-    const bytes = [];
-    for (let i = 0; i < str.length; i++) {
-      const c = str.charCodeAt(i);
-      if (le) bytes.push(c & 0xff, (c >> 8) & 0xff);
-      else bytes.push((c >> 8) & 0xff, c & 0xff);
-    }
-    return bytes;
-  }
-  function asciiBytesOf(str) {
-    const bytes = [];
-    for (let i = 0; i < str.length; i++) {
-      const c = str.charCodeAt(i);
-      if (c > 127) return null;
-      bytes.push(c);
-    }
-    return bytes;
+
+  // === 二进制编码核心函数 ===
+  function strToBytes(str, enc) {
+    enc = enc || "utf8";
+    if (enc === "utf8") return Array.from(new TextEncoder().encode(str));
+    if (enc === "latin1") { const b = []; for (let i = 0; i < str.length; i++) b.push(str.charCodeAt(i) & 0xff); return b; }
+    if (enc === "ascii") { const b = []; for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); if (c > 127) return null; b.push(c); } return b; }
+    if (enc === "utf16be") { const b = []; for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); b.push((c >> 8) & 0xff, c & 0xff); } return b; }
+    if (enc === "utf16le") { const b = []; for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); b.push(c & 0xff, (c >> 8) & 0xff); } return b; }
+    if (enc === "utf32be") { const b = []; for (let i = 0; i < str.length; i++) { const c = str.codePointAt(i) || str.charCodeAt(i); b.push((c >> 24) & 0xff, (c >> 16) & 0xff, (c >> 8) & 0xff, c & 0xff); } return b; }
+    if (enc === "utf32le") { const b = []; for (let i = 0; i < str.length; i++) { const c = str.codePointAt(i) || str.charCodeAt(i); b.push(c & 0xff, (c >> 8) & 0xff, (c >> 16) & 0xff, (c >> 24) & 0xff); } return b; }
+    return null;
   }
   function bytesToBin(bytes) {
     return bytes.map((b) => b.toString(2).padStart(8, "0")).join(" ");
@@ -1053,98 +1047,209 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     for (let i = 0; i + 8 <= clean.length; i += 8) bytes.push(parseInt(clean.slice(i, i + 8), 2));
     return bytes;
   }
-  function utf8BytesToStr(bytes) {
-    try {
-      return new TextDecoder("utf-8").decode(new Uint8Array(bytes));
-    } catch (e) {
-      return "";
-    }
+  function bytesToUtf8Str(bytes) {
+    try { return new TextDecoder("utf-8").decode(new Uint8Array(bytes)); } catch (e) { return ""; }
   }
-  function utf16BytesToStr(bytes, le) {
+  function bytesToUtf16Str(bytes, le) {
     const u16 = [];
-    for (let i = 0; i + 1 < bytes.length; i += 2) {
-      u16.push(le ? bytes[i] | (bytes[i + 1] << 8) : (bytes[i] << 8) | bytes[i + 1]);
+    for (let i = 0; i + 1 < bytes.length; i += 2) u16.push(le ? bytes[i] | (bytes[i + 1] << 8) : (bytes[i] << 8) | bytes[i + 1]);
+    let s = ""; for (const c of u16) s += String.fromCharCode(c); return s;
+  }
+  function bytesToUtf32Str(bytes, le) {
+    const codepoints = [];
+    for (let i = 0; i + 3 < bytes.length; i += 4) {
+      const cp = le ? bytes[i] | (bytes[i+1]<<8) | (bytes[i+2]<<16) | (bytes[i+3]<<24) : (bytes[i]<<24) | (bytes[i+1]<<16) | (bytes[i+2]<<8) | bytes[i+3];
+      if (cp >= 0x10000) { codepoints.push(0xD800 + ((cp - 0x10000) >> 10), 0xDC00 + ((cp - 0x10000) & 0x3FF)); } else { codepoints.push(cp); }
     }
-    let s = "";
-    for (const c of u16) s += String.fromCharCode(c);
-    return s;
+    return String.fromCodePoint(...codepoints);
+  }
+  function bytesToLatin1Str(bytes) {
+    return String.fromCharCode(...bytes);
+  }
+  function bytesToAsciiStr(bytes) {
+    let s = ""; for (const b of bytes) { if (b < 32 || b > 126) return ""; s += String.fromCharCode(b); } return s;
+  }
+  // 验证字符串是否"有效可读"（不含过多控制字符）
+  function isValidReadable(s) {
+    if (!s || s.length === 0) return false;
+    let controlCount = 0;
+    for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); if (c < 32 && c !== 10 && c !== 13) controlCount++; }
+    return controlCount < s.length * 0.1;
+  }
+  // 判断字节串是否能被指定编码有效解析
+  function canDecodeAs(bytes, enc) {
+    try {
+      if (enc === "utf8") return isValidReadable(bytesToUtf8Str(bytes));
+      if (enc === "utf16be" || enc === "utf16le") { if (bytes.length % 2 !== 0) return false; return isValidReadable(bytesToUtf16Str(bytes, enc === "utf16le")); }
+      if (enc === "utf32be" || enc === "utf32le") { if (bytes.length % 4 !== 0) return false; return isValidReadable(bytesToUtf32Str(bytes, enc === "utf32le")); }
+      if (enc === "ascii") return asciiBytesToStr(bytes) !== "";
+      if (enc === "latin1") return true; // Latin-1 永远有效
+      return false;
+    } catch (e) { return false; }
   }
   function asciiBytesToStr(bytes) {
-    let s = "";
-    for (const b of bytes) {
-      if (b < 32 || b > 126) return "";
-      s += String.fromCharCode(b);
-    }
-    return s;
+    let s = ""; for (const b of bytes) { if (b < 32 || b > 126) return ""; s += String.fromCharCode(b); } return s;
   }
+
+  // === 文字 → 二进制（多编码同时展示） ===
+  const ENCODING_OPTIONS = ["utf8", "utf16be", "utf16le", "utf32be", "utf32le", "ascii", "latin1"];
+  const ENCODING_NAMES = {
+    utf8: "UTF-8", utf16be: "UTF-16BE", utf16le: "UTF-16LE",
+    utf32be: "UTF-32BE", utf32le: "UTF-32LE", ascii: "ASCII", latin1: "Latin-1 (ISO-8859-1)"
+  };
   function renderTextToBin(text) {
-    const utf8 = strToUtf8Bytes(text);
-    const be = strToUtf16Bytes(text, false);
-    const le = strToUtf16Bytes(text, true);
-    const ascii = asciiBytesOf(text);
-    const block = (name, bytes) => {
-      if (!bytes) return null;
-      return (
-        '<div class="conv-result"><div class="conv-rt">' +
-        name +
-        "（" +
-        bytes.length +
-        " 字节）</div><div class=\"conv-bits\">" +
-        bytesToBin(bytes) +
-        '</div><div class="conv-hex">HEX：' +
-        bytesToHex(bytes) +
-        "</div></div>"
-      );
-    };
-    return (
-      '<div class="conv-note">共 ' +
-      text.length +
-      " 个字符（UTF-8 编码下 " +
-      utf8.length +
-      " 字节）</div>" +
-      (block("UTF-8", utf8) || "") +
-      (block("UTF-16BE", be) || "") +
-      (block("UTF-16LE", le) || "") +
-      (ascii
-        ? block("ASCII", ascii)
-        : '<div class="conv-result"><div class="conv-rt">ASCII</div><div class="conv-warn">包含非 ASCII 字符，无法用 ASCII 编码表示</div></div>')
-    );
+    let html = '<div class="conv-note">共 ' + text.length + ' 个字符，各编码结果如下：</div>';
+    ENCODING_OPTIONS.forEach(enc => {
+      const bytes = strToBytes(text, enc);
+      if (bytes === null) {
+        html += '<div class="conv-result"><div class="conv-rt">' + ENCODING_NAMES[enc] + '</div><div class="conv-warn">⚠ 包含非' + enc.toUpperCase() + '字符，无法编码</div></div>';
+        return;
+      }
+      html += '<div class="conv-result"><div class="conv-rt">' + ENCODING_NAMES[enc] + '（' + bytes.length + ' 字节）</div>';
+      html += '<div class="conv-bits">' + bytesToBin(bytes) + '</div>';
+      html += '<div class="conv-hex">HEX：' + bytesToHex(bytes) + '</div></div>';
+    });
+    return html;
   }
+
+  // === 二进制 → 文字（展示所有有效解码结果） ===
+  const DECODE_OPTIONS = ["utf8", "utf16be", "utf16le", "utf32be", "utf32le", "ascii", "latin1"];
+  const DECODE_NAMES = {
+    utf8: "UTF-8", utf16be: "UTF-16BE", utf16le: "UTF-16LE",
+    utf32be: "UTF-32BE", utf32le: "UTF-32LE", ascii: "ASCII", latin1: "Latin-1"
+  };
   function renderBinToText(bin) {
     const bytes = binToBytes(bin);
     if (!bytes.length) return '<div class="conv-empty">未识别到二进制数据，请检查输入</div>';
-    const utf8 = utf8BytesToStr(bytes);
-    const be = utf16BytesToStr(bytes, false);
-    const le = utf16BytesToStr(bytes, true);
-    const ascii = asciiBytesToStr(bytes);
-    const block = (name, s) => {
-      if (!s) return null;
-      return (
-        '<div class="conv-result"><div class="conv-rt">' +
-        name +
-        '</div><div class="conv-text">' +
-        escapeHtml(s) +
-        "</div></div>"
-      );
-    };
     const clean = String(bin).replace(/\s+/g, "");
     const remainder = clean.length % 8;
-    return (
-      '<div class="conv-note">解析出 ' +
-      bytes.length +
-      " 个字节（共 " +
-      clean.length +
-      " 位" +
-      (remainder ? "，末尾 " + remainder + " 位不足 8 位已忽略" : "") +
-      "）</div>" +
-      (block("UTF-8", utf8) || "") +
-      (block("UTF-16BE", be) || "") +
-      (block("UTF-16LE", le) || "") +
-      (block("ASCII", ascii) || "") +
-      (!utf8 && !be && !le && !ascii
-        ? '<div class="conv-warn">未能用任何编码解析为可读文字（字节数可能不是 2 的倍数）</div>'
-        : "")
-    );
+    let html = `<div class="conv-note">解析出 ` + bytes.length + ` 个字节（共 ` + clean.length + ` 位` + (remainder ? `,末尾 ` + remainder + ` 位不足 8 位已忽略` : '') + `)</div>`;
+    html += '<div class="conv-note" style="color:var(--primary);font-weight:600;margin-bottom:8px">所有有效解码结果：</div>';
+    let foundAny = false;
+    DECODE_OPTIONS.forEach(enc => {
+      let decoded = "";
+      let valid = false;
+      if (enc === "utf8") { decoded = bytesToUtf8Str(bytes); valid = isValidReadable(decoded); }
+      else if (enc === "utf16be" || enc === "utf16le") { if (bytes.length >= 2) { decoded = bytesToUtf16Str(bytes, enc === "utf16le"); valid = isValidReadable(decoded); } }
+      else if (enc === "utf32be" || enc === "utf32le") { if (bytes.length >= 4) { decoded = bytesToUtf32Str(bytes, enc === "utf32le"); valid = isValidReadable(decoded); } }
+      else if (enc === "ascii") { decoded = asciiBytesToStr(bytes); valid = decoded !== ""; }
+      else if (enc === "latin1") { decoded = bytesToLatin1Str(bytes); valid = decoded.length > 0; }
+
+      if (valid && decoded) {
+        foundAny = true;
+        const tag = enc === "utf8" ? '<span class="conv-tag conv-tag-primary">推荐</span>' : '';
+        html += '<div class="conv-result"><div class="conv-rt">' + ENCODING_NAMES[enc] + ' ' + tag + '</div><div class="conv-text">' + escapeHtml(decoded) + '</div></div>';
+      }
+    });
+    if (!foundAny) {
+      // 尝试 Latin-1（永远有效，但可能不可读）
+      const latin1 = bytesToLatin1Str(bytes);
+      html += '<div class="conv-result"><div class="conv-rt">Latin-1（原始字节）</div><div class="conv-text">' + escapeHtml(latin1) + '</div></div>';
+    }
+    return html;
+  }
+
+  // === 特殊编码转换函数 ===
+  function toBase64(str) {
+    try { return btoa(unescape(encodeURIComponent(str))); } catch(e) { return ""; }
+  }
+  function fromBase64(b64) {
+    try { return decodeURIComponent(escape(atob(b64.trim()))); } catch(e) { return ""; }
+  }
+  function toHex(str) {
+    let s = ""; for (let i = 0; i < str.length; i++) s += str.charCodeAt(i).toString(16).padStart(2, "0") + " ";
+    return s.trim().toUpperCase();
+  }
+  function fromHex(hex) {
+    const clean = hex.trim().replace(/\s+/g, "");
+    if (clean.length % 2 !== 0) return "";
+    let s = ""; for (let i = 0; i < clean.length; i += 2) s += String.fromCharCode(parseInt(clean.slice(i, i + 2), 16));
+    return s;
+  }
+  function toUrlEncode(str) {
+    return encodeURIComponent(str);
+  }
+  function fromUrlDecode(str) {
+    try { return decodeURIComponent(str); } catch(e) { return ""; }
+  }
+  function toUnicodeEscape(str) {
+    let s = ""; for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); s += (c <= 0xFFFF ? "\\u" + c.toString(16).padStart(4, "0") : "\\u" + ((c >> 16) & 0xffff).toString(16).padStart(4, "0") + "\\u" + (c & 0xffff).toString(16).padStart(4, "0")); }
+    return s;
+  }
+  function fromUnicodeEscape(str) {
+    try { return str.replace(/\\u([0-9a-fA-F]{4})/g, (_, h) => String.fromCharCode(parseInt(h, 16))).replace(/\\U([0-9a-fA-F]{8})/g, (_, h) => { const cp = parseInt(h, 16); return cp <= 0xFFFF ? String.fromCharCode(cp) : String.fromCharCode(0xD800 + ((cp - 0x10000) >> 10), 0xDC00 + ((cp - 0x10000) & 0x3FF)); }); } catch(e) { return ""; }
+  }
+  function rot13(str) {
+    return str.replace(/[a-zA-Z]/g, c => String.fromCharCode(c.charCodeAt(0) + (c.toLowerCase() >= "m" && c.toLowerCase() <= "z" ? 13 : c.toUpperCase() >= "A" && c.toUpperCase() <= "M" ? -13 : 0)));
+  }
+  function bitReverseByte(b) {
+    let r = 0; for (let i = 0; i < 8; i++) r = (r << 1) | ((b >> i) & 1); return r;
+  }
+  function reverseBits(str) {
+    const bytes = strToBytes(str, "utf8");
+    return bytes.map(bitReverseByte).join(" ");
+  }
+  function swapBytes(str) {
+    const bytes = strToBytes(str, "utf8");
+    const swapped = [];
+    for (let i = 0; i + 1 < bytes.length; i += 2) { swapped.push(bytes[i+1]); swapped.push(bytes[i]); }
+    if (bytes.length % 2) swapped.push(bytes[bytes.length - 1]);
+    return swapped.join(" ");
+  }
+  function xorBytes(str, key) {
+    const bytes = strToBytes(str, "utf8");
+    const k = key.charCodeAt(0);
+    return bytes.map(b => (b ^ k) & 0xff).join(" ");
+  }
+  function fromXorBits(bitsStr, key) {
+    const bytes = binToBytes(bitsStr);
+    const k = key.charCodeAt(0);
+    const result = bytes.map(b => (b ^ k) & 0xff);
+    return bytesToUtf8Str(result);
+  }
+
+  // === 特殊编码渲染函数 ===
+  function renderBase64(text, dir) {
+    if (dir === "to") return '<div class="conv-result"><div class="conv-rt">Base64 编码</div><div class="conv-text">' + escapeHtml(toBase64(text)) + '</div></div>';
+    return '<div class="conv-result"><div class="conv-rt">Base64 解码</div><div class="conv-text">' + escapeHtml(fromBase64(text)) + '</div></div>';
+  }
+  function renderHex(text, dir) {
+    if (dir === "to") return '<div class="conv-result"><div class="conv-rt">十六进制编码</div><div class="conv-text">' + escapeHtml(toHex(text)) + '</div></div>';
+    return '<div class="conv-result"><div class="conv-rt">十六进制解码</div><div class="conv-text">' + escapeHtml(fromHex(text)) + '</div></div>';
+  }
+  function renderUrl(text, dir) {
+    if (dir === "to") return '<div class="conv-result"><div class="conv-rt">URL 编码</div><div class="conv-text">' + escapeHtml(toUrlEncode(text)) + '</div></div>';
+    return '<div class="conv-result"><div class="conv-rt">URL 解码</div><div class="conv-text">' + escapeHtml(fromUrlDecode(text)) + '</div></div>';
+  }
+  function renderUnicode(text, dir) {
+    if (dir === "to") return '<div class="conv-result"><div class="conv-rt">Unicode 转义</div><div class="conv-text">' + escapeHtml(toUnicodeEscape(text)) + '</div></div>';
+    return '<div class="conv-result"><div class="conv-rt">Unicode 还原</div><div class="conv-text">' + escapeHtml(fromUnicodeEscape(text)) + '</div></div>';
+  }
+  function renderRot13(text, dir) {
+    return '<div class="conv-result"><div class="conv-rt">ROT13 ' + (dir === "to" ? "编码" : "解码") + '</div><div class="conv-text">' + escapeHtml(rot13(text)) + '</div></div>';
+  }
+  function renderBitReverse(text, dir) {
+    if (dir === "to") return '<div class="conv-result"><div class="conv-rt">逐位反转（bit reverse）</div><div class="conv-bits">' + reverseBits(text) + '</div></div>';
+    // 二进制 → 反转各字节 → UTF-8 解码
+    const bytes = binToBytes(text);
+    const reversed = bytes.map(bitReverseByte);
+    const decoded = bytesToUtf8Str(reversed);
+    return '<div class="conv-result"><div class="conv-rt">逐位反转还原</div><div class="conv-text">' + escapeHtml(isValidReadable(decoded) ? decoded : bytesToLatin1Str(reversed)) + '</div></div>';
+  }
+  function renderSwapBytes(text, dir) {
+    if (dir === "to") return '<div class="conv-result"><div class="conv-rt">字节交换（Byte Swap）</div><div class="conv-bits">' + swapBytes(text) + '</div></div>';
+    const bytes = binToBytes(text);
+    const swapped = [];
+    for (let i = 0; i + 1 < bytes.length; i += 2) { swapped.push(bytes[i+1]); swapped.push(bytes[i]); }
+    if (bytes.length % 2) swapped.push(bytes[bytes.length - 1]);
+    const decoded = bytesToUtf8Str(swapped);
+    return '<div class="conv-result"><div class="conv-rt">字节交换还原</div><div class="conv-text">' + escapeHtml(isValidReadable(decoded) ? decoded : bytesToLatin1Str(swapped)) + '</div></div>';
+  }
+  function renderXor(text, dir, key) {
+    key = key || "k";
+    if (dir === "to") return '<div class="conv-result"><div class="conv-rt">XOR 加密（密钥：' + escapeHtml(key) + '）</div><div class="conv-bits">' + xorBytes(text, key) + '</div></div>';
+    const decoded = fromXorBits(text, key);
+    return '<div class="conv-result"><div class="conv-rt">XOR 解密（密钥：' + escapeHtml(key) + '）</div><div class="conv-text">' + escapeHtml(isValidReadable(decoded) ? decoded : "") + '</div></div>';
   }
 
   function renderHome() {
@@ -1198,15 +1303,27 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     /* 二进制转换器（首页底部） */
     html += '<div class="conv-card">';
     html += '<div class="conv-head">';
-    html += '<div class="conv-title">二进制转换器</div>';
-    html += '<div class="conv-desc">在「文字」与「二进制」之间互转，同时给出 UTF-8 / UTF-16BE / UTF-16LE / ASCII 多种编码结果，支持中文、英文、Emoji 等任意文本。</div>';
+    html += '<div class="conv-title">🔢 编码转换器</div>';
+    html += '<div class="conv-desc">支持 7 种文字编码（UTF-8/16/32/ASCII/Latin-1）、Base64、十六进制、URL 编码、Unicode 转义、ROT13 加密、位反转、字节交换、XOR 加解密。中文输入时自动展示所有编码结果。</div>';
     html += "</div>";
     html += '<div class="conv-tabs">';
-    html += '<button class="conv-tab active" data-conv-mode="to">文字 → 二进制</button>';
-    html += '<button class="conv-tab" data-conv-mode="from">二进制 → 文字</button>';
+    html += '<button class="conv-tab active" data-conv-mode="to" data-conv-type="binary">文字→二进制</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="binary">二进制→文字</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="base64">Base64</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="base64">Base64 解码</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="hex">十六进制</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="hex">十六进制解码</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="url">URL 编码</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="url">URL 解码</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="unicode">Unicode</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="unicode">Unicode 还原</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="rot13">ROT13</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="bitrev">位反转</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="swap">字节交换</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="xor">XOR 加密</button>';
     html += "</div>";
     html += '<div class="conv-input-row">';
-    html += '<textarea id="convInput" class="conv-input" rows="4" spellcheck="false" placeholder="输入文字，或输入二进制串（如 01001000 01101001，可带空格）"></textarea>';
+    html += '<textarea id="convInput" class="conv-input" rows="4" spellcheck="false" placeholder="输入文字或二进制串，或 Base64 / 十六进制 / URL 编码等"></textarea>';
     html += '<div class="conv-actions">';
     html += '<button class="run-btn" id="convRun">转换</button>';
     html += '<button class="tool-btn" id="convClear">清空</button>';
@@ -1429,7 +1546,7 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
       editorTitle.textContent = "在线编辑器";
     }
 
-    // 二进制转换器交互
+    // 编码转换器交互
     const convInput = contentInner.querySelector("#convInput");
     const convModeTabs = contentInner.querySelectorAll(".conv-tab");
     const convRun = contentInner.querySelector("#convRun");
@@ -1437,19 +1554,53 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     const convResults = contentInner.querySelector("#convResults");
     if (convRun && convInput) {
       let convMode = "to";
+      let convType = "binary";
       convModeTabs.forEach((t) => {
         t.addEventListener("click", () => {
           convMode = t.getAttribute("data-conv-mode");
+          convType = t.getAttribute("data-conv-type") || "binary";
           convModeTabs.forEach((x) => x.classList.toggle("active", x === t));
         });
       });
       const runConv = () => {
         const val = convInput.value;
         if (!val.trim()) {
-          convResults.innerHTML = '<div class="conv-empty">请先输入文字或二进制内容</div>';
+          convResults.innerHTML = '<div class="conv-empty">请先输入内容</div>';
           return;
         }
-        convResults.innerHTML = convMode === "to" ? renderTextToBin(val) : renderBinToText(val);
+        let result = "";
+        switch (convType) {
+          case "binary":
+            result = convMode === "to" ? renderTextToBin(val) : renderBinToText(val);
+            break;
+          case "base64":
+            result = convMode === "to" ? renderBase64(val, convMode) : renderBase64(val, convMode);
+            break;
+          case "hex":
+            result = convMode === "to" ? renderHex(val, convMode) : renderHex(val, convMode);
+            break;
+          case "url":
+            result = convMode === "to" ? renderUrl(val, convMode) : renderUrl(val, convMode);
+            break;
+          case "unicode":
+            result = convMode === "to" ? renderUnicode(val, convMode) : renderUnicode(val, convMode);
+            break;
+          case "rot13":
+            result = renderRot13(val, convMode);
+            break;
+          case "bitrev":
+            result = renderBitReverse(val, convMode);
+            break;
+          case "swap":
+            result = renderSwapBytes(val, convMode);
+            break;
+          case "xor":
+            result = renderXor(val, convMode, "k");
+            break;
+          default:
+            result = convMode === "to" ? renderTextToBin(val) : renderBinToText(val);
+        }
+        convResults.innerHTML = result;
       };
       convRun.addEventListener("click", runConv);
       convClear.addEventListener("click", () => {

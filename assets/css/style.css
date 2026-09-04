@@ -1629,6 +1629,21 @@ html, body {
   font-size: 13px;
   color: var(--warning);
 }
+.conv-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: var(--bg-muted);
+  color: var(--text-muted);
+  margin-left: 6px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+.conv-tag-primary {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
 
 /* 转换器 / 导航 移动端适配 */
 @media (max-width: 640px) {
