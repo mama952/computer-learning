@@ -3,451 +3,2027 @@
    ============================================================ */
 window.LANGUAGE_EXTRA = window.LANGUAGE_EXTRA || [];
 window.LANGUAGE_EXTRA.push({
-  id: "mobile",
-  name: "Swift & Kotlin",
-  icon: "Mo",
-  tagline: "一科双修，iOS 与 Android 双端进阶的 16 章完整课程。",
-  intro:
-    "这是一套以『双语言对照』方式展开的移动开发完整课程：前 8 章讲 Swift（iOS 苹果生态），后 8 章讲 Kotlin（Android 安卓生态）。每章从大白话讲起，配可运行的示例代码与编辑器模板。学完这套课程，你将掌握 Swift 与 Kotlin 的核心语法、面向对象、空安全、各自的 UI 框架（SwiftUI 与 Jetpack Compose），并能独立做出计数器和待办清单这样的完整小项目，为今后发布应用到 App Store 与 Google Play 打好基础。注意：Swift 与 SwiftUI 需要 macOS + Xcode 才能编译运行，Kotlin 与 Compose 需要安装 Android Studio，正文里的示例代码可以在线阅读、对照理解，本页面编辑器无法直接编译它们。",
-  meta: { 难度: "从零到进阶", 章节: "16 章", 场景: "iOS / Android 移动开发" },
-  lessons: [
+  'id': "mobile",
+  'name': "Swift & Kotlin",
+  'icon': "Mo",
+  'tagline': "一科双修，iOS 与 Android 双端进阶的 16 章完整课程。",
+  'intro': "这是一套以『双语言对照』方式展开的移动开发完整课程：前 8 章讲 Swift（iOS 苹果生态），后 8 章讲 Kotlin（Android 安卓生态）。每章从大白话讲起，配可运行的示例代码与编辑器模板。学完这套课程，你将掌握 Swift 与 Kotlin 的核心语法、面向对象、空安全、各自的 UI 框架（SwiftUI 与 Jetpack Compose），并能独立做出计数器和待办清单这样的完整小项目，为今后发布应用到 App Store 与 Google Play 打好基础。注意：Swift 与 SwiftUI 需要 macOS + Xcode 才能编译运行，Kotlin 与 Compose 需要安装 Android Studio，正文里的示例代码可以在线阅读、对照理解，本页面编辑器无法直接编译它们。",
+  'meta': {
+    "难度": "从零到进阶",
+    "章节": "16 章",
+    "场景": "iOS / Android 移动开发"
+  },
+  'lessons': [
     {
-      id: "mb-1",
-      title: "移动开发总览：iOS 与 Android",
-      summary: "认识两大生态、Swift 与 Kotlin 的地位，学会选平台与跨平台方案。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "手机是今天人们使用最频繁的电子设备，而移动应用（App）的市场远比网页大。想给手机写程序，无非两条路：给 iPhone 写（iOS），或给安卓手机写（Android）。这门课把两条路都教给你——前 8 章学 Swift 做 iOS，后 8 章学 Kotlin 做 Android。" },
-        { type: "h", text: "两大生态：iOS 与 Android" },
-        { type: "list", items: ["**iOS**：苹果公司的系统，只运行在 iPhone、iPad、Apple Watch 等苹果设备上，应用从 App Store 下载，审核严格，用户付费意愿高。", "**Android**：谷歌主导的开源系统，运行在三星、小米、华为、OPPO、vivo 等几乎所有非苹果手机上，国内用户主要从各手机厂商的应用商店下载应用，门槛低、市场大。", "两者加起来占了全球智能手机几乎 100% 的份额，学移动开发就是学这两块。"] },
-        { type: "h", text: "Swift 与 Kotlin 的地位" },
-        { type: "p", text: "**Swift** 是苹果官方钦点的 iOS/macOS 开发语言，从 2014 年发布以来迅速取代了老旧的 Objective-C，语法现代、安全、简洁。**Kotlin** 是谷歌官方钦点的 Android 开发语言，2019 年被定为 Android 第一语言，它和 Java 完全兼容，却比 Java 更简洁安全。一句话：Swift 属于苹果，Kotlin 属于安卓，各自都是『第一公民』。" },
-        { type: "table", head: ["对比项", "Swift", "Kotlin"], rows: [["目标平台", "iOS / iPadOS / macOS / watchOS", "Android / JVM / 多平台"], ["官方工具", "Xcode", "Android Studio"], ["应用商店", "App Store", "Google Play / 国内商店"], ["上手门槛", "需要一台 Mac", "Windows / Mac 都行"], ["核心 UI 框架", "SwiftUI", "Jetpack Compose"]] },
-        { type: "h", text: "先学哪个？如何选择" },
-        { type: "list", items: ["有 Mac 电脑且想发 iPhone 应用：先学 Swift，因为 iOS 只能用 Mac 开发。", "没有 Mac 或目标用户在中国（安卓用户多）：先学 Kotlin，Windows 上就能开发。", "都想学：建议按本课程顺序，先 Swift 建立『语言思维』，再学 Kotlin 会发现大量语法相通，速度飞快。"] },
-        { type: "h", text: "跨平台选项" },
-        { type: "p", text: "除了分别写两套原生 App，还有『一次编写、双端运行』的跨平台方案：**Flutter**（谷歌出品，用 Dart 语言）、**React Native**（用 JavaScript/TypeScript）、**Kotlin Multiplatform**（共享 Kotlin 业务逻辑）。跨平台能省时间，但性能与原生体验略逊，且遇到平台特性时还是要写原生代码。建议先把一门原生语言学扎实，再考虑跨平台。" },
-        { type: "code", lang: "swift", title: "Swift 初见面（iOS）", code: 'import Foundation\n\n// 常量 let，变量 var\nlet appName = "我的第一款 App"\nvar version = 1\n\nprint("欢迎来到 \\(appName)，版本号 \\(version)")' },
-        { type: "code", lang: "kotlin", title: "Kotlin 初见面（Android）", code: '// 只读 val，可变 var\nval appName = "我的第一款 App"\nvar version = 1\n\nprintln("欢迎来到 $appName，版本号 $version")' },
-        { type: "info", title: "两门语言惊人相似", text: "对比上面两段代码你会发现：let/val 都是只读、var 都是可变，print/println 都是输出，字符串插值的写法也几乎一样。这也是为什么本课程把两门语言放在一起教——学会一门，另一门举一反三。" },
-        { type: "warn", title: "别贪多", text: "新手最常见的误区是同时学七八门语言。请记住：本课程的目标是把 Swift 和 Kotlin 各学透，而不是都学个皮毛。学的时候多写、多改、多运行，少『看会』。" },
-        { type: "keypoints", items: ["iOS 用 Swift 开发（需 Mac + Xcode），Android 用 Kotlin 开发（Android Studio）", "Swift 属苹果生态，Kotlin 属安卓生态，都是官方第一语言", "有 Mac 想发 iOS 先学 Swift；没有 Mac 或主攻安卓先学 Kotlin", "Flutter / React Native / KMP 是跨平台方案，建议先学好原生", "两门语言语法相似，学完一门另一门事半功倍"] },
+      'id': "mb-1",
+      'title': "移动开发总览：iOS 与 Android",
+      'summary': "认识两大生态、Swift 与 Kotlin 的地位，学会选平台与跨平台方案。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "手机是今天人们使用最频繁的电子设备，而移动应用（App）的市场远比网页大。想给手机写程序，无非两条路：给 iPhone 写（iOS），或给安卓手机写（Android）。这门课把两条路都教给你——前 8 章学 Swift 做 iOS，后 8 章学 Kotlin 做 Android。"
+        },
+        {
+          'type': "h",
+          'text': "两大生态：iOS 与 Android"
+        },
+        {
+          'type': "list",
+          'items': [
+            "**iOS**：苹果公司的系统，只运行在 iPhone、iPad、Apple Watch 等苹果设备上，应用从 App Store 下载，审核严格，用户付费意愿高。",
+            "**Android**：谷歌主导的开源系统，运行在三星、小米、华为、OPPO、vivo 等几乎所有非苹果手机上，国内用户主要从各手机厂商的应用商店下载应用，门槛低、市场大。",
+            "两者加起来占了全球智能手机几乎 100% 的份额，学移动开发就是学这两块。"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "Swift 与 Kotlin 的地位"
+        },
+        {
+          'type': "p",
+          'text': "**Swift** 是苹果官方钦点的 iOS/macOS 开发语言，从 2014 年发布以来迅速取代了老旧的 Objective-C，语法现代、安全、简洁。**Kotlin** 是谷歌官方钦点的 Android 开发语言，2019 年被定为 Android 第一语言，它和 Java 完全兼容，却比 Java 更简洁安全。一句话：Swift 属于苹果，Kotlin 属于安卓，各自都是『第一公民』。"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比项",
+            "Swift",
+            "Kotlin"
+          ],
+          'rows': [
+            [
+              "目标平台",
+              "iOS / iPadOS / macOS / watchOS",
+              "Android / JVM / 多平台"
+            ],
+            [
+              "官方工具",
+              "Xcode",
+              "Android Studio"
+            ],
+            [
+              "应用商店",
+              "App Store",
+              "Google Play / 国内商店"
+            ],
+            [
+              "上手门槛",
+              "需要一台 Mac",
+              "Windows / Mac 都行"
+            ],
+            [
+              "核心 UI 框架",
+              "SwiftUI",
+              "Jetpack Compose"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "先学哪个？如何选择"
+        },
+        {
+          'type': "list",
+          'items': [
+            "有 Mac 电脑且想发 iPhone 应用：先学 Swift，因为 iOS 只能用 Mac 开发。",
+            "没有 Mac 或目标用户在中国（安卓用户多）：先学 Kotlin，Windows 上就能开发。",
+            "都想学：建议按本课程顺序，先 Swift 建立『语言思维』，再学 Kotlin 会发现大量语法相通，速度飞快。"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "跨平台选项"
+        },
+        {
+          'type': "p",
+          'text': "除了分别写两套原生 App，还有『一次编写、双端运行』的跨平台方案：**Flutter**（谷歌出品，用 Dart 语言）、**React Native**（用 JavaScript/TypeScript）、**Kotlin Multiplatform**（共享 Kotlin 业务逻辑）。跨平台能省时间，但性能与原生体验略逊，且遇到平台特性时还是要写原生代码。建议先把一门原生语言学扎实，再考虑跨平台。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "Swift 初见面（iOS）",
+          'code': "import Foundation\n\n// 常量 let，变量 var\nlet appName = \"我的第一款 App\"\nvar version = 1\n\nprint(\"欢迎来到 \\(appName)，版本号 \\(version)\")"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "Kotlin 初见面（Android）",
+          'code': "// 只读 val，可变 var\nval appName = \"我的第一款 App\"\nvar version = 1\n\nprintln(\"欢迎来到 $appName，版本号 $version\")"
+        },
+        {
+          'type': "info",
+          'title': "两门语言惊人相似",
+          'text': "对比上面两段代码你会发现：let/val 都是只读、var 都是可变，print/println 都是输出，字符串插值的写法也几乎一样。这也是为什么本课程把两门语言放在一起教——学会一门，另一门举一反三。"
+        },
+        {
+          'type': "warn",
+          'title': "别贪多",
+          'text': "新手最常见的误区是同时学七八门语言。请记住：本课程的目标是把 Swift 和 Kotlin 各学透，而不是都学个皮毛。学的时候多写、多改、多运行，少『看会』。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"移动开发总览：iOS 与 Android\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"移动开发总览：iOS 与 Android\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"移动开发总览：iOS 与 Android\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "iOS 用 Swift 开发（需 Mac + Xcode），Android 用 Kotlin 开发（Android Studio）",
+            "Swift 属苹果生态，Kotlin 属安卓生态，都是官方第一语言",
+            "有 Mac 想发 iOS 先学 Swift；没有 Mac 或主攻安卓先学 Kotlin",
+            "Flutter / React Native / KMP 是跨平台方案，建议先学好原生",
+            "两门语言语法相似，学完一门另一门事半功倍"
+          ]
+        }
       ],
-      templates: [
-        { name: "双端问候", code: '// Swift\nlet appName = "我的第一款 App"\nprint("欢迎来到 \\(appName)")\n\n// Kotlin\nval appNameK = "我的第一款 App"\nprintln("欢迎来到 $appNameK")' },
-      ],
+      'templates': [
+        {
+          'name': "双端问候",
+          'code': "// Swift\nlet appName = \"我的第一款 App\"\nprint(\"欢迎来到 \\(appName)\")\n\n// Kotlin\nval appNameK = \"我的第一款 App\"\nprintln(\"欢迎来到 $appNameK\")"
+        }
+      ]
     },
     {
-      id: "mb-2",
-      title: "Swift 环境准备：装好 Xcode",
-      summary: "在 Mac 上通过 App Store 安装 Xcode 与 Swift Playgrounds，搞定 Swift 开发环境。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "想写 Swift、做 iOS 应用，**前提是有一台 Mac**（MacBook、iMac、Mac mini 都可以）。这不是因为 Swift 语言本身多高贵，而是苹果规定 iOS 应用的编译与打包只能在其自家工具 Xcode 上进行。好消息是 Xcode 完全免费。" },
-        { type: "h", text: "前提：你需要一台 Mac" },
-        { type: "list", items: ["Mac 上系统自带 App Store，所有苹果软件都从这里下载，无需破解、完全免费。", "如果暂时没有 Mac：可以先用网页版 Swift 或在线 Playground 练语法（后文会介绍），等有条件了再上真机。", "注意：老的 Intel Mac 和新款 Apple 芯片 Mac 都能装 Xcode，只是新版 Xcode 对系统版本有要求，装不上就先去系统设置里把 macOS 更新到最新。"] },
-        { type: "h", text: "第一步：从 App Store 下载 Xcode" },
-        { type: "list", items: ["在 Mac 上打开 App Store，搜索『Xcode』", "或直接打开官网链接：<a href='https://apps.apple.com/cn/app/xcode/id497799835' target='_blank' rel='noopener'>https://apps.apple.com/cn/app/xcode/id497799835</a>", "点击『获取』→『安装』，输入 Apple ID 密码即可（免费）", "Xcode 体积很大（十几个 GB），下载时间取决于网速，请耐心等待"] },
-        { type: "warn", title: "Xcode 的『大』与『慢』", text: "Xcode 是出了名的『巨无霸』，首次下载要十几个 GB，第一次打开还会自动下载一堆 SDK 组件，可能非常慢。这是正常的，别以为是卡死了。如果磁盘空间不足，先清理一下再装。建议预留 30GB 以上空间。" },
-        { type: "h", text: "第二步：验证环境" },
-        { type: "p", text: "装好 Xcode 后，打开它，菜单栏选择 File → New → Playground → Blank，就能进入一个可以直接写 Swift 的空白工作区。点击运行按钮（或快捷键 Cmd+Shift+Return），立刻能看到输出。这是最轻量的 Swift 练习方式，不用先建完整 App 工程。" },
-        { type: "code", lang: "swift", title: "第一个 Swift 程序", code: 'import UIKit\n\nlet greeting = "Hello, Swift!"\nprint(greeting)\n\nvar count = 1\ncount += 1\nprint("计数：\\(count)")' },
-        { type: "h", text: "轻量替代：Swift Playgrounds" },
-        { type: "p", text: "如果觉得 Xcode 太重，苹果还提供了 **Swift Playgrounds**，同样在 App Store 免费下载，iPad 和 Mac 上都能用。它界面像一本互动图书，边玩拼图边学语法，特别适合零基础入门。等熟练后再回到 Xcode 做正式 App。" },
-        { type: "info", title: "没有 Mac 怎么办", text: "可以先用网页版在线 Swift 环境（如各类在线的 Swift Playground 网站）练习纯语法；不过要强调的是，**编译运行真机 App 必须用 Xcode**，网页只能练练语法。本课程正文的 Swift 示例代码都可以在线阅读对照，但请把动手环节放在 Mac + Xcode 上完成。" },
-        { type: "tip", title: "顺手装的配套工具", text: "除了 Xcode，开发 iOS 还需要苹果开发者账号：个人开发者用免费 Apple ID 就能在自己手机上真机调试（免费签名），只有要上架 App Store 才需要花 99 美元/年的开发者会员。刚开始学，免费的就够用。" },
-        { type: "keypoints", items: ["写 Swift / iOS 必须有 Mac，Xcode 从 App Store 免费下载", "Xcode 官网链接：apps.apple.com/cn/app/xcode/id497799835", "Xcode 很大很慢是正常的，预留 30GB 空间", "Playground 是最轻量的 Swift 练习方式，Swift Playgrounds 适合零基础", "真机调试免费，上架 App Store 才需要 99 美元/年会员"] },
+      'id': "mb-2",
+      'title': "Swift 环境准备：装好 Xcode",
+      'summary': "在 Mac 上通过 App Store 安装 Xcode 与 Swift Playgrounds，搞定 Swift 开发环境。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "想写 Swift、做 iOS 应用，**前提是有一台 Mac**（MacBook、iMac、Mac mini 都可以）。这不是因为 Swift 语言本身多高贵，而是苹果规定 iOS 应用的编译与打包只能在其自家工具 Xcode 上进行。好消息是 Xcode 完全免费。"
+        },
+        {
+          'type': "h",
+          'text': "前提：你需要一台 Mac"
+        },
+        {
+          'type': "list",
+          'items': [
+            "Mac 上系统自带 App Store，所有苹果软件都从这里下载，无需破解、完全免费。",
+            "如果暂时没有 Mac：可以先用网页版 Swift 或在线 Playground 练语法（后文会介绍），等有条件了再上真机。",
+            "注意：老的 Intel Mac 和新款 Apple 芯片 Mac 都能装 Xcode，只是新版 Xcode 对系统版本有要求，装不上就先去系统设置里把 macOS 更新到最新。"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "第一步：从 App Store 下载 Xcode"
+        },
+        {
+          'type': "list",
+          'items': [
+            "在 Mac 上打开 App Store，搜索『Xcode』",
+            "或直接打开官网链接：<a href='https://apps.apple.com/cn/app/xcode/id497799835' target='_blank' rel='noopener'>https://apps.apple.com/cn/app/xcode/id497799835</a>",
+            "点击『获取』→『安装』，输入 Apple ID 密码即可（免费）",
+            "Xcode 体积很大（十几个 GB），下载时间取决于网速，请耐心等待"
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "Xcode 的『大』与『慢』",
+          'text': "Xcode 是出了名的『巨无霸』，首次下载要十几个 GB，第一次打开还会自动下载一堆 SDK 组件，可能非常慢。这是正常的，别以为是卡死了。如果磁盘空间不足，先清理一下再装。建议预留 30GB 以上空间。"
+        },
+        {
+          'type': "h",
+          'text': "第二步：验证环境"
+        },
+        {
+          'type': "p",
+          'text': "装好 Xcode 后，打开它，菜单栏选择 File → New → Playground → Blank，就能进入一个可以直接写 Swift 的空白工作区。点击运行按钮（或快捷键 Cmd+Shift+Return），立刻能看到输出。这是最轻量的 Swift 练习方式，不用先建完整 App 工程。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "第一个 Swift 程序",
+          'code': "import UIKit\n\nlet greeting = \"Hello, Swift!\"\nprint(greeting)\n\nvar count = 1\ncount += 1\nprint(\"计数：\\(count)\")"
+        },
+        {
+          'type': "h",
+          'text': "轻量替代：Swift Playgrounds"
+        },
+        {
+          'type': "p",
+          'text': "如果觉得 Xcode 太重，苹果还提供了 **Swift Playgrounds**，同样在 App Store 免费下载，iPad 和 Mac 上都能用。它界面像一本互动图书，边玩拼图边学语法，特别适合零基础入门。等熟练后再回到 Xcode 做正式 App。"
+        },
+        {
+          'type': "info",
+          'title': "没有 Mac 怎么办",
+          'text': "可以先用网页版在线 Swift 环境（如各类在线的 Swift Playground 网站）练习纯语法；不过要强调的是，**编译运行真机 App 必须用 Xcode**，网页只能练练语法。本课程正文的 Swift 示例代码都可以在线阅读对照，但请把动手环节放在 Mac + Xcode 上完成。"
+        },
+        {
+          'type': "tip",
+          'title': "顺手装的配套工具",
+          'text': "除了 Xcode，开发 iOS 还需要苹果开发者账号：个人开发者用免费 Apple ID 就能在自己手机上真机调试（免费签名），只有要上架 App Store 才需要花 99 美元/年的开发者会员。刚开始学，免费的就够用。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Swift 环境准备：装好 Xcode\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Swift 环境准备：装好 Xcode\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Swift 环境准备：装好 Xcode\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "写 Swift / iOS 必须有 Mac，Xcode 从 App Store 免费下载",
+            "Xcode 官网链接：apps.apple.com/cn/app/xcode/id497799835",
+            "Xcode 很大很慢是正常的，预留 30GB 空间",
+            "Playground 是最轻量的 Swift 练习方式，Swift Playgrounds 适合零基础",
+            "真机调试免费，上架 App Store 才需要 99 美元/年会员"
+          ]
+        }
       ],
-      templates: [
-        { name: "验证 Swift 环境", code: 'import UIKit\n\nlet greeting = "Hello, Swift!"\nprint(greeting)\n\nvar count = 1\ncount += 1\nprint("计数：\\(count)")' },
-      ],
+      'templates': [
+        {
+          'name': "验证 Swift 环境",
+          'code': "import UIKit\n\nlet greeting = \"Hello, Swift!\"\nprint(greeting)\n\nvar count = 1\ncount += 1\nprint(\"计数：\\(count)\")"
+        }
+      ]
     },
     {
-      id: "mb-3",
-      title: "Swift 基础语法：变量、类型与集合",
-      summary: "let/var、类型推断、基本数据类型、字符串插值与三种集合一网打尽。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "这一章是 Swift 的『地基』。把变量、数据类型、字符串和集合学扎实，后面所有内容都建立在这之上。Swift 是一门**类型安全**的语言，很多错误在编译时就能被揪出来，这对新手其实是保护。" },
-        { type: "h", text: "变量与常量：let 与 var" },
-        { type: "p", text: "Swift 用 <code.inline>let</code.inline> 声明常量（赋值后不能再改），用 <code.inline>var</code.inline> 声明变量（随时可以改）。原则是：**能 let 就 let**，这样代码更安全、意图更清晰。" },
-        { type: "code", lang: "swift", title: "let 与 var", code: 'let name = "小明"      // 常量：之后不能改\nvar age = 20           // 变量：之后可以改\n\nage = 21               // OK，var 可以改\n// name = "小红"        // 报错！let 不能改\n\nprint(name, age)' },
-        { type: "h", text: "类型推断与类型安全" },
-        { type: "p", text: "Swift 会从赋值内容自动推断出类型（叫**类型推断**），所以你可以不写类型；但也可以显式标注：<code.inline>var score: Int = 95</code.inline>。因为类型安全，把数字当字符串用、把字符串当数字算都会在编译期报错，而不是运行到一半才炸。" },
-        { type: "code", lang: "swift", title: "类型标注", code: 'let price: Double = 9.9    // 显式标注类型\nlet count: Int = 3\nvar title: String = "书籍"\nvar isOK: Bool = true\n\n// let bad: Int = "hello"  // 报错：String 不能当作 Int' },
-        { type: "h", text: "基本数据类型" },
-        { type: "table", head: ["类型", "含义", "示例"], rows: [["Int", "整数", "42、-7、0"], ["Double", "小数（双精度）", "3.14、-0.5"], ["String", "一串文字", "\"你好\""], ["Bool", "布尔值（真/假）", "true、false"], ["Character", "单个字符", "\"A\""]] },
-        { type: "h", text: "字符串插值" },
-        { type: "p", text: "想把变量塞进字符串里，用 **字符串插值**：在 <code.inline>\\(变量名)</code.inline> 的位置，Swift 会自动把变量的值填进去。这比用加号拼接字符串可读性强得多。" },
-        { type: "code", lang: "swift", title: "字符串插值", code: 'let name = "小红"\nlet age = 18\nlet message = "\\(name)今年\\(age)岁，明年就\\(age + 1)岁了"\nprint(message)   // 小红今年18岁，明年就19岁了\n\n// 直接输出\nprint("结果是 \\(1 + 2 * 3)")   // 结果是 7' },
-        { type: "h", text: "print 输出" },
-        { type: "code", lang: "swift", title: "print 的多种用法", code: 'print("你好")                 // 直接输出\nprint("A", "B", "C")          // 逗号分隔，自动加空格\nprint("A", "B", separator: "-") // 自定义分隔符\nprint(1, 2, terminator: "!\\n") // 自定义结尾' },
-        { type: "h", text: "集合：Array / Dictionary / Set" },
-        { type: "p", text: "**Array（数组）**按顺序存放多个值；**Dictionary（字典）**存键值对，用键取对应的值；**Set（集合）**存不重复的值，适合去重和判断成员是否存在。" },
-        { type: "code", lang: "swift", title: "三种集合", code: '// Array 数组\nvar fruits = ["苹果", "香蕉", "橙子"]\nfruits.append("葡萄")          // 末尾追加\nprint(fruits[0])              // 苹果（下标从 0 开始）\n\n// Dictionary 字典\nvar scores = ["语文": 95, "数学": 88]\nscores["英语"] = 92            // 新增/修改\nprint(scores["数学"] ?? 0)     // 88\n\n// Set 集合（自动去重）\nvar ids: Set<Int> = [1, 2, 2, 3, 3, 3]\nprint(ids)                    // {1, 2, 3} 只保留不重复的' },
-        { type: "warn", title: "新手常犯的类型错误", text: "Swift 类型安全很严格：<code.inline>let x: Int = 3.14</code.inline> 会报错，<code.inline>let y = \"5\"; y + 1</code.inline> 也会报错。字符串和数字之间转换要用 <code.inline>Int(\"...\")</code.inline> 或 <code.inline>String(数字)</code.inline>，别硬算。" },
-        { type: "keypoints", items: ["let 常量 / var 变量，能 let 就 let", "Swift 自动推断类型，也支持显式标注：var x: Int = 5", "基本类型：Int / Double / String / Bool / Character", "字符串插值用 \\(变量)，比拼接更清晰", "Array 顺序存、Dictionary 键值对存、Set 去重存", "类型安全：类型不匹配在编译期就报错，是保护不是麻烦"] },
+      'id': "mb-3",
+      'title': "Swift 基础语法：变量、类型与集合",
+      'summary': "let/var、类型推断、基本数据类型、字符串插值与三种集合一网打尽。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "这一章是 Swift 的『地基』。把变量、数据类型、字符串和集合学扎实，后面所有内容都建立在这之上。Swift 是一门**类型安全**的语言，很多错误在编译时就能被揪出来，这对新手其实是保护。"
+        },
+        {
+          'type': "h",
+          'text': "变量与常量：let 与 var"
+        },
+        {
+          'type': "p",
+          'text': "Swift 用 <code.inline>let</code.inline> 声明常量（赋值后不能再改），用 <code.inline>var</code.inline> 声明变量（随时可以改）。原则是：**能 let 就 let**，这样代码更安全、意图更清晰。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "let 与 var",
+          'code': "let name = \"小明\"      // 常量：之后不能改\nvar age = 20           // 变量：之后可以改\n\nage = 21               // OK，var 可以改\n// name = \"小红\"        // 报错！let 不能改\n\nprint(name, age)"
+        },
+        {
+          'type': "h",
+          'text': "类型推断与类型安全"
+        },
+        {
+          'type': "p",
+          'text': "Swift 会从赋值内容自动推断出类型（叫**类型推断**），所以你可以不写类型；但也可以显式标注：<code.inline>var score: Int = 95</code.inline>。因为类型安全，把数字当字符串用、把字符串当数字算都会在编译期报错，而不是运行到一半才炸。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "类型标注",
+          'code': "let price: Double = 9.9    // 显式标注类型\nlet count: Int = 3\nvar title: String = \"书籍\"\nvar isOK: Bool = true\n\n// let bad: Int = \"hello\"  // 报错：String 不能当作 Int"
+        },
+        {
+          'type': "h",
+          'text': "基本数据类型"
+        },
+        {
+          'type': "table",
+          'head': [
+            "类型",
+            "含义",
+            "示例"
+          ],
+          'rows': [
+            [
+              "Int",
+              "整数",
+              "42、-7、0"
+            ],
+            [
+              "Double",
+              "小数（双精度）",
+              "3.14、-0.5"
+            ],
+            [
+              "String",
+              "一串文字",
+              "\"你好\""
+            ],
+            [
+              "Bool",
+              "布尔值（真/假）",
+              "true、false"
+            ],
+            [
+              "Character",
+              "单个字符",
+              "\"A\""
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "字符串插值"
+        },
+        {
+          'type': "p",
+          'text': "想把变量塞进字符串里，用 **字符串插值**：在 <code.inline>\\(变量名)</code.inline> 的位置，Swift 会自动把变量的值填进去。这比用加号拼接字符串可读性强得多。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "字符串插值",
+          'code': "let name = \"小红\"\nlet age = 18\nlet message = \"\\(name)今年\\(age)岁，明年就\\(age + 1)岁了\"\nprint(message)   // 小红今年18岁，明年就19岁了\n\n// 直接输出\nprint(\"结果是 \\(1 + 2 * 3)\")   // 结果是 7"
+        },
+        {
+          'type': "h",
+          'text': "print 输出"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "print 的多种用法",
+          'code': "print(\"你好\")                 // 直接输出\nprint(\"A\", \"B\", \"C\")          // 逗号分隔，自动加空格\nprint(\"A\", \"B\", separator: \"-\") // 自定义分隔符\nprint(1, 2, terminator: \"!\\n\") // 自定义结尾"
+        },
+        {
+          'type': "h",
+          'text': "集合：Array / Dictionary / Set"
+        },
+        {
+          'type': "p",
+          'text': "**Array（数组）**按顺序存放多个值；**Dictionary（字典）**存键值对，用键取对应的值；**Set（集合）**存不重复的值，适合去重和判断成员是否存在。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "三种集合",
+          'code': "// Array 数组\nvar fruits = [\"苹果\", \"香蕉\", \"橙子\"]\nfruits.append(\"葡萄\")          // 末尾追加\nprint(fruits[0])              // 苹果（下标从 0 开始）\n\n// Dictionary 字典\nvar scores = [\"语文\": 95, \"数学\": 88]\nscores[\"英语\"] = 92            // 新增/修改\nprint(scores[\"数学\"] ?? 0)     // 88\n\n// Set 集合（自动去重）\nvar ids: Set<Int> = [1, 2, 2, 3, 3, 3]\nprint(ids)                    // {1, 2, 3} 只保留不重复的"
+        },
+        {
+          'type': "warn",
+          'title': "新手常犯的类型错误",
+          'text': "Swift 类型安全很严格：<code.inline>let x: Int = 3.14</code.inline> 会报错，<code.inline>let y = \"5\"; y + 1</code.inline> 也会报错。字符串和数字之间转换要用 <code.inline>Int(\"...\")</code.inline> 或 <code.inline>String(数字)</code.inline>，别硬算。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Swift 基础语法：变量、类型与集合\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Swift 基础语法：变量、类型与集合\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Swift 基础语法：变量、类型与集合\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "let 常量 / var 变量，能 let 就 let",
+            "Swift 自动推断类型，也支持显式标注：var x: Int = 5",
+            "基本类型：Int / Double / String / Bool / Character",
+            "字符串插值用 \\(变量)，比拼接更清晰",
+            "Array 顺序存、Dictionary 键值对存、Set 去重存",
+            "类型安全：类型不匹配在编译期就报错，是保护不是麻烦"
+          ]
+        }
       ],
-      templates: [
-        { name: "自我介绍卡片", code: 'let name = "小明"\nvar age = 20\nlet city = "上海"\nlet hobbies = ["篮球", "编程", "游戏"]\n\nprint("我叫\\(name)，今年\\(age)岁，来自\\(city)")\nprint("我的爱好：\\(hobbies.joined(separator: "、"))")' },
-        { name: "统计小助手", code: 'let scores = [88, 95, 76, 92, 85]\nvar total = 0\nfor s in scores {\n    total += s\n}\nlet avg = Double(total) / Double(scores.count)\nprint("总分 \\(total)，平均分 \\(avg)")' },
-      ],
+      'templates': [
+        {
+          'name': "自我介绍卡片",
+          'code': "let name = \"小明\"\nvar age = 20\nlet city = \"上海\"\nlet hobbies = [\"篮球\", \"编程\", \"游戏\"]\n\nprint(\"我叫\\(name)，今年\\(age)岁，来自\\(city)\")\nprint(\"我的爱好：\\(hobbies.joined(separator: \"、\"))\")"
+        },
+        {
+          'name': "统计小助手",
+          'code': "let scores = [88, 95, 76, 92, 85]\nvar total = 0\nfor s in scores {\n    total += s\n}\nlet avg = Double(total) / Double(scores.count)\nprint(\"总分 \\(total)，平均分 \\(avg)\")"
+        }
+      ]
     },
     {
-      id: "mb-4",
-      title: "Swift 控制流与函数：让代码有判断和逻辑",
-      summary: "if/switch、for/while 循环、函数与闭包，掌握代码的三种基本结构。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "任何程序都离不开三种基本结构：**顺序**（从上到下执行）、**分支**（根据条件走不同路线）、**循环**（重复做某件事）。再加上把代码打包复用的**函数**，你就能写出有逻辑的程序了。" },
-        { type: "h", text: "分支：if / else" },
-        { type: "code", lang: "swift", title: "if / else", code: 'let score = 86\n\nif score >= 90 {\n    print("优秀")\n} else if score >= 60 {\n    print("及格")\n} else {\n    print("不及格")\n}' },
-        { type: "h", text: "分支：switch" },
-        { type: "p", text: "当判断分支很多时，<code.inline>switch</code.inline> 比一长串 if/else 更清晰。注意 Swift 的 switch 每个 case 默认自动跳出，**不需要写 break**，这是和许多语言不一样的地方。" },
-        { type: "code", lang: "swift", title: "switch 匹配", code: 'let day = "周一"\n\nswitch day {\ncase "周一", "周二", "周三", "周四", "周五":\n    print("上班日")\ncase "周六", "周日":\n    print("休息日")\ncase let unknown where unknown.isEmpty:\n    print("空字符串")\ndefault:\n    print("未知输入")\n}' },
-        { type: "h", text: "循环：for-in 与 while" },
-        { type: "code", lang: "swift", title: "for-in 与 while", code: '// for-in 遍历区间\nfor i in 1...5 {\n    print("第 \\(i) 次")\n}\n\n// 遍历数组\nlet names = ["A", "B", "C"]\nfor n in names {\n    print(n)\n}\n\n// while：条件满足就一直循环\nvar count = 0\nwhile count < 3 {\n    count += 1\n    print("count = \\(count)")\n}' },
-        { type: "warn", title: "死循环危险", text: "while 循环里如果忘记让条件最终变为 false（比如忘了 count += 1），程序会永远循环下去，界面卡死。写循环时心里默念：**条件一定能结束**。" },
-        { type: "h", text: "函数：把逻辑打包复用" },
-        { type: "code", lang: "swift", title: "定义与调用函数", code: '// 无参无返回值\nfunc sayHello() {\n    print("你好！")\n}\n\n// 带参数与返回值\nfunc add(_ a: Int, _ b: Int) -> Int {\n    return a + b\n}\n\n// 带外部标签的参数\nfunc greet(name: String, times: Int) {\n    for _ in 1...times {\n        print("嗨，\\(name)")\n    }\n}\n\nsayHello()\nprint(add(3, 5))            // 8\ngreet(name: "小红", times: 2)' },
-        { type: "info", title: "参数标签是什么", text: "Swift 函数参数默认在调用时要写参数名（如 greet(name:times:)），为了让调用更自然，还可以自定义外部标签。上面 add 前的下划线 <code.inline>_</code.inline> 表示调用时省略参数名，直接写 add(3, 5)。" },
-        { type: "h", text: "闭包 Closure：可以作为参数传递的代码块" },
-        { type: "p", text: "**闭包**就是把一段代码打包成一个值，可以存起来、传来传去、最后再执行。它特别适合配合排序、过滤、异步回调使用。简单记：闭包 = 可以当参数传的『匿名函数』。" },
-        { type: "code", lang: "swift", title: "闭包基础", code: '// 闭包语法：{ (参数) -> 返回值 in 代码 }\nlet square: (Int) -> Int = { (x: Int) -> Int in\n    return x * x\n}\nprint(square(5))   // 25\n\n// 简化写法：单表达式可省略 return 和类型\nlet double = { (x: Int) in x * 2 }\nprint(double(4))   // 8\n\n// 数组排序：sort 接受闭包\nlet nums = [3, 1, 4, 2]\nlet sorted = nums.sorted { $0 < $1 }   // $0 $1 是闭包的简写参数\nprint(sorted)      // [1, 2, 3, 4]' },
-        { type: "keypoints", items: ["分支：if/else、switch；switch 每个 case 默认不穿透，不用写 break", "循环：for-in 遍历区间/集合，while 条件循环，务必保证能退出", "函数用 func 定义，返回类型写在 -> 后面", "闭包 = 可当参数传递的匿名代码块，$0/$1 是简写参数", "把重复逻辑抽成函数，代码才简洁可复用"] },
+      'id': "mb-4",
+      'title': "Swift 控制流与函数：让代码有判断和逻辑",
+      'summary': "if/switch、for/while 循环、函数与闭包，掌握代码的三种基本结构。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "任何程序都离不开三种基本结构：**顺序**（从上到下执行）、**分支**（根据条件走不同路线）、**循环**（重复做某件事）。再加上把代码打包复用的**函数**，你就能写出有逻辑的程序了。"
+        },
+        {
+          'type': "h",
+          'text': "分支：if / else"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "if / else",
+          'code': "let score = 86\n\nif score >= 90 {\n    print(\"优秀\")\n} else if score >= 60 {\n    print(\"及格\")\n} else {\n    print(\"不及格\")\n}"
+        },
+        {
+          'type': "h",
+          'text': "分支：switch"
+        },
+        {
+          'type': "p",
+          'text': "当判断分支很多时，<code.inline>switch</code.inline> 比一长串 if/else 更清晰。注意 Swift 的 switch 每个 case 默认自动跳出，**不需要写 break**，这是和许多语言不一样的地方。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "switch 匹配",
+          'code': "let day = \"周一\"\n\nswitch day {\ncase \"周一\", \"周二\", \"周三\", \"周四\", \"周五\":\n    print(\"上班日\")\ncase \"周六\", \"周日\":\n    print(\"休息日\")\ncase let unknown where unknown.isEmpty:\n    print(\"空字符串\")\ndefault:\n    print(\"未知输入\")\n}"
+        },
+        {
+          'type': "h",
+          'text': "循环：for-in 与 while"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "for-in 与 while",
+          'code': "// for-in 遍历区间\nfor i in 1...5 {\n    print(\"第 \\(i) 次\")\n}\n\n// 遍历数组\nlet names = [\"A\", \"B\", \"C\"]\nfor n in names {\n    print(n)\n}\n\n// while：条件满足就一直循环\nvar count = 0\nwhile count < 3 {\n    count += 1\n    print(\"count = \\(count)\")\n}"
+        },
+        {
+          'type': "warn",
+          'title': "死循环危险",
+          'text': "while 循环里如果忘记让条件最终变为 false（比如忘了 count += 1），程序会永远循环下去，界面卡死。写循环时心里默念：**条件一定能结束**。"
+        },
+        {
+          'type': "h",
+          'text': "函数：把逻辑打包复用"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "定义与调用函数",
+          'code': "// 无参无返回值\nfunc sayHello() {\n    print(\"你好！\")\n}\n\n// 带参数与返回值\nfunc add(_ a: Int, _ b: Int) -> Int {\n    return a + b\n}\n\n// 带外部标签的参数\nfunc greet(name: String, times: Int) {\n    for _ in 1...times {\n        print(\"嗨，\\(name)\")\n    }\n}\n\nsayHello()\nprint(add(3, 5))            // 8\ngreet(name: \"小红\", times: 2)"
+        },
+        {
+          'type': "info",
+          'title': "参数标签是什么",
+          'text': "Swift 函数参数默认在调用时要写参数名（如 greet(name:times:)），为了让调用更自然，还可以自定义外部标签。上面 add 前的下划线 <code.inline>_</code.inline> 表示调用时省略参数名，直接写 add(3, 5)。"
+        },
+        {
+          'type': "h",
+          'text': "闭包 Closure：可以作为参数传递的代码块"
+        },
+        {
+          'type': "p",
+          'text': "**闭包**就是把一段代码打包成一个值，可以存起来、传来传去、最后再执行。它特别适合配合排序、过滤、异步回调使用。简单记：闭包 = 可以当参数传的『匿名函数』。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "闭包基础",
+          'code': "// 闭包语法：{ (参数) -> 返回值 in 代码 }\nlet square: (Int) -> Int = { (x: Int) -> Int in\n    return x * x\n}\nprint(square(5))   // 25\n\n// 简化写法：单表达式可省略 return 和类型\nlet double = { (x: Int) in x * 2 }\nprint(double(4))   // 8\n\n// 数组排序：sort 接受闭包\nlet nums = [3, 1, 4, 2]\nlet sorted = nums.sorted { $0 < $1 }   // $0 $1 是闭包的简写参数\nprint(sorted)      // [1, 2, 3, 4]"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Swift 控制流与函数：让代码有判断和逻辑\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Swift 控制流与函数：让代码有判断和逻辑\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Swift 控制流与函数：让代码有判断和逻辑\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "分支：if/else、switch；switch 每个 case 默认不穿透，不用写 break",
+            "循环：for-in 遍历区间/集合，while 条件循环，务必保证能退出",
+            "函数用 func 定义，返回类型写在 -> 后面",
+            "闭包 = 可当参数传递的匿名代码块，$0/$1 是简写参数",
+            "把重复逻辑抽成函数，代码才简洁可复用"
+          ]
+        }
       ],
-      templates: [
-        { name: "成绩等级判断", code: 'func grade(of score: Int) -> String {\n    if score >= 90 { return "A" }\n    else if score >= 80 { return "B" }\n    else if score >= 70 { return "C" }\n    else if score >= 60 { return "D" }\n    else { return "F" }\n}\n\nlet scores = [95, 82, 66, 45]\nfor s in scores {\n    print("\\(s) 分 -> \\(grade(of: s))")' },
-        { name: "用闭包过滤数组", code: 'let numbers = [1, 2, 3, 4, 5, 6, 7, 8]\nlet evens = numbers.filter { $0 % 2 == 0 }\nlet doubled = numbers.map { $0 * 2 }\nprint("偶数：\\(evens)")\nprint("翻倍：\\(doubled)")' },
-      ],
+      'templates': [
+        {
+          'name': "成绩等级判断",
+          'code': "func grade(of score: Int) -> String {\n    if score >= 90 { return \"A\" }\n    else if score >= 80 { return \"B\" }\n    else if score >= 70 { return \"C\" }\n    else if score >= 60 { return \"D\" }\n    else { return \"F\" }\n}\n\nlet scores = [95, 82, 66, 45]\nfor s in scores {\n    print(\"\\(s) 分 -> \\(grade(of: s))\")"
+        },
+        {
+          'name': "用闭包过滤数组",
+          'code': "let numbers = [1, 2, 3, 4, 5, 6, 7, 8]\nlet evens = numbers.filter { $0 % 2 == 0 }\nlet doubled = numbers.map { $0 * 2 }\nprint(\"偶数：\\(evens)\")\nprint(\"翻倍：\\(doubled)\")"
+        }
+      ]
     },
     {
-      id: "mb-5",
-      title: "Swift 面向对象：结构体与类",
-      summary: "struct 与 class、属性与方法、mutating、枚举，理解值类型与引用类型。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "前面我们用的是零散的变量和函数。当程序变大，我们需要一种方式把『相关的数据』和『操作这些数据的函数』打包在一起，这就是**面向对象**。Swift 里有两个打包工具：**结构体（struct）** 和 **类（class）**。" },
-        { type: "h", text: "结构体 struct：定义自己的数据类型" },
-        { type: "code", lang: "swift", title: "定义并使用结构体", code: 'struct Student {\n    var name: String\n    var score: Int\n\n    // 结构体里的函数叫「方法」\n    func description() -> String {\n        return "\\(name)：\\(score) 分"\n    }\n}\n\n// 自动获得「成员初始化器」，按属性顺序传参\nlet s1 = Student(name: "小明", score: 95)\nlet s2 = Student(name: "小红", score: 88)\n\nprint(s1.description())   // 小明：95 分\nprint(s2.name)            // 小红' },
-        { type: "h", text: "类 class" },
-        { type: "code", lang: "swift", title: "定义类", code: 'class BankAccount {\n    var balance = 0\n\n    func deposit(_ amount: Int) {\n        balance += amount\n    }\n\n    func withdraw(_ amount: Int) {\n        if amount <= balance {\n            balance -= amount\n        } else {\n            print("余额不足")\n        }\n    }\n}\n\nlet account = BankAccount()\naccount.deposit(100)\naccount.withdraw(30)\nprint(account.balance)   // 70' },
-        { type: "h", text: "struct 与 class 的核心区别" },
-        { type: "table", head: ["对比", "struct 结构体", "class 类"], rows: [["类型", "值类型（复制一份）", "引用类型（共用同一份）"], ["赋值", "copy 副本，互不影响", "指向同一对象，互相影响"], ["继承", "不支持继承", "支持继承"], ["mutating", "改属性需加 mutating", "不需要"], ["推荐度", "Swift 官方推荐优先用 struct", "需要继承/共享状态时用 class"]] },
-        { type: "code", lang: "swift", title: "值类型 vs 引用类型", code: 'struct Point {\n    var x = 0\n    var y = 0\n}\n\nvar a = Point(x: 1, y: 2)\nvar b = a          // 复制了一份\nb.x = 99\nprint(a.x)         // 1（a 没变，因为是复制）\n\nclass Counter {\n    var value = 0\n}\n\nlet c1 = Counter()\nlet c2 = c1        // 指向同一个对象\nc2.value = 100\nprint(c1.value)    // 100（c1 也变了，因为是引用）' },
-        { type: "warn", title: "引用类型最容易踩的坑", text: "class 赋给新变量不是复制而是『同一个对象起了新名字』。改一个，另一个跟着变。想要真正复制，类要实现 copy 或换用 struct。这是面试常考题，务必理解透彻。" },
-        { type: "h", text: "mutating：结构体里修改自己" },
-        { type: "p", text: "因为 struct 是值类型，它的方法里想修改自身属性，必须在方法前加 <code.inline>mutating</code.inline> 关键字，声明『这个方法会改变结构体自己』。" },
-        { type: "code", lang: "swift", title: "mutating 方法", code: 'struct Counter {\n    var value = 0\n\n    mutating func increment() {\n        value += 1\n    }\n}\n\nvar c = Counter()   // 注意：要用 var 声明，否则不能调 mutating\nc.increment()\nc.increment()\nprint(c.value)      // 2' },
-        { type: "h", text: "枚举 enum：一组有限的可选值" },
-        { type: "code", lang: "swift", title: "枚举的使用", code: 'enum Direction {\n    case north, south, east, west\n}\n\n// 带关联值的枚举\nenum Result {\n    case success\n    case failure(String)   // 可以携带数据\n}\n\nlet dir = Direction.north\nlet r = Result.failure("网络超时")\n\nswitch dir {\ncase .north:\n    print("向北")\ncase .south:\n    print("向南")\ndefault:\n    print("其他方向")\n}\n\nif case .failure(let msg) = r {\n    print("失败了：\\(msg)")   // 失败了：网络超时\n}' },
-        { type: "keypoints", items: ["struct 值类型（复制），class 引用类型（共享），官方推荐优先 struct", "结构体/类的属性是数据，方法是操作数据的函数", "struct 的方法想改自己属性要加 mutating", "class 支持继承，struct 不支持", "enum 表示一组有限可选项，还能携带关联值", "用 class 共享状态时小心『一个变量改了全变』的坑"] },
+      'id': "mb-5",
+      'title': "Swift 面向对象：结构体与类",
+      'summary': "struct 与 class、属性与方法、mutating、枚举，理解值类型与引用类型。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "前面我们用的是零散的变量和函数。当程序变大，我们需要一种方式把『相关的数据』和『操作这些数据的函数』打包在一起，这就是**面向对象**。Swift 里有两个打包工具：**结构体（struct）** 和 **类（class）**。"
+        },
+        {
+          'type': "h",
+          'text': "结构体 struct：定义自己的数据类型"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "定义并使用结构体",
+          'code': "struct Student {\n    var name: String\n    var score: Int\n\n    // 结构体里的函数叫「方法」\n    func description() -> String {\n        return \"\\(name)：\\(score) 分\"\n    }\n}\n\n// 自动获得「成员初始化器」，按属性顺序传参\nlet s1 = Student(name: \"小明\", score: 95)\nlet s2 = Student(name: \"小红\", score: 88)\n\nprint(s1.description())   // 小明：95 分\nprint(s2.name)            // 小红"
+        },
+        {
+          'type': "h",
+          'text': "类 class"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "定义类",
+          'code': "class BankAccount {\n    var balance = 0\n\n    func deposit(_ amount: Int) {\n        balance += amount\n    }\n\n    func withdraw(_ amount: Int) {\n        if amount <= balance {\n            balance -= amount\n        } else {\n            print(\"余额不足\")\n        }\n    }\n}\n\nlet account = BankAccount()\naccount.deposit(100)\naccount.withdraw(30)\nprint(account.balance)   // 70"
+        },
+        {
+          'type': "h",
+          'text': "struct 与 class 的核心区别"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "struct 结构体",
+            "class 类"
+          ],
+          'rows': [
+            [
+              "类型",
+              "值类型（复制一份）",
+              "引用类型（共用同一份）"
+            ],
+            [
+              "赋值",
+              "copy 副本，互不影响",
+              "指向同一对象，互相影响"
+            ],
+            [
+              "继承",
+              "不支持继承",
+              "支持继承"
+            ],
+            [
+              "mutating",
+              "改属性需加 mutating",
+              "不需要"
+            ],
+            [
+              "推荐度",
+              "Swift 官方推荐优先用 struct",
+              "需要继承/共享状态时用 class"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "值类型 vs 引用类型",
+          'code': "struct Point {\n    var x = 0\n    var y = 0\n}\n\nvar a = Point(x: 1, y: 2)\nvar b = a          // 复制了一份\nb.x = 99\nprint(a.x)         // 1（a 没变，因为是复制）\n\nclass Counter {\n    var value = 0\n}\n\nlet c1 = Counter()\nlet c2 = c1        // 指向同一个对象\nc2.value = 100\nprint(c1.value)    // 100（c1 也变了，因为是引用）"
+        },
+        {
+          'type': "warn",
+          'title': "引用类型最容易踩的坑",
+          'text': "class 赋给新变量不是复制而是『同一个对象起了新名字』。改一个，另一个跟着变。想要真正复制，类要实现 copy 或换用 struct。这是面试常考题，务必理解透彻。"
+        },
+        {
+          'type': "h",
+          'text': "mutating：结构体里修改自己"
+        },
+        {
+          'type': "p",
+          'text': "因为 struct 是值类型，它的方法里想修改自身属性，必须在方法前加 <code.inline>mutating</code.inline> 关键字，声明『这个方法会改变结构体自己』。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "mutating 方法",
+          'code': "struct Counter {\n    var value = 0\n\n    mutating func increment() {\n        value += 1\n    }\n}\n\nvar c = Counter()   // 注意：要用 var 声明，否则不能调 mutating\nc.increment()\nc.increment()\nprint(c.value)      // 2"
+        },
+        {
+          'type': "h",
+          'text': "枚举 enum：一组有限的可选值"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "枚举的使用",
+          'code': "enum Direction {\n    case north, south, east, west\n}\n\n// 带关联值的枚举\nenum Result {\n    case success\n    case failure(String)   // 可以携带数据\n}\n\nlet dir = Direction.north\nlet r = Result.failure(\"网络超时\")\n\nswitch dir {\ncase .north:\n    print(\"向北\")\ncase .south:\n    print(\"向南\")\ndefault:\n    print(\"其他方向\")\n}\n\nif case .failure(let msg) = r {\n    print(\"失败了：\\(msg)\")   // 失败了：网络超时\n}"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Swift 面向对象：结构体与类\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Swift 面向对象：结构体与类\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Swift 面向对象：结构体与类\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "struct 值类型（复制），class 引用类型（共享），官方推荐优先 struct",
+            "结构体/类的属性是数据，方法是操作数据的函数",
+            "struct 的方法想改自己属性要加 mutating",
+            "class 支持继承，struct 不支持",
+            "enum 表示一组有限可选项，还能携带关联值",
+            "用 class 共享状态时小心『一个变量改了全变』的坑"
+          ]
+        }
       ],
-      templates: [
-        { name: "图书管理系统", code: 'struct Book {\n    var title: String\n    var price: Double\n    var sold = 0\n\n    mutating func sell(_ count: Int) {\n        sold += count\n    }\n\n    func revenue() -> Double {\n        return price * Double(sold)\n    }\n}\n\nvar b = Book(title: "Swift 入门", price: 39.9)\nb.sell(3)\nb.sell(2)\nprint("\\(b.title) 已售 \\(b.sold) 本，收入 \\(b.revenue()) 元")' },
-        { name: "用枚举做状态机", code: 'enum State {\n    case idle, running, paused, stopped\n}\n\nvar current = State.idle\nfunc describe(_ s: State) -> String {\n    switch s {\n    case .idle: return "空闲"\n    case .running: return "运行中"\n    case .paused: return "已暂停"\n    case .stopped: return "已停止"\n    }\n}\n\nprint(describe(current))   // 空闲' },
-      ],
+      'templates': [
+        {
+          'name': "图书管理系统",
+          'code': "struct Book {\n    var title: String\n    var price: Double\n    var sold = 0\n\n    mutating func sell(_ count: Int) {\n        sold += count\n    }\n\n    func revenue() -> Double {\n        return price * Double(sold)\n    }\n}\n\nvar b = Book(title: \"Swift 入门\", price: 39.9)\nb.sell(3)\nb.sell(2)\nprint(\"\\(b.title) 已售 \\(b.sold) 本，收入 \\(b.revenue()) 元\")"
+        },
+        {
+          'name': "用枚举做状态机",
+          'code': "enum State {\n    case idle, running, paused, stopped\n}\n\nvar current = State.idle\nfunc describe(_ s: State) -> String {\n    switch s {\n    case .idle: return \"空闲\"\n    case .running: return \"运行中\"\n    case .paused: return \"已暂停\"\n    case .stopped: return \"已停止\"\n    }\n}\n\nprint(describe(current))   // 空闲"
+        }
+      ]
     },
     {
-      id: "mb-6",
-      title: "Swift 进阶：可选型与协议",
-      summary: "Optional 空值安全、guard/if let 解包、protocol 协议、extension 扩展与错误处理。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "这一章是 Swift 的精髓，也是最容易劝退新手的地方：**可选型（Optional）**。它解决了编程中最头疼的『空值崩溃』问题，让 Swift 成为极其安全的语言。学懂它，你的 Swift 才算真正入门。" },
-        { type: "h", text: "可选型 Optional：可能有值，也可能没有" },
-        { type: "p", text: "Swift 的变量默认**不允许**是空（nil）。如果你确实需要『可能没值』，就把它声明成可选型，在类型后面加个问号 <code.inline>?</code.inline>。可选型就像一个包装盒：里面有值，或者里面是空的。" },
-        { type: "code", lang: "swift", title: "可选型声明", code: 'var name: String? = "小明"   // 有值\nvar nickname: String? = nil  // 没有值\n\n// 不能直接使用可选型！\n// print(name.uppercased())   // 报错：name 可能为 nil\n\n// 可选型在内存里本质是个枚举：要么 .some(值)，要么 .none' },
-        { type: "h", text: "安全解包：if let 与 guard let" },
-        { type: "p", text: "既然可选型不能直接用，就要『解包』把里面的值取出来。最安全的方式是 <code.inline>if let</code.inline>：如果里面有值就解包并执行代码块，否则跳过或走 else。" },
-        { type: "code", lang: "swift", title: "if let 安全解包", code: 'var maybeNumber: Int? = 42\n\nif let value = maybeNumber {\n    print("有值，是 \\(value)")       // 走到这里\n} else {\n    print("是空的")\n}\n\nvar empty: Int? = nil\nif let value = empty {\n    print(value)\n} else {\n    print("empty 是空的")             // 走到这里\n}' },
-        { type: "h", text: "guard let：提前退出" },
-        { type: "p", text: "<code.inline>guard let</code.inline> 用于『条件不满足就提前返回』的场景，能把繁琐的判断收拢到函数开头，让后面的代码放心使用解包后的变量。它比 if let 的嵌套更整洁。" },
-        { type: "code", lang: "swift", title: "guard 提前退出", code: 'func greet(person: String?) {\n    guard let name = person else {\n        print("没有名字，不打招呼了")\n        return\n    }\n    // 走到这里说明 person 一定有值\n    print("你好，\\(name)！")\n}\n\ngreet(person: "小红")\ngreet(person: nil)' },
-        { type: "danger", title: "强制解包 ! 的代价", text: "在可选型后面加感叹号 <code.inline>!</code.inline> 可以强制解包：有值就取出，没值就直接**崩溃**。新手图省事爱用 !，但一个不留神就闪退。口诀：**能安全解包就别用 !**，只在 100% 确定有值时用。" },
-        { type: "code", lang: "swift", title: "强制解包示例（慎用）", code: 'let text: String? = "abc"\nlet forced = text!          // 此刻确定有值，可以\nprint(forced)\n\n// let bad: String? = nil\n// let crash = bad!          // 崩溃！Fatal error: Unexpectedly found nil' },
-        { type: "h", text: "协议 protocol：制定规则" },
-        { type: "p", text: "**协议**定义一组『要求』（属性 + 方法），谁想遵守协议，谁就必须实现这些要求。它不关心具体是谁，只关心『能不能做到』，是 Swift 面向协议编程的核心。" },
-        { type: "code", lang: "swift", title: "协议的定义与遵守", code: 'protocol Animal {\n    var name: String { get }\n    func makeSound()\n}\n\nstruct Dog: Animal {\n    var name: String\n    func makeSound() {\n        print("\\(name) 汪汪叫")\n    }\n}\n\nstruct Cat: Animal {\n    var name: String\n    func makeSound() {\n        print("\\(name) 喵喵叫")\n    }\n}\n\nlet pets: [Animal] = [Dog(name: "旺财"), Cat(name: "咪咪")]\nfor pet in pets {\n    pet.makeSound()     // 多态：不同动物发出不同声音\n}' },
-        { type: "h", text: "扩展 extension：给类型加新本领" },
-        { type: "p", text: "**扩展**可以给已有的类型（包括 Int、String 这类系统类型）添加新方法，而不用修改原始定义。这是 Swift 代码组织的重要工具。" },
-        { type: "code", lang: "swift", title: "扩展 String", code: 'extension String {\n    // 判断是否是回文（正读反读一样）\n    var isPalindrome: Bool {\n        let lower = self.lowercased()\n        return lower == String(lower.reversed())\n    }\n\n    func repeatTimes(_ n: Int) -> String {\n        return String(repeating: self, count: n)\n    }\n}\n\nprint("abba".isPalindrome)      // true\nprint("Hi".repeatTimes(3))      // HiHiHi' },
-        { type: "h", text: "错误处理：do / catch" },
-        { type: "code", lang: "swift", title: "抛出与捕获错误", code: 'enum LoginError: Error {\n    case emptyName\n    case wrongPassword\n}\n\nfunc login(name: String, password: String) throws {\n    if name.isEmpty {\n        throw LoginError.emptyName\n    }\n    if password != "123456" {\n        throw LoginError.wrongPassword\n    }\n    print("登录成功！")\n}\n\n// 调用可能抛错的函数，必须用 try + do/catch\ndo {\n    try login(name: "", password: "x")\n} catch LoginError.emptyName {\n    print("用户名不能为空")\n} catch LoginError.wrongPassword {\n    print("密码错误")\n} catch {\n    print("其他错误：\\(error)")\n}' },
-        { type: "keypoints", items: ["可选型 ? 表示『可能有值可能为空』，不能直接使用", "if let 安全解包；guard let 提前退出，让后续代码放心用", "强制解包 ! 在值为空时直接崩溃，能不用就不用", "协议 protocol 定义规则，遵守者必须实现其要求", "扩展 extension 给已有类型加方法", "可能失败的操作用 throws 抛出，调用方用 do/catch 捕获"] },
+      'id': "mb-6",
+      'title': "Swift 进阶：可选型与协议",
+      'summary': "Optional 空值安全、guard/if let 解包、protocol 协议、extension 扩展与错误处理。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "这一章是 Swift 的精髓，也是最容易劝退新手的地方：**可选型（Optional）**。它解决了编程中最头疼的『空值崩溃』问题，让 Swift 成为极其安全的语言。学懂它，你的 Swift 才算真正入门。"
+        },
+        {
+          'type': "h",
+          'text': "可选型 Optional：可能有值，也可能没有"
+        },
+        {
+          'type': "p",
+          'text': "Swift 的变量默认**不允许**是空（nil）。如果你确实需要『可能没值』，就把它声明成可选型，在类型后面加个问号 <code.inline>?</code.inline>。可选型就像一个包装盒：里面有值，或者里面是空的。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "可选型声明",
+          'code': "var name: String? = \"小明\"   // 有值\nvar nickname: String? = nil  // 没有值\n\n// 不能直接使用可选型！\n// print(name.uppercased())   // 报错：name 可能为 nil\n\n// 可选型在内存里本质是个枚举：要么 .some(值)，要么 .none"
+        },
+        {
+          'type': "h",
+          'text': "安全解包：if let 与 guard let"
+        },
+        {
+          'type': "p",
+          'text': "既然可选型不能直接用，就要『解包』把里面的值取出来。最安全的方式是 <code.inline>if let</code.inline>：如果里面有值就解包并执行代码块，否则跳过或走 else。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "if let 安全解包",
+          'code': "var maybeNumber: Int? = 42\n\nif let value = maybeNumber {\n    print(\"有值，是 \\(value)\")       // 走到这里\n} else {\n    print(\"是空的\")\n}\n\nvar empty: Int? = nil\nif let value = empty {\n    print(value)\n} else {\n    print(\"empty 是空的\")             // 走到这里\n}"
+        },
+        {
+          'type': "h",
+          'text': "guard let：提前退出"
+        },
+        {
+          'type': "p",
+          'text': "<code.inline>guard let</code.inline> 用于『条件不满足就提前返回』的场景，能把繁琐的判断收拢到函数开头，让后面的代码放心使用解包后的变量。它比 if let 的嵌套更整洁。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "guard 提前退出",
+          'code': "func greet(person: String?) {\n    guard let name = person else {\n        print(\"没有名字，不打招呼了\")\n        return\n    }\n    // 走到这里说明 person 一定有值\n    print(\"你好，\\(name)！\")\n}\n\ngreet(person: \"小红\")\ngreet(person: nil)"
+        },
+        {
+          'type': "danger",
+          'title': "强制解包 ! 的代价",
+          'text': "在可选型后面加感叹号 <code.inline>!</code.inline> 可以强制解包：有值就取出，没值就直接**崩溃**。新手图省事爱用 !，但一个不留神就闪退。口诀：**能安全解包就别用 !**，只在 100% 确定有值时用。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "强制解包示例（慎用）",
+          'code': "let text: String? = \"abc\"\nlet forced = text!          // 此刻确定有值，可以\nprint(forced)\n\n// let bad: String? = nil\n// let crash = bad!          // 崩溃！Fatal error: Unexpectedly found nil"
+        },
+        {
+          'type': "h",
+          'text': "协议 protocol：制定规则"
+        },
+        {
+          'type': "p",
+          'text': "**协议**定义一组『要求』（属性 + 方法），谁想遵守协议，谁就必须实现这些要求。它不关心具体是谁，只关心『能不能做到』，是 Swift 面向协议编程的核心。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "协议的定义与遵守",
+          'code': "protocol Animal {\n    var name: String { get }\n    func makeSound()\n}\n\nstruct Dog: Animal {\n    var name: String\n    func makeSound() {\n        print(\"\\(name) 汪汪叫\")\n    }\n}\n\nstruct Cat: Animal {\n    var name: String\n    func makeSound() {\n        print(\"\\(name) 喵喵叫\")\n    }\n}\n\nlet pets: [Animal] = [Dog(name: \"旺财\"), Cat(name: \"咪咪\")]\nfor pet in pets {\n    pet.makeSound()     // 多态：不同动物发出不同声音\n}"
+        },
+        {
+          'type': "h",
+          'text': "扩展 extension：给类型加新本领"
+        },
+        {
+          'type': "p",
+          'text': "**扩展**可以给已有的类型（包括 Int、String 这类系统类型）添加新方法，而不用修改原始定义。这是 Swift 代码组织的重要工具。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "扩展 String",
+          'code': "extension String {\n    // 判断是否是回文（正读反读一样）\n    var isPalindrome: Bool {\n        let lower = self.lowercased()\n        return lower == String(lower.reversed())\n    }\n\n    func repeatTimes(_ n: Int) -> String {\n        return String(repeating: self, count: n)\n    }\n}\n\nprint(\"abba\".isPalindrome)      // true\nprint(\"Hi\".repeatTimes(3))      // HiHiHi"
+        },
+        {
+          'type': "h",
+          'text': "错误处理：do / catch"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "抛出与捕获错误",
+          'code': "enum LoginError: Error {\n    case emptyName\n    case wrongPassword\n}\n\nfunc login(name: String, password: String) throws {\n    if name.isEmpty {\n        throw LoginError.emptyName\n    }\n    if password != \"123456\" {\n        throw LoginError.wrongPassword\n    }\n    print(\"登录成功！\")\n}\n\n// 调用可能抛错的函数，必须用 try + do/catch\ndo {\n    try login(name: \"\", password: \"x\")\n} catch LoginError.emptyName {\n    print(\"用户名不能为空\")\n} catch LoginError.wrongPassword {\n    print(\"密码错误\")\n} catch {\n    print(\"其他错误：\\(error)\")\n}"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Swift 进阶：可选型与协议\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Swift 进阶：可选型与协议\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Swift 进阶：可选型与协议\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "可选型 ? 表示『可能有值可能为空』，不能直接使用",
+            "if let 安全解包；guard let 提前退出，让后续代码放心用",
+            "强制解包 ! 在值为空时直接崩溃，能不用就不用",
+            "协议 protocol 定义规则，遵守者必须实现其要求",
+            "扩展 extension 给已有类型加方法",
+            "可能失败的操作用 throws 抛出，调用方用 do/catch 捕获"
+          ]
+        }
       ],
-      templates: [
-        { name: "安全解析数字", code: 'func parseAge(_ input: String) -> Int? {\n    guard let age = Int(input), age >= 0 else {\n        return nil\n    }\n    return age\n}\n\nlet a = parseAge("18")\nlet b = parseAge("-5")\nprint(a ?? -1)   // 18\nprint(b ?? -1)   // -1（解析失败返回默认值）' },
-        { name: "扩展 Int 判断奇偶", code: 'extension Int {\n    var isEven: Bool { return self % 2 == 0 }\n}\n\nfor i in 1...5 {\n    print("\\(i) 是\\(i.isEven ? "偶数" : "奇数")")\n}' },
-      ],
+      'templates': [
+        {
+          'name': "安全解析数字",
+          'code': "func parseAge(_ input: String) -> Int? {\n    guard let age = Int(input), age >= 0 else {\n        return nil\n    }\n    return age\n}\n\nlet a = parseAge(\"18\")\nlet b = parseAge(\"-5\")\nprint(a ?? -1)   // 18\nprint(b ?? -1)   // -1（解析失败返回默认值）"
+        },
+        {
+          'name': "扩展 Int 判断奇偶",
+          'code': "extension Int {\n    var isEven: Bool { return self % 2 == 0 }\n}\n\nfor i in 1...5 {\n    print(\"\\(i) 是\\(i.isEven ? \"偶数\" : \"奇数\")\")\n}"
+        }
+      ]
     },
     {
-      id: "mb-7",
-      title: "SwiftUI 入门：声明式 UI 框架",
-      summary: "用 View、Text、Button、Stack 布局与 @State 状态，编写 iOS 界面。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "前面学的都是 Swift 语言本身，这一章开始写**界面**。苹果推出的 **SwiftUI** 用『声明式』写法描述界面：你只负责说『界面上有什么、长什么样』，剩下的刷新和更新交给框架。" },
-        { type: "h", text: "第一个 View" },
-        { type: "p", text: "在 SwiftUI 里，每个界面片段都是一个 <code.inline>View</code.inline>（视图）。最小单位是 <code.inline>Text</code.inline>（文本）和 <code.inline>Button</code.inline>（按钮），它们通过 <code.inline>body</code> 属性组合成完整界面。" },
-        { type: "code", lang: "swift", title: "第一个 SwiftUI 视图", code: 'import SwiftUI\n\nstruct ContentView: View {\n    var body: some View {\n        VStack {\n            Text("你好，SwiftUI！")\n                .font(.title)\n                .foregroundColor(.blue)\n            Text("这是我们的第一个界面")\n                .font(.body)\n        }\n        .padding()\n    }\n}\n\n// 预览（Xcode 里会自动渲染出来）\n#Preview {\n    ContentView()\n}' },
-        { type: "h", text: "布局：VStack / HStack" },
-        { type: "p", text: "SwiftUI 用 <code.inline>VStack</code.inline>（垂直堆叠）、<code.inline>HStack</code.inline>（水平排列）、<code.inline>ZStack</code.inline>（层叠）三个容器摆放子视图。修饰符（.font、.padding 等）用来调整样式。" },
-        { type: "code", lang: "swift", title: "Stack 布局与修饰符", code: 'struct LayoutView: View {\n    var body: some View {\n        VStack(spacing: 20) {\n            Text("标题")\n                .font(.largeTitle)\n                .bold()\n\n            HStack(spacing: 30) {\n                Text("左")\n                    .frame(width: 60, height: 40)\n                    .background(Color.red)\n                    .foregroundColor(.white)\n                Text("右")\n                    .frame(width: 60, height: 40)\n                    .background(Color.green)\n                    .foregroundColor(.white)\n            }\n\n            Text("底部文字")\n                .italic()\n                .foregroundColor(.gray)\n        }\n        .padding()\n    }\n}' },
-        { type: "h", text: "状态：@State 让界面动起来" },
-        { type: "p", text: "纯静态的界面没意思。SwiftUI 用 <code.inline>@State</code.inline> 声明『状态』：一旦状态变了，SwiftUI 会自动重新计算并刷新界面。这是声明式 UI 的核心——**你不用手动操作控件，只管改状态**。" },
-        { type: "code", lang: "swift", title: "Button 与 @State 计数器", code: 'import SwiftUI\n\nstruct CounterView: View {\n    @State private var count = 0\n\n    var body: some View {\n        VStack(spacing: 30) {\n            Text("\\(count)")\n                .font(.system(size: 80))\n                .fontWeight(.bold)\n\n            HStack(spacing: 20) {\n                Button("加一") {\n                    count += 1\n                }\n                .buttonStyle(.borderedProminent)\n\n                Button("清零") {\n                    count = 0\n                }\n                .buttonStyle(.bordered)\n            }\n        }\n    }\n}\n\n#Preview {\n    CounterView()\n}' },
-        { type: "h", text: "列表 List" },
-        { type: "code", lang: "swift", title: "List 展示数据", code: 'import SwiftUI\n\nstruct FruitListView: View {\n    let fruits = ["苹果", "香蕉", "橙子", "葡萄"]\n\n    var body: some View {\n        List(fruits, id: \\.self) { fruit in\n            HStack {\n                Text("🍎")\n                Text(fruit)\n            }\n        }\n    }\n}\n\n#Preview {\n    FruitListView()\n}' },
-        { type: "warn", title: "@State 必须配 var，且要写在 View 内部", text: "<code.inline>@State</code.inline> 只能配合 <code.inline>var</code.inline> 使用（写成 let 会报错），并且要声明在结构体内部。它只用于这个视图自己的局部状态；要在父子视图间共享数据，需要用后面会讲的 @Binding / ObservableObject。" },
-        { type: "info", title: "如何预览", text: "在 Xcode 里，SwiftUI 界面右侧的『画布（Canvas）』会实时渲染预览。如果没看到，点右上角的『编辑器选项』→『Canvas』打开即可。改代码，预览跟着变，非常爽。" },
-        { type: "keypoints", items: ["SwiftUI 是声明式 UI：描述『是什么』而非『怎么变』", "Text/Button 是最小元素，VStack/HStack/ZStack 负责布局", "修饰符 .font/.padding/.background 链式调整样式", "@State 声明状态，状态一变界面自动刷新", "List 高效展示数据列表，id 参数用于区分每一行", "@State 要配 var 使用，负责视图局部状态"] },
+      'id': "mb-7",
+      'title': "SwiftUI 入门：声明式 UI 框架",
+      'summary': "用 View、Text、Button、Stack 布局与 @State 状态，编写 iOS 界面。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "前面学的都是 Swift 语言本身，这一章开始写**界面**。苹果推出的 **SwiftUI** 用『声明式』写法描述界面：你只负责说『界面上有什么、长什么样』，剩下的刷新和更新交给框架。"
+        },
+        {
+          'type': "h",
+          'text': "第一个 View"
+        },
+        {
+          'type': "p",
+          'text': "在 SwiftUI 里，每个界面片段都是一个 <code.inline>View</code.inline>（视图）。最小单位是 <code.inline>Text</code.inline>（文本）和 <code.inline>Button</code.inline>（按钮），它们通过 <code.inline>body</code> 属性组合成完整界面。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "第一个 SwiftUI 视图",
+          'code': "import SwiftUI\n\nstruct ContentView: View {\n    var body: some View {\n        VStack {\n            Text(\"你好，SwiftUI！\")\n                .font(.title)\n                .foregroundColor(.blue)\n            Text(\"这是我们的第一个界面\")\n                .font(.body)\n        }\n        .padding()\n    }\n}\n\n// 预览（Xcode 里会自动渲染出来）\n#Preview {\n    ContentView()\n}"
+        },
+        {
+          'type': "h",
+          'text': "布局：VStack / HStack"
+        },
+        {
+          'type': "p",
+          'text': "SwiftUI 用 <code.inline>VStack</code.inline>（垂直堆叠）、<code.inline>HStack</code.inline>（水平排列）、<code.inline>ZStack</code.inline>（层叠）三个容器摆放子视图。修饰符（.font、.padding 等）用来调整样式。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "Stack 布局与修饰符",
+          'code': "struct LayoutView: View {\n    var body: some View {\n        VStack(spacing: 20) {\n            Text(\"标题\")\n                .font(.largeTitle)\n                .bold()\n\n            HStack(spacing: 30) {\n                Text(\"左\")\n                    .frame(width: 60, height: 40)\n                    .background(Color.red)\n                    .foregroundColor(.white)\n                Text(\"右\")\n                    .frame(width: 60, height: 40)\n                    .background(Color.green)\n                    .foregroundColor(.white)\n            }\n\n            Text(\"底部文字\")\n                .italic()\n                .foregroundColor(.gray)\n        }\n        .padding()\n    }\n}"
+        },
+        {
+          'type': "h",
+          'text': "状态：@State 让界面动起来"
+        },
+        {
+          'type': "p",
+          'text': "纯静态的界面没意思。SwiftUI 用 <code.inline>@State</code.inline> 声明『状态』：一旦状态变了，SwiftUI 会自动重新计算并刷新界面。这是声明式 UI 的核心——**你不用手动操作控件，只管改状态**。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "Button 与 @State 计数器",
+          'code': "import SwiftUI\n\nstruct CounterView: View {\n    @State private var count = 0\n\n    var body: some View {\n        VStack(spacing: 30) {\n            Text(\"\\(count)\")\n                .font(.system(size: 80))\n                .fontWeight(.bold)\n\n            HStack(spacing: 20) {\n                Button(\"加一\") {\n                    count += 1\n                }\n                .buttonStyle(.borderedProminent)\n\n                Button(\"清零\") {\n                    count = 0\n                }\n                .buttonStyle(.bordered)\n            }\n        }\n    }\n}\n\n#Preview {\n    CounterView()\n}"
+        },
+        {
+          'type': "h",
+          'text': "列表 List"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "List 展示数据",
+          'code': "import SwiftUI\n\nstruct FruitListView: View {\n    let fruits = [\"苹果\", \"香蕉\", \"橙子\", \"葡萄\"]\n\n    var body: some View {\n        List(fruits, id: \\.self) { fruit in\n            HStack {\n                Text(\"🍎\")\n                Text(fruit)\n            }\n        }\n    }\n}\n\n#Preview {\n    FruitListView()\n}"
+        },
+        {
+          'type': "warn",
+          'title': "@State 必须配 var，且要写在 View 内部",
+          'text': "<code.inline>@State</code.inline> 只能配合 <code.inline>var</code.inline> 使用（写成 let 会报错），并且要声明在结构体内部。它只用于这个视图自己的局部状态；要在父子视图间共享数据，需要用后面会讲的 @Binding / ObservableObject。"
+        },
+        {
+          'type': "info",
+          'title': "如何预览",
+          'text': "在 Xcode 里，SwiftUI 界面右侧的『画布（Canvas）』会实时渲染预览。如果没看到，点右上角的『编辑器选项』→『Canvas』打开即可。改代码，预览跟着变，非常爽。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"SwiftUI 入门：声明式 UI 框架\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"SwiftUI 入门：声明式 UI 框架\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"SwiftUI 入门：声明式 UI 框架\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "SwiftUI 是声明式 UI：描述『是什么』而非『怎么变』",
+            "Text/Button 是最小元素，VStack/HStack/ZStack 负责布局",
+            "修饰符 .font/.padding/.background 链式调整样式",
+            "@State 声明状态，状态一变界面自动刷新",
+            "List 高效展示数据列表，id 参数用于区分每一行",
+            "@State 要配 var 使用，负责视图局部状态"
+          ]
+        }
       ],
-      templates: [
-        { name: "可点亮的灯泡", code: 'import SwiftUI\n\nstruct LampView: View {\n    @State private var isOn = false\n\n    var body: some View {\n        VStack(spacing: 30) {\n            Text(isOn ? "💡 灯亮着" : "🌑 灯关了")\n                .font(.largeTitle)\n            Button(isOn ? "关灯" : "开灯") {\n                isOn.toggle()\n            }\n            .buttonStyle(.borderedProminent)\n        }\n    }\n}\n\n#Preview {\n    LampView()\n}' },
-      ],
+      'templates': [
+        {
+          'name': "可点亮的灯泡",
+          'code': "import SwiftUI\n\nstruct LampView: View {\n    @State private var isOn = false\n\n    var body: some View {\n        VStack(spacing: 30) {\n            Text(isOn ? \"💡 灯亮着\" : \"🌑 灯关了\")\n                .font(.largeTitle)\n            Button(isOn ? \"关灯\" : \"开灯\") {\n                isOn.toggle()\n            }\n            .buttonStyle(.borderedProminent)\n        }\n    }\n}\n\n#Preview {\n    LampView()\n}"
+        }
+      ]
     },
     {
-      id: "mb-8",
-      title: "Swift 小项目：计数器与待办清单 App",
-      summary: "用前面所有知识做一个可运行的 SwiftUI 计数器，再扩展成待办清单。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "学到这里，我们可以做点真东西了。本章做一个**计数器 App**，再用同样的思路升级成**待办清单 App**。两个项目都不大，但麻雀虽小五脏俱全，能把 @State、布局、List、Button 全部串起来。" },
-        { type: "h", text: "项目一：完整的计数器 App" },
-        { type: "p", text: "功能：显示一个数字，点『加一』增加，点『减一』减少，点『清零』归零。整个过程只用一个 @State 变量 count，SwiftUI 自动刷新界面。" },
-        { type: "code", lang: "swift", title: "计数器 App 完整代码", code: 'import SwiftUI\n\nstruct CounterApp: App {\n    var body: some Scene {\n        WindowGroup {\n            CounterView()\n        }\n    }\n}\n\nstruct CounterView: View {\n    @State private var count = 0\n\n    var body: some View {\n        VStack(spacing: 30) {\n            Text("\\(count)")\n                .font(.system(size: 90, weight: .bold))\n                .foregroundColor(count >= 0 ? .blue : .red)\n\n            HStack(spacing: 40) {\n                Button("减一") { count -= 1 }\n                    .font(.title)\n                Button("加一") { count += 1 }\n                    .font(.title)\n                    .buttonStyle(.borderedProminent)\n            }\n\n            Button("清零") { count = 0 }\n                .foregroundColor(.gray)\n        }\n        .padding()\n    }\n}\n\n#Preview {\n    CounterView()\n}' },
-        { type: "h", text: "逐行拆解计数器" },
-        { type: "list", items: ["<code.inline>struct CounterApp: App</code.inline>：App 是程序入口，WindowGroup 里放根视图。", "<code.inline>@State private var count = 0</code.inline>：唯一的状态，加一减一都在改它。", "<code.inline>Text(\"\\(count)\")</code.inline>：把数字显示出来，负数显示红色。", "三个 Button 分别修改 count，SwiftUI 检测到状态变化自动重绘界面。", "<code.inline>#Preview</code.inline>：让 Xcode 画布能预览这个视图。"] },
-        { type: "warn", title: "状态在视图里，别在函数里定义", text: "很多新手把 count 定义成普通局部变量，发现按钮点了没反应。原因：普通变量变了，SwiftUI 不会知道。**必须用 @State**，它才有『通知界面刷新』的能力。" },
-        { type: "h", text: "项目二：待办清单 App" },
-        { type: "p", text: "功能：输入文字点『添加』进列表，点一行可以删除。这里用到两个新东西：<code.inline>@State</code.inline> 存文本输入，<code.inline>List</code.inline> 展示数组。" },
-        { type: "code", lang: "swift", title: "待办清单 App", code: 'import SwiftUI\n\nstruct TodoView: View {\n    @State private var todos: [String] = ["学习 Swift", "写一个小项目"]\n    @State private var newTodo = ""\n\n    var body: some View {\n        VStack {\n            HStack {\n                TextField("输入新待办", text: $newTodo)\n                    .textFieldStyle(.roundedBorder)\n                Button("添加") {\n                    let text = newTodo.trimmingCharacters(in: .whitespaces)\n                    if !text.isEmpty {\n                        todos.append(text)\n                        newTodo = ""\n                    }\n                }\n            }\n            .padding()\n\n            List {\n                ForEach(todos, id: \\.self) { todo in\n                    Text(todo)\n                }\n                .onDelete { indexSet in\n                    todos.remove(atOffsets: indexSet)\n                }\n            }\n        }\n    }\n}\n\n#Preview {\n    TodoView()\n}' },
-        { type: "h", text: "待办清单的要点" },
-        { type: "list", items: ["<code.inline>TextField</code.inline> 负责输入，通过 <code.inline>$newTodo</code> 双向绑定：用户输入会自动写进 newTodo。", "<code.inline>onDelete</code.inline> 让列表支持左滑删除，删除的回调里直接操作 todos 数组。", "<code.inline>ForEach</code.inline> 把数组每一项渲染成一行，id: \\.self 表示用内容本身当唯一标识。", "添加前先 <code.inline>trimmingCharacters</code> 去掉首尾空格，防止添加空字符串。"] },
-        { type: "info", title: "如何运行", text: "在 Xcode 里新建项目：File → New → Project → App，模板选 SwiftUI，Language 选 Swift，然后把上面代码贴进 ContentView.swift（和项目同名文件），点运行按钮（Cmd+R）就能在模拟器里看到效果。" },
-        { type: "tip", title: "下一步怎么练", text: "试着给待办 App 加功能：每条待办前面加一个勾选方框（用 @State 存完成状态）、统计『已完成/总数』、加一个清空按钮。改的过程就是最好的学习。" },
-        { type: "keypoints", items: ["计数器：一个 @State + 三个 Button，演示状态驱动界面刷新", "待办清单：TextField 双向绑定 $newTodo，List + ForEach 渲染数组", "onDelete 让列表支持左滑删除", "@State 是界面刷新的开关，普通变量做不到", "小项目是把语法串起来的最佳练习"] },
+      'id': "mb-8",
+      'title': "Swift 小项目：计数器与待办清单 App",
+      'summary': "用前面所有知识做一个可运行的 SwiftUI 计数器，再扩展成待办清单。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "学到这里，我们可以做点真东西了。本章做一个**计数器 App**，再用同样的思路升级成**待办清单 App**。两个项目都不大，但麻雀虽小五脏俱全，能把 @State、布局、List、Button 全部串起来。"
+        },
+        {
+          'type': "h",
+          'text': "项目一：完整的计数器 App"
+        },
+        {
+          'type': "p",
+          'text': "功能：显示一个数字，点『加一』增加，点『减一』减少，点『清零』归零。整个过程只用一个 @State 变量 count，SwiftUI 自动刷新界面。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "计数器 App 完整代码",
+          'code': "import SwiftUI\n\nstruct CounterApp: App {\n    var body: some Scene {\n        WindowGroup {\n            CounterView()\n        }\n    }\n}\n\nstruct CounterView: View {\n    @State private var count = 0\n\n    var body: some View {\n        VStack(spacing: 30) {\n            Text(\"\\(count)\")\n                .font(.system(size: 90, weight: .bold))\n                .foregroundColor(count >= 0 ? .blue : .red)\n\n            HStack(spacing: 40) {\n                Button(\"减一\") { count -= 1 }\n                    .font(.title)\n                Button(\"加一\") { count += 1 }\n                    .font(.title)\n                    .buttonStyle(.borderedProminent)\n            }\n\n            Button(\"清零\") { count = 0 }\n                .foregroundColor(.gray)\n        }\n        .padding()\n    }\n}\n\n#Preview {\n    CounterView()\n}"
+        },
+        {
+          'type': "h",
+          'text': "逐行拆解计数器"
+        },
+        {
+          'type': "list",
+          'items': [
+            "<code.inline>struct CounterApp: App</code.inline>：App 是程序入口，WindowGroup 里放根视图。",
+            "<code.inline>@State private var count = 0</code.inline>：唯一的状态，加一减一都在改它。",
+            "<code.inline>Text(\"\\(count)\")</code.inline>：把数字显示出来，负数显示红色。",
+            "三个 Button 分别修改 count，SwiftUI 检测到状态变化自动重绘界面。",
+            "<code.inline>#Preview</code.inline>：让 Xcode 画布能预览这个视图。"
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "状态在视图里，别在函数里定义",
+          'text': "很多新手把 count 定义成普通局部变量，发现按钮点了没反应。原因：普通变量变了，SwiftUI 不会知道。**必须用 @State**，它才有『通知界面刷新』的能力。"
+        },
+        {
+          'type': "h",
+          'text': "项目二：待办清单 App"
+        },
+        {
+          'type': "p",
+          'text': "功能：输入文字点『添加』进列表，点一行可以删除。这里用到两个新东西：<code.inline>@State</code.inline> 存文本输入，<code.inline>List</code.inline> 展示数组。"
+        },
+        {
+          'type': "code",
+          'lang': "swift",
+          'title': "待办清单 App",
+          'code': "import SwiftUI\n\nstruct TodoView: View {\n    @State private var todos: [String] = [\"学习 Swift\", \"写一个小项目\"]\n    @State private var newTodo = \"\"\n\n    var body: some View {\n        VStack {\n            HStack {\n                TextField(\"输入新待办\", text: $newTodo)\n                    .textFieldStyle(.roundedBorder)\n                Button(\"添加\") {\n                    let text = newTodo.trimmingCharacters(in: .whitespaces)\n                    if !text.isEmpty {\n                        todos.append(text)\n                        newTodo = \"\"\n                    }\n                }\n            }\n            .padding()\n\n            List {\n                ForEach(todos, id: \\.self) { todo in\n                    Text(todo)\n                }\n                .onDelete { indexSet in\n                    todos.remove(atOffsets: indexSet)\n                }\n            }\n        }\n    }\n}\n\n#Preview {\n    TodoView()\n}"
+        },
+        {
+          'type': "h",
+          'text': "待办清单的要点"
+        },
+        {
+          'type': "list",
+          'items': [
+            "<code.inline>TextField</code.inline> 负责输入，通过 <code.inline>$newTodo</code> 双向绑定：用户输入会自动写进 newTodo。",
+            "<code.inline>onDelete</code.inline> 让列表支持左滑删除，删除的回调里直接操作 todos 数组。",
+            "<code.inline>ForEach</code.inline> 把数组每一项渲染成一行，id: \\.self 表示用内容本身当唯一标识。",
+            "添加前先 <code.inline>trimmingCharacters</code> 去掉首尾空格，防止添加空字符串。"
+          ]
+        },
+        {
+          'type': "info",
+          'title': "如何运行",
+          'text': "在 Xcode 里新建项目：File → New → Project → App，模板选 SwiftUI，Language 选 Swift，然后把上面代码贴进 ContentView.swift（和项目同名文件），点运行按钮（Cmd+R）就能在模拟器里看到效果。"
+        },
+        {
+          'type': "tip",
+          'title': "下一步怎么练",
+          'text': "试着给待办 App 加功能：每条待办前面加一个勾选方框（用 @State 存完成状态）、统计『已完成/总数』、加一个清空按钮。改的过程就是最好的学习。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Swift 小项目：计数器与待办清单 App\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Swift 小项目：计数器与待办清单 App\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Swift 小项目：计数器与待办清单 App\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "计数器：一个 @State + 三个 Button，演示状态驱动界面刷新",
+            "待办清单：TextField 双向绑定 $newTodo，List + ForEach 渲染数组",
+            "onDelete 让列表支持左滑删除",
+            "@State 是界面刷新的开关，普通变量做不到",
+            "小项目是把语法串起来的最佳练习"
+          ]
+        }
       ],
-      templates: [
-        { name: "计数器（核心部分）", code: 'import SwiftUI\n\nstruct CounterView: View {\n    @State private var count = 0\n\n    var body: some View {\n        VStack(spacing: 30) {\n            Text("\\(count)")\n                .font(.system(size: 90, weight: .bold))\n            HStack(spacing: 40) {\n                Button("减一") { count -= 1 }\n                Button("加一") { count += 1 }\n                    .buttonStyle(.borderedProminent)\n            }\n        }\n    }\n}' },
-      ],
+      'templates': [
+        {
+          'name': "计数器（核心部分）",
+          'code': "import SwiftUI\n\nstruct CounterView: View {\n    @State private var count = 0\n\n    var body: some View {\n        VStack(spacing: 30) {\n            Text(\"\\(count)\")\n                .font(.system(size: 90, weight: .bold))\n            HStack(spacing: 40) {\n                Button(\"减一\") { count -= 1 }\n                Button(\"加一\") { count += 1 }\n                    .buttonStyle(.borderedProminent)\n            }\n        }\n    }\n}"
+        }
+      ]
     },
     {
-      id: "mb-9",
-      title: "Kotlin 环境准备：安装 Android Studio",
-      summary: "下载安装 Android Studio、配置 SDK、创建第一个项目并在模拟器/真机运行。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "从这一章开始，我们转战 Android，学习 Kotlin。好消息是：**开发 Android 用 Windows 电脑就行**，不需要 Mac。官方工具是 **Android Studio**（完全免费），它自带 Kotlin 支持、可视化布局和模拟器，一站式搞定。" },
-        { type: "h", text: "第一步：下载安装 Android Studio" },
-        { type: "list", items: ["打开官网：<a href='https://developer.android.com/studio' target='_blank' rel='noopener'>https://developer.android.com/studio</a>", "点击『Download Android Studio』，选 Windows 版安装包（新版是 .exe）", "如果官网访问慢，可在国内镜像或搜索引擎搜『Android Studio 国内下载』找官方渠道的加速站", "安装过程一路 Next 即可，它会顺便安装 Android SDK（工具链）和模拟器组件"] },
-        { type: "warn", title: "磁盘空间务必留够", text: "Android Studio + SDK + 模拟器加起来可能占用 20~40GB。安装前确认磁盘有足够空间，SDK 默认装在 C:\\Users\\你的用户名\\AppData\\Local\\Android\\Sdk，介意占 C 盘空间的可以在安装时改路径。" },
-        { type: "h", text: "第二步：首次启动与 SDK 配置" },
-        { type: "list", items: ["首次启动会进入 Setup Wizard，选择『Standard』标准安装即可，它会自动下载对应版本的 Android SDK。", "若遇到组件下载失败，多半是网络问题，点『Retry』重试，或检查代理设置。", "配置完成后，在欢迎页选择 SDK Manager 可以查看/安装不同 Android 版本的 SDK（新手默认装最新稳定版就够）。"] },
-        { type: "h", text: "第三步：创建第一个项目" },
-        { type: "list", items: ["点『New Project』，模板选 **Empty Activity**", "Name 填项目名（如 MyFirstApp），Language 一定选 **Kotlin**", "Minimum SDK 选较新的版本（如 API 24+），然后点 Finish 等待构建（首次构建较慢）"] },
-        { type: "code", lang: "kotlin", title: "创建项目后自动生成的 MainActivity", code: 'package com.example.myfirstapp\n\nimport android.os.Bundle\nimport androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent\n\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContent {\n            // 在这里放界面内容\n            println("Kotlin 环境 OK！")\n        }\n    }\n}' },
-        { type: "h", text: "第四步：模拟器与真机运行" },
-        { type: "list", items: ["**模拟器**：顶部工具栏点『Device Manager』→『Create device』选一个手机型号 → 下载系统镜像 → 启动模拟器，然后点绿色运行按钮（Shift+F10）。", "**真机**：手机上开启『开发者选项』→ 打开『USB 调试』，用数据线连电脑，运行时会自动安装到手机。", "首次运行构建较慢属正常现象，多等一会儿。"] },
-        { type: "tip", title: "开发语言确认", text: "创建项目时一定确认 Language 选的是 **Kotlin**，别选成 Java——虽然两者能混用，但本课程按 Kotlin 讲，模板代码也会生成 Kotlin 文件。" },
-        { type: "info", title: "Gradle 构建慢怎么办", text: "Android 项目用 Gradle 构建，首次下载依赖很慢。可以在国内用阿里云镜像仓库替换默认仓库，或耐心等首次构建完成（之后会缓存）。遇到报错先看 Build 面板的提示，大多数问题都能搜到解决方案。" },
-        { type: "keypoints", items: ["Android 开发用 Windows 就行，工具是 Android Studio（免费）", "官网：developer.android.com/studio", "创建项目时 Language 选 Kotlin、模板选 Empty Activity", "SDK 与模拟器占空间大，注意磁盘", "运行方式：模拟器（Device Manager）或真机 USB 调试", "首次构建慢是正常的，别焦虑"] },
+      'id': "mb-9",
+      'title': "Kotlin 环境准备：安装 Android Studio",
+      'summary': "下载安装 Android Studio、配置 SDK、创建第一个项目并在模拟器/真机运行。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "从这一章开始，我们转战 Android，学习 Kotlin。好消息是：**开发 Android 用 Windows 电脑就行**，不需要 Mac。官方工具是 **Android Studio**（完全免费），它自带 Kotlin 支持、可视化布局和模拟器，一站式搞定。"
+        },
+        {
+          'type': "h",
+          'text': "第一步：下载安装 Android Studio"
+        },
+        {
+          'type': "list",
+          'items': [
+            "打开官网：<a href='https://developer.android.com/studio' target='_blank' rel='noopener'>https://developer.android.com/studio</a>",
+            "点击『Download Android Studio』，选 Windows 版安装包（新版是 .exe）",
+            "如果官网访问慢，可在国内镜像或搜索引擎搜『Android Studio 国内下载』找官方渠道的加速站",
+            "安装过程一路 Next 即可，它会顺便安装 Android SDK（工具链）和模拟器组件"
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "磁盘空间务必留够",
+          'text': "Android Studio + SDK + 模拟器加起来可能占用 20~40GB。安装前确认磁盘有足够空间，SDK 默认装在 C:\\Users\\你的用户名\\AppData\\Local\\Android\\Sdk，介意占 C 盘空间的可以在安装时改路径。"
+        },
+        {
+          'type': "h",
+          'text': "第二步：首次启动与 SDK 配置"
+        },
+        {
+          'type': "list",
+          'items': [
+            "首次启动会进入 Setup Wizard，选择『Standard』标准安装即可，它会自动下载对应版本的 Android SDK。",
+            "若遇到组件下载失败，多半是网络问题，点『Retry』重试，或检查代理设置。",
+            "配置完成后，在欢迎页选择 SDK Manager 可以查看/安装不同 Android 版本的 SDK（新手默认装最新稳定版就够）。"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "第三步：创建第一个项目"
+        },
+        {
+          'type': "list",
+          'items': [
+            "点『New Project』，模板选 **Empty Activity**",
+            "Name 填项目名（如 MyFirstApp），Language 一定选 **Kotlin**",
+            "Minimum SDK 选较新的版本（如 API 24+），然后点 Finish 等待构建（首次构建较慢）"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "创建项目后自动生成的 MainActivity",
+          'code': "package com.example.myfirstapp\n\nimport android.os.Bundle\nimport androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent\n\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContent {\n            // 在这里放界面内容\n            println(\"Kotlin 环境 OK！\")\n        }\n    }\n}"
+        },
+        {
+          'type': "h",
+          'text': "第四步：模拟器与真机运行"
+        },
+        {
+          'type': "list",
+          'items': [
+            "**模拟器**：顶部工具栏点『Device Manager』→『Create device』选一个手机型号 → 下载系统镜像 → 启动模拟器，然后点绿色运行按钮（Shift+F10）。",
+            "**真机**：手机上开启『开发者选项』→ 打开『USB 调试』，用数据线连电脑，运行时会自动安装到手机。",
+            "首次运行构建较慢属正常现象，多等一会儿。"
+          ]
+        },
+        {
+          'type': "tip",
+          'title': "开发语言确认",
+          'text': "创建项目时一定确认 Language 选的是 **Kotlin**，别选成 Java——虽然两者能混用，但本课程按 Kotlin 讲，模板代码也会生成 Kotlin 文件。"
+        },
+        {
+          'type': "info",
+          'title': "Gradle 构建慢怎么办",
+          'text': "Android 项目用 Gradle 构建，首次下载依赖很慢。可以在国内用阿里云镜像仓库替换默认仓库，或耐心等首次构建完成（之后会缓存）。遇到报错先看 Build 面板的提示，大多数问题都能搜到解决方案。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Kotlin 环境准备：安装 Android Studio\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Kotlin 环境准备：安装 Android Studio\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Kotlin 环境准备：安装 Android Studio\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Android 开发用 Windows 就行，工具是 Android Studio（免费）",
+            "官网：developer.android.com/studio",
+            "创建项目时 Language 选 Kotlin、模板选 Empty Activity",
+            "SDK 与模拟器占空间大，注意磁盘",
+            "运行方式：模拟器（Device Manager）或真机 USB 调试",
+            "首次构建慢是正常的，别焦虑"
+          ]
+        }
       ],
-      templates: [
-        { name: "验证 Kotlin 环境", code: 'fun main() {\n    val name = "Kotlin"\n    println("Hello, $name! 环境就绪")\n}\n\n// 在 Android Studio 里可以直接右键运行上面的 main 函数' },
-      ],
+      'templates': [
+        {
+          'name': "验证 Kotlin 环境",
+          'code': "fun main() {\n    val name = \"Kotlin\"\n    println(\"Hello, $name! 环境就绪\")\n}\n\n// 在 Android Studio 里可以直接右键运行上面的 main 函数"
+        }
+      ]
     },
     {
-      id: "mb-10",
-      title: "Kotlin 基础语法：变量、类型与集合",
-      summary: "val/var、类型推断、基本类型、字符串模板与 List/Map/Set 集合。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "学完 Swift 再来学 Kotlin，你会觉得特别亲切：**val 对应 let（只读），var 对应 var（可变）**，字符串模板、集合、空安全……几乎处处相通。这一章把 Kotlin 的地基打牢。" },
-        { type: "h", text: "val 与 var" },
-        { type: "code", lang: "kotlin", title: "val 与 var", code: 'val name = "小明"   // 只读，赋值后不能改\nvar age = 20        // 可变\n\nage = 21            // OK\n// name = "小红"     // 报错：val 不能重新赋值\n\nprintln("$name 今年 $age 岁")' },
-        { type: "h", text: "类型推断与基本类型" },
-        { type: "p", text: "Kotlin 同样有类型推断，也可以用冒号显式标注类型：<code.inline>val score: Int = 95</code.inline>。基本类型有 <code.inline>Int</code.inline>、<code.inline>Double</code.inline>、<code.inline>String</code.inline>、<code.inline>Boolean</code.inline> 等。" },
-        { type: "table", head: ["类型", "含义", "示例"], rows: [["Int", "整数", "42"], ["Long", "长整数", "1000000000L"], ["Double", "小数", "3.14"], ["String", "文字", "\"你好\""], ["Boolean", "真假", "true / false"], ["Char", "单个字符", "'A'"]] },
-        { type: "code", lang: "kotlin", title: "类型标注与运算", code: 'val price: Double = 9.9\nval count: Int = 3\nval total = price * count\nprintln("总价：$total")\n\nval a = 10\nval b = 3\nprintln(a / b)     // 3（整数除法，结果是 3）\nprintln(a / 3.0)   // 3.333...（除以小数才是浮点除法）\nprintln(a % b)     // 1（取余）' },
-        { type: "h", text: "字符串模板" },
-        { type: "p", text: "Kotlin 用 <code.inline>$变量</code.inline> 或 <code.inline>${表达式}</code.inline> 做字符串模板，和 Swift 的 \\( ) 一样好用。" },
-        { type: "code", lang: "kotlin", title: "字符串模板", code: 'val name = "小红"\nval age = 18\nprintln("$name 明年 ${age + 1} 岁")\nprintln("总人数：${listOf(1, 2, 3).size}")' },
-        { type: "h", text: "集合：List / Map / Set" },
-        { type: "code", lang: "kotlin", title: "三种集合", code: '// List 列表（按顺序）\nval fruits = mutableListOf("苹果", "香蕉")\nfruits.add("橙子")\nprintln(fruits[0])        // 苹果\n\n// Map 键值对\nval scores = mutableMapOf("语文" to 95, "数学" to 88)\nscores["英语"] = 92\nprintln(scores["数学"])    // 88\n\n// Set 去重集合\nval ids = setOf(1, 2, 2, 3, 3, 3)\nprintln(ids)              // [1, 2, 3]' },
-        { type: "h", text: "空安全初探" },
-        { type: "p", text: "Kotlin 默认变量**不能为 null**，这是它最引以为傲的安全特性。如果需要空值，类型后面加问号 <code.inline>?</code.inline>，表示『可空』。详细内容会在后面专门一章讲解。" },
-        { type: "code", lang: "kotlin", title: "可空类型", code: 'var nickname: String? = null   // 可空\nvar name: String = "小明"      // 不可空\n\n// println(name.length)          // OK，name 一定有值\n// println(nickname.length)     // 报错！nickname 可能为 null\n\nprintln(nickname ?: "匿名用户")  // 为 null 时用默认值' },
-        { type: "warn", title: "val 不是常量", text: "val 表示『引用不可变』，不等于常量：<code.inline>val list = mutableListOf(1)</code.inline> 里 list 不能重新指向别的对象，但可以往里面加元素。真正的编译期常量要用 <code.inline>const val</code>。" },
-        { type: "keypoints", items: ["val 只读 / var 可变，对应 Swift 的 let / var", "类型推断 + 显式标注，基本类型 Int/Double/String/Boolean 等", "字符串模板 $变量 或 ${表达式}", "List 顺序存、Map 键值对存、Set 去重存", "Kotlin 默认变量不可为 null，可空用 ?", "val 是引用不可变，不是常量"] },
+      'id': "mb-10",
+      'title': "Kotlin 基础语法：变量、类型与集合",
+      'summary': "val/var、类型推断、基本类型、字符串模板与 List/Map/Set 集合。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "学完 Swift 再来学 Kotlin，你会觉得特别亲切：**val 对应 let（只读），var 对应 var（可变）**，字符串模板、集合、空安全……几乎处处相通。这一章把 Kotlin 的地基打牢。"
+        },
+        {
+          'type': "h",
+          'text': "val 与 var"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "val 与 var",
+          'code': "val name = \"小明\"   // 只读，赋值后不能改\nvar age = 20        // 可变\n\nage = 21            // OK\n// name = \"小红\"     // 报错：val 不能重新赋值\n\nprintln(\"$name 今年 $age 岁\")"
+        },
+        {
+          'type': "h",
+          'text': "类型推断与基本类型"
+        },
+        {
+          'type': "p",
+          'text': "Kotlin 同样有类型推断，也可以用冒号显式标注类型：<code.inline>val score: Int = 95</code.inline>。基本类型有 <code.inline>Int</code.inline>、<code.inline>Double</code.inline>、<code.inline>String</code.inline>、<code.inline>Boolean</code.inline> 等。"
+        },
+        {
+          'type': "table",
+          'head': [
+            "类型",
+            "含义",
+            "示例"
+          ],
+          'rows': [
+            [
+              "Int",
+              "整数",
+              "42"
+            ],
+            [
+              "Long",
+              "长整数",
+              "1000000000L"
+            ],
+            [
+              "Double",
+              "小数",
+              "3.14"
+            ],
+            [
+              "String",
+              "文字",
+              "\"你好\""
+            ],
+            [
+              "Boolean",
+              "真假",
+              "true / false"
+            ],
+            [
+              "Char",
+              "单个字符",
+              "'A'"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "类型标注与运算",
+          'code': "val price: Double = 9.9\nval count: Int = 3\nval total = price * count\nprintln(\"总价：$total\")\n\nval a = 10\nval b = 3\nprintln(a / b)     // 3（整数除法，结果是 3）\nprintln(a / 3.0)   // 3.333...（除以小数才是浮点除法）\nprintln(a % b)     // 1（取余）"
+        },
+        {
+          'type': "h",
+          'text': "字符串模板"
+        },
+        {
+          'type': "p",
+          'text': "Kotlin 用 <code.inline>$变量</code.inline> 或 <code.inline>${表达式}</code.inline> 做字符串模板，和 Swift 的 \\( ) 一样好用。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "字符串模板",
+          'code': "val name = \"小红\"\nval age = 18\nprintln(\"$name 明年 ${age + 1} 岁\")\nprintln(\"总人数：${listOf(1, 2, 3).size}\")"
+        },
+        {
+          'type': "h",
+          'text': "集合：List / Map / Set"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "三种集合",
+          'code': "// List 列表（按顺序）\nval fruits = mutableListOf(\"苹果\", \"香蕉\")\nfruits.add(\"橙子\")\nprintln(fruits[0])        // 苹果\n\n// Map 键值对\nval scores = mutableMapOf(\"语文\" to 95, \"数学\" to 88)\nscores[\"英语\"] = 92\nprintln(scores[\"数学\"])    // 88\n\n// Set 去重集合\nval ids = setOf(1, 2, 2, 3, 3, 3)\nprintln(ids)              // [1, 2, 3]"
+        },
+        {
+          'type': "h",
+          'text': "空安全初探"
+        },
+        {
+          'type': "p",
+          'text': "Kotlin 默认变量**不能为 null**，这是它最引以为傲的安全特性。如果需要空值，类型后面加问号 <code.inline>?</code.inline>，表示『可空』。详细内容会在后面专门一章讲解。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "可空类型",
+          'code': "var nickname: String? = null   // 可空\nvar name: String = \"小明\"      // 不可空\n\n// println(name.length)          // OK，name 一定有值\n// println(nickname.length)     // 报错！nickname 可能为 null\n\nprintln(nickname ?: \"匿名用户\")  // 为 null 时用默认值"
+        },
+        {
+          'type': "warn",
+          'title': "val 不是常量",
+          'text': "val 表示『引用不可变』，不等于常量：<code.inline>val list = mutableListOf(1)</code.inline> 里 list 不能重新指向别的对象，但可以往里面加元素。真正的编译期常量要用 <code.inline>const val</code>。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Kotlin 基础语法：变量、类型与集合\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Kotlin 基础语法：变量、类型与集合\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Kotlin 基础语法：变量、类型与集合\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "val 只读 / var 可变，对应 Swift 的 let / var",
+            "类型推断 + 显式标注，基本类型 Int/Double/String/Boolean 等",
+            "字符串模板 $变量 或 ${表达式}",
+            "List 顺序存、Map 键值对存、Set 去重存",
+            "Kotlin 默认变量不可为 null，可空用 ?",
+            "val 是引用不可变，不是常量"
+          ]
+        }
       ],
-      templates: [
-        { name: "自我介绍", code: 'fun main() {\n    val name = "小明"\n    var age = 20\n    val city = "上海"\n    val hobbies = listOf("篮球", "编程", "游戏")\n\n    println("我叫$name，今年$age岁，来自$city")\n    println("我的爱好：${hobbies.joinToString("、")}")\n}' },
-        { name: "计算平均分", code: 'fun main() {\n    val scores = listOf(88, 95, 76, 92, 85)\n    val avg = scores.average()\n    println("平均分：$avg")\n}' },
-      ],
+      'templates': [
+        {
+          'name': "自我介绍",
+          'code': "fun main() {\n    val name = \"小明\"\n    var age = 20\n    val city = \"上海\"\n    val hobbies = listOf(\"篮球\", \"编程\", \"游戏\")\n\n    println(\"我叫$name，今年$age岁，来自$city\")\n    println(\"我的爱好：${hobbies.joinToString(\"、\")}\")\n}"
+        },
+        {
+          'name': "计算平均分",
+          'code': "fun main() {\n    val scores = listOf(88, 95, 76, 92, 85)\n    val avg = scores.average()\n    println(\"平均分：$avg\")\n}"
+        }
+      ]
     },
     {
-      id: "mb-11",
-      title: "Kotlin 控制流与函数",
-      summary: "if/when 分支、for/while 循环、函数与默认参数、Lambda 与高阶函数。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "这一章掌握 Kotlin 的『逻辑骨架』：分支（if/when）、循环（for/while）、函数和函数式编程利器 Lambda。学完你能写出有判断、能循环、可复用的代码。" },
-        { type: "h", text: "分支：if 与 when" },
-        { type: "code", lang: "kotlin", title: "if / else", code: 'val score = 86\n\nval grade = if (score >= 90) {\n    "优秀"\n} else if (score >= 60) {\n    "及格"\n} else {\n    "不及格"\n}\nprintln(grade)   // 及格' },
-        { type: "p", text: "注意：Kotlin 的 <code.inline>if</code.inline> 是**表达式**，可以有返回值（上面直接把 if 的结果赋给了 grade），这比很多语言更简洁。" },
-        { type: "code", lang: "kotlin", title: "when 分支（比 switch 更强）", code: 'val day = "周一"\n\nval type = when (day) {\n    "周一", "周二", "周三", "周四", "周五" -> "上班日"\n    "周六", "周日" -> "休息日"\n    else -> "未知"\n}\nprintln(type)   // 上班日\n\n// when 还能当 if/else 用（不带参数）\nval n = 5\nwhen {\n    n > 0 -> println("正数")\n    n < 0 -> println("负数")\n    else -> println("零")\n}' },
-        { type: "h", text: "循环：for 与 while" },
-        { type: "code", lang: "kotlin", title: "for / while", code: '// for 遍历区间\nfor (i in 1..5) {\n    print("$i ")        // 1 2 3 4 5\n}\nprintln()\n\n// 遍历列表\nval names = listOf("A", "B", "C")\nfor (name in names) {\n    println(name)\n}\n\n// while 条件循环\nvar count = 0\nwhile (count < 3) {\n    count++\n    println("count = $count")\n}' },
-        { type: "h", text: "函数与默认参数" },
-        { type: "code", lang: "kotlin", title: "定义函数", code: '// 带返回值的函数\nfun add(a: Int, b: Int): Int {\n    return a + b\n}\n\n// 单表达式函数可以简写\nfun double(x: Int) = x * 2\n\n// 默认参数：不传就用默认值\nfun greet(name: String, times: Int = 1) {\n    repeat(times) {\n        println("嗨，$name")\n    }\n}\n\nprintln(add(3, 5))      // 8\nprintln(double(4))      // 8\ngreet("小红", times = 2)' },
-        { type: "h", text: "Lambda 表达式" },
-        { type: "p", text: "**Lambda** 是一段可以像值一样传来传去的代码块。Kotlin 里，如果 Lambda 只有一个参数，可以省略参数名直接用 <code.inline>it</code.inline>。" },
-        { type: "code", lang: "kotlin", title: "Lambda 基础", code: 'val square: (Int) -> Int = { x -> x * x }\nprintln(square(5))   // 25\n\nval greet: (String) -> String = { "你好，$it" }\nprintln(greet("小明"))' },
-        { type: "h", text: "高阶函数：map / filter / forEach" },
-        { type: "p", text: "**高阶函数**就是接收 Lambda 作为参数的函数。集合的 <code.inline>map</code.inline>（逐个变换）、<code.inline>filter</code.inline>（按条件筛选）、<code.inline>forEach</code.inline>（逐个处理）是最常用的三个。" },
-        { type: "code", lang: "kotlin", title: "集合的高阶操作", code: 'val numbers = listOf(1, 2, 3, 4, 5, 6)\n\nval doubled = numbers.map { it * 2 }\nprintln(doubled)        // [2, 4, 6, 8, 10, 12]\n\nval evens = numbers.filter { it % 2 == 0 }\nprintln(evens)          // [2, 4, 6]\n\nval sum = numbers.reduce { acc, n -> acc + n }\nprintln(sum)            // 21\n\nnumbers.forEach { print("$it ") }   // 1 2 3 4 5 6\nprintln()' },
-        { type: "warn", title: "不要在循环里改正在遍历的集合", text: "对 List 用 for 遍历的同时调用 add/remove 修改它，会抛 <code.inline>ConcurrentModificationException</code.inline>。想筛选并得到新集合，用 filter/map 生成新列表，而不是在原列表上删。" },
-        { type: "keypoints", items: ["if 是表达式可返回值，when 比 switch 更灵活", "for 遍历区间/集合，while 条件循环", "函数用 fun 定义，支持默认参数与单表达式简写", "Lambda 是可传的代码块，单参数可用 it 简写", "map 变换、filter 筛选、forEach 遍历，是高阶函数三件套", "遍历时别改原集合，用高阶函数生成新列表"] },
+      'id': "mb-11",
+      'title': "Kotlin 控制流与函数",
+      'summary': "if/when 分支、for/while 循环、函数与默认参数、Lambda 与高阶函数。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "这一章掌握 Kotlin 的『逻辑骨架』：分支（if/when）、循环（for/while）、函数和函数式编程利器 Lambda。学完你能写出有判断、能循环、可复用的代码。"
+        },
+        {
+          'type': "h",
+          'text': "分支：if 与 when"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "if / else",
+          'code': "val score = 86\n\nval grade = if (score >= 90) {\n    \"优秀\"\n} else if (score >= 60) {\n    \"及格\"\n} else {\n    \"不及格\"\n}\nprintln(grade)   // 及格"
+        },
+        {
+          'type': "p",
+          'text': "注意：Kotlin 的 <code.inline>if</code.inline> 是**表达式**，可以有返回值（上面直接把 if 的结果赋给了 grade），这比很多语言更简洁。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "when 分支（比 switch 更强）",
+          'code': "val day = \"周一\"\n\nval type = when (day) {\n    \"周一\", \"周二\", \"周三\", \"周四\", \"周五\" -> \"上班日\"\n    \"周六\", \"周日\" -> \"休息日\"\n    else -> \"未知\"\n}\nprintln(type)   // 上班日\n\n// when 还能当 if/else 用（不带参数）\nval n = 5\nwhen {\n    n > 0 -> println(\"正数\")\n    n < 0 -> println(\"负数\")\n    else -> println(\"零\")\n}"
+        },
+        {
+          'type': "h",
+          'text': "循环：for 与 while"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "for / while",
+          'code': "// for 遍历区间\nfor (i in 1..5) {\n    print(\"$i \")        // 1 2 3 4 5\n}\nprintln()\n\n// 遍历列表\nval names = listOf(\"A\", \"B\", \"C\")\nfor (name in names) {\n    println(name)\n}\n\n// while 条件循环\nvar count = 0\nwhile (count < 3) {\n    count++\n    println(\"count = $count\")\n}"
+        },
+        {
+          'type': "h",
+          'text': "函数与默认参数"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "定义函数",
+          'code': "// 带返回值的函数\nfun add(a: Int, b: Int): Int {\n    return a + b\n}\n\n// 单表达式函数可以简写\nfun double(x: Int) = x * 2\n\n// 默认参数：不传就用默认值\nfun greet(name: String, times: Int = 1) {\n    repeat(times) {\n        println(\"嗨，$name\")\n    }\n}\n\nprintln(add(3, 5))      // 8\nprintln(double(4))      // 8\ngreet(\"小红\", times = 2)"
+        },
+        {
+          'type': "h",
+          'text': "Lambda 表达式"
+        },
+        {
+          'type': "p",
+          'text': "**Lambda** 是一段可以像值一样传来传去的代码块。Kotlin 里，如果 Lambda 只有一个参数，可以省略参数名直接用 <code.inline>it</code.inline>。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "Lambda 基础",
+          'code': "val square: (Int) -> Int = { x -> x * x }\nprintln(square(5))   // 25\n\nval greet: (String) -> String = { \"你好，$it\" }\nprintln(greet(\"小明\"))"
+        },
+        {
+          'type': "h",
+          'text': "高阶函数：map / filter / forEach"
+        },
+        {
+          'type': "p",
+          'text': "**高阶函数**就是接收 Lambda 作为参数的函数。集合的 <code.inline>map</code.inline>（逐个变换）、<code.inline>filter</code.inline>（按条件筛选）、<code.inline>forEach</code.inline>（逐个处理）是最常用的三个。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "集合的高阶操作",
+          'code': "val numbers = listOf(1, 2, 3, 4, 5, 6)\n\nval doubled = numbers.map { it * 2 }\nprintln(doubled)        // [2, 4, 6, 8, 10, 12]\n\nval evens = numbers.filter { it % 2 == 0 }\nprintln(evens)          // [2, 4, 6]\n\nval sum = numbers.reduce { acc, n -> acc + n }\nprintln(sum)            // 21\n\nnumbers.forEach { print(\"$it \") }   // 1 2 3 4 5 6\nprintln()"
+        },
+        {
+          'type': "warn",
+          'title': "不要在循环里改正在遍历的集合",
+          'text': "对 List 用 for 遍历的同时调用 add/remove 修改它，会抛 <code.inline>ConcurrentModificationException</code.inline>。想筛选并得到新集合，用 filter/map 生成新列表，而不是在原列表上删。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Kotlin 控制流与函数\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Kotlin 控制流与函数\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Kotlin 控制流与函数\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "if 是表达式可返回值，when 比 switch 更灵活",
+            "for 遍历区间/集合，while 条件循环",
+            "函数用 fun 定义，支持默认参数与单表达式简写",
+            "Lambda 是可传的代码块，单参数可用 it 简写",
+            "map 变换、filter 筛选、forEach 遍历，是高阶函数三件套",
+            "遍历时别改原集合，用高阶函数生成新列表"
+          ]
+        }
       ],
-      templates: [
-        { name: "成绩等级", code: 'fun main() {\n    fun grade(score: Int) = when {\n        score >= 90 -> "A"\n        score >= 80 -> "B"\n        score >= 70 -> "C"\n        score >= 60 -> "D"\n        else -> "F"\n    }\n\n    val scores = listOf(95, 82, 66, 45)\n    scores.forEach { println("$it 分 -> ${grade(it)}") }\n}' },
-        { name: "高阶函数演示", code: 'fun main() {\n    val words = listOf("apple", "banana", "cherry", "date")\n    val long = words.filter { it.length > 4 }\n    val upper = long.map { it.uppercase() }\n    println(upper)   // [APPLE, BANANA, CHERRY]\n}' },
-      ],
+      'templates': [
+        {
+          'name': "成绩等级",
+          'code': "fun main() {\n    fun grade(score: Int) = when {\n        score >= 90 -> \"A\"\n        score >= 80 -> \"B\"\n        score >= 70 -> \"C\"\n        score >= 60 -> \"D\"\n        else -> \"F\"\n    }\n\n    val scores = listOf(95, 82, 66, 45)\n    scores.forEach { println(\"$it 分 -> ${grade(it)}\") }\n}"
+        },
+        {
+          'name': "高阶函数演示",
+          'code': "fun main() {\n    val words = listOf(\"apple\", \"banana\", \"cherry\", \"date\")\n    val long = words.filter { it.length > 4 }\n    val upper = long.map { it.uppercase() }\n    println(upper)   // [APPLE, BANANA, CHERRY]\n}"
+        }
+      ]
     },
     {
-      id: "mb-12",
-      title: "Kotlin 面向对象：类与数据类",
-      summary: "class、data class、继承、接口、object 单例与伴生对象，全面掌握 Kotlin 的面向对象。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "Kotlin 的面向对象比 Java 简洁得多：构造函数、getter/setter、toString 这些样板代码都被大幅简化，尤其 **data class** 一行顶 Java 几十行。这一章把 Kotlin 面向对象的核心一次讲透。" },
-        { type: "h", text: "class 与属性" },
-        { type: "p", text: "Kotlin 里构造函数直接写在类名后面，属性用 <code.inline>val/var</code.inline> 声明，编译器自动生成 getter/setter。" },
-        { type: "code", lang: "kotlin", title: "定义类", code: 'class Student(val name: String, var score: Int) {\n    fun description(): String = "$name：$score 分"\n}\n\nval s = Student("小明", 95)\ns.score = 98          // var 属性可改\nprintln(s.description())   // 小明：98 分' },
-        { type: "h", text: "data class：数据类" },
-        { type: "p", text: "只用来装数据的类，声明成 <code.inline>data class</code.inline>，编译器自动生成 <code.inline>toString()</code.inline>、<code.inline>equals()</code.inline>、<code.inline>hashCode()</code.inline> 和 <code.inline>copy()</code.inline>。这在 Android 里到处都用。" },
-        { type: "code", lang: "kotlin", title: "data class", code: 'data class User(val id: Int, val name: String, val email: String)\n\nval u1 = User(1, "小红", "hong@example.com")\nprintln(u1)                 // 自动生成友好输出\n\nval u2 = u1.copy(name = "小红改名了")   // 复制并改某个字段\nprintln(u2.name)\n\nval (id, name, email) = u1   // 解构\nprintln("id=$id name=$name")' },
-        { type: "h", text: "继承" },
-        { type: "p", text: "Kotlin 的类默认是 final（不可被继承），想让别人继承要在类前面加 <code.inline>open</code.inline>。方法同理，可被重写的方法要加 <code.inline>open</code.inline>，重写时用 <code.inline>override</code.inline>。" },
-        { type: "code", lang: "kotlin", title: "继承与重写", code: 'open class Animal(val name: String) {\n    open fun makeSound() {\n        println("$name 发出声音")\n    }\n}\n\nclass Dog(name: String) : Animal(name) {\n    override fun makeSound() {\n        println("$name 汪汪叫")\n    }\n}\n\nclass Cat(name: String) : Animal(name) {\n    override fun makeSound() {\n        println("$name 喵喵叫")\n    }\n}\n\nval pets: List<Animal> = listOf(Dog("旺财"), Cat("咪咪"))\npets.forEach { it.makeSound() }' },
-        { type: "h", text: "接口 interface" },
-        { type: "code", lang: "kotlin", title: "接口与实现", code: 'interface Clickable {\n    fun click()\n    fun showTip() = println("默认实现，可以不覆盖")   // 带默认实现\n}\n\nclass Button : Clickable {\n    override fun click() {\n        println("按钮被点击")\n    }\n}\n\nval b = Button()\nb.click()\nb.showTip()' },
-        { type: "h", text: "object 单例与伴生对象" },
-        { type: "p", text: "<code.inline>object</code.inline> 声明一个**单例**：整个程序只有这一个实例，直接通过名字访问，适合放工具类或全局配置。<code.inline>companion object</code.inline> 是类里的伴生对象，相当于 Java 的 static 成员。" },
-        { type: "code", lang: "kotlin", title: "object 与 companion object", code: 'object Config {\n    val apiBase = "https://api.example.com"\n    const val timeout = 3000   // 编译期常量\n}\n\nprintln(Config.apiBase)   // 直接访问，不需要实例\n\nclass Database {\n    companion object {\n        fun open(name: String) = println("打开数据库 $name")\n    }\n}\n\nDatabase.open("users.db")   // 像静态方法一样调用' },
-        { type: "warn", title: "data class 别乱加默认值以外的逻辑", text: "data class 会自动生成 equals/hashCode，因此被设计成『纯粹的数据容器』。如果你在里面塞大量业务方法，要么别用 data class，要么把这些逻辑拆出去。另外 data class 主构造函数里**必须有至少一个 val/var 参数**。" },
-        { type: "keypoints", items: ["构造函数写在类名后，属性用 val/var，自动生成 getter/setter", "data class 自动生成 toString/equals/hashCode/copy，还能解构", "类默认 final，继承要加 open，重写用 override", "接口 interface 支持默认实现，可多实现", "object 是单例，companion object 相当于 static 成员", "data class 适合做数据容器，别塞太多业务逻辑"] },
+      'id': "mb-12",
+      'title': "Kotlin 面向对象：类与数据类",
+      'summary': "class、data class、继承、接口、object 单例与伴生对象，全面掌握 Kotlin 的面向对象。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Kotlin 的面向对象比 Java 简洁得多：构造函数、getter/setter、toString 这些样板代码都被大幅简化，尤其 **data class** 一行顶 Java 几十行。这一章把 Kotlin 面向对象的核心一次讲透。"
+        },
+        {
+          'type': "h",
+          'text': "class 与属性"
+        },
+        {
+          'type': "p",
+          'text': "Kotlin 里构造函数直接写在类名后面，属性用 <code.inline>val/var</code.inline> 声明，编译器自动生成 getter/setter。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "定义类",
+          'code': "class Student(val name: String, var score: Int) {\n    fun description(): String = \"$name：$score 分\"\n}\n\nval s = Student(\"小明\", 95)\ns.score = 98          // var 属性可改\nprintln(s.description())   // 小明：98 分"
+        },
+        {
+          'type': "h",
+          'text': "data class：数据类"
+        },
+        {
+          'type': "p",
+          'text': "只用来装数据的类，声明成 <code.inline>data class</code.inline>，编译器自动生成 <code.inline>toString()</code.inline>、<code.inline>equals()</code.inline>、<code.inline>hashCode()</code.inline> 和 <code.inline>copy()</code.inline>。这在 Android 里到处都用。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "data class",
+          'code': "data class User(val id: Int, val name: String, val email: String)\n\nval u1 = User(1, \"小红\", \"hong@example.com\")\nprintln(u1)                 // 自动生成友好输出\n\nval u2 = u1.copy(name = \"小红改名了\")   // 复制并改某个字段\nprintln(u2.name)\n\nval (id, name, email) = u1   // 解构\nprintln(\"id=$id name=$name\")"
+        },
+        {
+          'type': "h",
+          'text': "继承"
+        },
+        {
+          'type': "p",
+          'text': "Kotlin 的类默认是 final（不可被继承），想让别人继承要在类前面加 <code.inline>open</code.inline>。方法同理，可被重写的方法要加 <code.inline>open</code.inline>，重写时用 <code.inline>override</code.inline>。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "继承与重写",
+          'code': "open class Animal(val name: String) {\n    open fun makeSound() {\n        println(\"$name 发出声音\")\n    }\n}\n\nclass Dog(name: String) : Animal(name) {\n    override fun makeSound() {\n        println(\"$name 汪汪叫\")\n    }\n}\n\nclass Cat(name: String) : Animal(name) {\n    override fun makeSound() {\n        println(\"$name 喵喵叫\")\n    }\n}\n\nval pets: List<Animal> = listOf(Dog(\"旺财\"), Cat(\"咪咪\"))\npets.forEach { it.makeSound() }"
+        },
+        {
+          'type': "h",
+          'text': "接口 interface"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "接口与实现",
+          'code': "interface Clickable {\n    fun click()\n    fun showTip() = println(\"默认实现，可以不覆盖\")   // 带默认实现\n}\n\nclass Button : Clickable {\n    override fun click() {\n        println(\"按钮被点击\")\n    }\n}\n\nval b = Button()\nb.click()\nb.showTip()"
+        },
+        {
+          'type': "h",
+          'text': "object 单例与伴生对象"
+        },
+        {
+          'type': "p",
+          'text': "<code.inline>object</code.inline> 声明一个**单例**：整个程序只有这一个实例，直接通过名字访问，适合放工具类或全局配置。<code.inline>companion object</code.inline> 是类里的伴生对象，相当于 Java 的 static 成员。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "object 与 companion object",
+          'code': "object Config {\n    val apiBase = \"https://api.example.com\"\n    const val timeout = 3000   // 编译期常量\n}\n\nprintln(Config.apiBase)   // 直接访问，不需要实例\n\nclass Database {\n    companion object {\n        fun open(name: String) = println(\"打开数据库 $name\")\n    }\n}\n\nDatabase.open(\"users.db\")   // 像静态方法一样调用"
+        },
+        {
+          'type': "warn",
+          'title': "data class 别乱加默认值以外的逻辑",
+          'text': "data class 会自动生成 equals/hashCode，因此被设计成『纯粹的数据容器』。如果你在里面塞大量业务方法，要么别用 data class，要么把这些逻辑拆出去。另外 data class 主构造函数里**必须有至少一个 val/var 参数**。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Kotlin 面向对象：类与数据类\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Kotlin 面向对象：类与数据类\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Kotlin 面向对象：类与数据类\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "构造函数写在类名后，属性用 val/var，自动生成 getter/setter",
+            "data class 自动生成 toString/equals/hashCode/copy，还能解构",
+            "类默认 final，继承要加 open，重写用 override",
+            "接口 interface 支持默认实现，可多实现",
+            "object 是单例，companion object 相当于 static 成员",
+            "data class 适合做数据容器，别塞太多业务逻辑"
+          ]
+        }
       ],
-      templates: [
-        { name: "数据类 + 解构", code: 'fun main() {\n    data class Point(val x: Int, val y: Int)\n\n    val p = Point(3, 4)\n    val (x, y) = p\n    println("x=$x, y=$y, 距离=${kotlin.math.sqrt((x*x + y*y).toDouble())}")\n}' },
-        { name: "接口多态", code: 'interface Shape {\n    fun area(): Double\n}\n\nclass Circle(val r: Double) : Shape {\n    override fun area() = Math.PI * r * r\n}\n\nclass Rect(val w: Double, val h: Double) : Shape {\n    override fun area() = w * h\n}\n\nfun main() {\n    val shapes = listOf(Circle(2.0), Rect(3.0, 4.0))\n    shapes.forEach { println(it.area()) }\n}' },
-      ],
+      'templates': [
+        {
+          'name': "数据类 + 解构",
+          'code': "fun main() {\n    data class Point(val x: Int, val y: Int)\n\n    val p = Point(3, 4)\n    val (x, y) = p\n    println(\"x=$x, y=$y, 距离=${kotlin.math.sqrt((x*x + y*y).toDouble())}\")\n}"
+        },
+        {
+          'name': "接口多态",
+          'code': "interface Shape {\n    fun area(): Double\n}\n\nclass Circle(val r: Double) : Shape {\n    override fun area() = Math.PI * r * r\n}\n\nclass Rect(val w: Double, val h: Double) : Shape {\n    override fun area() = w * h\n}\n\nfun main() {\n    val shapes = listOf(Circle(2.0), Rect(3.0, 4.0))\n    shapes.forEach { println(it.area()) }\n}"
+        }
+      ]
     },
     {
-      id: "mb-13",
-      title: "Kotlin 空安全与扩展函数、协程",
-      summary: "可空类型 ?、?. 安全调用、?: 空合并、!! 断言、扩展函数与协程入门。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "Kotlin 最著名的卖点就是**空安全**：把『空指针崩溃（NullPointerException）』这种最常见的崩溃在编译期就挡掉。这一章学完，你会明白为什么 Kotlin 比 Java 安全得多，还会顺带掌握扩展函数和协程。" },
-        { type: "h", text: "可空类型：类型后面加 ?" },
-        { type: "code", lang: "kotlin", title: "可空类型", code: 'val nonNull: String = "一定有值"\nval nullable: String? = null   // 可能为 null\n\n// println(nullable.length)   // 编译报错：nullable 可能为 null\nprintln(nonNull.length)' },
-        { type: "h", text: "安全调用 ?. 与 Elvis 运算符 ?:" },
-        { type: "p", text: "<code.inline>?. </code.inline>表示『如果不为 null 才调用』，为 null 则整体结果是 null。<code.inline>?:</code.inline>（猫王运算符）表示『左边为 null 就用右边兜底』。" },
-        { type: "code", lang: "kotlin", title: "?. 与 ?:", code: 'data class Address(val city: String)\ndata class User(val name: String, val address: Address?)\n\nval u1 = User("小明", Address("上海"))\nval u2 = User("小红", null)\n\n// ?. 安全调用链\nprintln(u1.address?.city)      // 上海\nprintln(u2.address?.city)      // null（不崩溃）\n\n// ?: 空合并，给默认值\nprintln(u2.address?.city ?: "未知城市")   // 未知城市\n\n// 链式安全调用\nval cityLen = u2.address?.city?.length ?: 0\nprintln(cityLen)   // 0' },
-        { type: "danger", title: "!! 非空断言是崩溃开关", text: "<code.inline>!!</code.inline> 表示『我保证这里不为 null』，但如果它是 null，程序**立刻抛 NullPointerException 崩溃**。新手常为省事到处用 !!，结果线上闪退。正确定位：能用 ?. 和 ?: 就别用 !!。" },
-        { type: "code", lang: "kotlin", title: "!! 的使用（慎用）", code: 'val text: String? = "hello"\nprintln(text!!.uppercase())   // HELLO（此刻确定非空）\n\n// val empty: String? = null\n// println(empty!!.length)     // 崩溃！NullPointerException' },
-        { type: "h", text: "扩展函数：给已有类加方法" },
-        { type: "p", text: "**扩展函数**允许你不修改源码，就给某个类添加新函数。语法：<code.inline>fun 类型.函数名()</code.inline>，函数里用 <code.inline>this</code.inline> 指代对象本身。Kotlin 标准库大量使用扩展函数。" },
-        { type: "code", lang: "kotlin", title: "扩展函数", code: '// 给 String 加一个判断回文的方法\nfun String.isPalindrome(): Boolean {\n    return this == this.reversed()\n}\n\n// 给 Int 加一个取阶乘的方法\nfun Int.factorial(): Long {\n    var result = 1L\n    for (i in 1..this) result *= i\n    return result\n}\n\nprintln("abba".isPalindrome())   // true\nprintln(5.factorial())          // 120' },
-        { type: "h", text: "协程 Coroutine：优雅地写异步" },
-        { type: "p", text: "Android 里网络请求、读数据库都是耗时操作，不能卡住主线程。**协程（coroutine）**让异步代码看起来像同步代码一样简单。核心是 <code.inline>suspend</code.inline>（挂起函数）和 <code.inline>launch</code.inline>（启动协程）。" },
-        { type: "code", lang: "kotlin", title: "协程入门", code: '// 需要引入协程依赖：implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")\nimport kotlinx.coroutines.*\n\nsuspend fun fetchUser(): String {\n    delay(1000)   // 模拟网络请求耗时 1 秒，不阻塞线程\n    return "用户数据"\n}\n\nfun main() = runBlocking {\n    launch {\n        val data = fetchUser()\n        println("拿到：$data")\n    }\n    println("先打印这一行（主流程不阻塞）")\n}' },
-        { type: "info", title: "协程是 Android 开发的必考技能", text: "面试高频问题：什么是协程？答：协程是『可挂起/恢复的轻量线程』，用 suspend 函数和 launch/async 管理异步任务，避免回调地狱，且不会阻塞主线程。" },
-        { type: "keypoints", items: ["可空类型用 ? 声明，编译期强制你处理空值", "?. 安全调用：为 null 就不执行，结果是 null", "?: 空合并：为 null 时用右侧默认值兜底", "!! 非空断言：为 null 直接崩溃，能不用就不用", "扩展函数：fun 类型.函数名()，this 指代对象", "协程：suspend + launch，让异步代码像同步一样写"] },
+      'id': "mb-13",
+      'title': "Kotlin 空安全与扩展函数、协程",
+      'summary': "可空类型 ?、?. 安全调用、?: 空合并、!! 断言、扩展函数与协程入门。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Kotlin 最著名的卖点就是**空安全**：把『空指针崩溃（NullPointerException）』这种最常见的崩溃在编译期就挡掉。这一章学完，你会明白为什么 Kotlin 比 Java 安全得多，还会顺带掌握扩展函数和协程。"
+        },
+        {
+          'type': "h",
+          'text': "可空类型：类型后面加 ?"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "可空类型",
+          'code': "val nonNull: String = \"一定有值\"\nval nullable: String? = null   // 可能为 null\n\n// println(nullable.length)   // 编译报错：nullable 可能为 null\nprintln(nonNull.length)"
+        },
+        {
+          'type': "h",
+          'text': "安全调用 ?. 与 Elvis 运算符 ?:"
+        },
+        {
+          'type': "p",
+          'text': "<code.inline>?. </code.inline>表示『如果不为 null 才调用』，为 null 则整体结果是 null。<code.inline>?:</code.inline>（猫王运算符）表示『左边为 null 就用右边兜底』。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "?. 与 ?:",
+          'code': "data class Address(val city: String)\ndata class User(val name: String, val address: Address?)\n\nval u1 = User(\"小明\", Address(\"上海\"))\nval u2 = User(\"小红\", null)\n\n// ?. 安全调用链\nprintln(u1.address?.city)      // 上海\nprintln(u2.address?.city)      // null（不崩溃）\n\n// ?: 空合并，给默认值\nprintln(u2.address?.city ?: \"未知城市\")   // 未知城市\n\n// 链式安全调用\nval cityLen = u2.address?.city?.length ?: 0\nprintln(cityLen)   // 0"
+        },
+        {
+          'type': "danger",
+          'title': "!! 非空断言是崩溃开关",
+          'text': "<code.inline>!!</code.inline> 表示『我保证这里不为 null』，但如果它是 null，程序**立刻抛 NullPointerException 崩溃**。新手常为省事到处用 !!，结果线上闪退。正确定位：能用 ?. 和 ?: 就别用 !!。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "!! 的使用（慎用）",
+          'code': "val text: String? = \"hello\"\nprintln(text!!.uppercase())   // HELLO（此刻确定非空）\n\n// val empty: String? = null\n// println(empty!!.length)     // 崩溃！NullPointerException"
+        },
+        {
+          'type': "h",
+          'text': "扩展函数：给已有类加方法"
+        },
+        {
+          'type': "p",
+          'text': "**扩展函数**允许你不修改源码，就给某个类添加新函数。语法：<code.inline>fun 类型.函数名()</code.inline>，函数里用 <code.inline>this</code.inline> 指代对象本身。Kotlin 标准库大量使用扩展函数。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "扩展函数",
+          'code': "// 给 String 加一个判断回文的方法\nfun String.isPalindrome(): Boolean {\n    return this == this.reversed()\n}\n\n// 给 Int 加一个取阶乘的方法\nfun Int.factorial(): Long {\n    var result = 1L\n    for (i in 1..this) result *= i\n    return result\n}\n\nprintln(\"abba\".isPalindrome())   // true\nprintln(5.factorial())          // 120"
+        },
+        {
+          'type': "h",
+          'text': "协程 Coroutine：优雅地写异步"
+        },
+        {
+          'type': "p",
+          'text': "Android 里网络请求、读数据库都是耗时操作，不能卡住主线程。**协程（coroutine）**让异步代码看起来像同步代码一样简单。核心是 <code.inline>suspend</code.inline>（挂起函数）和 <code.inline>launch</code.inline>（启动协程）。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "协程入门",
+          'code': "// 需要引入协程依赖：implementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3\")\nimport kotlinx.coroutines.*\n\nsuspend fun fetchUser(): String {\n    delay(1000)   // 模拟网络请求耗时 1 秒，不阻塞线程\n    return \"用户数据\"\n}\n\nfun main() = runBlocking {\n    launch {\n        val data = fetchUser()\n        println(\"拿到：$data\")\n    }\n    println(\"先打印这一行（主流程不阻塞）\")\n}"
+        },
+        {
+          'type': "info",
+          'title': "协程是 Android 开发的必考技能",
+          'text': "面试高频问题：什么是协程？答：协程是『可挂起/恢复的轻量线程』，用 suspend 函数和 launch/async 管理异步任务，避免回调地狱，且不会阻塞主线程。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Kotlin 空安全与扩展函数、协程\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Kotlin 空安全与扩展函数、协程\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Kotlin 空安全与扩展函数、协程\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "可空类型用 ? 声明，编译期强制你处理空值",
+            "?. 安全调用：为 null 就不执行，结果是 null",
+            "?: 空合并：为 null 时用右侧默认值兜底",
+            "!! 非空断言：为 null 直接崩溃，能不用就不用",
+            "扩展函数：fun 类型.函数名()，this 指代对象",
+            "协程：suspend + launch，让异步代码像同步一样写"
+          ]
+        }
       ],
-      templates: [
-        { name: "空安全工具箱", code: 'fun main() {\n    fun parseAge(s: String?): Int {\n        val n = s?.toIntOrNull() ?: 0\n        return if (n in 1..150) n else 0\n    }\n\n    println(parseAge("18"))    // 18\n    println(parseAge("abc"))   // 0\n    println(parseAge(null))    // 0\n}' },
-        { name: "扩展函数合集", code: 'fun String.repeat(times: Int): String = this.repeat(times)\nfun Int.isEven(): Boolean = this % 2 == 0\n\nfun main() {\n    println("哈".repeat(3))     // 哈哈哈\n    println(4.isEven())        // true\n}' },
-      ],
+      'templates': [
+        {
+          'name': "空安全工具箱",
+          'code': "fun main() {\n    fun parseAge(s: String?): Int {\n        val n = s?.toIntOrNull() ?: 0\n        return if (n in 1..150) n else 0\n    }\n\n    println(parseAge(\"18\"))    // 18\n    println(parseAge(\"abc\"))   // 0\n    println(parseAge(null))    // 0\n}"
+        },
+        {
+          'name': "扩展函数合集",
+          'code': "fun String.repeat(times: Int): String = this.repeat(times)\nfun Int.isEven(): Boolean = this % 2 == 0\n\nfun main() {\n    println(\"哈\".repeat(3))     // 哈哈哈\n    println(4.isEven())        // true\n}"
+        }
+      ]
     },
     {
-      id: "mb-14",
-      title: "Jetpack Compose 入门：声明式 UI",
-      summary: "Composable 函数、Text/Button/Column/Row、remember 状态与 LazyColumn 列表。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "**Jetpack Compose** 是谷歌官方的现代 UI 工具包，用 Kotlin 代码直接写界面（不再用老旧的 XML）。它的理念和 SwiftUI 一模一样：**声明式**——你描述界面长什么样，状态一变界面自动更新。" },
-        { type: "h", text: "Composable 函数：界面的基本单位" },
-        { type: "p", text: "用 <code.inline>@Composable</code.inline> 注解标记的函数就是界面组件。它返回的不是值，而是描述界面的一棵『树』。文本用 <code.inline>Text</code.inline>，按钮用 <code.inline>Button</code.inline>。" },
-        { type: "code", lang: "kotlin", title: "第一个 Composable", code: '@Composable\nfun Greeting() {\n    Text(\n        text = "你好，Compose！",\n        fontSize = 32.sp,\n        color = Color.Blue\n    )\n}\n\n// 在 Activity 里挂载\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContent {\n            Greeting()\n        }\n    }\n}' },
-        { type: "h", text: "布局：Column 与 Row" },
-        { type: "p", text: "<code.inline>Column</code.inline> 垂直排列子元素，<code.inline>Row</code.inline> 水平排列，<code.inline>Box</code.inline> 层叠。Modifier（修饰符）负责间距、背景、对齐等样式。" },
-        { type: "code", lang: "kotlin", title: "Column / Row 布局", code: '@Composable\nfun LayoutDemo() {\n    Column(\n        modifier = Modifier.padding(16.dp),\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        Text("标题", fontSize = 28.sp)\n\n        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {\n            Box(modifier = Modifier.size(60.dp).background(Color.Red))\n            Box(modifier = Modifier.size(60.dp).background(Color.Green))\n        }\n\n        Text("底部文字", color = Color.Gray)\n    }\n}' },
-        { type: "h", text: "状态：remember 与 mutableStateOf" },
-        { type: "p", text: "Compose 里用 <code.inline>remember { mutableStateOf(初始值) }</code.inline> 声明状态。当这个状态变化时，Compose 会自动**重组**（重新执行函数），界面随之更新。这正是声明式 UI 的核心。" },
-        { type: "code", lang: "kotlin", title: "计数器：状态 + 交互", code: '@Composable\nfun CounterApp() {\n    var count by remember { mutableStateOf(0) }\n\n    Column(\n        modifier = Modifier.fillMaxSize().padding(32.dp),\n        horizontalAlignment = Alignment.CenterHorizontally,\n        verticalArrangement = Arrangement.Center\n    ) {\n        Text(\n            text = "$count",\n            fontSize = 80.sp,\n            fontWeight = FontWeight.Bold\n        )\n\n        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {\n            Button(onClick = { count-- }) { Text("减一") }\n            Button(onClick = { count++ }) { Text("加一") }\n        }\n    }\n}' },
-        { type: "h", text: "列表：LazyColumn" },
-        { type: "p", text: "展示大量数据用 <code.inline>LazyColumn</code.inline>，它只渲染屏幕上的行，性能好。类似 SwiftUI 的 List。" },
-        { type: "code", lang: "kotlin", title: "LazyColumn 列表", code: '@Composable\nfun FruitList() {\n    val fruits = listOf("苹果", "香蕉", "橙子", "葡萄", "西瓜")\n\n    LazyColumn {\n        items(fruits) { fruit ->\n            Text(\n                text = fruit,\n                modifier = Modifier\n                    .fillMaxWidth()\n                    .padding(16.dp)\n            )\n        }\n    }\n}' },
-        { type: "warn", title: "状态要用 remember，别用普通变量", text: "在 Composable 里写 <code.inline>var count = 0</code.inline> 再点按钮，界面不会变——因为普通变量变了 Compose 不知道。**必须用 remember { mutableStateOf(...) }**，Compose 才能感知变化并重组。" },
-        { type: "info", title: "Compose 与 SwiftUI 的对照", text: "Composable 函数 ≈ SwiftUI 的 View；remember/mutableStateOf ≈ @State；Column/Row ≈ VStack/HStack；LazyColumn ≈ List。两套框架思路完全一致，会一个另一个上手极快。" },
-        { type: "keypoints", items: ["@Composable 函数是界面基本单位，声明式描述 UI", "Text/Button 是基础元素，Column/Row/Box 负责布局", "remember { mutableStateOf(...) } 声明状态，变化自动重组", "Modifier 链式调整样式：padding/size/background/align", "LazyColumn 高性能列表，类似 SwiftUI 的 List", "声明式 UI：状态驱动界面，无需手动操作控件"] },
+      'id': "mb-14",
+      'title': "Jetpack Compose 入门：声明式 UI",
+      'summary': "Composable 函数、Text/Button/Column/Row、remember 状态与 LazyColumn 列表。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "**Jetpack Compose** 是谷歌官方的现代 UI 工具包，用 Kotlin 代码直接写界面（不再用老旧的 XML）。它的理念和 SwiftUI 一模一样：**声明式**——你描述界面长什么样，状态一变界面自动更新。"
+        },
+        {
+          'type': "h",
+          'text': "Composable 函数：界面的基本单位"
+        },
+        {
+          'type': "p",
+          'text': "用 <code.inline>@Composable</code.inline> 注解标记的函数就是界面组件。它返回的不是值，而是描述界面的一棵『树』。文本用 <code.inline>Text</code.inline>，按钮用 <code.inline>Button</code.inline>。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "第一个 Composable",
+          'code': "@Composable\nfun Greeting() {\n    Text(\n        text = \"你好，Compose！\",\n        fontSize = 32.sp,\n        color = Color.Blue\n    )\n}\n\n// 在 Activity 里挂载\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContent {\n            Greeting()\n        }\n    }\n}"
+        },
+        {
+          'type': "h",
+          'text': "布局：Column 与 Row"
+        },
+        {
+          'type': "p",
+          'text': "<code.inline>Column</code.inline> 垂直排列子元素，<code.inline>Row</code.inline> 水平排列，<code.inline>Box</code.inline> 层叠。Modifier（修饰符）负责间距、背景、对齐等样式。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "Column / Row 布局",
+          'code': "@Composable\nfun LayoutDemo() {\n    Column(\n        modifier = Modifier.padding(16.dp),\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        Text(\"标题\", fontSize = 28.sp)\n\n        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {\n            Box(modifier = Modifier.size(60.dp).background(Color.Red))\n            Box(modifier = Modifier.size(60.dp).background(Color.Green))\n        }\n\n        Text(\"底部文字\", color = Color.Gray)\n    }\n}"
+        },
+        {
+          'type': "h",
+          'text': "状态：remember 与 mutableStateOf"
+        },
+        {
+          'type': "p",
+          'text': "Compose 里用 <code.inline>remember { mutableStateOf(初始值) }</code.inline> 声明状态。当这个状态变化时，Compose 会自动**重组**（重新执行函数），界面随之更新。这正是声明式 UI 的核心。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "计数器：状态 + 交互",
+          'code': "@Composable\nfun CounterApp() {\n    var count by remember { mutableStateOf(0) }\n\n    Column(\n        modifier = Modifier.fillMaxSize().padding(32.dp),\n        horizontalAlignment = Alignment.CenterHorizontally,\n        verticalArrangement = Arrangement.Center\n    ) {\n        Text(\n            text = \"$count\",\n            fontSize = 80.sp,\n            fontWeight = FontWeight.Bold\n        )\n\n        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {\n            Button(onClick = { count-- }) { Text(\"减一\") }\n            Button(onClick = { count++ }) { Text(\"加一\") }\n        }\n    }\n}"
+        },
+        {
+          'type': "h",
+          'text': "列表：LazyColumn"
+        },
+        {
+          'type': "p",
+          'text': "展示大量数据用 <code.inline>LazyColumn</code.inline>，它只渲染屏幕上的行，性能好。类似 SwiftUI 的 List。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "LazyColumn 列表",
+          'code': "@Composable\nfun FruitList() {\n    val fruits = listOf(\"苹果\", \"香蕉\", \"橙子\", \"葡萄\", \"西瓜\")\n\n    LazyColumn {\n        items(fruits) { fruit ->\n            Text(\n                text = fruit,\n                modifier = Modifier\n                    .fillMaxWidth()\n                    .padding(16.dp)\n            )\n        }\n    }\n}"
+        },
+        {
+          'type': "warn",
+          'title': "状态要用 remember，别用普通变量",
+          'text': "在 Composable 里写 <code.inline>var count = 0</code.inline> 再点按钮，界面不会变——因为普通变量变了 Compose 不知道。**必须用 remember { mutableStateOf(...) }**，Compose 才能感知变化并重组。"
+        },
+        {
+          'type': "info",
+          'title': "Compose 与 SwiftUI 的对照",
+          'text': "Composable 函数 ≈ SwiftUI 的 View；remember/mutableStateOf ≈ @State；Column/Row ≈ VStack/HStack；LazyColumn ≈ List。两套框架思路完全一致，会一个另一个上手极快。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Jetpack Compose 入门：声明式 UI\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Jetpack Compose 入门：声明式 UI\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Jetpack Compose 入门：声明式 UI\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "@Composable 函数是界面基本单位，声明式描述 UI",
+            "Text/Button 是基础元素，Column/Row/Box 负责布局",
+            "remember { mutableStateOf(...) } 声明状态，变化自动重组",
+            "Modifier 链式调整样式：padding/size/background/align",
+            "LazyColumn 高性能列表，类似 SwiftUI 的 List",
+            "声明式 UI：状态驱动界面，无需手动操作控件"
+          ]
+        }
       ],
-      templates: [
-        { name: "可切换的开关", code: '@Composable\nfun ToggleDemo() {\n    var on by remember { mutableStateOf(false) }\n\n    Column(horizontalAlignment = Alignment.CenterHorizontally) {\n        Text(if (on) "💡 亮着" else "🌑 关了", fontSize = 30.sp)\n        Button(onClick = { on = !on }) {\n            Text(if (on) "关灯" else "开灯")\n        }\n    }\n}' },
-      ],
+      'templates': [
+        {
+          'name': "可切换的开关",
+          'code': "@Composable\nfun ToggleDemo() {\n    var on by remember { mutableStateOf(false) }\n\n    Column(horizontalAlignment = Alignment.CenterHorizontally) {\n        Text(if (on) \"💡 亮着\" else \"🌑 关了\", fontSize = 30.sp)\n        Button(onClick = { on = !on }) {\n            Text(if (on) \"关灯\" else \"开灯\")\n        }\n    }\n}"
+        }
+      ]
     },
     {
-      id: "mb-15",
-      title: "Android 小项目：计数器与待办 App",
-      summary: "用 Compose 从零写一个可运行的计数器，再扩展成待办清单，讲透布局与状态。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "这一章把前面所有 Compose 知识合成两个完整的小项目：**计数器**和**待办清单**。做完这两个，你就真正走通了『写界面 → 管状态 → 跑在手机里』的完整流程。" },
-        { type: "h", text: "项目一：完整的计数器" },
-        { type: "code", lang: "kotlin", title: "计数器完整代码", code: 'package com.example.counter\n\nimport android.os.Bundle\nimport androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent\nimport androidx.compose.foundation.layout.*\nimport androidx.compose.material3.*\nimport androidx.compose.runtime.*\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\n\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContent { CounterScreen() }\n    }\n}\n\n@Composable\nfun CounterScreen() {\n    var count by remember { mutableStateOf(0) }\n\n    Column(\n        modifier = Modifier.fillMaxSize().padding(24.dp),\n        horizontalAlignment = Alignment.CenterHorizontally,\n        verticalArrangement = Arrangement.Center\n    ) {\n        Text(\n            text = "$count",\n            fontSize = 90.sp,\n            fontWeight = FontWeight.Bold,\n            color = if (count >= 0) Color.Blue else Color.Red\n        )\n\n        Row(\n            modifier = Modifier.padding(top = 24.dp),\n            horizontalArrangement = Arrangement.spacedBy(24.dp)\n        ) {\n            Button(onClick = { count-- }) { Text("减一", fontSize = 20.sp) }\n            Button(onClick = { count++ }) { Text("加一", fontSize = 20.sp) }\n        }\n\n        TextButton(onClick = { count = 0 }) { Text("清零", color = Color.Gray) }\n    }\n}' },
-        { type: "h", text: "逐块讲解计数器" },
-        { type: "list", items: ["<code.inline>setContent { CounterScreen() }</code.inline>：把 Composable 界面挂载到 Activity。", "<code.inline>var count by remember { mutableStateOf(0) }</code.inline>：声明状态，<code.inline>by</code> 是委托语法，写起来像普通变量。", "<code.inline>Column</code.inline> 居中排列，<code.inline>fillMaxSize</code.inline> 占满全屏。", "<code.inline>Button(onClick = { count++ })</code.inline>：点击回调里改状态，界面自动刷新。", "颜色用 if 表达式：负数显示红色。"] },
-        { type: "warn", title: "remember 在旋转屏幕后会丢失", text: "手机旋转屏幕时 Activity 会重建，remember 的状态会被重置。要跨配置保留，用 <code.inline>rememberSaveable</code.inline> 代替 remember。这是 Android 开发的经典坑。" },
-        { type: "h", text: "项目二：待办清单" },
-        { type: "p", text: "功能：输入框输入文字，点『添加』进入列表，点条目可以删除。用到 <code.inline>OutlinedTextField</code.inline>（输入框）、<code.inline>LazyColumn</code.inline>（列表）和状态列表。" },
-        { type: "code", lang: "kotlin", title: "待办清单完整代码", code: '@Composable\nfun TodoScreen() {\n    val todos = remember { mutableStateListOf("学习 Kotlin", "做一个小项目") }\n    var input by remember { mutableStateOf("") }\n\n    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {\n        Row(verticalAlignment = Alignment.CenterVertically) {\n            OutlinedTextField(\n                value = input,\n                onValueChange = { input = it },\n                modifier = Modifier.weight(1f),\n                placeholder = { Text("输入新待办") }\n            )\n            Spacer(modifier = Modifier.width(8.dp))\n            Button(onClick = {\n                val text = input.trim()\n                if (text.isNotEmpty()) {\n                    todos.add(text)\n                    input = ""\n                }\n            }) { Text("添加") }\n        }\n\n        LazyColumn(modifier = Modifier.padding(top = 16.dp)) {\n            items(todos.size) { index ->\n                val todo = todos[index]\n                Row(\n                    modifier = Modifier\n                        .fillMaxWidth()\n                        .clickable { todos.removeAt(index) }\n                        .padding(12.dp),\n                    horizontalArrangement = Arrangement.SpaceBetween\n                ) {\n                    Text(todo)\n                    Text("✕", color = Color.Gray)\n                }\n            }\n        }\n    }\n}' },
-        { type: "h", text: "待办清单要点" },
-        { type: "list", items: ["<code.inline>mutableStateListOf</code.inline>：可观察的列表，增删都会触发重组。", "<code.inline>OutlinedTextField</code.inline> 用 <code.inline>value/onValueChange</code.inline> 双向绑定 input。", "<code.inline>items(todos.size)</code.inline> 渲染每一行，点击行（clickable）删除该条。", "添加前 trim 去掉首尾空格，空内容不添加。"] },
-        { type: "tip", title: "动手练习建议", text: "给待办 App 加：勾选完成状态（用 data class 存 isDone）、显示『已完成 x / 共 y』、底部加清空按钮。改的过程中会碰到状态更新的细节，那就是真正的收获。" },
-        { type: "keypoints", items: ["计数器：remember + mutableStateOf + Button，状态驱动界面", "待办清单：mutableStateListOf 管理列表，OutlinedTextField 输入", "点击回调里改状态，Compose 自动重组刷新", "旋转屏幕 remember 会丢，跨配置用 rememberSaveable", "Column/Row 管布局，LazyColumn 管长列表", "小项目是打通『界面-状态-运行』的最佳练习"] },
+      'id': "mb-15",
+      'title': "Android 小项目：计数器与待办 App",
+      'summary': "用 Compose 从零写一个可运行的计数器，再扩展成待办清单，讲透布局与状态。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "这一章把前面所有 Compose 知识合成两个完整的小项目：**计数器**和**待办清单**。做完这两个，你就真正走通了『写界面 → 管状态 → 跑在手机里』的完整流程。"
+        },
+        {
+          'type': "h",
+          'text': "项目一：完整的计数器"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "计数器完整代码",
+          'code': "package com.example.counter\n\nimport android.os.Bundle\nimport androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent\nimport androidx.compose.foundation.layout.*\nimport androidx.compose.material3.*\nimport androidx.compose.runtime.*\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\n\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContent { CounterScreen() }\n    }\n}\n\n@Composable\nfun CounterScreen() {\n    var count by remember { mutableStateOf(0) }\n\n    Column(\n        modifier = Modifier.fillMaxSize().padding(24.dp),\n        horizontalAlignment = Alignment.CenterHorizontally,\n        verticalArrangement = Arrangement.Center\n    ) {\n        Text(\n            text = \"$count\",\n            fontSize = 90.sp,\n            fontWeight = FontWeight.Bold,\n            color = if (count >= 0) Color.Blue else Color.Red\n        )\n\n        Row(\n            modifier = Modifier.padding(top = 24.dp),\n            horizontalArrangement = Arrangement.spacedBy(24.dp)\n        ) {\n            Button(onClick = { count-- }) { Text(\"减一\", fontSize = 20.sp) }\n            Button(onClick = { count++ }) { Text(\"加一\", fontSize = 20.sp) }\n        }\n\n        TextButton(onClick = { count = 0 }) { Text(\"清零\", color = Color.Gray) }\n    }\n}"
+        },
+        {
+          'type': "h",
+          'text': "逐块讲解计数器"
+        },
+        {
+          'type': "list",
+          'items': [
+            "<code.inline>setContent { CounterScreen() }</code.inline>：把 Composable 界面挂载到 Activity。",
+            "<code.inline>var count by remember { mutableStateOf(0) }</code.inline>：声明状态，<code.inline>by</code> 是委托语法，写起来像普通变量。",
+            "<code.inline>Column</code.inline> 居中排列，<code.inline>fillMaxSize</code.inline> 占满全屏。",
+            "<code.inline>Button(onClick = { count++ })</code.inline>：点击回调里改状态，界面自动刷新。",
+            "颜色用 if 表达式：负数显示红色。"
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "remember 在旋转屏幕后会丢失",
+          'text': "手机旋转屏幕时 Activity 会重建，remember 的状态会被重置。要跨配置保留，用 <code.inline>rememberSaveable</code.inline> 代替 remember。这是 Android 开发的经典坑。"
+        },
+        {
+          'type': "h",
+          'text': "项目二：待办清单"
+        },
+        {
+          'type': "p",
+          'text': "功能：输入框输入文字，点『添加』进入列表，点条目可以删除。用到 <code.inline>OutlinedTextField</code.inline>（输入框）、<code.inline>LazyColumn</code.inline>（列表）和状态列表。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "待办清单完整代码",
+          'code': "@Composable\nfun TodoScreen() {\n    val todos = remember { mutableStateListOf(\"学习 Kotlin\", \"做一个小项目\") }\n    var input by remember { mutableStateOf(\"\") }\n\n    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {\n        Row(verticalAlignment = Alignment.CenterVertically) {\n            OutlinedTextField(\n                value = input,\n                onValueChange = { input = it },\n                modifier = Modifier.weight(1f),\n                placeholder = { Text(\"输入新待办\") }\n            )\n            Spacer(modifier = Modifier.width(8.dp))\n            Button(onClick = {\n                val text = input.trim()\n                if (text.isNotEmpty()) {\n                    todos.add(text)\n                    input = \"\"\n                }\n            }) { Text(\"添加\") }\n        }\n\n        LazyColumn(modifier = Modifier.padding(top = 16.dp)) {\n            items(todos.size) { index ->\n                val todo = todos[index]\n                Row(\n                    modifier = Modifier\n                        .fillMaxWidth()\n                        .clickable { todos.removeAt(index) }\n                        .padding(12.dp),\n                    horizontalArrangement = Arrangement.SpaceBetween\n                ) {\n                    Text(todo)\n                    Text(\"✕\", color = Color.Gray)\n                }\n            }\n        }\n    }\n}"
+        },
+        {
+          'type': "h",
+          'text': "待办清单要点"
+        },
+        {
+          'type': "list",
+          'items': [
+            "<code.inline>mutableStateListOf</code.inline>：可观察的列表，增删都会触发重组。",
+            "<code.inline>OutlinedTextField</code.inline> 用 <code.inline>value/onValueChange</code.inline> 双向绑定 input。",
+            "<code.inline>items(todos.size)</code.inline> 渲染每一行，点击行（clickable）删除该条。",
+            "添加前 trim 去掉首尾空格，空内容不添加。"
+          ]
+        },
+        {
+          'type': "tip",
+          'title': "动手练习建议",
+          'text': "给待办 App 加：勾选完成状态（用 data class 存 isDone）、显示『已完成 x / 共 y』、底部加清空按钮。改的过程中会碰到状态更新的细节，那就是真正的收获。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Android 小项目：计数器与待办 App\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Android 小项目：计数器与待办 App\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Android 小项目：计数器与待办 App\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "计数器：remember + mutableStateOf + Button，状态驱动界面",
+            "待办清单：mutableStateListOf 管理列表，OutlinedTextField 输入",
+            "点击回调里改状态，Compose 自动重组刷新",
+            "旋转屏幕 remember 会丢，跨配置用 rememberSaveable",
+            "Column/Row 管布局，LazyColumn 管长列表",
+            "小项目是打通『界面-状态-运行』的最佳练习"
+          ]
+        }
       ],
-      templates: [
-        { name: "计数器核心", code: '@Composable\nfun CounterScreen() {\n    var count by remember { mutableStateOf(0) }\n\n    Column(\n        modifier = Modifier.fillMaxSize().padding(24.dp),\n        horizontalAlignment = Alignment.CenterHorizontally,\n        verticalArrangement = Arrangement.Center\n    ) {\n        Text("$count", fontSize = 90.sp, fontWeight = FontWeight.Bold)\n        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {\n            Button(onClick = { count-- }) { Text("减一") }\n            Button(onClick = { count++ }) { Text("加一") }\n        }\n    }\n}' },
-      ],
+      'templates': [
+        {
+          'name': "计数器核心",
+          'code': "@Composable\nfun CounterScreen() {\n    var count by remember { mutableStateOf(0) }\n\n    Column(\n        modifier = Modifier.fillMaxSize().padding(24.dp),\n        horizontalAlignment = Alignment.CenterHorizontally,\n        verticalArrangement = Arrangement.Center\n    ) {\n        Text(\"$count\", fontSize = 90.sp, fontWeight = FontWeight.Bold)\n        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {\n            Button(onClick = { count-- }) { Text(\"减一\") }\n            Button(onClick = { count++ }) { Text(\"加一\") }\n        }\n    }\n}"
+        }
+      ]
     },
     {
-      id: "mb-16",
-      title: "跨平台与下一步：学完怎么走",
-      summary: "Kotlin Multiplatform、Flutter 对比，发布 App 的流程与后续学习路线。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "恭喜！学到这里，你已经同时掌握了 iOS（Swift + SwiftUI）和 Android（Kotlin + Compose）两大平台的核心开发能力。最后一章聊聊『从会写代码到真正发布』的路，以及要不要做跨平台。" },
-        { type: "h", text: "跨平台方案怎么选" },
-        { type: "table", head: ["方案", "语言", "优点", "缺点"], rows: [["原生双写", "Swift + Kotlin", "性能与体验最佳，官方支持最全", "开发量翻倍，需要两套团队"], ["Flutter", "Dart", "一套代码双端，UI 一致性好，性能不错", "UI 非原生组件，平台特性需桥接"], ["React Native", "JavaScript/TS", "前端开发者上手快，生态大", "性能与原生有差距，长列表易卡顿"], ["Kotlin Multiplatform", "Kotlin", "共享业务逻辑，UI 仍用原生", "共享边界设计有学习成本"]] },
-        { type: "h", text: "Kotlin Multiplatform：共享逻辑" },
-        { type: "p", text: "**Kotlin Multiplatform（KMP）** 的思路是：把网络请求、数据处理、数据库等『与界面无关』的业务逻辑用 Kotlin 写一份，在 iOS 和 Android 之间共享；界面仍然分别用 SwiftUI 和 Compose 写原生 UI。这样既保留原生体验，又省了重复逻辑。适合已有原生基础、想提高效率的团队。" },
-        { type: "h", text: "Flutter 值得学吗" },
-        { type: "p", text: "**Flutter** 是谷歌的另一条跨平台路线，用 Dart 语言，自己绘制所有 UI 组件。它上手快、UI 表现力强，国内很多中小团队用它快速出双端应用。它和『原生 Swift/Kotlin』是两种不同思路，谈不上谁绝对更好。建议：先打好原生基础，再按需学 Flutter，两条路都能走通。" },
-        { type: "code", lang: "kotlin", title: "KMP：一份逻辑双端共享", code: '// Kotlin Multiplatform 的核心思路：\n// 与界面无关的纯逻辑用 Kotlin 写一份，iOS 与 Android 都能调用\n\n// 计算订单总价（含折扣与最低价限制）\nfun calculateTotal(prices: List<Double>, discount: Double): Double {\n    val sum = prices.sum()\n    val finalPrice = sum * (1 - discount)\n    return finalPrice.coerceAtLeast(0.0)\n}\n\n// 校验手机号格式\nfun isValidPhone(phone: String): Boolean {\n    return phone.length == 11 && phone.all { it.isDigit() }\n}\n\n// 这段逻辑 Android 端直接用 Kotlin 调用，\n// iOS 端通过 KMP 生成的 framework 用 Swift 调用同一个函数\nval total = calculateTotal(listOf(39.9, 19.9), 0.1)\nprintln("折扣后总价：$total")' },
-        { type: "h", text: "如何发布到应用商店" },
-        { type: "list", items: ["**App Store（iOS）**：需要 Apple 开发者账号（99 美元/年）→ 在 Xcode 里 Archive 打包 → 上传到 App Store Connect → 填写元数据 → 提交审核。审核一般几天，可能被拒后按提示修改再提交。", "**Google Play（Android）**：注册 Google Play 开发者账号（一次性 25 美元）→ 用 Android Studio 生成签名 APK/AAB → 上传并填写商店信息 → 审核上架。", "**国内安卓市场**：应用宝、华为、小米、OPPO、vivo 等各家应用商店分别上架，通常需要软著（软件著作权）等资质材料，且各家规则不同。", "个人开发者的第一款 App，建议先上架到一家商店练流程，不必追求全渠道。"] },
-        { type: "h", text: "继续深入的学习路线" },
-        { type: "list", items: ["**iOS 方向**：SwiftUI 进阶（动画、导航 NavigationStack、数据持久化 SwiftData/Core Data、网络 URLSession）→ 架构（MVVM、Swift Concurrency 并发）→ 适配与性能优化。", "**Android 方向**：Compose 进阶（导航 Navigation、Room 数据库、Retrofit 网络、ViewModel + StateFlow 架构）→ 协程与 Flow 深度 → 性能与多模块化。", "**双端通用**：网络与缓存、本地数据库、推送通知、支付集成、上架与用户增长、Crash 监控与埋点。", "**求职方向**：刷 LeetCode 算法题、整理项目亮点、准备八股文（内存管理、线程与协程、组件生命周期、性能优化）。"] },
-        { type: "info", title: "给零基础同学的建议", text: "别急着上架。先把你做的计数器/待办清单 App 好好打磨，加登录、加数据保存、加更多页面，做成一个完整的『作品』，这个过程中遇到的所有问题，都是面试时最值钱的实战经验。" },
-        { type: "keypoints", items: ["跨平台：Flutter/RN/KMP 各有取舍，建议先学透一门原生", "KMP 共享业务逻辑，UI 仍用原生 SwiftUI/Compose", "上架 iOS 需 99 美元/年，Google Play 一次性 25 美元，国内各商店需软著", "学习路线：UI 进阶 → 数据持久化 → 网络 → 架构 → 性能", "把计数器/待办升级成完整作品，才是最好的求职简历", "会 Swift 再学 Kotlin（或反之）会非常快，两门都掌握就是双端通吃"] },
+      'id': "mb-16",
+      'title': "跨平台与下一步：学完怎么走",
+      'summary': "Kotlin Multiplatform、Flutter 对比，发布 App 的流程与后续学习路线。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "恭喜！学到这里，你已经同时掌握了 iOS（Swift + SwiftUI）和 Android（Kotlin + Compose）两大平台的核心开发能力。最后一章聊聊『从会写代码到真正发布』的路，以及要不要做跨平台。"
+        },
+        {
+          'type': "h",
+          'text': "跨平台方案怎么选"
+        },
+        {
+          'type': "table",
+          'head': [
+            "方案",
+            "语言",
+            "优点",
+            "缺点"
+          ],
+          'rows': [
+            [
+              "原生双写",
+              "Swift + Kotlin",
+              "性能与体验最佳，官方支持最全",
+              "开发量翻倍，需要两套团队"
+            ],
+            [
+              "Flutter",
+              "Dart",
+              "一套代码双端，UI 一致性好，性能不错",
+              "UI 非原生组件，平台特性需桥接"
+            ],
+            [
+              "React Native",
+              "JavaScript/TS",
+              "前端开发者上手快，生态大",
+              "性能与原生有差距，长列表易卡顿"
+            ],
+            [
+              "Kotlin Multiplatform",
+              "Kotlin",
+              "共享业务逻辑，UI 仍用原生",
+              "共享边界设计有学习成本"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "Kotlin Multiplatform：共享逻辑"
+        },
+        {
+          'type': "p",
+          'text': "**Kotlin Multiplatform（KMP）** 的思路是：把网络请求、数据处理、数据库等『与界面无关』的业务逻辑用 Kotlin 写一份，在 iOS 和 Android 之间共享；界面仍然分别用 SwiftUI 和 Compose 写原生 UI。这样既保留原生体验，又省了重复逻辑。适合已有原生基础、想提高效率的团队。"
+        },
+        {
+          'type': "h",
+          'text': "Flutter 值得学吗"
+        },
+        {
+          'type': "p",
+          'text': "**Flutter** 是谷歌的另一条跨平台路线，用 Dart 语言，自己绘制所有 UI 组件。它上手快、UI 表现力强，国内很多中小团队用它快速出双端应用。它和『原生 Swift/Kotlin』是两种不同思路，谈不上谁绝对更好。建议：先打好原生基础，再按需学 Flutter，两条路都能走通。"
+        },
+        {
+          'type': "code",
+          'lang': "kotlin",
+          'title': "KMP：一份逻辑双端共享",
+          'code': "// Kotlin Multiplatform 的核心思路：\n// 与界面无关的纯逻辑用 Kotlin 写一份，iOS 与 Android 都能调用\n\n// 计算订单总价（含折扣与最低价限制）\nfun calculateTotal(prices: List<Double>, discount: Double): Double {\n    val sum = prices.sum()\n    val finalPrice = sum * (1 - discount)\n    return finalPrice.coerceAtLeast(0.0)\n}\n\n// 校验手机号格式\nfun isValidPhone(phone: String): Boolean {\n    return phone.length == 11 && phone.all { it.isDigit() }\n}\n\n// 这段逻辑 Android 端直接用 Kotlin 调用，\n// iOS 端通过 KMP 生成的 framework 用 Swift 调用同一个函数\nval total = calculateTotal(listOf(39.9, 19.9), 0.1)\nprintln(\"折扣后总价：$total\")"
+        },
+        {
+          'type': "h",
+          'text': "如何发布到应用商店"
+        },
+        {
+          'type': "list",
+          'items': [
+            "**App Store（iOS）**：需要 Apple 开发者账号（99 美元/年）→ 在 Xcode 里 Archive 打包 → 上传到 App Store Connect → 填写元数据 → 提交审核。审核一般几天，可能被拒后按提示修改再提交。",
+            "**Google Play（Android）**：注册 Google Play 开发者账号（一次性 25 美元）→ 用 Android Studio 生成签名 APK/AAB → 上传并填写商店信息 → 审核上架。",
+            "**国内安卓市场**：应用宝、华为、小米、OPPO、vivo 等各家应用商店分别上架，通常需要软著（软件著作权）等资质材料，且各家规则不同。",
+            "个人开发者的第一款 App，建议先上架到一家商店练流程，不必追求全渠道。"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "继续深入的学习路线"
+        },
+        {
+          'type': "list",
+          'items': [
+            "**iOS 方向**：SwiftUI 进阶（动画、导航 NavigationStack、数据持久化 SwiftData/Core Data、网络 URLSession）→ 架构（MVVM、Swift Concurrency 并发）→ 适配与性能优化。",
+            "**Android 方向**：Compose 进阶（导航 Navigation、Room 数据库、Retrofit 网络、ViewModel + StateFlow 架构）→ 协程与 Flow 深度 → 性能与多模块化。",
+            "**双端通用**：网络与缓存、本地数据库、推送通知、支付集成、上架与用户增长、Crash 监控与埋点。",
+            "**求职方向**：刷 LeetCode 算法题、整理项目亮点、准备八股文（内存管理、线程与协程、组件生命周期、性能优化）。"
+          ]
+        },
+        {
+          'type': "info",
+          'title': "给零基础同学的建议",
+          'text': "别急着上架。先把你做的计数器/待办清单 App 好好打磨，加登录、加数据保存、加更多页面，做成一个完整的『作品』，这个过程中遇到的所有问题，都是面试时最值钱的实战经验。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"跨平台与下一步：学完怎么走\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"跨平台与下一步：学完怎么走\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"跨平台与下一步：学完怎么走\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "跨平台：Flutter/RN/KMP 各有取舍，建议先学透一门原生",
+            "KMP 共享业务逻辑，UI 仍用原生 SwiftUI/Compose",
+            "上架 iOS 需 99 美元/年，Google Play 一次性 25 美元，国内各商店需软著",
+            "学习路线：UI 进阶 → 数据持久化 → 网络 → 架构 → 性能",
+            "把计数器/待办升级成完整作品，才是最好的求职简历",
+            "会 Swift 再学 Kotlin（或反之）会非常快，两门都掌握就是双端通吃"
+          ]
+        }
       ],
-      templates: [
-        { name: "最后的小练习", code: '// 用 Swift 打印一段 Kotlin 的代码，体会两门语言的相似\nlet swiftGreeting = "Hello, Swift"\nprint(swiftGreeting)\n\n// Kotlin 版本\nval kotlinGreeting = "Hello, Kotlin"\nprintln(kotlinGreeting)\n\n// 结论：语法相似，生态不同，双端通吃！' },
-      ],
-    },
+      'templates': [
+        {
+          'name': "最后的小练习",
+          'code': "// 用 Swift 打印一段 Kotlin 的代码，体会两门语言的相似\nlet swiftGreeting = \"Hello, Swift\"\nprint(swiftGreeting)\n\n// Kotlin 版本\nval kotlinGreeting = \"Hello, Kotlin\"\nprintln(kotlinGreeting)\n\n// 结论：语法相似，生态不同，双端通吃！"
+        }
+      ]
+    }
   ]
 });
+

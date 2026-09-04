@@ -3,1685 +3,7711 @@
    ============================================================ */
 window.LANGUAGE_EXTRA = window.LANGUAGE_EXTRA || [];
 window.LANGUAGE_EXTRA.push({
-  id: "sql",
-  name: "SQL",
-  icon: "Sq",
-  tagline: "和数据库对话的语言，所有数据应用的地基。",
-  intro:
-    "这是一套从零开始的 SQL 完整课程。第 1 章教你下载安装数据库，之后从建表、增删改查，一路讲到多表 JOIN、聚合、子查询、事务、索引与性能优化，最后是 5 个实战项目和 10 章面试题。学完这套课程，你将能自己设计数据库表结构、写出复杂的查询和报表 SQL，为后端开发和数据分析打下扎实基础。",
-  meta: { 难度: "从零到进阶", 章节: "80 章", 场景: "后端/数据分析/存储" },
-  lessons: [
-    {
-      id: "sql-1",
-      title: "数据库概念与安装（SQLite / MySQL）",
-      summary: "搞懂数据库是什么，装好 SQLite 或 MySQL，验证安装成功。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "数据库（Database）就是用来『存数据』的地方。你可以把它想象成一个超级有组织的 Excel 表格，但它比 Excel 强大得多：能存几千万条数据、能多个人同时访问、能快速查询、不会因为文件太大而卡死。这一章我们先搞明白数据库是什么，然后把最常用的免费数据库装到电脑上。" },
-        { type: "list", items: ["程序运行时要存用户信息、订单、文章等数据", "数据要长期保存（文件会丢失，数据库更可靠）", "要能快速查询（几百万条数据也能瞬间查出来）", "要支持多人同时读写和权限控制"] },
-        { type: "h", text: "选哪种数据库？SQLite 还是 MySQL" },
-        { type: "table", head: ["对比项", "SQLite", "MySQL Community Server"], rows: [["安装难度", "几乎零安装，一个文件即数据库", "需要安装服务，稍复杂"], ["适用场景", "学习、小应用、单机", "网站后端、生产环境"], ["费用", "完全免费", "社区版免费"], ["上手速度", "最快，推荐新手入门", "接近真实开发环境"]] },
-        { type: "tip", title: "新手建议", text: "零基础入门强烈推荐先用 SQLite，装起来最省事，语法和 MySQL 几乎一样（后面章节的 SQL 两者基本通用）。想感受真实服务器环境，再装 MySQL Community Server。" },
-        { type: "h", text: "方案一：安装 SQLite" },
-        { type: "list", items: ["打开官方下载页：<a href='https://www.sqlite.org/download.html' target='_blank' rel='noopener'>https://www.sqlite.org/download.html</a>", "Windows 用户下载 precompiled binaries 里的 sqlite-tools-win-x64 压缩包", "解压后把 sqlite3.exe 放到一个文件夹，比如 D:\\sqlite", "把 D:\\sqlite 加入系统环境变量 PATH（这样命令行到处都能用）"] },
-        { type: "h", text: "方案二：安装 MySQL Community Server" },
-        { type: "list", items: ["打开官方下载页：<a href='https://dev.mysql.com/downloads/' target='_blank' rel='noopener'>https://dev.mysql.com/downloads/</a>", "进入 MySQL Community Server 下载，选 Windows (x86, 64-bit) 的 ZIP Archive 或 MSI 安装包", "按向导安装，设置 root 密码（一定要记住）", "可选安装 MySQL Workbench 图形工具，方便操作"] },
-        { type: "code", lang: "text", title: "验证安装是否成功", code: "sqlite3 --version\nrem 或者 MySQL 打开命令行输入：\nmysql --version" },
-        { type: "warn", title: "最常见的问题：命令找不到", text: "如果在命令行输入 sqlite3 或 mysql 提示『不是内部或外部命令』，说明没有把程序目录加入 PATH 环境变量。解决方法：系统设置 → 高级系统设置 → 环境变量 → 编辑 Path → 把 sqlite3.exe 所在文件夹加进去，然后重开命令行。" },
-        { type: "keypoints", items: ["数据库用来长期、高效、安全地存数据", "SQLite 零安装最快上手，MySQL 更接近生产环境", "SQLite 官网 sqlite.org/download.html，MySQL 官网 dev.mysql.com/downloads/", "用 sqlite3 --version 或 mysql --version 验证安装", "命令找不到 = 没加 PATH，手动加环境变量"] },
-      ],
-      templates: [
-        { name: "SQLite 快速自检", code: "SELECT 1 + 1;\n-- 能输出 2 就说明 SQLite 可用" },
-      ],
-    },
-    {
-      id: "sql-2",
-      title: "SQL 分类（DDL/DML/DQL/DCL）",
-      summary: "把 SQL 命令分成四大类，学习顺序一目了然。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "SQL 全称 Structured Query Language（结构化查询语言），是一门用来和数据库『对话』的语言。不管是 SQLite、MySQL、PostgreSQL、Oracle，只要用 SQL 就能操作它们。SQL 命令非常多，但我们可以把它分成四大类，记住了分类，学起来就井井有条。" },
-        { type: "table", head: ["分类", "全称", "作用", "代表命令"], rows: [["DDL", "数据定义语言", "定义数据结构（建库、建表、删表）", "CREATE / DROP / ALTER"], ["DML", "数据操纵语言", "对数据增删改", "INSERT / UPDATE / DELETE"], ["DQL", "数据查询语言", "查询数据（用得最多）", "SELECT"], ["DCL", "数据控制语言", "管理权限和用户", "GRANT / REVOKE"]] },
-        { type: "h", text: "每种分类看一眼示例" },
-        { type: "code", lang: "sql", title: "四大分类的命令示例", code: "CREATE DATABASE school;            -- DDL：建库\nCREATE TABLE student (id INT);      -- DDL：建表\nINSERT INTO student VALUES (1);     -- DML：插入\nSELECT * FROM student;              -- DQL：查询\nGRANT ALL ON *.* TO 'root';         -- DCL：授权" },
-        { type: "info", title: "DQL 为什么单独拎出来", text: "在真实开发里，查询（SELECT）占了所有 SQL 的七八成，所以专门分成一类。后面章节大部分时间都在学 DQL。" },
-        { type: "tip", title: "学习顺序建议", text: "先学 DDL（建表）→ 再学 DML（插入数据）→ 然后重点啃 DQL（查询）→ 最后了解 DCL（权限）。本章之后的路线也大致如此。" },
-        { type: "keypoints", items: ["SQL 是操作关系型数据库的通用语言", "DDL 管结构：CREATE/DROP/ALTER", "DML 管数据：INSERT/UPDATE/DELETE", "DQL 查数据：SELECT（最重要）", "DCL 管权限：GRANT/REVOKE"] },
-      ],
-      templates: [
-        { name: "四分类小演示", code: "CREATE DATABASE demo;\nCREATE TABLE student (id INT, name VARCHAR(20));\nINSERT INTO student VALUES (1, '小明');\nSELECT * FROM student;" },
-      ],
-    },
-    {
-      id: "sql-3",
-      title: "数据库与表的基本操作",
-      summary: "CREATE DATABASE、USE、SHOW、DROP，管好数据库本身。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "数据库好比一栋大楼，里面有很多房间（表），每个房间放一类东西。本章先学会『怎么建大楼、怎么进入房间、怎么查看、怎么拆楼』——也就是数据库本身的增删查操作。" },
-        { type: "h", text: "创建数据库 CREATE DATABASE" },
-        { type: "code", lang: "sql", title: "创建并查看数据库", code: "CREATE DATABASE school;\nCREATE DATABASE IF NOT EXISTS school;  -- 存在就不报错\nSHOW DATABASES;                         -- 查看所有数据库" },
-        { type: "h", text: "使用数据库 USE" },
-        { type: "code", lang: "sql", title: "进入指定数据库", code: "USE school;    -- 之后的操作都在 school 里进行\nSELECT DATABASE();  -- 查看当前在哪个库" },
-        { type: "h", text: "删除数据库 DROP" },
-        { type: "code", lang: "sql", title: "删除数据库（慎用）", code: "DROP DATABASE school;   -- 整个库和所有表一起没了\nDROP DATABASE IF EXISTS school;" },
-        { type: "danger", title: "DROP 无法撤销", text: "DROP DATABASE 会连同里面的所有表和数据一起彻底删除，且无法恢复。练习时建议多用临时数据库（比如 demo、test），千万别在重要数据库上乱试。" },
-        { type: "h", text: "MySQL 与 SQLite 的小区别" },
-        { type: "table", head: ["操作", "MySQL", "SQLite"], rows: [["建库", "CREATE DATABASE 库名", "不需要，一个 .db 文件即一个库"], ["查看库", "SHOW DATABASES", "没有这个概念"], ["进库", "USE 库名", "打开文件时指定 sqlite3 文件名"]] },
-        { type: "keypoints", items: ["CREATE DATABASE 创建库，SHOW DATABASES 查看库", "USE 库名 进入某个库", "DROP DATABASE 删库，危险且不可恢复", "SQLite 一个文件即一个库，无需建库语句"] },
-      ],
-      templates: [
-        { name: "建库三步走", code: "CREATE DATABASE IF NOT EXISTS school;\nSHOW DATABASES;\nUSE school;" },
-      ],
-    },
-    {
-      id: "sql-4",
-      title: "CREATE TABLE 建表",
-      summary: "用 CREATE TABLE 定义表结构和列，建出第一张表。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "数据库建好后，要在里面『盖房间』——这个房间就是表（Table）。表由列（字段）组成，每一列有名字和类型。建表是后续一切操作的地基，语法也很直观。" },
-        { type: "h", text: "最基础的建表语句" },
-        { type: "code", lang: "sql", title: "创建学生表", code: "CREATE TABLE student (\n    id   INT,\n    name VARCHAR(20),\n    age  INT,\n    score DECIMAL(5,2)\n);" },
-        { type: "p", text: "语法解读：<code.inline>CREATE TABLE 表名 (列名 类型, 列名 类型, ...)</code.inline>。上面建了一张 student 表，有 4 列：id 是整数，name 是最多 20 个字符的字符串，age 是整数，score 是保留 2 位小数的小数。" },
-        { type: "h", text: "查看表结构" },
-        { type: "code", lang: "sql", title: "查看表有哪些列", code: "DESC student;       -- MySQL\nSHOW CREATE TABLE student;  -- 查看建表语句\n-- SQLite 用：.schema student" },
-        { type: "h", text: "带约束建表（提前体验）" },
-        { type: "code", lang: "sql", title: "加上主键等约束", code: "CREATE TABLE student (\n    id   INT PRIMARY KEY AUTO_INCREMENT,  -- 主键且自动递增\n    name VARCHAR(20) NOT NULL,            -- 不能为空\n    age  INT DEFAULT 0                    -- 默认值 0\n);" },
-        { type: "tip", title: "列名/表名注意", text: "表名和列名不要用中文、不要用空格，用英文小写加下划线，例如 user_info、order_detail。这样在不同数据库之间兼容性最好。" },
-        { type: "warn", title: "分号别丢", text: "SQL 语句以分号 ; 结尾是习惯（SQLite 里每条命令必须有分号）。漏了分号，命令行里按回车不执行，会一直等待，新手经常卡在这一步。" },
-        { type: "keypoints", items: ["建表语法：CREATE TABLE 表名 (列名 类型, ...)", "列由『名字 + 类型』组成，如 INT、VARCHAR", "DESC 表名 / SHOW CREATE TABLE 查看结构", "PRIMARY KEY 主键、NOT NULL 非空、DEFAULT 默认值", "语句以分号结尾"] },
-      ],
-      templates: [
-        { name: "建一张商品表", code: "CREATE TABLE product (\n    id       INT PRIMARY KEY AUTO_INCREMENT,\n    name     VARCHAR(50) NOT NULL,\n    price    DECIMAL(10,2),\n    stock    INT DEFAULT 0,\n    category VARCHAR(20)\n);" },
-      ],
-    },
-    {
-      id: "sql-5",
-      title: "数据类型（INT/VARCHAR/DATE/DECIMAL/TEXT）",
-      summary: "数值、字符串、日期三类类型逐个吃透，选对类型很重要。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "每一列都要声明『类型』，就像盒子要标明装什么：装数字的、装文字的、装日期的。类型决定了能存什么、占多少空间、怎么比较。SQL 常用的数据类型可以归为三类：数值、字符串、日期时间。" },
-        { type: "h", text: "数值类型" },
-        { type: "table", head: ["类型", "说明", "例子"], rows: [["INT / INTEGER", "整数", "年龄、数量 25"], ["DECIMAL(m,d)", "精确小数，m 总位数 d 小数位", "价格 1999.99"], ["FLOAT / DOUBLE", "近似小数", "科学计算"], ["BIGINT", "超大整数", "订单号"]] },
-        { type: "h", text: "字符串类型" },
-        { type: "table", head: ["类型", "说明", "例子"], rows: [["VARCHAR(n)", "可变长字符串，最多 n 字符", "姓名、标题"], ["TEXT", "长文本", "文章正文"], ["CHAR(n)", "定长字符串", "固定长度编码"]] },
-        { type: "h", text: "日期时间类型" },
-        { type: "table", head: ["类型", "说明", "例子"], rows: [["DATE", "仅日期", "2026-08-28"], ["TIME", "仅时间", "14:30:00"], ["DATETIME / TIMESTAMP", "日期 + 时间", "2026-08-28 14:30:00"]] },
-        { type: "code", lang: "sql", title: "使用各种类型建表", code: "CREATE TABLE article (\n    id         INT PRIMARY KEY,\n    title      VARCHAR(100),\n    content    TEXT,\n    price      DECIMAL(10,2),\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);" },
-        { type: "warn", title: "用 DECIMAL 别用 FLOAT 存钱", text: "金额这种需要精确的数据，一定用 DECIMAL，不要用 FLOAT/DOUBLE。因为浮点数在计算机里是近似存储，0.1 + 0.2 可能等于 0.30000000000000004，钱算错是要出大问题的。" },
-        { type: "info", title: "不同数据库类型略有差别", text: "MySQL 用 VARCHAR、DATETIME；SQLite 的类型更宽松，甚至可以不写类型。本章以 MySQL 语法为主，但概念通用。" },
-        { type: "keypoints", items: ["数值：INT 整数、DECIMAL 精确小数、FLOAT 近似小数", "字符串：VARCHAR(n) 变长、TEXT 长文本", "日期：DATE 日期、DATETIME 日期时间", "存钱用 DECIMAL，不用 FLOAT", "建表时给每列定好类型，是数据规范的第一步"] },
-      ],
-      templates: [
-        { name: "文章表模板", code: "CREATE TABLE article (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    title      VARCHAR(100) NOT NULL,\n    content    TEXT,\n    views      INT DEFAULT 0,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);" },
-      ],
-    },
-    {
-      id: "sql-6",
-      title: "约束初步（PRIMARY KEY、NOT NULL、UNIQUE）",
-      summary: "用主键、非空、唯一三种约束，拦住脏数据。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "约束（Constraint）就是给列定规矩，防止垃圾数据进表。比如身份证号不能重复、年龄不能为空、性别只能填男女。本章学三个最常用的约束：PRIMARY KEY、NOT NULL、UNIQUE。" },
-        { type: "h", text: "PRIMARY KEY 主键" },
-        { type: "p", text: "主键是每行数据的唯一身份标识，就像身份证号。主键值不能重复、不能为空。一张表通常只有一个主键。" },
-        { type: "h", text: "NOT NULL 非空" },
-        { type: "p", text: "加上 NOT NULL 的列，插入数据时必须给值，不能留空。适合姓名、标题这类必须有的字段。" },
-        { type: "h", text: "UNIQUE 唯一" },
-        { type: "code", lang: "sql", title: "三个约束一起用", code: "CREATE TABLE user (\n    id       INT PRIMARY KEY,           -- 主键：不能重复不能空\n    email    VARCHAR(50) UNIQUE,        -- 唯一：不能重复，可以为空\n    nickname VARCHAR(20) NOT NULL,      -- 非空：必须填\n    age      INT\n);" },
-        { type: "h", text: "违反约束会怎样" },
-        { type: "code", lang: "sql", title: "插入违反约束的数据会报错", code: "INSERT INTO user (id, email, nickname, age)\nVALUES (1, 'a@b.com', '小明', 20);\n\nINSERT INTO user (id, email, nickname, age)\nVALUES (1, 'c@d.com', '小红', 21);  -- 错误！id=1 重复了" },
-        { type: "warn", title: "主键 vs 唯一，别混淆", text: "主键（PRIMARY KEY）默认就自带非空+唯一，通常只有一个；唯一（UNIQUE）只限制不能重复，但允许多个 UNIQUE 列，且 UNIQUE 列可以留空。" },
-        { type: "keypoints", items: ["约束是给数据定的规矩，防止脏数据", "PRIMARY KEY 主键：唯一且非空，一张表一个", "NOT NULL：该列必须有值", "UNIQUE：该列不能重复", "违反约束时 INSERT/UPDATE 会直接报错"] },
-      ],
-      templates: [
-        { name: "用户表约束演示", code: "CREATE TABLE user (\n    id    INT PRIMARY KEY,\n    email VARCHAR(50) UNIQUE,\n    name  VARCHAR(20) NOT NULL\n);\nINSERT INTO user VALUES (1, 'a@b.com', '小明');" },
-      ],
-    },
-    {
-      id: "sql-7",
-      title: "INSERT 插入数据（单行/多行）",
-      summary: "把数据一行行或一批批塞进表里，学会正确姿势。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "表建好了是空的，像一张没有内容的表格。用 INSERT 往里加数据，就像往表格里填一行。本章学单行插入和多行插入。" },
-        { type: "h", text: "单行插入" },
-        { type: "code", lang: "sql", title: "按顺序插入", code: "CREATE TABLE student (id INT, name VARCHAR(20), age INT);\nINSERT INTO student VALUES (1, '小明', 18);\n-- 字符串用单引号，数字不用引号" },
-        { type: "h", text: "指定列插入（推荐）" },
-        { type: "code", lang: "sql", title: "明确列出列名", code: "INSERT INTO student (id, name, age) VALUES (2, '小红', 19);\nINSERT INTO student (name, id) VALUES ('小刚', 3);  -- 列的顺序可以换\nINSERT INTO student (id, name) VALUES (4, '小丽');  -- 没写的 age 是 NULL" },
-        { type: "h", text: "多行插入" },
-        { type: "code", lang: "sql", title: "一次插多行，逗号分隔", code: "INSERT INTO student (id, name, age) VALUES\n    (5, '王五', 20),\n    (6, '赵六', 21),\n    (7, '钱七', 22);" },
-        { type: "warn", title: "三个最常见的坑", text: "第一：值的个数必须和列数一致，少一个都报错。第二：字符串必须加单引号，数字不要加。第三：如果某列有 NOT NULL 约束却不给它赋值，会插入失败。" },
-        { type: "tip", title: "AUTO_INCREMENT 自动编号", text: "如果主键列设置了 AUTO_INCREMENT（MySQL），插入时可以不用写主键值，数据库会自动生成：INSERT INTO student (name, age) VALUES ('小美', 20); 主键自动从 1 开始递增。" },
-        { type: "keypoints", items: ["INSERT INTO 表 VALUES (...) 按顺序插入", "推荐写清楚列名：INSERT INTO 表 (列...) VALUES (...)", "一次可插多行，用逗号分隔多个值组", "字符串加单引号，数字不加", "有 NOT NULL 的列必须给值"] },
-      ],
-      templates: [
-        { name: "批量插入学生", code: "INSERT INTO student (id, name, age) VALUES\n    (1, '小明', 18),\n    (2, '小红', 19),\n    (3, '小刚', 20);\nSELECT * FROM student;" },
-      ],
-    },
-    {
-      id: "sql-8",
-      title: "SELECT 基础（列与 *）",
-      summary: "用 SELECT 从表里取出想要的列，查询从这里起步。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "SELECT 是 SQL 里最重要的命令，用来从表里『取数据』。可以把表想成一张成绩单，SELECT 就是回答『我想看哪些列、哪些行』。" },
-        { type: "h", text: "准备一张表" },
-        { type: "code", lang: "sql", title: "建表并插入示例数据", code: "CREATE TABLE student (id INT, name VARCHAR(20), age INT, score DECIMAL(5,2));\nINSERT INTO student VALUES\n    (1, '小明', 18, 92.5),\n    (2, '小红', 19, 88.0),\n    (3, '小刚', 20, 95.5);" },
-        { type: "h", text: "选择指定列" },
-        { type: "code", lang: "sql", title: "只要名字和分数", code: "SELECT name, score FROM student;\n-- 结果只有两列：name 和 score" },
-        { type: "h", text: "选择所有列" },
-        { type: "code", lang: "sql", title: "* 表示所有列", code: "SELECT * FROM student;\n-- 结果包含全部列" },
-        { type: "tip", title: "生产环境少用 *", text: "SELECT * 会把所有列都查出来，浪费带宽。真实项目里建议明确写出要的列名，既能看清要什么，也方便后续加列时不受影响。" },
-        { type: "keypoints", items: ["SELECT 列名, 列名 FROM 表名 查询指定列", "SELECT * FROM 表名 查询所有列", "SELECT 只读不写，不会改动数据", "生产环境尽量写明确列名而非 *"] },
-      ],
-      templates: [
-        { name: "查询所有学生", code: "SELECT id, name, age, score FROM student;" },
-      ],
-    },
-    {
-      id: "sql-9",
-      title: "别名 AS 与去重 DISTINCT",
-      summary: "用 AS 给列起别名，用 DISTINCT 去掉重复行。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "给列或表起个『外号』叫别名（AS），让查询结果更好读；用 DISTINCT 去掉重复的行，让数据更干净。本章两个小技巧，开发中天天用。" },
-        { type: "h", text: "列别名 AS" },
-        { type: "code", lang: "sql", title: "给列起中文别名", code: "SELECT name AS 姓名, score AS 分数\nFROM student;\n-- 结果表头显示『姓名』『分数』" },
-        { type: "p", text: "AS 可以省略，直接写空格：<code.inline>SELECT name 姓名 FROM student</code.inline>。但为了清晰，推荐写上 AS。" },
-        { type: "h", text: "去重 DISTINCT" },
-        { type: "code", lang: "sql", title: "看有哪些不重复的班级", code: "SELECT DISTINCT class FROM student;\n-- 比如 student 表里 class 有 1班 1班 2班 3班\n-- 结果只有 1班 2班 3班 三行" },
-        { type: "warn", title: "DISTINCT 是对整行去重", text: "DISTINCT 比较的是你选出的『那一整行』是否相同。比如 SELECT DISTINCT class, age FROM student，只有 class 和 age 两列都相同才算重复；如果一列相同一列不同，会全部保留。" },
-        { type: "keypoints", items: ["别名用 AS：SELECT 列 AS 别名", "别名只是显示名，不改表里真实数据", "DISTINCT 去重：SELECT DISTINCT 列", "DISTINCT 对选出的整行判断重复"] },
-      ],
-      templates: [
-        { name: "别名 + 去重", code: "SELECT name AS 姓名, score AS 分数 FROM student;\nSELECT DISTINCT class FROM student;" },
-      ],
-    },
-    {
-      id: "sql-10",
-      title: "WHERE 条件过滤",
-      summary: "用 WHERE 只留下满足条件的行，过滤出想要的数据。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "SELECT 选出列，WHERE 筛选行。WHERE 后面写条件，只有满足条件的行才会出现在结果里，就像成绩单里『只挑出及格的同学』。" },
-        { type: "code", lang: "sql", title: "基础 WHERE", code: "SELECT * FROM student\nWHERE age = 18;\n-- 只显示 age 等于 18 的学生" },
-        { type: "h", text: "配合比较运算符" },
-        { type: "code", lang: "sql", title: "各种条件写法", code: "SELECT name FROM student WHERE age > 18;   -- 大于\nSELECT name FROM student WHERE age >= 18;  -- 大于等于\nSELECT name FROM student WHERE age < 18;   -- 小于\nSELECT name FROM student WHERE age <> 18;  -- 不等于（也可以写 !=）\nSELECT name FROM student WHERE score > 90;\nSELECT name FROM student WHERE name = '小明';  -- 字符串比较用等号" },
-        { type: "info", title: "WHERE 写在 FROM 后面", text: "SELECT 语句的顺序是：SELECT 列 → FROM 表 → WHERE 条件。WHERE 一定在 FROM 之后，写在别的位置会语法报错。" },
-        { type: "warn", title: "字符串要加引号", text: "比较字符串时值要加单引号：WHERE name = '小明'，写 WHERE name = 小明 会报错（小明被当成列名）。数字不需要引号。" },
-        { type: "keypoints", items: ["WHERE 用于筛选行，跟在 FROM 后面", "比较符：> < >= <= = <> (!=)", "字符串值必须加单引号", "WHERE 选行，SELECT 选列，互不冲突"] },
-      ],
-      templates: [
-        { name: "筛选及格学生", code: "SELECT name, score FROM student\nWHERE score >= 60;" },
-      ],
-    },
-    {
-      id: "sql-11",
-      title: "比较运算符与逻辑运算符（AND/OR/NOT）",
-      summary: "用 AND/OR/NOT 组合多个条件，精准圈出目标数据。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "一个条件不够用时，可以用 AND、OR、NOT 把多个条件组合起来。AND 表示『并且』，OR 表示『或者』，NOT 表示『取反』。这是 WHERE 里最常用的组合技巧。" },
-        { type: "table", head: ["运算符", "含义", "例子"], rows: [["AND", "两个条件都满足才留下", "age > 18 AND score > 90"], ["OR", "满足其中一个就留下", "age > 18 OR score > 90"], ["NOT", "取反", "NOT age = 18"]] },
-        { type: "code", lang: "sql", title: "组合条件示例", code: "SELECT name, age, score FROM student\nWHERE age >= 18 AND score >= 90;\n-- 成年 且 高分\n\nSELECT name, age FROM student\nWHERE age < 18 OR age > 22;\n-- 未成年 或 大于22\n\nSELECT name FROM student\nWHERE NOT class = '1班';\n-- 不是1班的学生" },
-        { type: "h", text: "优先级与括号" },
-        { type: "p", text: "NOT 优先级最高，然后 AND，最后 OR。当条件混在一起容易读错时，用括号强制顺序、提升可读性。" },
-        { type: "code", lang: "sql", title: "用括号改变逻辑", code: "SELECT * FROM student\nWHERE (age >= 18 AND score >= 90)\n   OR (age < 18 AND score >= 95);" },
-        { type: "warn", title: "新手经典错误", text: "想表达『年龄不是 18 也不是 20』，写 WHERE age <> 18 OR age <> 20 是错的——这样任何年龄都满足。正确写法：WHERE age <> 18 AND age <> 20，或 WHERE age NOT IN (18, 20)。" },
-        { type: "keypoints", items: ["AND 并且、OR 或者、NOT 取反", "优先级：NOT > AND > OR", "复杂条件用括号分隔，清晰又安全", "否定多个条件时用 AND 连接，别用 OR"] },
-      ],
-      templates: [
-        { name: "组合筛选", code: "SELECT name, age, score FROM student\nWHERE age >= 18 AND score >= 90;" },
-      ],
-    },
-    {
-      id: "sql-12",
-      title: "模糊查询 LIKE 与通配符（% _）",
-      summary: "用 LIKE 配合 % 和 _ 做模糊匹配，搜名字搜关键词。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "WHERE 里用 LIKE 做模糊匹配，适合『记不全、搜部分』的场景，比如搜名字里带『小』字的人、搜邮箱以 @gmail.com 结尾的用户。" },
-        { type: "table", head: ["通配符", "含义", "例子"], rows: [["%", "任意多个字符（含 0 个）", "小% 匹配 小明、小刚、小"], ["_", "恰好一个字符", "小_ 匹配 小明、小刚，不匹配 小"]] },
-        { type: "code", lang: "sql", title: "LIKE 的常见用法", code: "SELECT * FROM student WHERE name LIKE '小%';\n-- 名字以『小』开头\n\nSELECT * FROM student WHERE name LIKE '%明';\n-- 名字以『明』结尾\n\nSELECT * FROM student WHERE name LIKE '%小%';\n-- 名字中间任何位置有『小』\n\nSELECT * FROM student WHERE name LIKE '小_';\n-- 以『小』开头且总共 2 个字\n\nSELECT * FROM student WHERE name NOT LIKE '%小%';\n-- 名字里不含『小』" },
-        { type: "tip", title: "% 放哪边很关键", text: "字符串 '%小%' 前后都有 %，表示任意位置；'小%' 只有后面有 %，表示以『小』开头。放的位置决定匹配的形态。" },
-        { type: "warn", title: "LIKE 性能问题", text: "以 % 开头的模糊查询（如 LIKE '%小%'）无法利用索引，数据量大时会很慢。如果确实要搜『包含』，建议用全文检索方案，或至少避免在超大表上频繁使用。" },
-        { type: "keypoints", items: ["LIKE 做模糊匹配，配合 % 和 _ 通配符", "% 代表任意多个字符，_ 代表一个字符", "% 的位置决定匹配方式（开头/结尾/任意位置）", "NOT LIKE 表示不匹配", "以 % 开头的 LIKE 无法走索引，大表慎用"] },
-      ],
-      templates: [
-        { name: "搜名字含小的人", code: "SELECT * FROM student WHERE name LIKE '%小%';" },
-      ],
-    },
-    {
-      id: "sql-13",
-      title: "BETWEEN 与 IN",
-      summary: "区间用 BETWEEN，多值匹配用 IN，让 WHERE 更简洁。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "判断『在一个范围内』用 BETWEEN，判断『在几个值里』用 IN。它们让 WHERE 条件更简洁。" },
-        { type: "h", text: "BETWEEN 范围查询" },
-        { type: "code", lang: "sql", title: "BETWEEN 包含边界", code: "SELECT name, score FROM student\nWHERE score BETWEEN 80 AND 90;\n-- 等价于 score >= 80 AND score <= 90（含 80 和 90）\n\nSELECT name, age FROM student\nWHERE age NOT BETWEEN 18 AND 20;\n-- 不在 18~20 之间" },
-        { type: "h", text: "IN 多值匹配" },
-        { type: "code", lang: "sql", title: "IN 匹配多个值", code: "SELECT name, class FROM student\nWHERE class IN ('1班', '3班');\n-- 等价于 class = '1班' OR class = '3班'\n\nSELECT name FROM student\nWHERE id IN (1, 3, 5);\n\nSELECT name FROM student\nWHERE class NOT IN ('1班', '2班');" },
-        { type: "info", title: "IN 比多个 OR 好读", text: "IN (…) 本质就是多个 OR 的简写，但可读性好得多。以后学子查询时，IN 还能接一个子查询的结果集，非常强大。" },
-        { type: "keypoints", items: ["BETWEEN 前后都包含边界", "IN (值1,值2,...) 匹配集合中任意一个", "BETWEEN 和 IN 都支持前面加 NOT", "IN 可理解为多个 OR 的优雅写法"] },
-      ],
-      templates: [
-        { name: "范围与多值", code: "SELECT name, score FROM student WHERE score BETWEEN 60 AND 90;\nSELECT name, class FROM student WHERE class IN ('1班', '3班');" },
-      ],
-    },
-    {
-      id: "sql-14",
-      title: "空值处理 IS NULL 与 IS NOT NULL",
-      summary: "NULL 表示没有值，判断空必须用 IS NULL，踩坑预警。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "NULL 表示『不知道/没填』，它不是 0、不是空字符串，而是『没有值』。处理 NULL 是 SQL 新手最容易翻车的点，因为 NULL 的运算规则很特别。" },
-        { type: "code", lang: "sql", title: "构造含 NULL 的数据", code: "CREATE TABLE student (id INT, name VARCHAR(20), phone VARCHAR(20));\nINSERT INTO student VALUES\n    (1, '小明', '13800000000'),\n    (2, '小红', NULL),        -- 小红没填电话\n    (3, '小刚', NULL);" },
-        { type: "h", text: "判断是否为 NULL" },
-        { type: "code", lang: "sql", title: "用 IS NULL / IS NOT NULL", code: "SELECT * FROM student WHERE phone IS NULL;\n-- 找出没填电话的人\n\nSELECT * FROM student WHERE phone IS NOT NULL;\n-- 找出填了电话的人" },
-        { type: "danger", title: "最经典的坑：= NULL 永远查不到", text: "用 WHERE phone = NULL 查不出来任何东西！NULL 不是一个值，不能用 = 或 <> 比较。判断空必须用 IS NULL / IS NOT NULL。同理 NOT phone = NULL 也什么都查不到，要用 phone IS NOT NULL。" },
-        { type: "h", text: "NULL 参与运算" },
-        { type: "code", lang: "sql", title: "NULL 运算结果是 NULL", code: "SELECT 1 + NULL;   -- 结果是 NULL\nSELECT 'a' || NULL;  -- 结果是 NULL（拼接含 NULL 得 NULL）\n-- NULL 与任何值运算/比较结果都是 NULL（未知）" },
-        { type: "tip", title: "用 IFNULL / COALESCE 兜底", text: "想给空值一个默认显示值，MySQL 用 IFNULL(phone, '未填写')，标准写法 COALESCE(phone, '未填写')：如果 phone 是 NULL 就显示『未填写』。" },
-        { type: "keypoints", items: ["NULL 表示没有值，不是 0 也不是空字符串", "判断空用 IS NULL / IS NOT NULL，绝不能用 =", "NULL 参与任何运算结果都是 NULL", "用 IFNULL / COALESCE 给空值设默认显示"] },
-      ],
-      templates: [
-        { name: "查找没填电话的人", code: "SELECT * FROM student WHERE phone IS NULL;\nSELECT name, IFNULL(phone, '未填写') FROM student;" },
-      ],
-    },
-    {
-      id: "sql-15",
-      title: "ORDER BY 排序（ASC/DESC、多列排序）",
-      summary: "用 ORDER BY 给结果排序，升序降序加多列组合。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "查询结果默认是无序的。用 ORDER BY 按某一列排序：ASC 升序（默认）、DESC 降序，还能多列组合排序，让结果整整齐齐。" },
-        { type: "code", lang: "sql", title: "按分数排序", code: "SELECT name, score FROM student\nORDER BY score;          -- 升序（默认，低到高）\n\nSELECT name, score FROM student\nORDER BY score DESC;     -- 降序（高到低）" },
-        { type: "h", text: "多列排序" },
-        { type: "code", lang: "sql", title: "先按班级再按分数", code: "SELECT class, name, score FROM student\nORDER BY class ASC, score DESC;\n-- 先按 class 升序，同班级的再按 score 降序" },
-        { type: "tip", title: "NULL 的排序位置", text: "ORDER BY 时，NULL 默认排在最前（ASC）或最后（DESC），不同数据库略有差别。想控制可以在排序字段上用 IS NULL 表达式。" },
-        { type: "warn", title: "ORDER BY 放最后", text: "SELECT 语句里 ORDER BY 必须写在最后（在 WHERE、GROUP BY 等之后）。把它写到 FROM 后面或 WHERE 前面都会语法报错。" },
-        { type: "keypoints", items: ["ORDER BY 列 ASC 升序 / DESC 降序", "不写 ASC/DESC 默认升序", "多列排序：ORDER BY 列1, 列2，先按列1", "ORDER BY 必须写在 SELECT 语句最后"] },
-      ],
-      templates: [
-        { name: "成绩榜", code: "SELECT name, score FROM student ORDER BY score DESC;" },
-      ],
-    },
-    {
-      id: "sql-16",
-      title: "LIMIT/OFFSET 分页",
-      summary: "用 LIMIT 和 OFFSET 实现分页，学会分页公式。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "数据多了不可能一次全显示，分页是最常见的需求（比如论坛第 1 页、第 2 页）。LIMIT 控制取多少条，OFFSET 控制从第几条开始。" },
-        { type: "code", lang: "sql", title: "LIMIT 取前几条", code: "SELECT * FROM student ORDER BY id\nLIMIT 5;   -- 只取前 5 条\n\nSELECT * FROM student\nLIMIT 5 OFFSET 5;   -- 跳过前 5 条，取第 6~10 条" },
-        { type: "h", text: "分页公式" },
-        { type: "table", head: ["页码 n", "每页 m 条", "SQL 写法"], rows: [["第 1 页", "10 条", "LIMIT 10 OFFSET 0"], ["第 2 页", "10 条", "LIMIT 10 OFFSET 10"], ["第 3 页", "10 条", "LIMIT 10 OFFSET 20"]] },
-        { type: "p", text: "规律：OFFSET = (页码 - 1) × 每页条数。比如第 3 页每页 10 条，OFFSET = (3-1)×10 = 20。" },
-        { type: "code", lang: "sql", title: "结合排序的分页", code: "SELECT id, name FROM student\nORDER BY id\nLIMIT 10 OFFSET 0;   -- 第 1 页\n\n-- 用变量写通用分页（MySQL）\nSET @page = 3; SET @size = 10;\nSELECT * FROM student\nLIMIT @size OFFSET (@page - 1) * @size;" },
-        { type: "warn", title: "大 OFFSET 很慢", text: "OFFSET 太大（比如第 10000 页）时，数据库要先跳过前面所有行，很慢。数据量大时更推荐『键集分页』：WHERE id > 上一页最后一条的 id ORDER BY id LIMIT 10。" },
-        { type: "keypoints", items: ["LIMIT n 取前 n 条", "OFFSET m 跳过前 m 条", "分页公式：OFFSET = (页码-1) × 每页条数", "大 OFFSET 性能差，数据多时用键集分页"] },
-      ],
-      templates: [
-        { name: "每页3条取第2页", code: "SELECT * FROM student ORDER BY id\nLIMIT 3 OFFSET 3;" },
-      ],
-    },
-    {
-      id: "sql-17",
-      title: "算术运算与字符串函数（CONCAT/UPPER/LENGTH）",
-      summary: "把 SELECT 当计算器，对列做算术和字符串变换。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "SELECT 不止能取列，还能对列做计算。数字可以加减乘除，字符串可以用函数变换。这一章把 SQL 当计算器使。" },
-        { type: "h", text: "算术运算" },
-        { type: "code", lang: "sql", title: "对列做算术", code: "SELECT price, price * 0.9 AS discount_price\nFROM product;\n-- 打 9 折后的价格\n\nSELECT score, score + 5 AS bonus_score\nFROM student;\n-- 平时分加 5 分\n\nSELECT 7 / 2;    -- 3.5\nSELECT 7 DIV 2;  -- 3 整除\nSELECT 7 % 2;    -- 1 取余" },
-        { type: "h", text: "字符串函数" },
-        { type: "table", head: ["函数", "作用", "例子"], rows: [["CONCAT(a, b)", "拼接字符串", "CONCAT('小','明') → 小明"], ["UPPER(s)", "转大写", "UPPER('abc') → ABC"], ["LOWER(s)", "转小写", "LOWER('ABC') → abc"], ["LENGTH(s)", "长度", "LENGTH('abc') → 3"], ["SUBSTRING(s, i, n)", "截取子串", "SUBSTRING('hello',2,3) → ell"]] },
-        { type: "code", lang: "sql", title: "字符串函数实战", code: "SELECT CONCAT(first_name, last_name) AS full_name FROM user;\nSELECT UPPER(email) FROM user;\nSELECT name, LENGTH(name) AS name_len FROM student;\nSELECT CONCAT('分数：', score) FROM student;" },
-        { type: "info", title: "函数不影响原数据", text: "函数作用在查询结果上，只是『显示成什么』，不会修改表里的真实数据。想永久修改要用 UPDATE（后面会学）。" },
-        { type: "keypoints", items: ["SELECT 里可以直接做四则运算", "DIV 整除、% 取余", "CONCAT 拼接、UPPER/LOWER 大小写、LENGTH 长度", "函数只影响查询结果，不改表中数据"] },
-      ],
-      templates: [
-        { name: "打九折计算", code: "SELECT name, price, price * 0.9 AS discount_price FROM product;" },
-      ],
-    },
-    {
-      id: "sql-18",
-      title: "日期时间函数（NOW/DATE/YEAR）",
-      summary: "拿当前时间、拆年月日、算日期差，处理时间数据。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "业务里到处是时间：注册时间、下单时间、生日。SQL 提供一堆日期函数，让你能取出当前时间、拆出年月日、做日期加减。" },
-        { type: "table", head: ["函数", "作用", "返回例子"], rows: [["NOW()", "当前日期时间", "2026-08-28 14:30:00"], ["CURDATE()", "当前日期", "2026-08-28"], ["YEAR(d)", "取年份", "2026"], ["MONTH(d)", "取月份", "8"], ["DAY(d)", "取日", "28"], ["DATEDIFF(a,b)", "相差天数", "a 减 b 的天数"]] },
-        { type: "code", lang: "sql", title: "日期函数使用", code: "SELECT NOW();              -- 当前日期时间\nSELECT YEAR(NOW());        -- 今年\nSELECT MONTH(NOW());       -- 这个月\nSELECT DATE_ADD(NOW(), INTERVAL 7 DAY);  -- 7 天后\nSELECT DATEDIFF('2026-08-28', '2026-01-01');  -- 相距天数\n\n-- 查出某年注册的用户\nSELECT * FROM user WHERE YEAR(created_at) = 2026;" },
-        { type: "tip", title: "日期比较小技巧", text: "日期之间可以直接用 > < = 比较，字符串格式 '2026-08-28' 和 DATE 类型可以互换，因为日期字符串是排序友好的格式。比如 WHERE created_at >= '2026-08-01' 就能查 8 月以来的记录。" },
-        { type: "warn", title: "别在列上套函数导致索引失效", text: "WHERE YEAR(created_at) = 2026 虽然能查出来，但无法用上 created_at 的索引，数据量大时慢。更优写法：WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'。" },
-        { type: "keypoints", items: ["NOW() 当前时间、CURDATE() 当前日期", "YEAR/MONTH/DAY 拆出年月日", "DATE_ADD 日期加减、DATEDIFF 相差天数", "日期可字符串比较，'YYYY-MM-DD' 排序友好", "条件里对列套函数会让索引失效"] },
-      ],
-      templates: [
-        { name: "查今年注册用户", code: "SELECT * FROM user WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01';" },
-      ],
-    },
-    {
-      id: "sql-19",
-      title: "聚合函数（COUNT/SUM/AVG/MAX/MIN）",
-      summary: "用聚合函数把多行压成一个结果，掌握统计的基本功。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "有时候我们不关心每一条数据，而关心『整体情况』：一共多少人？总分多少？平均分多少？最高分最低分？聚合函数把多行数据『压』成一个结果。" },
-        { type: "table", head: ["函数", "作用", "例子"], rows: [["COUNT(*)", "统计行数", "总共有多少学生"], ["COUNT(列)", "统计非空值个数", "有多少人填了电话"], ["SUM(列)", "求和", "总分"], ["AVG(列)", "平均值", "平均分"], ["MAX(列)", "最大值", "最高分"], ["MIN(列)", "最小值", "最低分"]] },
-        { type: "code", lang: "sql", title: "聚合函数实战", code: "SELECT COUNT(*)   AS total_student FROM student;   -- 学生总数\nSELECT AVG(score)  AS avg_score FROM student;        -- 平均分\nSELECT MAX(score)  AS max_score FROM student;        -- 最高分\nSELECT MIN(score)  AS min_score FROM student;        -- 最低分\nSELECT SUM(price)  AS total_sales FROM orders;       -- 销售额总和" },
-        { type: "warn", title: "COUNT(*) 和 COUNT(列) 不一样", text: "COUNT(*) 数所有行；COUNT(列) 只数该列非 NULL 的行。如果某列有空值，两个结果可能不同。想数『有效记录』用 COUNT(列)。" },
-        { type: "info", title: "SUM/AVG 忽略 NULL", text: "SUM 和 AVG 计算时会自动跳过 NULL 行，不需要手动排除。但如果某列全是 NULL，SUM 结果是 NULL，AVG 也返回 NULL。" },
-        { type: "keypoints", items: ["聚合函数把多行压成一个结果", "COUNT 数行数、SUM 求和、AVG 平均、MAX/MIN 极值", "COUNT(*) 数全部，COUNT(列) 数非空", "SUM/AVG 自动忽略 NULL", "聚合函数常配别名使用，如 AS avg_score"] },
-      ],
-      templates: [
-        { name: "班级统计", code: "SELECT\n    COUNT(*) AS 人数,\n    AVG(score) AS 平均分,\n    MAX(score) AS 最高分,\n    MIN(score) AS 最低分\nFROM student;" },
-      ],
-    },
-    {
-      id: "sql-20",
-      title: "GROUP BY 分组",
-      summary: "按维度把数据分堆再统计，数据分析的核心手法。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "聚合函数算的是『整体』，GROUP BY 能把数据按某个维度『分堆』再分别统计。比如按班级统计平均分、按省份统计订单量，这是数据分析的核心手法。" },
-        { type: "code", lang: "sql", title: "按班级分组统计", code: "SELECT class, COUNT(*) AS 人数, AVG(score) AS 平均分\nFROM student\nGROUP BY class;\n-- 结果：每个班级一行，分别显示人数和平均分" },
-        { type: "h", text: "分组原理" },
-        { type: "list", items: ["GROUP BY class 把相同 class 的行归为一组", "每组再用聚合函数（COUNT/AVG/SUM...）计算", "最终每组输出一行结果"] },
-        { type: "code", lang: "sql", title: "更多分组统计", code: "-- 按性别统计人数\nSELECT gender, COUNT(*) FROM student GROUP BY gender;\n\n-- 按班级统计最高最低分\nSELECT class, MAX(score), MIN(score)\nFROM student GROUP BY class;\n\n-- 按年份统计注册人数\nSELECT YEAR(created_at), COUNT(*)\nFROM user GROUP BY YEAR(created_at);" },
-        { type: "danger", title: "分组后 SELECT 的列必须有限制", text: "SELECT 里出现的『普通列』必须出现在 GROUP BY 里。SELECT class, name FROM student GROUP BY class 会报错——因为每组有多个人，name 该显示谁的？数据库不知道。要显示所有人的名字可以用 GROUP_CONCAT(name)。" },
-        { type: "tip", title: "先 WHERE 再 GROUP", text: "WHERE 在分组之前过滤行，GROUP BY 在之后分组。想『只统计及格的人再分组』就写 WHERE score >= 60 然后再 GROUP BY。" },
-        { type: "keypoints", items: ["GROUP BY 把数据按列分堆再聚合", "SELECT 的普通列必须在 GROUP BY 里", "每组输出一行聚合结果", "WHERE 先于 GROUP BY 过滤", "分组 + 聚合是统计报表的基础"] },
-      ],
-      templates: [
-        { name: "按班级统计", code: "SELECT class, COUNT(*) AS 人数, AVG(score) AS 平均分\nFROM student\nGROUP BY class;" },
-      ],
-    },
-    ,
-    {
-      id: "sql-21",
-      title: "HAVING 过滤分组",
-      summary: "用 HAVING 对分组后的结果再过滤，配合聚合条件。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "WHERE 在分组之前过滤行，而 HAVING 在分组之后过滤『组』。比如『只显示平均分超过 90 的班级』，这种对聚合结果的筛选必须用 HAVING。" },
-        { type: "code", lang: "sql", title: "HAVING 基本用法", code: "SELECT class, AVG(score) AS avg_score\nFROM student\nGROUP BY class\nHAVING AVG(score) > 90;\n-- 只保留平均分 > 90 的班级" },
-        { type: "table", head: ["对比", "WHERE", "HAVING"], rows: [["过滤时机", "分组之前过滤行", "分组之后过滤组"], ["能不能用聚合函数", "不能（如 WHERE COUNT(*) > 5 报错）", "可以（HAVING COUNT(*) > 5 合法）"], ["能不能用别名", "不能", "可以引用别名"]] },
-        { type: "code", lang: "sql", title: "WHERE + HAVING 组合", code: "SELECT class, COUNT(*) AS 人数, AVG(score) AS 平均分\nFROM student\nWHERE score >= 60       -- 先只统计及格的人\nGROUP BY class\nHAVING COUNT(*) >= 3;   -- 再只要人数 >= 3 的班级" },
-        { type: "danger", title: "WHERE 里不能用聚合函数", text: "写 WHERE COUNT(*) > 3 会直接语法报错。聚合函数只能在 SELECT、HAVING、ORDER BY 里用。想对分组过滤就用 HAVING。" },
-        { type: "keypoints", items: ["HAVING 对分组结果（组）过滤，WHERE 对行过滤", "HAVING 可以用聚合函数，WHERE 不行", "WHERE 在 GROUP BY 前，HAVING 在 GROUP BY 后", "HAVING 里可以引用 SELECT 的别名"] },
-      ],
-      templates: [
-        { name: "平均分超90的班", code: "SELECT class, AVG(score) AS avg_score\nFROM student\nGROUP BY class\nHAVING AVG(score) > 90;" },
-      ],
-    },
-    {
-      id: "sql-22",
-      title: "GROUP BY 进阶（多列分组、与 DISTINCT 区别）",
-      summary: "多列分组、GROUP_CONCAT，以及和 DISTINCT 的本质区别。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "GROUP BY 不止能按一列分组，还能按多列组合分组；它和 DISTINCT 都能去重，但本质不同。这一章把这些进阶点讲透。" },
-        { type: "h", text: "多列分组" },
-        { type: "code", lang: "sql", title: "按 班级+性别 分组", code: "SELECT class, gender, COUNT(*) AS 人数\nFROM student\nGROUP BY class, gender;\n-- 先按班级分，每个班再按性别分\n-- 结果形如：1班 男 12 / 1班 女 8 / 2班 男 15 ..." },
-        { type: "h", text: "GROUP BY 与 DISTINCT 的区别" },
-        { type: "table", head: ["对比", "DISTINCT", "GROUP BY"], rows: [["作用", "只去重，不统计", "分组，常用于配聚合函数统计"], ["能不能配 COUNT/AVG", "不能", "可以，这是它的核心用途"], ["结果", "只返回不重复的行", "每组返回一行，可带统计值"]] },
-        { type: "code", lang: "sql", title: "两者对比", code: "SELECT DISTINCT class FROM student;\n-- 只是把班级列出去重\n\nSELECT class, COUNT(*) FROM student GROUP BY class;\n-- 每个班级一行，并统计人数（DISTINCT 做不到）" },
-        { type: "h", text: "GROUP_CONCAT 把组内值拼起来" },
-        { type: "code", lang: "sql", title: "每组的学生名单", code: "SELECT class, GROUP_CONCAT(name) AS 名单\nFROM student\nGROUP BY class;\n-- 结果：1班 → 小明,小红,小刚" },
-        { type: "keypoints", items: ["GROUP BY 列1, 列2 支持多列组合分组", "DISTINCT 只去重，GROUP BY 用于分组统计", "想统计每组就用 GROUP BY + 聚合函数", "GROUP_CONCAT 把组内多个值拼成一行字符串"] },
-      ],
-      templates: [
-        { name: "多列分组统计", code: "SELECT class, gender, COUNT(*) AS 人数\nFROM student\nGROUP BY class, gender;" },
-      ],
-    },
-    {
-      id: "sql-23",
-      title: "子查询基础（标量子查询）",
-      summary: "把一条 SELECT 嵌进另一条里，理解子查询的思想。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "子查询就是『查询里套查询』：外层查询叫外查询，括号里的内层 SELECT 叫子查询。子查询的结果可以当作一个值、一个集合或一张临时表来用。先从最简单的标量子查询（返回单个值）学起。" },
-        { type: "h", text: "标量子查询：返回一个值" },
-        { type: "code", lang: "sql", title: "查分数最高的学生", code: "-- 第一步先算出最高分\nSELECT MAX(score) FROM student;   -- 结果是 95.5\n\n-- 第二步用它当条件\nSELECT name, score FROM student\nWHERE score = (SELECT MAX(score) FROM student);\n-- 括号里的子查询返回单个值 95.5，再和外层比较" },
-        { type: "p", text: "注意子查询必须用括号 () 包起来，并且标量子查询只能返回一行一列，多返回一个都会报错。" },
-        { type: "h", text: "子查询放在 SELECT 里当列" },
-        { type: "code", lang: "sql", title: "子查询当普通列用", code: "SELECT name, score,\n       (SELECT AVG(score) FROM student) AS 全表平均分\nFROM student;\n-- 每个学生旁边都显示一次全表平均分" },
-        { type: "h", text: "子查询放在 FROM 里当临时表" },
-        { type: "code", lang: "sql", title: "FROM 子查询要起别名", code: "SELECT *\nFROM (SELECT name, score FROM student WHERE score >= 90) AS top;\n-- 子查询结果像一张临时表，MySQL 要求必须起别名 AS top" },
-        { type: "tip", title: "从里往外读", text: "读子查询时先看括号里面，搞清它返回什么（一个值？一列？一张表？），再回到外层理解怎么用它。" },
-        { type: "keypoints", items: ["子查询是括号里再套一条 SELECT", "标量子查询返回单个值，可当条件或当列", "子查询在 FROM 里当临时表，且必须起别名", "读法：先内后外，搞清返回的是值还是表"] },
-      ],
-      templates: [
-        { name: "最高分学生", code: "SELECT name, score FROM student\nWHERE score = (SELECT MAX(score) FROM student);" },
-      ],
-    },
-    {
-      id: "sql-24",
-      title: "子查询进阶（IN/EXISTS/ANY/ALL）",
-      summary: "IN 和 EXISTS 判断存在性，ANY/ALL 做高级比较。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "标量子查询返回单个值，这一章的子查询返回『一列多个值』甚至『多列』，配合 IN、EXISTS、ANY、ALL 使用，能解决很多复杂问题。" },
-        { type: "h", text: "IN 子查询：值在不在集合里" },
-        { type: "code", lang: "sql", title: "IN 接子查询", code: "-- 找出选过课的学生的名字\nSELECT name FROM student\nWHERE id IN (SELECT student_id FROM score);\n-- 子查询返回一列 student_id，IN 判断 id 是否在里面" },
-        { type: "h", text: "EXISTS 子查询：判断是否存在" },
-        { type: "code", lang: "sql", title: "EXISTS 存在性判断", code: "SELECT name FROM student s\nWHERE EXISTS (\n    SELECT 1 FROM score sc\n    WHERE sc.student_id = s.id\n);\n-- 对每个学生，检查他有没有成绩记录\n-- 有就留下，返回 SELECT 1 只是占位，多少无所谓" },
-        { type: "h", text: "ANY 与 ALL" },
-        { type: "code", lang: "sql", title: "ANY 任意 / ALL 全部", code: "-- 分数大于任意一个 1班 学生分数\nSELECT name, score FROM student\nWHERE score > ANY (SELECT score FROM student WHERE class = '1班');\n\n-- 分数大于所有 1班 学生分数（即大于 1班 最高分）\nSELECT name, score FROM student\nWHERE score > ALL (SELECT score FROM student WHERE class = '1班');" },
-        { type: "table", head: ["关键字", "含义", "等价写法"], rows: [["IN", "等于其中任意一个", "= ANY"], ["NOT IN", "不等于其中任意一个", "<> ALL"], ["ANY", "与其中任意一个满足比较", "如 > ANY 即大于最小值"], ["ALL", "与所有值都满足比较", "如 > ALL 即大于最大值"]] },
-        { type: "warn", title: "IN 子查询遇到 NULL 的坑", text: "NOT IN (…) 如果子查询结果里包含 NULL，整个条件会变成『未知』，什么都查不到。避免办法：子查询里过滤掉 NULL，或者改用 NOT EXISTS。" },
-        { type: "keypoints", items: ["IN 判断值在集合里，EXISTS 判断记录存在", "ANY 满足其中一个，ALL 必须全部满足", "> ANY 相当于大于最小值，> ALL 相当于大于最大值", "NOT IN 遇到 NULL 会失效，可用 NOT EXISTS 替代"] },
-      ],
-      templates: [
-        { name: "选过课的学生", code: "SELECT name FROM student\nWHERE id IN (SELECT student_id FROM score);" },
-      ],
-    },
-    {
-      id: "sql-25",
-      title: "多表设计基础与外键概念",
-      summary: "为什么拆表、什么是外键，学会多表设计的思想。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "真实业务很少只用一个表。比如订单、商品、用户，如果全塞一张表，数据会大量重复、改一处要改好多行。多表设计的核心思想：拆开存、用外键联系。" },
-        { type: "h", text: "不拆表的麻烦" },
-        { type: "code", lang: "sql", title: "反例：一张表塞所有订单", code: "CREATE TABLE bad_order (\n    id INT,\n    product_name VARCHAR(50),\n    product_price DECIMAL(10,2),\n    user_name VARCHAR(20),\n    user_phone VARCHAR(20)\n);\n-- 同一个用户买 10 次，user_name、user_phone 就重复 10 次\n-- 用户改手机号要改 10 行，很容易漏改" },
-        { type: "h", text: "正确做法：拆成多张表" },
-        { type: "code", lang: "sql", title: "用户表 + 商品表 + 订单表", code: "CREATE TABLE user (\n    id INT PRIMARY KEY,\n    name VARCHAR(20),\n    phone VARCHAR(20)\n);\n\nCREATE TABLE product (\n    id INT PRIMARY KEY,\n    name VARCHAR(50),\n    price DECIMAL(10,2)\n);\n\nCREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,        -- 只存用户的 id\n    product_id INT,     -- 只存商品的 id\n    quantity INT\n);" },
-        { type: "h", text: "外键 FOREIGN KEY" },
-        { type: "p", text: "外键是一列，它引用了另一张表的主键。比如 orders.user_id 指向 user.id。外键保证『引用的值必须真实存在』，防止订单指向一个不存在的用户。完整的 JOIN 会在后面章节展开，这里先建立概念。" },
-        { type: "table", head: ["关系类型", "举例", "实现方式"], rows: [["一对多 1:N", "一个用户多个订单", "『多』的一方存外键 user_id"], ["一对一 1:1", "一个用户一个档案", "任一表存对方主键做外键"], ["多对多 N:M", "学生和课程", "中间表存两个外键"]] },
-        { type: "warn", title: "外键不是强制的", text: "很多项目为了性能和管理方便，不在数据库层声明 FOREIGN KEY，只在应用层保证引用关系。学习阶段建议建表时加上外键，能帮你理解关系；实际生产按团队规范来。" },
-        { type: "keypoints", items: ["多表设计 = 拆开存 + 用外键联系", "重复数据应该抽成独立表，避免冗余", "外键引用另一张表的主键，保证引用合法", "关系类型：1:1、1:N、N:M，用外键或中间表表达"] },
-      ],
-      templates: [
-        { name: "用户+订单两表", code: "CREATE TABLE user (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,\n    amount DECIMAL(10,2)\n);" },
-      ],
-    },
-    {
-      id: "sql-26",
-      title: "INNER JOIN 内连接",
-      summary: "用 INNER JOIN 把两张表按条件拼起来，只留匹配的行。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "数据拆到了多张表，查询时就要『拼回去』——这就是 JOIN。INNER JOIN（内连接）只返回两张表中匹配上的行，像把两张表的相同部分对齐。" },
-        { type: "h", text: "准备两张表" },
-        { type: "code", lang: "sql", title: "建表并插入数据", code: "CREATE TABLE user (id INT, name VARCHAR(20));\nCREATE TABLE orders (id INT, user_id INT, amount DECIMAL(10,2));\nINSERT INTO user VALUES (1,'小明'),(2,'小红');\nINSERT INTO orders VALUES\n    (101, 1, 99.0),\n    (102, 1, 150.0),\n    (103, 2, 200.0);" },
-        { type: "h", text: "JOIN 语法" },
-        { type: "code", lang: "sql", title: "查询每个订单是谁下的", code: "SELECT o.id AS 订单号, u.name AS 用户名, o.amount AS 金额\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id;\n-- o、u 是表别名\n-- ON 后面写匹配条件：订单的 user_id = 用户的 id" },
-        { type: "p", text: "解读：FROM orders o INNER JOIN user u ON o.user_id = u.id，意思是把 orders 的每一行，去 user 里找 user_id 相等的行拼在一起。只有匹配上的行才会出现在结果里。" },
-        { type: "h", text: "三张表 JOIN" },
-        { type: "code", lang: "sql", title: "订单+用户+商品", code: "SELECT o.id, u.name, p.name, o.quantity\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id;" },
-        { type: "warn", title: "忘了 ON 就是笛卡尔积", text: "写 INNER JOIN 却漏掉 ON，会变成笛卡尔积：两表所有行两两组合。比如 100 行 × 100 行 = 10000 行，数据会暴涨。写完 JOIN 一定检查 ON 条件。" },
-        { type: "keypoints", items: ["INNER JOIN 只返回两张表匹配上的行", "ON 写连接条件，如 o.user_id = u.id", "表可以起别名：FROM orders o", "多个 JOIN 可以连用，拼多张表", "漏写 ON 会产生笛卡尔积，务必检查"] },
-      ],
-      templates: [
-        { name: "订单看用户", code: "SELECT o.id AS 订单号, u.name AS 用户名, o.amount AS 金额\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id;" },
-      ],
-    },
-    {
-      id: "sql-27",
-      title: "LEFT JOIN 左连接",
-      summary: "LEFT JOIN 保留左表全部行，没匹配的用 NULL 填充。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "LEFT JOIN（左连接）以左边的表为主，左表每一行都会保留在结果里；右表有匹配就拼接，没匹配就用 NULL 填空。特别适合『谁还没有下单』这类问题。" },
-        { type: "h", text: "基础用法" },
-        { type: "code", lang: "sql", title: "所有用户以及他们的订单", code: "SELECT u.name, o.id AS 订单号, o.amount\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id;\n-- 用户『小明』没下单，也会出现一行，订单号是 NULL" },
-        { type: "h", text: "找没有匹配的记录" },
-        { type: "code", lang: "sql", title: "找出没下过单的用户", code: "SELECT u.name\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.id IS NULL;\n-- 右表没匹配上的行，o.id 是 NULL\n-- 用 IS NULL 就能圈出『没下过单的人』" },
-        { type: "p", text: "这个套路（LEFT JOIN + 右表主键 IS NULL）非常经典，一定要记住：它等价于『左表里在右表找不到对应的行』。" },
-        { type: "tip", title: "INNER 与 LEFT 怎么选", text: "只要匹配行 → INNER JOIN；要以左表为主、保留全部 → LEFT JOIN。做『补全、对账、找缺失』时几乎都用 LEFT JOIN。" },
-        { type: "keypoints", items: ["LEFT JOIN 保留左表所有行，右表没匹配填 NULL", "JOIN 顺序决定谁是『主表』", "LEFT JOIN + 右表主键 IS NULL 可找缺失记录", "对账、找缺失、补全用 LEFT JOIN"] },
-      ],
-      templates: [
-        { name: "没下过单的用户", code: "SELECT u.name\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.id IS NULL;" },
-      ],
-    },
-    {
-      id: "sql-28",
-      title: "RIGHT JOIN 与 FULL OUTER JOIN 概念",
-      summary: "RIGHT JOIN 以右表为主，FULL OUTER JOIN 全保留。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "LEFT JOIN 以左表为主，RIGHT JOIN 正好相反，以右表为主。FULL OUTER JOIN 两边都保留。MySQL 不支持 FULL OUTER JOIN，但可以用 UNION 模拟。" },
-        { type: "h", text: "RIGHT JOIN" },
-        { type: "code", lang: "sql", title: "以右表 user 为主", code: "SELECT u.name, o.amount\nFROM orders o\nRIGHT JOIN user u ON o.user_id = u.id;\n-- user 表每一行都保留，没订单的用户 amount 为 NULL" },
-        { type: "h", text: "FULL OUTER JOIN 概念" },
-        { type: "p", text: "FULL OUTER JOIN = LEFT JOIN 的结果 ∪ RIGHT JOIN 的结果，两边没匹配的都保留。它等价于『A 的全部 + B 的全部，去掉重复匹配』。" },
-        { type: "code", lang: "sql", title: "MySQL 用 UNION 模拟 FULL JOIN", code: "SELECT u.name, o.amount\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nUNION\nSELECT u.name, o.amount\nFROM user u\nRIGHT JOIN orders o ON o.user_id = u.id;" },
-        { type: "table", head: ["连接方式", "保留哪些行", "适用"], rows: [["INNER JOIN", "两边都匹配的行", "只关心有关联的数据"], ["LEFT JOIN", "左表全部 + 匹配的右表", "以左表为主"], ["RIGHT JOIN", "右表全部 + 匹配的左表", "以右表为主"], ["FULL OUTER JOIN", "两边全部", "两边数据都要保留"]] },
-        { type: "info", title: "实践建议", text: "大多数场景用 LEFT JOIN 就够了，需要右表为主时把两表顺序换一下写 LEFT JOIN 也行（RIGHT 只是把方向反过来）。真正的 FULL 在 MySQL 里用 UNION 模拟。" },
-        { type: "keypoints", items: ["RIGHT JOIN 以右表为主，是 LEFT 的镜像", "FULL OUTER JOIN 两边全保留", "MySQL 不支持 FULL，用 LEFT+UNION+RIGHT 模拟", "大部分场景 LEFT JOIN 已够用"] },
-      ],
-      templates: [
-        { name: "RIGHT JOIN 示例", code: "SELECT u.name, o.amount\nFROM orders o\nRIGHT JOIN user u ON o.user_id = u.id;" },
-      ],
-    },
-    {
-      id: "sql-29",
-      title: "UNION 与 UNION ALL",
-      summary: "纵向拼接两个查询结果，UNION 去重、UNION ALL 不去重。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "JOIN 是横向拼（列变多），UNION 是纵向拼（行变多）。UNION 把两个查询的结果上下叠在一起，适合『合并两个班级的名单』这类需求。" },
-        { type: "h", text: "基本用法" },
-        { type: "code", lang: "sql", title: "合并两个班级的学生", code: "SELECT name FROM class1_student\nUNION\nSELECT name FROM class2_student;\n-- 结果自动去重：同名的人只出现一次" },
-        { type: "code", lang: "sql", title: "UNION ALL 不去重", code: "SELECT name FROM class1_student\nUNION ALL\nSELECT name FROM class2_student;\n-- 不去重：同名的人会出现两次，速度快" },
-        { type: "table", head: ["对比", "UNION", "UNION ALL"], rows: [["去重", "自动去掉重复行", "保留所有行"], ["速度", "稍慢（要比较去重）", "更快"], ["用途", "结果集不允许重复", "要原始全部数据"]] },
-        { type: "warn", title: "两个查询的列必须一致", text: "UNION 要求两边 SELECT 的列数相同，且对应列类型要兼容。SELECT name FROM a UNION SELECT id, name FROM b 会报错（一个 1 列一个 2 列）。" },
-        { type: "tip", title: "配合排序", text: "UNION 结果想排序，把 ORDER BY 写在最后一个查询末尾：SELECT a FROM t1 UNION SELECT a FROM t2 ORDER BY a;（作用于整个合并结果）。" },
-        { type: "keypoints", items: ["UNION 纵向合并两个查询结果", "UNION 去重，UNION ALL 不去重", "UNION ALL 更快，无重复需求时优先", "两边列数必须一致，类型要兼容"] },
-      ],
-      templates: [
-        { name: "合并并去重", code: "SELECT name FROM class1_student\nUNION\nSELECT name FROM class2_student;" },
-      ],
-    },
-    {
-      id: "sql-30",
-      title: "自连接 SELF JOIN",
-      summary: "表和自己连接，解决员工-经理、父子类目等场景。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "自连接就是一张表跟自己 JOIN。听起来奇怪，但很常用：比如员工表里存了 manager_id 指向另一个员工，查『每个员工的经理是谁』就要用自连接。" },
-        { type: "h", text: "准备员工表" },
-        { type: "code", lang: "sql", title: "员工表，manager_id 指向自己的 id", code: "CREATE TABLE emp (\n    id INT,\n    name VARCHAR(20),\n    manager_id INT   -- 指向本表另一个员工的 id，老板为 NULL\n);\nINSERT INTO emp VALUES\n    (1, '老板', NULL),\n    (2, '张三', 1),\n    (3, '李四', 1),\n    (4, '王五', 2);" },
-        { type: "h", text: "自连接查询" },
-        { type: "code", lang: "sql", title: "查每个员工的经理", code: "SELECT e.name AS 员工, m.name AS 经理\nFROM emp e\nLEFT JOIN emp m ON e.manager_id = m.id;\n-- e 和 m 都指向 emp 表，只是起了两个别名\n-- LEFT JOIN 保证老板也显示（经理为 NULL）" },
-        { type: "p", text: "关键点：给同一张表起两个不同的别名（e、m），然后当成两张表来 JOIN。自连接也常用 INNER JOIN，取决于要不要保留无上级的人。" },
-        { type: "h", text: "另一个经典场景：商品父子类目" },
-        { type: "code", lang: "sql", title: "查每个子类的父类", code: "SELECT c.name AS 子类, p.name AS 父类\nFROM category c\nLEFT JOIN category p ON c.parent_id = p.id;" },
-        { type: "tip", title: "别名必须不同", text: "自连接最大的要求就是起两个不同的别名，否则数据库分不清哪个是哪个。改别名别写错，自连接的 ON 条件要写清楚：e.manager_id = m.id。" },
-        { type: "keypoints", items: ["自连接是表和自己 JOIN，需要两个不同别名", "经典场景：员工-经理、父子类目", "LEFT JOIN 保留无上级的根节点", "ON 条件要写清 别名.外键 = 别名.主键"] },
-      ],
-      templates: [
-        { name: "员工和他们的经理", code: "SELECT e.name AS 员工, m.name AS 经理\nFROM emp e\nLEFT JOIN emp m ON e.manager_id = m.id;" },
-      ],
-    },
-    {
-      id: "sql-31",
-      title: "多表 JOIN 综合查询",
-      summary: "三表四表 JOIN 连查，把前面学的 JOIN 串起来。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "真实业务常常一次要拼 3 张以上的表。这一章用『订单-用户-商品』的完整例子，把多表 JOIN 的套路讲清楚。" },
-        { type: "h", text: "准备三张表" },
-        { type: "code", lang: "sql", title: "用户、商品、订单三表", code: "CREATE TABLE user (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE product (id INT PRIMARY KEY, name VARCHAR(50), price DECIMAL(10,2));\nCREATE TABLE orders (id INT, user_id INT, product_id INT, qty INT);\nINSERT INTO user VALUES (1,'小明'),(2,'小红');\nINSERT INTO product VALUES (1,'键盘',199),(2,'鼠标',99);\nINSERT INTO orders VALUES\n    (101,1,1,2),(102,1,2,1),(103,2,1,1);" },
-        { type: "h", text: "三表连接" },
-        { type: "code", lang: "sql", title: "订单关联用户和商品", code: "SELECT o.id AS 订单号,\n       u.name AS 买家,\n       p.name AS 商品,\n       o.qty AS 数量,\n       p.price * o.qty AS 小计\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id;\n-- 顺序：先 orders 拼 user，再拼 product，一路拼下去" },
-        { type: "h", text: "综合统计" },
-        { type: "code", lang: "sql", title: "按用户统计消费总额", code: "SELECT u.name, SUM(p.price * o.qty) AS 总消费\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id\nGROUP BY u.id, u.name\nORDER BY 总消费 DESC;" },
-        { type: "tip", title: "JOIN 的万能套路", text: "写多表 JOIN：先定主表（FROM），然后依次 JOIN 每张关联表并写 ON，最后再 WHERE/GROUP BY/ORDER BY。一次 JOIN 一张表，慢慢拼，别一次想太多。" },
-        { type: "warn", title: "列名冲突要加前缀", text: "多表 JOIN 后列名可能重复（比如都有 id、name）。SELECT 时建议都用 别名.列名 的写法，如 u.name、p.name，否则可能报『列不唯一』错误。" },
-        { type: "keypoints", items: ["多表 JOIN 一次拼一张表，从主表出发", "用 别名.列名 消除同名列歧义", "JOIN 后可继续 GROUP BY / ORDER BY 做统计", "先写对结果，再优化性能"] },
-      ],
-      templates: [
-        { name: "订单明细大查询", code: "SELECT o.id AS 订单号, u.name AS 买家, p.name AS 商品, p.price * o.qty AS 小计\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id;" },
-      ],
-    },
-    {
-      id: "sql-32",
-      title: "UPDATE 更新数据",
-      summary: "用 UPDATE 修改已有数据，记住带 WHERE。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "数据错了、要改了，用 UPDATE。语法：UPDATE 表 SET 列=新值 WHERE 条件。关键提醒：一定要带 WHERE，否则会更新全表。" },
-        { type: "h", text: "基本 UPDATE" },
-        { type: "code", lang: "sql", title: "把 id=1 的学生年龄改成 20", code: "UPDATE student\nSET age = 20\nWHERE id = 1;\n-- 只有 id=1 这一行被改" },
-        { type: "h", text: "同时改多个字段" },
-        { type: "code", lang: "sql", title: "一次改多列，逗号分隔", code: "UPDATE student\nSET age = 21, score = 95.5\nWHERE name = '小明';" },
-        { type: "h", text: "UPDATE 里也能用表达式" },
-        { type: "code", lang: "sql", title: "用原值计算新值", code: "UPDATE product\nSET price = price * 0.9\nWHERE category = '电子产品';\n-- 电子产品统一打 9 折，新值 = 原值 * 0.9" },
-        { type: "danger", title: "忘写 WHERE 会全表更新", text: "UPDATE student SET age = 20;（没有 WHERE）会把所有学生的年龄都改成 20，无法轻易撤销。写 UPDATE 前先想清楚 WHERE 圈定了哪些行，最好先用 SELECT 验证一下条件。" },
-        { type: "tip", title: "先 SELECT 再 UPDATE", text: "拿不准 WHERE 对不对时，先把 UPDATE 换成 SELECT 跑一遍：SELECT * FROM student WHERE id = 1;，确认圈定的正是要改的行，再执行 UPDATE。" },
-        { type: "keypoints", items: ["UPDATE 表 SET 列=新值 WHERE 条件", "多列更新用逗号分隔", "SET 里可以用原值做运算（如 price*0.9）", "忘写 WHERE = 全表更新，极其危险", "改前先 SELECT 验证 WHERE"] },
-      ],
-      templates: [
-        { name: "安全更新", code: "UPDATE student SET age = 20 WHERE id = 1;\n-- 先查询确认\nSELECT * FROM student WHERE id = 1;" },
-      ],
-    },
-    {
-      id: "sql-33",
-      title: "DELETE 删除数据",
-      summary: "用 DELETE 删行、TRUNCATE 清表，都不可轻易撤销。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "DELETE 用来删掉指定的行，语法简单但危险程度最高。这一章还讲 TRUNCATE 清空整张表，以及两者的区别。" },
-        { type: "h", text: "DELETE 删指定行" },
-        { type: "code", lang: "sql", title: "删除 id=3 的学生", code: "DELETE FROM student WHERE id = 3;\n-- 只删满足条件的行\n\nDELETE FROM student WHERE score < 60;\n-- 删除所有不及格的学生" },
-        { type: "danger", title: "忘写 WHERE 就清空了", text: "DELETE FROM student;（没有 WHERE）会删光整张表所有行。有些数据库默认有保护，但千万别赌。执行前先想清楚，或用事务包起来以便后悔（见第 36 章）。" },
-        { type: "h", text: "TRUNCATE 清空整表" },
-        { type: "code", lang: "sql", title: "清空整张表", code: "TRUNCATE TABLE student;\n-- 把所有行一次性删光，速度很快\n-- 但无法按条件删，也不能加 WHERE" },
-        { type: "table", head: ["对比", "DELETE", "TRUNCATE"], rows: [["能否按条件删", "可以（WHERE）", "只能全清"], ["删除方式", "逐行删，可回滚（事务内）", "直接重建表，通常不可回滚"], ["速度", "慢", "快"], ["主键自增", "保留当前值", "重置回起点"]] },
-        { type: "warn", title: "DELETE 不释放空间", text: "DELETE 只是把行标记删除，表文件空间不一定会变小。要彻底释放空间可考虑 TRUNCATE 或优化表（OPTIMIZE TABLE），小表不必在意。" },
-        { type: "keypoints", items: ["DELETE FROM 表 WHERE 条件 删指定行", "忘写 WHERE 会删光全表", "TRUNCATE 一次性清空整表，速度更快", "DELETE 可配事务回滚，TRUNCATE 通常不能", "删除前先 SELECT 确认范围"] },
-      ],
-      templates: [
-        { name: "删除不及格学生", code: "DELETE FROM student WHERE score < 60;\nSELECT * FROM student;" },
-      ],
-    },
-    {
-      id: "sql-34",
-      title: "INSERT 进阶（多行插入、INSERT SELECT 复制）",
-      summary: "批量插入、从查询结果直接导数据，复制表的妙招。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "第 7 章学了基础插入，这一章讲两个进阶玩法：批量多行插入提升性能，以及用 INSERT ... SELECT 从别的表直接搬数据。" },
-        { type: "h", text: "批量多行插入" },
-        { type: "code", lang: "sql", title: "一条语句插多行", code: "INSERT INTO student (id, name, age) VALUES\n    (1, '小明', 18),\n    (2, '小红', 19),\n    (3, '小刚', 20);\n-- 比分开三条 INSERT 快得多，一次网络往返" },
-        { type: "h", text: "INSERT ... SELECT 从查询导入" },
-        { type: "code", lang: "sql", title: "把 A 表的数据复制到 B 表", code: "INSERT INTO student_copy (id, name, age)\nSELECT id, name, age FROM student;\n-- 子查询的结果一行行插入目标表\n-- 适合备份、归档、把数据搬进新表" },
-        { type: "h", text: "一条语句建表并复制" },
-        { type: "code", lang: "sql", title: "CREATE TABLE AS SELECT", code: "CREATE TABLE student_backup AS\nSELECT * FROM student;\n-- 一步到位：创建新表并填充数据（注意不会复制索引）\n\n-- 只复制结构不复制数据\nCREATE TABLE student_empty LIKE student;" },
-        { type: "tip", title: "什么时候用批量插入", text: "一次性要插几百上千条时，一定要拼成一条多行 INSERT 或 INSERT ... SELECT。逐条 INSERT 在真实环境会非常慢。" },
-        { type: "warn", title: "列要对齐，类型要兼容", text: "INSERT ... SELECT 要求两边列数、顺序、类型能对上，否则报错。SELECT 里可以写表达式：INSERT INTO t (a) SELECT price * 2 FROM other;" },
-        { type: "keypoints", items: ["多行 INSERT 一次插多条，性能好", "INSERT ... SELECT 把查询结果导进表", "CREATE TABLE ... AS SELECT 一步建表复制", "数据复制时注意列对齐与类型兼容"] },
-      ],
-      templates: [
-        { name: "备份学生表", code: "CREATE TABLE student_backup AS SELECT * FROM student;\nSELECT * FROM student_backup;" },
-      ],
-    },
-    {
-      id: "sql-35",
-      title: "事务 ACID 概念",
-      summary: "理解事务四大特性 ACID，这是数据库可靠性的根基。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "事务（Transaction）就是一组 SQL 操作的『打包』：要么全部成功，要么全部失败。最经典的是转账：A 扣 100，B 加 100，中间任何一步失败，整个转账都要撤销。" },
-        { type: "h", text: "没有事务的可怕场景" },
-        { type: "code", lang: "sql", title: "转账的两条 SQL", code: "-- 第一步：A 账户扣 100 元\nUPDATE account SET balance = balance - 100 WHERE id = 1;\n-- 第二步：B 账户加 100 元\nUPDATE account SET balance = balance + 100 WHERE id = 2;\n-- 如果第一步成功、第二步断电了，钱就凭空消失了" },
-        { type: "h", text: "ACID 四大特性" },
-        { type: "table", head: ["特性", "含义", "通俗理解"], rows: [["A 原子性", "Atomicity，一组操作要么全成要么全败", "转账不能只扣不加"], ["C 一致性", "Consistency，操作前后数据保持合法", "账总是平的，金额守恒"], ["I 隔离性", "Isolation，事务之间互不干扰", "你转账时不看到别人的中间态"], ["D 持久性", "Durability，提交后永久保存", "断电重启数据不丢"]] },
-        { type: "p", text: "原子性是基础：数据库把所有操作记录成一份『清单』，只要有一步失败，就按清单把前面做过的全部回滚（UNDO），保证不留半截操作。" },
-        { type: "tip", title: "记法", text: "记 ACID 可以这样联想：原子性管『全成或全败』，一致性管『数据合法』，隔离性管『互不干扰』，持久性管『永不丢失』。" },
-        { type: "keypoints", items: ["事务是把一组 SQL 打包：全成或全败", "ACID = 原子性、一致性、隔离性、持久性", "转账、下单、扣库存都依赖事务", "原子性靠回滚实现，持久性靠落盘实现"] },
-      ],
-      templates: [
-        { name: "转账两条SQL", code: "UPDATE account SET balance = balance - 100 WHERE id = 1;\nUPDATE account SET balance = balance + 100 WHERE id = 2;" },
-      ],
-    },
-    {
-      id: "sql-36",
-      title: "事务操作 COMMIT/ROLLBACK/SAVEPOINT",
-      summary: "用 BEGIN/COMMIT/ROLLBACK/SAVEPOINT 手动控制事务。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "默认情况下每条 SQL 自动提交（改完就生效）。想要『要么全成要么全败』，就要显式开启事务，再决定是 COMMIT（提交）还是 ROLLBACK（回滚）。" },
-        { type: "h", text: "事务三连：开始-提交/回滚" },
-        { type: "code", lang: "sql", title: "手动控制转账事务", code: "START TRANSACTION;   -- 1. 开启事务\n\nUPDATE account SET balance = balance - 100 WHERE id = 1;\nUPDATE account SET balance = balance + 100 WHERE id = 2;\n\nCOMMIT;              -- 3. 全部成功，正式生效\n\n-- 如果中途发现错了：\nROLLBACK;            -- 放弃所有改动，回到开启前" },
-        { type: "h", text: "SAVEPOINT 保存点" },
-        { type: "code", lang: "sql", title: "部分回滚", code: "START TRANSACTION;\nUPDATE account SET balance = balance - 100 WHERE id = 1;\n\nSAVEPOINT s1;        -- 打个保存点\nUPDATE account SET balance = balance - 50 WHERE id = 1;\n\nROLLBACK TO s1;      -- 只撤销 s1 之后的操作，保留之前\nCOMMIT;" },
-        { type: "info", title: "自动提交模式", text: "MySQL 默认 autocommit=1，每条语句自动提交。想每次都手动控制，可以 SET autocommit = 0;，或用 START TRANSACTION 显式开启（本语句开启，用完 COMMIT/ROLLBACK 结束）。" },
-        { type: "warn", title: "忘了 COMMIT 的坑", text: "开着事务不 COMMIT 也不 ROLLBACK，表会被锁住，别的会话读不到/改不了这些数据，还可能造成连接堆积。事务用完立刻提交或回滚。" },
-        { type: "keypoints", items: ["START TRANSACTION 开启，COMMIT 提交，ROLLBACK 回滚", "COMMIT 让改动永久生效，ROLLBACK 全部撤销", "SAVEPOINT 可设置部分回滚点", "不提交的事务会锁数据，用完记得 COMMIT/ROLLBACK"] },
-      ],
-      templates: [
-        { name: "安全转账", code: "START TRANSACTION;\nUPDATE account SET balance = balance - 100 WHERE id = 1;\nUPDATE account SET balance = balance + 100 WHERE id = 2;\nCOMMIT;" },
-      ],
-    },
-    {
-      id: "sql-37",
-      title: "事务隔离级别简介",
-      summary: "四个隔离级别解决并发问题，理解脏读/不可重复读/幻读。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "多个事务同时操作同一份数据时会产生各种问题（脏读、不可重复读、幻读）。隔离级别就是数据库提供的『防干扰程度』开关，级别越高越安全，但并发性能越低。" },
-        { type: "h", text: "三个并发问题" },
-        { type: "table", head: ["问题", "含义", "例子"], rows: [["脏读", "读到别的未提交事务的修改", "A 改钱没提交，B 读到了这笔假修改"], ["不可重复读", "同一次事务里两次读到不同值", "先读到 100，别人改了，再读是 50"], ["幻读", "两次查询行数不同，凭空多出行", "第一次查 2 行，别人插入后查到 3 行"]] },
-        { type: "h", text: "四个隔离级别" },
-        { type: "table", head: ["隔离级别", "脏读", "不可重复读", "幻读"], rows: [["READ UNCOMMITTED 读未提交", "可能", "可能", "可能"], ["READ COMMITTED 读已提交", "不会", "可能", "可能"], ["REPEATABLE READ 可重复读", "不会", "不会", "可能"], ["SERIALIZABLE 串行化", "不会", "不会", "不会"]] },
-        { type: "code", lang: "sql", title: "查看与设置隔离级别", code: "SELECT @@transaction_isolation;   -- 查看当前级别\n\nSET SESSION TRANSACTION ISOLATION LEVEL\n    READ COMMITTED;   -- 修改当前会话级别" },
-        { type: "p", text: "MySQL 默认是 REPEATABLE READ（可重复读）；PostgreSQL 和 Oracle 默认是 READ COMMITTED。大多数业务场景 READ COMMITTED 已经够用。" },
-        { type: "warn", title: "级别不是越高越好", text: "SERIALIZABLE 几乎完全杜绝并发问题，但会让大量事务排队，性能暴跌。生产环境按需选择，别无脑拉满。" },
-        { type: "keypoints", items: ["并发三大问题：脏读、不可重复读、幻读", "四个级别：读未提交 < 读已提交 < 可重复读 < 串行化", "级别越高越安全，并发性能越低", "MySQL 默认可重复读，业务常用读已提交", "隔离级别是并发与一致性的权衡"] },
-      ],
-      templates: [
-        { name: "查看隔离级别", code: "SELECT @@transaction_isolation;" },
-      ],
-    },
-    {
-      id: "sql-38",
-      title: "主键与外键约束详解（FOREIGN KEY、级联）",
-      summary: "外键语法与 ON DELETE 级联策略，把表关联得更牢固。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "第 25 章认识了外键概念，这一章讲完整的 FOREIGN KEY 语法、以及删除父表数据时的级联行为（ON DELETE）。" },
-        { type: "h", text: "定义外键" },
-        { type: "code", lang: "sql", title: "建表时加外键", code: "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,\n    amount DECIMAL(10,2),\n    FOREIGN KEY (user_id) REFERENCES user(id)\n);\n-- 声明 orders.user_id 指向 user.id\n-- 插入不存在的 user_id 会报错" },
-        { type: "h", text: "级联删除 ON DELETE" },
-        { type: "code", lang: "sql", title: "删用户时连带删他的订单", code: "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,\n    FOREIGN KEY (user_id) REFERENCES user(id)\n        ON DELETE CASCADE\n);\n-- 删除 user 里某行时，orders 里引用的行也会自动删除" },
-        { type: "table", head: ["策略", "含义", "适用"], rows: [["CASCADE", "父删子也删", "订单随用户删除"], ["RESTRICT / NO ACTION", "有子记录就拒绝删除", "默认安全行为"], ["SET NULL", "父删后子表外键变 NULL", "保留历史记录"], ["SET DEFAULT", "父删后子表外键恢复默认值", "较少用"]] },
-        { type: "code", lang: "sql", title: "已有表添加外键", code: "ALTER TABLE orders\nADD FOREIGN KEY (user_id) REFERENCES user(id);\n\n-- 删除外键（MySQL）\nALTER TABLE orders DROP FOREIGN KEY 约束名;" },
-        { type: "warn", title: "外键不是免费的", text: "外键会带来写入时的校验开销，高并发写入时可能成为瓶颈。大厂常见做法：表结构不写 FOREIGN KEY，由应用层保证引用完整。理解外键的意义，按团队规范取舍。" },
-        { type: "keypoints", items: ["FOREIGN KEY (列) REFERENCES 父表(主键) 定义外键", "ON DELETE 级联策略：CASCADE/RESTRICT/SET NULL", "CASCADE 删父带删子，RESTRICT 有子拒删", "外键保证引用完整，但有性能开销", "可用 ALTER TABLE 后补外键"] },
-      ],
-      templates: [
-        { name: "带级联的订单表", code: "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,\n    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE\n);" },
-      ],
-    },
-    {
-      id: "sql-39",
-      title: "UNIQUE/NOT NULL/CHECK/DEFAULT 约束",
-      summary: "四种常用约束完整讲解，用 CHECK 限制取值范围。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "第 6 章学了三种约束，这一章系统补全：UNIQUE、NOT NULL、CHECK（检查取值范围）、DEFAULT（默认值）。把约束用好，数据质量就有保障。" },
-        { type: "h", text: "UNIQUE 与 NOT NULL" },
-        { type: "code", lang: "sql", title: "唯一 + 非空", code: "CREATE TABLE user (\n    id       INT PRIMARY KEY,\n    email    VARCHAR(50) UNIQUE NOT NULL,   -- 邮箱唯一且必填\n    phone    VARCHAR(20) UNIQUE,            -- 电话唯一，可空\n    name     VARCHAR(20) NOT NULL\n);" },
-        { type: "h", text: "CHECK 检查取值" },
-        { type: "code", lang: "sql", title: "限制年龄和分数的范围", code: "CREATE TABLE student (\n    id    INT PRIMARY KEY,\n    name  VARCHAR(20),\n    age   INT CHECK (age BETWEEN 0 AND 150),\n    score DECIMAL(5,2) CHECK (score >= 0 AND score <= 100)\n);\n-- 插入 age=200 或 score=999 会直接报错" },
-        { type: "h", text: "DEFAULT 默认值" },
-        { type: "code", lang: "sql", title: "给列设默认值", code: "CREATE TABLE article (\n    id         INT PRIMARY KEY,\n    title      VARCHAR(100),\n    views      INT DEFAULT 0,\n    status     VARCHAR(10) DEFAULT 'draft',\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n-- 不写 views/status/created_at 时自动填默认值" },
-        { type: "h", text: "用 ALTER TABLE 追加约束" },
-        { type: "code", lang: "sql", title: "给已有表加约束", code: "ALTER TABLE student ADD UNIQUE (email);\nALTER TABLE student ALTER COLUMN name SET NOT NULL;\nALTER TABLE student ADD CONSTRAINT ck_age CHECK (age >= 0);" },
-        { type: "table", head: ["约束", "作用", "写在哪"], rows: [["PRIMARY KEY", "唯一非空的主键", "建表时"], ["UNIQUE", "值不能重复", "建表/ALTER"], ["NOT NULL", "必须填值", "建表/ALTER"], ["CHECK", "限制取值合法", "建表/ALTER"], ["DEFAULT", "缺省时自动填", "建表/ALTER"]] },
-        { type: "keypoints", items: ["UNIQUE 值不重复、NOT NULL 必须填", "CHECK 限制取值范围（如分数 0~100）", "DEFAULT 给缺省值（如 views DEFAULT 0）", "ALTER TABLE 可对已有表追加约束", "约束是数据质量的第一道防线"] },
-      ],
-      templates: [
-        { name: "带CHECK的学生表", code: "CREATE TABLE student (\n    id    INT PRIMARY KEY,\n    name  VARCHAR(20),\n    score DECIMAL(5,2) CHECK (score >= 0 AND score <= 100)\n);" },
-      ],
-    },
-    {
-      id: "sql-40",
-      title: "索引概念与创建（CREATE INDEX）",
-      summary: "索引像书的目录，创建索引让查询提速。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "数据少时查询无所谓快慢，但到了几百万行，没索引的查询会慢到让人崩溃。索引就像书的目录：没有目录要翻遍全书，有目录直接翻到对应页。" },
-        { type: "h", text: "没有索引时发生了什么" },
-        { type: "p", text: "没有索引时，WHERE name = '小明' 要把整张表每一行都扫一遍（全表扫描，Full Table Scan）。表有 500 万行就要读 500 万行，非常慢。" },
-        { type: "h", text: "创建索引" },
-        { type: "code", lang: "sql", title: "创建普通索引", code: "CREATE INDEX idx_name ON student(name);\n-- 给 student.name 建索引\n\nCREATE INDEX idx_age ON student(age);\n\n-- 建表时直接指定索引\nCREATE TABLE student (\n    id INT PRIMARY KEY,\n    name VARCHAR(20),\n    INDEX idx_name (name)\n);" },
-        { type: "h", text: "查看与删除索引" },
-        { type: "code", lang: "sql", title: "管理索引", code: "SHOW INDEX FROM student;   -- 查看表的索引\nDROP INDEX idx_name ON student;   -- 删除索引" },
-        { type: "tip", title: "主键自动建索引", text: "PRIMARY KEY 和 UNIQUE 约束会自动生成索引，不需要手动建。我们要手动建的是那些经常在 WHERE、JOIN、ORDER BY 里用到的普通列。" },
-        { type: "warn", title: "索引不是越多越好", text: "索引能加速查询，但每次 INSERT/UPDATE/DELETE 都要同步维护索引，写会变慢，还占磁盘。只给『真正常查的列』建索引，别见列就建。" },
-        { type: "keypoints", items: ["索引像书目录，加速 WHERE/JOIN/ORDER BY", "CREATE INDEX 索引名 ON 表(列) 创建", "主键、UNIQUE 自动建索引", "索引不是免费的：拖慢写入、占磁盘", "只给高频查询的列建索引"] },
-      ],
-      templates: [
-        { name: "建索引提速", code: "CREATE INDEX idx_name ON student(name);\nSELECT * FROM student WHERE name = '小明';" },
-      ],
-    },
-    ,
-    {
-      id: "sql-41",
-      title: "索引类型（普通/唯一/复合）与使用原则",
-      summary: "普通索引、唯一索引、复合索引的区别和适用场景。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "上一章会创建基本索引了，这一章把索引分类讲清：普通索引、唯一索引、复合索引。并且重点讲『最左前缀』这个复合索引的关键原则。" },
-        { type: "h", text: "三种索引" },
-        { type: "table", head: ["类型", "特点", "场景"], rows: [["普通索引 INDEX", "不限制值重复", "经常查询的列"], ["唯一索引 UNIQUE", "值不能重复", "邮箱、手机号、订单号"], ["复合索引", "多列组合成一个索引", "多条件联合查询"]] },
-        { type: "code", lang: "sql", title: "创建不同类型的索引", code: "CREATE INDEX idx_name ON student(name);           -- 普通索引\nCREATE UNIQUE INDEX idx_email ON user(email);    -- 唯一索引\nCREATE INDEX idx_class_score ON student(class, score);  -- 复合索引\n\n-- 建表时指定\nCREATE TABLE user (\n    id INT PRIMARY KEY,\n    email VARCHAR(50) UNIQUE,   -- UNIQUE 自动生成唯一索引\n    name VARCHAR(20),\n    INDEX idx_name (name)\n);" },
-        { type: "h", text: "复合索引的最左前缀原则" },
-        { type: "p", text: "复合索引 idx_class_score (class, score) 相当于先按 class 排、再按 score 排。它能命中以下查询：只看 class 的、class+score 一起的。但只查 score 用不上它（最左前缀原则：必须从第一列开始用）。" },
-        { type: "code", lang: "sql", title: "哪些查询能用到复合索引", code: "-- 能用上 idx_class_score：\nSELECT * FROM student WHERE class = '1班';                    -- 用到左列 class\nSELECT * FROM student WHERE class = '1班' AND score > 90;    -- 两列都用\n\n-- 用不上 idx_class_score：\nSELECT * FROM student WHERE score > 90;   -- 没用第一列 class，索引失效" },
-        { type: "h", text: "使用原则" },
-        { type: "list", items: ["高区分度优先：像性别这种只有两三个值的列，索引意义不大", "优先给 WHERE、JOIN ON、ORDER BY 里的列建索引", "复合索引把最常查的列放最左边", "少而精：索引过多会拖慢写入、吃磁盘"] },
-        { type: "warn", title: "区分度低不要建索引", text: "比如 status 只有『正常/禁用』两个值，建索引后扫描一半数据还要回表，数据库很可能干脆不用这个索引。低区分度列别白费力气。" },
-        { type: "keypoints", items: ["普通索引不限制重复，唯一索引值不能重复", "复合索引是多列组合，按最左列排序", "最左前缀：复合索引必须从第一列开始用", "索引要少而精，优先高区分度、高频查询列"] },
-      ],
-      templates: [
-        { name: "建复合索引", code: "CREATE INDEX idx_class_score ON student(class, score);\nSELECT * FROM student WHERE class = '1班' AND score > 90;" },
-      ],
-    },
-    {
-      id: "sql-42",
-      title: "视图 VIEW（创建、使用、更新限制）",
-      summary: "视图是保存好的查询，像虚拟表，复用复杂查询。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "视图（VIEW）就是一条存起来的 SELECT 查询，用的时候像一个虚拟的表。它不存真实数据，数据仍来自原始表，但能帮你把复杂查询封装成一张『假表』复用。" },
-        { type: "h", text: "创建视图" },
-        { type: "code", lang: "sql", title: "把三表 JOIN 存成视图", code: "CREATE VIEW v_order_detail AS\nSELECT o.id AS 订单号, u.name AS 买家, p.name AS 商品, o.qty AS 数量\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id;" },
-        { type: "h", text: "使用视图" },
-        { type: "code", lang: "sql", title: "视图当成普通表查", code: "SELECT * FROM v_order_detail;              -- 全部订单明细\nSELECT * FROM v_order_detail WHERE 买家 = '小明';\nSELECT 商品, SUM(数量) FROM v_order_detail GROUP BY 商品;" },
-        { type: "h", text: "修改与删除视图" },
-        { type: "code", lang: "sql", title: "管理视图", code: "CREATE OR REPLACE VIEW v_order_detail AS\nSELECT ...;      -- 覆盖式更新视图定义\n\nDROP VIEW v_order_detail;   -- 删除视图" },
-        { type: "warn", title: "视图能否更新有限制", text: "简单视图（单表、无聚合、无 DISTINCT）可以 UPDATE/INSERT；包含聚合、GROUP BY、JOIN 多表的复杂视图一般不能直接改数据。视图大多用于查询，别指望它帮你改数据。" },
-        { type: "info", title: "视图的好处", text: "一是复用，复杂查询只写一遍；二是安全，可以只给用户开视图权限而不给原始表；三是屏蔽表结构变化，改底层表不影响用视图的代码。" },
-        { type: "keypoints", items: ["视图是存起来的 SELECT，像虚拟表，不存数据", "CREATE VIEW 视图名 AS SELECT ... 创建", "视图可当普通表 SELECT，也能再聚合", "复杂视图（聚合/JOIN）通常不能直接改数据", "视图用于复用查询和权限控制"] },
-      ],
-      templates: [
-        { name: "订单明细视图", code: "CREATE VIEW v_order AS\nSELECT o.id, u.name AS 买家, o.amount\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id;\n\nSELECT * FROM v_order WHERE 买家 = '小明';" },
-      ],
-    },
-    {
-      id: "sql-43",
-      title: "存储过程 PROCEDURE（创建与调用）",
-      summary: "把一段 SQL 存起来反复调用，理解存储过程。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "存储过程（Stored Procedure）把一段或多条 SQL 打包成一个『函数』存在数据库里，调用时传参执行。适合固定流程、减少网络往返。注意不同数据库语法有差异，本章以 MySQL 为例。" },
-        { type: "h", text: "创建一个简单的存储过程" },
-        { type: "code", lang: "sql", title: "无参数存储过程", code: "DELIMITER $$\nCREATE PROCEDURE get_all_student()\nBEGIN\n    SELECT * FROM student;\nEND $$\nDELIMITER ;\n\n-- 调用\nCALL get_all_student();" },
-        { type: "h", text: "带参数的存储过程" },
-        { type: "code", lang: "sql", title: "按班级查询", code: "DELIMITER $$\nCREATE PROCEDURE get_student_by_class(IN c VARCHAR(20))\nBEGIN\n    SELECT * FROM student WHERE class = c;\nEND $$\nDELIMITER ;\n\nCALL get_student_by_class('1班');" },
-        { type: "h", text: "删除存储过程" },
-        { type: "code", lang: "sql", title: "管理存储过程", code: "DROP PROCEDURE IF EXISTS get_all_student;\n\n-- 查看有哪些\nSHOW PROCEDURE STATUS;" },
-        { type: "info", title: "DELIMITER 是什么", text: "存储过程体里有很多分号，MySQL 会把第一个分号误认为语句结束。DELIMITER $$ 临时把结束符改成 $$，让整个 BEGIN...END 作为一个整体创建，用完再改回分号。SQLite 不支持存储过程。" },
-        { type: "warn", title: "别滥用存储过程", text: "存储过程把业务逻辑藏在数据库里，难调试、难版本管理。现代开发趋势是『业务逻辑放应用层』，存储过程只用于少量固定、追求性能的流程。" },
-        { type: "keypoints", items: ["存储过程把多条 SQL 打包存库，用 CALL 调用", "DELIMITER $$ 配合创建带 BEGIN...END 的过程", "参数用 IN 声明，调用时传值", "适合固定流程，但业务逻辑别全塞进数据库"] },
-      ],
-      templates: [
-        { name: "按班级查学生", code: "DELIMITER $$\nCREATE PROCEDURE get_stu(IN c VARCHAR(20))\nBEGIN\n    SELECT * FROM student WHERE class = c;\nEND $$\nDELIMITER ;\nCALL get_stu('1班');" },
-      ],
-    },
-    {
-      id: "sql-44",
-      title: "函数与流程控制（IF、CASE WHEN）",
-      summary: "在 SQL 里写条件判断，掌握 IF 与 CASE WHEN。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "SQL 里也能写条件分支。IF 适合二选一，CASE WHEN 适合多分支。这一章教你在查询结果里『动态生成』一列。" },
-        { type: "h", text: "IF(条件, 是, 否)" },
-        { type: "code", lang: "sql", title: "判断及格与否", code: "SELECT name, score,\n       IF(score >= 60, '及格', '不及格') AS result\nFROM student;\n-- IF(条件, 条件为真时的值, 条件为假时的值)" },
-        { type: "h", text: "CASE WHEN 多分支" },
-        { type: "code", lang: "sql", title: "给分数评等级", code: "SELECT name, score,\n    CASE\n        WHEN score >= 90 THEN '优秀'\n        WHEN score >= 80 THEN '良好'\n        WHEN score >= 60 THEN '及格'\n        ELSE '不及格'\n    END AS grade\nFROM student;\n-- 从上往下匹配，命中第一个 WHEN 就停" },
-        { type: "h", text: "CASE 的另一种简写" },
-        { type: "code", lang: "sql", title: "CASE 列 WHEN 值", code: "SELECT name,\n    CASE class\n        WHEN '1班' THEN '一班'\n        WHEN '2班' THEN '二班'\n        ELSE '其他'\n    END AS class_name\nFROM student;\n-- 简写形式：CASE 列 WHEN 值 WHEN 值..." },
-        { type: "h", text: "CASE 配合聚合做行列转换" },
-        { type: "code", lang: "sql", title: "统计每门课男生女生人数", code: "SELECT\n    SUM(CASE WHEN gender = '男' THEN 1 ELSE 0 END) AS 男生,\n    SUM(CASE WHEN gender = '女' THEN 1 ELSE 0 END) AS 女生\nFROM student;" },
-        { type: "keypoints", items: ["IF(条件, 真值, 假值) 适合二选一", "CASE WHEN ... THEN ... ELSE ... END 多分支", "CASE 从上往下匹配，命中即停", "CASE 可配 SUM/COUNT 做行列转换统计"] },
-      ],
-      templates: [
-        { name: "成绩评等级", code: "SELECT name, score,\n    CASE\n        WHEN score >= 90 THEN '优秀'\n        WHEN score >= 60 THEN '及格'\n        ELSE '不及格'\n    END AS grade\nFROM student;" },
-      ],
-    },
-    {
-      id: "sql-45",
-      title: "触发器 TRIGGER（创建与使用）",
-      summary: "在增删改前后自动执行 SQL，理解触发器机制。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "触发器（TRIGGER）是挂在表上的『自动程序』：当你对这张表 INSERT/UPDATE/DELETE 时，它自动执行一段 SQL。适合写日志、自动更新统计等场景。本章以 MySQL 为例。" },
-        { type: "h", text: "创建一个记录日志的触发器" },
-        { type: "code", lang: "sql", title: "删除用户时自动记日志", code: "CREATE TRIGGER trg_user_delete\nAFTER DELETE ON user\nFOR EACH ROW\nBEGIN\n    INSERT INTO user_log (content, created_at)\n    VALUES (CONCAT('删除了用户: ', OLD.name), NOW());\nEND;\n-- OLD 表示被删除的那一行" },
-        { type: "h", text: "INSERT 和 UPDATE 触发器" },
-        { type: "code", lang: "sql", title: "插入订单时自动更新统计", code: "CREATE TRIGGER trg_order_insert\nAFTER INSERT ON orders\nFOR EACH ROW\nBEGIN\n    UPDATE stat SET order_count = order_count + 1;\nEND;\n-- NEW 表示刚插入的那一行" },
-        { type: "table", head: ["触发时机", "关键字", "可访问的记录"], rows: [["AFTER/BEFORE INSERT", "INSERT", "NEW（新行）"], ["AFTER/BEFORE UPDATE", "UPDATE", "NEW（新值）、OLD（旧值）"], ["AFTER/BEFORE DELETE", "DELETE", "OLD（被删行）"]] },
-        { type: "h", text: "查看与删除触发器" },
-        { type: "code", lang: "sql", title: "管理触发器", code: "SHOW TRIGGERS;      -- 查看所有触发器\nDROP TRIGGER trg_user_delete;   -- 删除触发器" },
-        { type: "warn", title: "触发器别做复杂逻辑", text: "触发器是『隐式』执行的，出问题很难排查：一条 INSERT 可能悄悄触发一串操作，还容易和事务、外键叠加出怪问题。日志、简单统计可以，复杂业务逻辑放应用层。" },
-        { type: "keypoints", items: ["触发器在 INSERT/UPDATE/DELETE 前后自动执行", "NEW 是新行，OLD 是旧行/被删行", "常用于写日志、自动更新统计", "触发器隐式执行难排查，别写复杂逻辑"] },
-      ],
-      templates: [
-        { name: "删除日志触发器", code: "CREATE TRIGGER trg_user_delete\nAFTER DELETE ON user\nFOR EACH ROW\nBEGIN\n    INSERT INTO user_log (content) VALUES (CONCAT('删除了用户: ', OLD.name));\nEND;" },
-      ],
-    },
-    {
-      id: "sql-46",
-      title: "数据库设计范式（1NF/2NF/3NF）",
-      summary: "用三范式规范表设计，消除冗余与更新异常。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "范式（Normal Form）是规范表设计的一套规则，用来消除数据冗余和更新异常。最常见的三范式：1NF、2NF、3NF。理解它们，你设计的表会更规范。" },
-        { type: "h", text: "第一范式 1NF：字段不可再分" },
-        { type: "p", text: "每个字段都必须是原子的，不能再拆。比如『地址』字段存了『上海市-浦东-xx路』，就违反 1NF，应该拆成省、市、区多个字段（具体拆分粒度看业务）。" },
-        { type: "h", text: "第二范式 2NF：消除部分依赖" },
-        { type: "p", text: "在满足 1NF 基础上，非主键列必须完全依赖于主键，不能只依赖主键的一部分。常见于复合主键的表中。比如选课表主键是 (student_id, course_id)，『课程名』只依赖 course_id 部分，就应拆出去。" },
-        { type: "h", text: "第三范式 3NF：消除传递依赖" },
-        { type: "code", lang: "sql", title: "违反 3NF 的例子", code: "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    product_id INT,\n    product_name VARCHAR(50)   -- 产品名只依赖 product_id，不是主键 id\n);\n-- product_name 通过 product_id 间接依赖主键，这叫传递依赖\n-- 应拆出 product 表，orders 只留 product_id" },
-        { type: "table", head: ["范式", "规则", "消除的问题"], rows: [["1NF", "字段不可再分", "字段不原子"], ["2NF", "非主键列完全依赖主键", "部分依赖、冗余"], ["3NF", "非主键列不传递依赖主键", "传递依赖、更新异常"]] },
-        { type: "code", lang: "sql", title: "符合 3NF 的设计", code: "CREATE TABLE product (id INT PRIMARY KEY, name VARCHAR(50));\nCREATE TABLE orders (id INT PRIMARY KEY, product_id INT);\n-- orders 只存 product_id，名字在 product 表里\n-- 改产品名只改 product 一行" },
-        { type: "tip", title: "实践心法", text: "别死记概念，记住目的：避免重复、避免改了这边漏了那边。大多数正常业务设计到 3NF 就够用了，个别场景才需要反范式（下一章）。" },
-        { type: "keypoints", items: ["范式是规范表设计、消除冗余的规则", "1NF 字段不可再分，2NF 消除部分依赖，3NF 消除传递依赖", "符合 3NF 的表重复数据少、改一处即可", "实际项目做到 3NF 通常足够"] },
-      ],
-      templates: [
-        { name: "符合3NF的订单", code: "CREATE TABLE product (id INT PRIMARY KEY, name VARCHAR(50));\nCREATE TABLE orders (id INT PRIMARY KEY, product_id INT);" },
-      ],
-    },
-    {
-      id: "sql-47",
-      title: "反范式与设计权衡",
-      summary: "为什么有时要故意违反范式？理解冗余的代价与收益。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "上一章的范式追求『零冗余』，但真实系统为了性能，常常故意保留一些冗余——这叫反范式（Denormalization）。这一章讲清楚什么时候该『反』。" },
-        { type: "h", text: "为什么反范式" },
-        { type: "list", items: ["JOIN 很贵：每次查都要连表，数据量大时慢", "统计报表频繁：冗余一份聚合结果，查得飞快", "读多写少：多存一份冗余换查询速度，划算"] },
-        { type: "h", text: "典型例子：订单快照" },
-        { type: "code", lang: "sql", title: "订单里冗余商品名和价格", code: "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    product_id INT,\n    product_name VARCHAR(50),    -- 冗余字段\n    price DECIMAL(10,2),         -- 冗余字段\n    quantity INT\n);\n-- 好处：订单列表不用 JOIN 商品表就能显示商品名和价格\n-- 代价：商品改名/改价时，历史订单不受影响（反而是期望行为！）" },
-        { type: "h", text: "范式 vs 反范式的权衡" },
-        { type: "table", head: ["对比", "范式化", "反范式"], rows: [["冗余", "少", "多"], ["写入一致性", "好（改一处）", "差（可能多处不一致）"], ["查询性能", "慢（要 JOIN）", "快（直接读）"], ["适用", "写多、一致性要求高", "读多、追求查询速度"]] },
-        { type: "warn", title: "反范式的代价", text: "冗余字段要保证多处同步更新，靠应用层或触发器维护，否则会出现『两个地方数据不一致』的脏状态。为性能反范式时，一定想好怎么保证一致性。" },
-        { type: "keypoints", items: ["反范式 = 故意留冗余换查询性能", "订单快照存商品名/价是经典反范式", "读多写少、查询频繁的场景适合反范式", "反范式要负责维护冗余一致性，别随意用"] },
-      ],
-      templates: [
-        { name: "带快照的订单", code: "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    product_id INT,\n    product_name VARCHAR(50),\n    price DECIMAL(10,2),\n    quantity INT\n);" },
-      ],
-    },
-    {
-      id: "sql-48",
-      title: "实体关系图 ER 设计与表关系（1:1/1:N/N:M）",
-      summary: "画 ER 图理清实体与关系，把 1:1/1:N/N:M 落到建表。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "动手建表前，先画一张 ER 图（实体关系图）：把业务里的『实体』（人、订单、商品）和它们之间的『关系』画出来。这张图就是你的建表蓝图。" },
-        { type: "h", text: "ER 图的基本元素" },
-        { type: "list", items: ["实体（Entity）：矩形，如『用户』『订单』，对应一张表", "属性（Attribute）：椭圆，如『姓名』『价格』，对应列", "关系（Relationship）：菱形，如『下单』，表示实体间的联系"] },
-        { type: "h", text: "三种关系如何建表" },
-        { type: "code", lang: "sql", title: "1:N 一对多", code: "-- 一个用户有多个订单\nCREATE TABLE user (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,          -- 『多』的一方放外键\n    amount DECIMAL(10,2)\n);" },
-        { type: "code", lang: "sql", title: "N:M 多对多（中间表）", code: "-- 一个学生选多门课，一门课有多名学生\nCREATE TABLE student (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE course (id INT PRIMARY KEY, title VARCHAR(50));\nCREATE TABLE student_course (          -- 中间表\n    student_id INT,\n    course_id INT,\n    score DECIMAL(5,2),                -- 关系自身可带属性\n    PRIMARY KEY (student_id, course_id)\n);" },
-        { type: "h", text: "1:1 一对一" },
-        { type: "code", lang: "sql", title: "用户和档案一一对应", code: "CREATE TABLE user (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE user_profile (\n    user_id INT PRIMARY KEY,   -- 直接拿对方主键做自己的主键\n    bio VARCHAR(200)\n);\n-- 一对一：任意一方用对方主键做外键，通常设为 UNIQUE" },
-        { type: "table", head: ["关系", "表达方式", "例子"], rows: [["1:1", "一方存对方主键（加 UNIQUE）", "用户 ↔ 档案"], ["1:N", "N 的一方存外键", "用户 1 — N 订单"], ["N:M", "新建中间表存两个外键", "学生 N — M 课程"]] },
-        { type: "tip", title: "先画图再建表", text: "笔头功夫：先列出实体，标出关系类型，再决定外键放哪、要不要中间表。图对了，建表就是抄答案。" },
-        { type: "keypoints", items: ["ER 图 = 实体 + 属性 + 关系，是建表蓝图", "1:1 一方存对方主键；1:N 多方存外键；N:M 用中间表", "中间表可带属性（如成绩）", "先画关系图，再动手建表"] },
-      ],
-      templates: [
-        { name: "多对多中间表", code: "CREATE TABLE student (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE course (id INT PRIMARY KEY, title VARCHAR(50));\nCREATE TABLE student_course (\n    student_id INT,\n    course_id INT,\n    PRIMARY KEY (student_id, course_id)\n);" },
-      ],
-    },
-    {
-      id: "sql-49",
-      title: "实战：设计博客系统数据库",
-      summary: "从零设计博客系统：用户、文章、评论、标签四张表。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "从这一章开始进入实战。第一个项目是博客系统：用户写文章、读者评论、文章打标签。先按上一章的思路画关系、再建表。" },
-        { type: "h", text: "理清实体与关系" },
-        { type: "list", items: ["用户 User：一个用户写多篇文章（1:N）", "文章 Article：一个文章有多个评论（1:N）", "评论 Comment：归属一个用户和一篇文章（N:1）", "标签 Tag：一篇文章多个标签，一个标签多篇文章（N:M，用中间表）"] },
-        { type: "h", text: "建表" },
-        { type: "code", lang: "sql", title: "博客系统四张表", code: "CREATE TABLE user (\n    id       INT PRIMARY KEY AUTO_INCREMENT,\n    name     VARCHAR(20) NOT NULL,\n    email    VARCHAR(50) UNIQUE,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE article (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    user_id    INT NOT NULL,\n    title      VARCHAR(100) NOT NULL,\n    content    TEXT,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE comment (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    article_id INT NOT NULL,\n    user_id    INT NOT NULL,\n    content    TEXT,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE tag (\n    id   INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) UNIQUE\n);\n\nCREATE TABLE article_tag (\n    article_id INT,\n    tag_id     INT,\n    PRIMARY KEY (article_id, tag_id)\n);" },
-        { type: "h", text: "插入演示数据" },
-        { type: "code", lang: "sql", title: "填几行数据", code: "INSERT INTO user (name, email) VALUES ('小明','a@b.com'),('小红','c@d.com');\nINSERT INTO article (user_id, title) VALUES\n    (1, '我的第一篇博客'),\n    (1, 'SQL 学习笔记'),\n    (2, '前端入门');\nINSERT INTO comment (article_id, user_id, content) VALUES\n    (1, 2, '写得好！'),\n    (2, 2, '收藏了');\nINSERT INTO tag (name) VALUES ('随笔'),('技术'),('教程');\nINSERT INTO article_tag VALUES (1,1),(2,2),(2,3),(3,2);" },
-        { type: "tip", title: "主键自增", text: "MySQL 里 INT PRIMARY KEY AUTO_INCREMENT 让主键自动编号，插入时不用管 id，省心又不会撞号。SQLite 对应写法是 INTEGER PRIMARY KEY AUTOINCREMENT。" },
-        { type: "keypoints", items: ["博客系统核心：用户、文章、评论、标签", "用户-文章-评论是 1:N 链，存 user_id/article_id 外键", "文章-标签是 N:M，用 article_tag 中间表", "主键自增 AUTO_INCREMENT 自动编号", "设计先行：先画关系，再建表，再插数据"] },
-      ],
-      templates: [
-        { name: "博客核心建表", code: "CREATE TABLE user (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20));\nCREATE TABLE article (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, title VARCHAR(100));\nCREATE TABLE tag (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20));\nCREATE TABLE article_tag (article_id INT, tag_id INT, PRIMARY KEY (article_id, tag_id));" },
-      ],
-    },
-    {
-      id: "sql-50",
-      title: "实战：博客系统增删改查",
-      summary: "对博客四张表做完整 CRUD：增、查、改、删。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "表建好了，这一章练博客系统的完整增删改查（CRUD：Create 增、Read 查、Update 改、Delete 删）。用真实业务场景把前面学的 INSERT/SELECT/UPDATE/DELETE 用起来。" },
-        { type: "h", text: "C 增：写文章、注册用户" },
-        { type: "code", lang: "sql", title: "插入新数据", code: "INSERT INTO user (name, email) VALUES ('小刚', 'e@f.com');\nINSERT INTO article (user_id, title, content) VALUES\n    (1, 'SQL 实战总结', '今天学会了 JOIN...');" },
-        { type: "h", text: "R 查：各种查询" },
-        { type: "code", lang: "sql", title: "查文章列表和详情", code: "SELECT id, title, created_at FROM article ORDER BY created_at DESC;\n\n-- 查某用户的所有文章\nSELECT * FROM article WHERE user_id = 1;\n\n-- 查某篇文章的评论\nSELECT * FROM comment WHERE article_id = 1;\n\n-- 统计每篇文章评论数\nSELECT article_id, COUNT(*) AS 评论数\nFROM comment GROUP BY article_id;" },
-        { type: "h", text: "U 改：更新文章" },
-        { type: "code", lang: "sql", title: "修改标题和内容", code: "UPDATE article\nSET title = 'SQL 实战总结（修订版）', content = '补充了索引部分'\nWHERE id = 1;" },
-        { type: "h", text: "D 删：删除评论与文章" },
-        { type: "code", lang: "sql", title: "删除数据", code: "DELETE FROM comment WHERE id = 1;\nDELETE FROM article WHERE id = 3;\n-- 删除文章时，它的评论如果没有外键级联，需一并处理" },
-        { type: "warn", title: "删除带关联的数据要小心", text: "删文章时它的评论、标签关联可能残留。要么建表时用 ON DELETE CASCADE 自动清，要么先删评论再删文章。正式系统常用『软删除』：加一列 is_deleted 标记，而不是真删。" },
-        { type: "keypoints", items: ["CRUD = 增 INSERT、查 SELECT、改 UPDATE、删 DELETE", "查询先按业务拆需求：列表/详情/统计", "UPDATE/DELETE 必须带 WHERE", "删除有关联的数据要处理级联或软删除"] },
-      ],
-      templates: [
-        { name: "博客 CRUD 全家桶", code: "INSERT INTO article (user_id, title) VALUES (1, '新文章');\nSELECT * FROM article ORDER BY created_at DESC;\nUPDATE article SET title = '改名了' WHERE id = 1;\nDELETE FROM article WHERE id = 2;" },
-      ],
-    },
-    {
-      id: "sql-51",
-      title: "实战：博客系统查询（文章+作者+标签 JOIN）",
-      summary: "用 JOIN 把文章、作者、标签、评论串成完整查询。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "博客系统的查询往往要把多张表拼起来：文章要显示作者名、标签列表、评论数。这一章综合运用 JOIN、GROUP BY、子查询。" },
-        { type: "h", text: "文章 + 作者" },
-        { type: "code", lang: "sql", title: "JOIN 出作者名", code: "SELECT a.id, a.title, u.name AS 作者, a.created_at\nFROM article a\nINNER JOIN user u ON a.user_id = u.id\nORDER BY a.created_at DESC;" },
-        { type: "h", text: "文章 + 评论数" },
-        { type: "code", lang: "sql", title: "用子查询统计评论数", code: "SELECT a.id, a.title,\n       (SELECT COUNT(*) FROM comment c WHERE c.article_id = a.id) AS 评论数\nFROM article a;" },
-        { type: "h", text: "文章 + 标签（多对多）" },
-        { type: "code", lang: "sql", title: "三表 JOIN 出标签", code: "SELECT a.title, t.name AS 标签\nFROM article a\nINNER JOIN article_tag at ON at.article_id = a.id\nINNER JOIN tag t ON at.tag_id = t.id\nORDER BY a.id;" },
-        { type: "h", text: "综合：一篇文章的完整信息" },
-        { type: "code", lang: "sql", title: "文章详情页一条 SQL", code: "SELECT a.id, a.title, u.name AS 作者,\n       (SELECT COUNT(*) FROM comment c WHERE c.article_id = a.id) AS 评论数,\n       (SELECT GROUP_CONCAT(t.name) FROM article_tag at\n        INNER JOIN tag t ON at.tag_id = t.id\n        WHERE at.article_id = a.id) AS 标签\nFROM article a\nINNER JOIN user u ON a.user_id = u.id\nWHERE a.id = 1;" },
-        { type: "tip", title: "子查询当列用要注意性能", text: "上面的子查询对每篇文章执行一次，文章多时会变慢。数据量大时可用 LEFT JOIN + GROUP_CONCAT + COUNT 一次性算好，更高效。先把思路跑通，再谈优化。" },
-        { type: "keypoints", items: ["文章作者用 INNER JOIN user 拼出", "评论数用 COUNT 子查询或 GROUP BY", "多对多标签用 article_tag 中间表三表 JOIN", "GROUP_CONCAT 能把多个标签拼成一行", "复杂查询先搭骨架，再逐步优化"] },
-      ],
-      templates: [
-        { name: "文章列表带作者", code: "SELECT a.id, a.title, u.name AS 作者, a.created_at\nFROM article a\nINNER JOIN user u ON a.user_id = u.id\nORDER BY a.created_at DESC;" },
-      ],
-    },
-    {
-      id: "sql-52",
-      title: "实战：电商数据库设计",
-      summary: "设计电商核心四表：用户、商品、订单、订单明细。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "电商系统是数据库设计的经典考题。核心是四张表：用户、商品、订单（主表）、订单明细（子表）。一个订单可以包含多种商品，所以订单和明细是一对多。" },
-        { type: "h", text: "表关系" },
-        { type: "list", items: ["用户 User 1:N 订单 Orders", "订单 Orders 1:N 订单明细 Order_item", "订单明细 Order_item N:1 商品 Product（冗余快照）"] },
-        { type: "h", text: "建表" },
-        { type: "code", lang: "sql", title: "电商四张表", code: "CREATE TABLE user (\n    id       INT PRIMARY KEY AUTO_INCREMENT,\n    name     VARCHAR(20) NOT NULL,\n    phone    VARCHAR(20)\n);\n\nCREATE TABLE product (\n    id     INT PRIMARY KEY AUTO_INCREMENT,\n    name   VARCHAR(50) NOT NULL,\n    price  DECIMAL(10,2) NOT NULL,\n    stock  INT DEFAULT 0\n);\n\nCREATE TABLE orders (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    user_id    INT NOT NULL,\n    total      DECIMAL(12,2) DEFAULT 0,\n    status     VARCHAR(20) DEFAULT '待付款',\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE order_item (\n    id          INT PRIMARY KEY AUTO_INCREMENT,\n    order_id    INT NOT NULL,\n    product_id  INT NOT NULL,\n    product_name VARCHAR(50),     -- 快照：历史商品名\n    price       DECIMAL(10,2),    -- 快照：成交价\n    quantity    INT DEFAULT 1\n);" },
-        { type: "h", text: "插入演示数据" },
-        { type: "code", lang: "sql", title: "用户下单", code: "INSERT INTO user (name, phone) VALUES ('小明','13800000000');\nINSERT INTO product (name, price, stock) VALUES\n    ('键盘', 199, 100),\n    ('鼠标', 99, 200);\n\nINSERT INTO orders (user_id, total) VALUES (1, 497);\nINSERT INTO order_item (order_id, product_id, product_name, price, quantity)\nVALUES\n    (1, 1, '键盘', 199, 2),\n    (1, 2, '鼠标', 99, 1);" },
-        { type: "info", title: "为什么要订单明细", text: "一个订单可能包含多个商品，如果只在一行里塞『键盘 x2，鼠标 x1』没法查询和统计。拆成明细表，每行一个商品，还能记录成交价快照（商品以后改价不影响历史订单）。" },
-        { type: "keypoints", items: ["电商核心：用户、商品、订单、订单明细四表", "订单与明细是 1:N，明细每行一个商品", "明细存商品名/价格快照，历史订单不受改价影响", "订单总金额 total 可冗余，或由明细汇总"] },
-      ],
-      templates: [
-        { name: "电商核心建表", code: "CREATE TABLE user (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20));\nCREATE TABLE product (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50), price DECIMAL(10,2));\nCREATE TABLE orders (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, total DECIMAL(12,2));\nCREATE TABLE order_item (id INT PRIMARY KEY AUTO_INCREMENT, order_id INT, product_id INT, quantity INT);" },
-      ],
-    },
-    {
-      id: "sql-53",
-      title: "实战：电商订单查询（多表 JOIN）",
-      summary: "把电商四张表 JOIN 起来，查订单完整信息。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "订单列表要显示：买家是谁、买了哪些商品、每件多少、总价多少。这需要把订单、用户、明细、商品四张表串起来。" },
-        { type: "h", text: "订单 + 用户" },
-        { type: "code", lang: "sql", title: "订单列表显示买家", code: "SELECT o.id AS 订单号, u.name AS 买家, o.total AS 金额, o.status\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nORDER BY o.id DESC;" },
-        { type: "h", text: "订单 + 明细 + 商品" },
-        { type: "code", lang: "sql", title: "订单里有哪些商品", code: "SELECT o.id AS 订单号, p.name AS 商品, oi.price AS 单价,\n       oi.quantity AS 数量, oi.price * oi.quantity AS 小计\nFROM order_item oi\nINNER JOIN orders o ON oi.order_id = o.id\nINNER JOIN product p ON oi.product_id = p.id\nWHERE o.id = 1;" },
-        { type: "h", text: "每个订单的总金额明细" },
-        { type: "code", lang: "sql", title: "按订单汇总", code: "SELECT oi.order_id, SUM(oi.price * oi.quantity) AS 订单实付\nFROM order_item oi\nGROUP BY oi.order_id;\n-- 和 orders.total 对比，可以核对金额是否一致" },
-        { type: "h", text: "某用户的历史订单" },
-        { type: "code", lang: "sql", title: "查用户买过什么", code: "SELECT o.id AS 订单号, p.name AS 商品, oi.quantity AS 数量,\n       oi.price * oi.quantity AS 小计\nFROM orders o\nINNER JOIN order_item oi ON oi.order_id = o.id\nINNER JOIN product p ON oi.product_id = p.id\nWHERE o.user_id = 1\nORDER BY o.id DESC;" },
-        { type: "tip", title: "JOIN 顺序不影响结果", text: "FROM 后面 JOIN 的先后顺序在 INNER JOIN 下不影响最终结果，只影响执行计划。按逻辑从主表出发写，读起来顺就行。" },
-        { type: "keypoints", items: ["订单+用户用 user_id 拼，订单+明细+商品三段 JOIN", "明细的 price 是快照，统计用小计=price*quantity", "GROUP BY 可汇总每单金额用于对账", "多表查询先写清每步 JOIN 的 ON 条件"] },
-      ],
-      templates: [
-        { name: "订单商品明细", code: "SELECT o.id AS 订单号, p.name AS 商品, oi.price AS 单价, oi.quantity AS 数量\nFROM order_item oi\nINNER JOIN orders o ON oi.order_id = o.id\nINNER JOIN product p ON oi.product_id = p.id;" },
-      ],
-    },
-    {
-      id: "sql-54",
-      title: "实战：电商统计报表（GROUP BY + 聚合）",
-      summary: "用分组聚合做销量、销售额、TOP 排行等报表。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "电商运营最关心数据：卖了多少钱、哪个商品最好卖、谁买得最多。这一章用 GROUP BY + 聚合函数做统计报表。" },
-        { type: "h", text: "总销售额与订单数" },
-        { type: "code", lang: "sql", title: "整体大盘", code: "SELECT COUNT(*) AS 订单数,\n       SUM(total) AS 总销售额,\n       AVG(total) AS 客单价\nFROM orders;" },
-        { type: "h", text: "按商品统计销量" },
-        { type: "code", lang: "sql", title: "商品销量排行", code: "SELECT product_id,\n       (SELECT name FROM product p WHERE p.id = oi.product_id) AS 商品名,\n       SUM(quantity) AS 销量,\n       SUM(price * quantity) AS 销售额\nFROM order_item oi\nGROUP BY product_id\nORDER BY 销售额 DESC;" },
-        { type: "h", text: "按用户统计消费" },
-        { type: "code", lang: "sql", title: "客户消费 TOP 榜", code: "SELECT u.name, COUNT(o.id) AS 下单次数, SUM(o.total) AS 消费总额\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nGROUP BY u.id, u.name\nORDER BY 消费总额 DESC\nLIMIT 5;   -- 只看前 5 名" },
-        { type: "h", text: "按日期统计" },
-        { type: "code", lang: "sql", title: "每日销售额", code: "SELECT DATE(created_at) AS 日期, SUM(total) AS 销售额\nFROM orders\nWHERE status = '已完成'\nGROUP BY DATE(created_at)\nORDER BY 日期;" },
-        { type: "warn", title: "LEFT JOIN 统计要防 NULL", text: "用 LEFT JOIN 统计时，没下过单的用户 SUM(total) 是 NULL。用 IFNULL(SUM(o.total), 0) 把 NULL 变成 0，报表才好看。" },
-        { type: "keypoints", items: ["大盘统计：COUNT 订单数、SUM 销售额、AVG 客单价", "商品排行：GROUP BY product_id + SUM 销量", "客户排行：LEFT JOIN + GROUP BY + ORDER BY + LIMIT", "日报表：GROUP BY DATE(created_at)", "LEFT JOIN 的 SUM 用 IFNULL 兜底"] },
-      ],
-      templates: [
-        { name: "商品销售排行", code: "SELECT product_id, SUM(quantity) AS 销量, SUM(price * quantity) AS 销售额\nFROM order_item\nGROUP BY product_id\nORDER BY 销售额 DESC;" },
-      ],
-    },
-    {
-      id: "sql-55",
-      title: "实战：员工部门管理库",
-      summary: "设计并查询员工-部门库，覆盖 1:N 和自连接场景。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "员工管理是另一套经典系统：部门（Department）和员工（Employee），一个部门多个员工（1:N）。再加上经理关系（自连接），把前面学的都练一遍。" },
-        { type: "h", text: "建表" },
-        { type: "code", lang: "sql", title: "部门表和员工表", code: "CREATE TABLE dept (\n    id   INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) NOT NULL\n);\n\nCREATE TABLE emp (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    name       VARCHAR(20) NOT NULL,\n    dept_id    INT NOT NULL,      -- 所属部门\n    manager_id INT,               -- 上级经理（自连接）\n    salary     DECIMAL(10,2),\n    hire_date  DATE\n);\n\nINSERT INTO dept (name) VALUES ('技术部'),('市场部'),('人事部');\nINSERT INTO emp (name, dept_id, manager_id, salary) VALUES\n    ('张三', 1, NULL, 20000),\n    ('李四', 1, 1, 12000),\n    ('王五', 1, 1, 11000),\n    ('赵六', 2, 2, 10000),\n    ('钱七', 3, 3, 9000);" },
-        { type: "h", text: "查询：员工 + 部门名" },
-        { type: "code", lang: "sql", title: "INNER JOIN 拼部门", code: "SELECT e.name AS 员工, d.name AS 部门, e.salary AS 工资\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nORDER BY e.salary DESC;" },
-        { type: "h", text: "查询：员工 + 经理（自连接）" },
-        { type: "code", lang: "sql", title: "SELF JOIN 拼经理", code: "SELECT e.name AS 员工, m.name AS 经理, d.name AS 部门\nFROM emp e\nLEFT JOIN emp m ON e.manager_id = m.id\nINNER JOIN dept d ON e.dept_id = d.id;" },
-        { type: "h", text: "统计：各部门平均工资" },
-        { type: "code", lang: "sql", title: "GROUP BY 部门统计", code: "SELECT d.name AS 部门,\n       COUNT(e.id) AS 人数,\n       AVG(e.salary) AS 平均工资,\n       MAX(e.salary) AS 最高工资\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nGROUP BY d.id, d.name\nORDER BY 平均工资 DESC;" },
-        { type: "warn", title: "部门没员工时别丢", text: "想显示『所有部门含空部门』，用 dept 做主表 LEFT JOIN emp：FROM dept d LEFT JOIN emp e ON e.dept_id = d.id，这样没人的部门人数是 0（COUNT(e.id) 为 0）。" },
-        { type: "keypoints", items: ["员工-部门是 1:N，员工表存 dept_id 外键", "经理关系用自连接（manager_id 指向本表）", "部门统计：GROUP BY + COUNT/AVG/MAX", "要显示空部门用 dept 作主表 LEFT JOIN"] },
-      ],
-      templates: [
-        { name: "部门平均工资", code: "SELECT d.name AS 部门, COUNT(e.id) AS 人数, AVG(e.salary) AS 平均工资\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nGROUP BY d.id, d.name;" },
-      ],
-    },
-    {
-      id: "sql-56",
-      title: "实战：学生选课系统（多对多）",
-      summary: "学生-课程-成绩，用中间表实现多对多与成绩管理。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "学生选课是最标准的多对多场景：一个学生选多门课，一门课有多个学生，成绩存在中间表里。把关系建清楚，查询就水到渠成。" },
-        { type: "h", text: "建表" },
-        { type: "code", lang: "sql", title: "学生、课程、选课成绩三表", code: "CREATE TABLE student (\n    id   INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) NOT NULL\n);\n\nCREATE TABLE course (\n    id    INT PRIMARY KEY AUTO_INCREMENT,\n    title VARCHAR(50) NOT NULL\n);\n\nCREATE TABLE score (\n    student_id INT,\n    course_id  INT,\n    score      DECIMAL(5,2),\n    PRIMARY KEY (student_id, course_id),   -- 联合主键\n    FOREIGN KEY (student_id) REFERENCES student(id),\n    FOREIGN KEY (course_id) REFERENCES course(id)\n);\n\nINSERT INTO student (name) VALUES ('小明'),('小红'),('小刚');\nINSERT INTO course (title) VALUES ('数学'),('语文'),('英语');\nINSERT INTO score VALUES\n    (1,1,95),(1,2,88),(2,1,76),(2,3,90),(3,2,82);" },
-        { type: "h", text: "查询：学生选了哪些课" },
-        { type: "code", lang: "sql", title: "三表 JOIN", code: "SELECT s.name AS 学生, c.title AS 课程, sc.score AS 成绩\nFROM student s\nINNER JOIN score sc ON sc.student_id = s.id\nINNER JOIN course c ON sc.course_id = c.id\nORDER BY s.id;" },
-        { type: "h", text: "统计：每门课的平均分" },
-        { type: "code", lang: "sql", title: "课程难度分析", code: "SELECT c.title AS 课程,\n       COUNT(sc.student_id) AS 选课人数,\n       AVG(sc.score) AS 平均分\nFROM course c\nLEFT JOIN score sc ON sc.course_id = c.id\nGROUP BY c.id, c.title;" },
-        { type: "h", text: "统计：每个学生总分与排名" },
-        { type: "code", lang: "sql", title: "学生成绩汇总", code: "SELECT s.name AS 学生,\n       COUNT(sc.course_id) AS 选课数,\n       SUM(sc.score) AS 总分,\n       AVG(sc.score) AS 平均分\nFROM student s\nLEFT JOIN score sc ON sc.student_id = s.id\nGROUP BY s.id, s.name\nORDER BY 总分 DESC;" },
-        { type: "tip", title: "联合主键 vs 独立主键", text: "中间表用 (student_id, course_id) 联合主键，能防止同一学生重复选同一门课，这是业务上的合理约束。也可以加一个自增 id 做主键，另加 UNIQUE 约束达到同样效果。" },
-        { type: "keypoints", items: ["多对多用中间表 score 存两个外键", "联合主键 (student_id, course_id) 防重复选课", "查询要三表 JOIN：学生+中间表+课程", "统计用 LEFT JOIN 保证没选课的人/课也在"] },
-      ],
-      templates: [
-        { name: "学生选课成绩", code: "SELECT s.name AS 学生, c.title AS 课程, sc.score AS 成绩\nFROM student s\nINNER JOIN score sc ON sc.student_id = s.id\nINNER JOIN course c ON sc.course_id = c.id;" },
-      ],
-    },
-    {
-      id: "sql-57",
-      title: "实战：图书馆管理系统（图书/读者/借阅）",
-      summary: "设计图书、读者、借阅记录，练日期和状态管理。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "图书馆系统：图书（Book）、读者（Reader）、借阅记录（Borrow）。一个读者可借多本书，一本书可被借多次（历史记录），借阅里要管借期、还期、状态。" },
-        { type: "h", text: "建表" },
-        { type: "code", lang: "sql", title: "图书、读者、借阅三表", code: "CREATE TABLE book (\n    id     INT PRIMARY KEY AUTO_INCREMENT,\n    title  VARCHAR(50) NOT NULL,\n    author VARCHAR(20),\n    stock  INT DEFAULT 1     -- 库存本数\n);\n\nCREATE TABLE reader (\n    id   INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) NOT NULL\n);\n\nCREATE TABLE borrow (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    book_id    INT NOT NULL,\n    reader_id  INT NOT NULL,\n    borrow_date DATE NOT NULL,\n    return_date DATE,          -- NULL 表示还没还\n    FOREIGN KEY (book_id) REFERENCES book(id),\n    FOREIGN KEY (reader_id) REFERENCES reader(id)\n);\n\nINSERT INTO book (title, author) VALUES\n    ('SQL 入门', '张三'),('数据库原理', '李四');\nINSERT INTO reader (name) VALUES ('小明'),('小红');\nINSERT INTO borrow (book_id, reader_id, borrow_date)\nVALUES (1, 1, '2026-08-01'), (2, 2, '2026-08-05');" },
-        { type: "h", text: "查询：当前借阅情况" },
-        { type: "code", lang: "sql", title: "谁借了什么书、还了吗", code: "SELECT r.name AS 读者, b.title AS 书名,\n       br.borrow_date AS 借出日,\n       IFNULL(br.return_date, '未归还') AS 归还日\nFROM borrow br\nINNER JOIN reader r ON br.reader_id = r.id\nINNER JOIN book b ON br.book_id = b.id\nORDER BY br.borrow_date;" },
-        { type: "h", text: "查询：还没还的书（逾期）" },
-        { type: "code", lang: "sql", title: "查找逾期未还", code: "SELECT r.name AS 读者, b.title AS 书名, br.borrow_date,\n       DATEDIFF(CURDATE(), br.borrow_date) AS 借了几天\nFROM borrow br\nINNER JOIN reader r ON br.reader_id = r.id\nINNER JOIN book b ON br.book_id = b.id\nWHERE br.return_date IS NULL\n  AND DATEDIFF(CURDATE(), br.borrow_date) > 30;\n-- 借了 30 天以上还没还" },
-        { type: "h", text: "还书：更新状态" },
-        { type: "code", lang: "sql", title: "归还图书", code: "UPDATE borrow\nSET return_date = CURDATE()\nWHERE id = 1 AND return_date IS NULL;\n\n-- 同时把库存加回来\nUPDATE book SET stock = stock + 1 WHERE id = 1;" },
-        { type: "tip", title: "用日期函数做业务判断", text: "『借了几天』= DATEDIFF(CURDATE(), borrow_date)；『逾期』= return_date IS NULL 且天数超限。日期函数 + 空值判断组合，能覆盖很多真实业务逻辑。" },
-        { type: "keypoints", items: ["图书馆核心：图书、读者、借阅三表", "return_date 为 NULL 表示未归还", "逾期查询：IS NULL + DATEDIFF 超期", "还书 = 更新 return_date + 恢复库存", "日期字段配合状态字段驱动业务"] },
-      ],
-      templates: [
-        { name: "借阅明细查询", code: "SELECT r.name AS 读者, b.title AS 书名, br.borrow_date AS 借出日,\n       IFNULL(br.return_date, '未归还') AS 归还日\nFROM borrow br\nINNER JOIN reader r ON br.reader_id = r.id\nINNER JOIN book b ON br.book_id = b.id;" },
-      ],
-    },
-    {
-      id: "sql-58",
-      title: "实战：工资统计（部门/员工/聚合）",
-      summary: "用聚合函数做工资统计：平均、最高、分布区间。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "HR 关心的工资统计：部门平均、全司最高、工资分布。这一章把聚合、CASE WHEN、排序全用上，做一份工资报表。" },
-        { type: "h", text: "整体工资概览" },
-        { type: "code", lang: "sql", title: "全司统计", code: "SELECT COUNT(*) AS 员工数,\n       SUM(salary) AS 总工资,\n       AVG(salary) AS 平均工资,\n       MAX(salary) AS 最高工资,\n       MIN(salary) AS 最低工资\nFROM emp;" },
-        { type: "h", text: "部门工资排行" },
-        { type: "code", lang: "sql", title: "各部门平均与总工资", code: "SELECT d.name AS 部门,\n       COUNT(e.id) AS 人数,\n       AVG(e.salary) AS 平均工资,\n       SUM(e.salary) AS 工资总额\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nGROUP BY d.id, d.name\nORDER BY 平均工资 DESC;" },
-        { type: "h", text: "工资分布区间" },
-        { type: "code", lang: "sql", title: "用 CASE WHEN 分档", code: "SELECT\n    CASE\n        WHEN salary >= 15000 THEN '高薪(>=15000)'\n        WHEN salary >= 10000 THEN '中薪(10000~15000)'\n        ELSE '普通(<10000)'\n    END AS 档位,\n    COUNT(*) AS 人数\nFROM emp\nGROUP BY 档位\nORDER BY 档位;" },
-        { type: "h", text: "超过部门平均工资的人" },
-        { type: "code", lang: "sql", title: "子查询对比部门平均", code: "SELECT e.name, e.salary, d.name AS 部门\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nWHERE e.salary > (\n    SELECT AVG(e2.salary) FROM emp e2 WHERE e2.dept_id = e.dept_id\n);\n-- 每个人的工资 > 他所在部门的平均工资" },
-        { type: "warn", title: "GROUP BY 别名", text: "MySQL 里 GROUP BY 后面可以用 SELECT 里定义的别名（如 GROUP BY 档位）。但为兼容性，最好写完整表达式或换个写法。ORDER BY 用别名是通用的。" },
-        { type: "keypoints", items: ["工资概览用 COUNT/SUM/AVG/MAX/MIN", "部门排行：GROUP BY + 排序", "分布区间：CASE WHEN 分档 + GROUP BY", "和部门平均比：相关子查询对比", "报表类 SQL 就是聚合 + 条件 + 排序的组合"] },
-      ],
-      templates: [
-        { name: "部门工资统计", code: "SELECT d.name AS 部门, COUNT(e.id) AS 人数, AVG(e.salary) AS 平均工资\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nGROUP BY d.id, d.name\nORDER BY 平均工资 DESC;" },
-      ],
-    },
-    {
-      id: "sql-59",
-      title: "条件逻辑 CASE WHEN",
-      summary: "深入 CASE WHEN：多分支、嵌套、聚合中应用。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "第 44 章初识了 CASE WHEN，这一章系统深挖：它的两种写法、和 NULL 的配合、在聚合里的妙用（条件计数、条件求和）。" },
-        { type: "h", text: "两种写法回顾" },
-        { type: "code", lang: "sql", title: "搜索式 vs 简单式", code: "-- 写法一：搜索式 CASE（最灵活）\nSELECT name,\n  CASE WHEN score >= 90 THEN 'A'\n       WHEN score >= 80 THEN 'B'\n       ELSE 'C' END AS grade\nFROM student;\n\n-- 写法二：简单式 CASE（等值判断）\nSELECT name,\n  CASE class WHEN '1班' THEN '一班'\n            WHEN '2班' THEN '二班'\n            ELSE '其他' END AS c\nFROM student;" },
-        { type: "h", text: "CASE 与 NULL" },
-        { type: "code", lang: "sql", title: "处理 NULL 用 IS NULL", code: "SELECT name, phone,\n  CASE WHEN phone IS NULL THEN '未填写' ELSE phone END AS 电话\nFROM student;\n-- 注意：CASE WHEN phone = NULL 是错的，必须用 IS NULL" },
-        { type: "h", text: "CASE + 聚合做条件统计" },
-        { type: "code", lang: "sql", title: "一行统计及格/不及格人数", code: "SELECT\n    SUM(CASE WHEN score >= 60 THEN 1 ELSE 0 END) AS 及格人数,\n    SUM(CASE WHEN score < 60 THEN 1 ELSE 0 END) AS 不及格人数,\n    COUNT(*) AS 总人数\nFROM student;\n-- 把满足条件的行计成 1，再求和" },
-        { type: "h", text: "CASE 实现行转列" },
-        { type: "code", lang: "sql", title: "按班级转成列", code: "SELECT\n    SUM(CASE WHEN class = '1班' THEN 1 ELSE 0 END) AS 一班,\n    SUM(CASE WHEN class = '2班' THEN 1 ELSE 0 END) AS 二班,\n    SUM(CASE WHEN class = '3班' THEN 1 ELSE 0 END) AS 三班\nFROM student;" },
-        { type: "tip", title: "CASE 很强大，别用成面条", text: "CASE WHEN 是最常用的条件表达式，但它出现在 SELECT 的每一行计算中。分支太多时考虑拆查询或在应用层处理，保持可读性。" },
-        { type: "keypoints", items: ["搜索式 CASE WHEN 条件灵活，简单式 CASE 列=值", "NULL 判断用 CASE WHEN x IS NULL", "CASE+SUM 可做条件计数、条件求和", "CASE 配合 GROUP BY 可做行转列统计"] },
-      ],
-      templates: [
-        { name: "条件计数", code: "SELECT\n    SUM(CASE WHEN score >= 60 THEN 1 ELSE 0 END) AS 及格,\n    SUM(CASE WHEN score < 60 THEN 1 ELSE 0 END) AS 不及格\nFROM student;" },
-      ],
-    },
-    {
-      id: "sql-60",
-      title: "窗口函数基础（ROW_NUMBER/RANK/DENSE_RANK）",
-      summary: "窗口函数不合并行也能排名，先学三大排名函数。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "窗口函数（Window Function）是进阶利器：它和聚合函数一样能对一组行计算，但不会把多行压成一行，每行都能保留自己的信息并看到『名次』。先学三大排名函数。" },
-        { type: "h", text: "三个排名函数对比" },
-        { type: "table", head: ["函数", "行为", "并列怎么排"], rows: [["ROW_NUMBER()", "连续编号 1,2,3...", "并列也按顺序给不同号"], ["RANK()", "有并列时跳过", "1,1,3（2 被跳过）"], ["DENSE_RANK()", "有并列不跳过", "1,1,2"]] },
-        { type: "code", lang: "sql", title: "给分数排名", code: "SELECT name, score,\n    ROW_NUMBER() OVER (ORDER BY score DESC) AS 行号,\n    RANK()       OVER (ORDER BY score DESC) AS 名次,\n    DENSE_RANK() OVER (ORDER BY score DESC) AS 密集名次\nFROM student;" },
-        { type: "p", text: "语法解读：函数() OVER (ORDER BY ...)。OVER 里写排序规则，决定按什么顺序编号。OVER (ORDER BY score DESC) 就是按分数从高到低排名。" },
-        { type: "h", text: "实战：每组内排名" },
-        { type: "code", lang: "sql", title: "按部门给员工工资排名", code: "SELECT name, dept_id, salary,\n    RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS 部门内名次\nFROM emp;\n-- PARTITION BY 把数据分块，块内各自排名" },
-        { type: "tip", title: "窗口函数 vs GROUP BY", text: "GROUP BY 把多行合并成一行（会丢明细）；窗口函数不合并行，每行都在，只是多一列排名结果。要『排名、累计、移动平均』这类带上下文的计算就用窗口函数。" },
-        { type: "warn", title: "支持情况", text: "MySQL 8.0+、PostgreSQL、SQL Server、Oracle 都支持窗口函数；MySQL 5.7 及以下、SQLite 老版本不支持。用前确认版本。" },
-        { type: "keypoints", items: ["窗口函数 = OVER(ORDER BY ...)，不合并行", "ROW_NUMBER 连续编号、RANK 并列跳号、DENSE_RANK 并列不跳", "PARTITION BY 分组后组内排名", "要排名/累计用窗口函数，要汇总合并用 GROUP BY"] },
-      ],
-      templates: [
-        { name: "分数排名", code: "SELECT name, score,\n    ROW_NUMBER() OVER (ORDER BY score DESC) AS 行号,\n    RANK()       OVER (ORDER BY score DESC) AS 名次\nFROM student;" },
-      ],
-    },
-    ,
-    {
-      id: "sql-61",
-      title: "窗口函数进阶（SUM() OVER、PARTITION BY）",
-      summary: "用 SUM() OVER 算累计、占比、移动平均，窗口函数实战。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "排名只是窗口函数的第一步。真正厉害的是用聚合函数 + OVER 做『累计、占比、移动平均』，且不丢失任何一行明细。这一章深入 SUM() OVER 和 PARTITION BY。" },
-        { type: "h", text: "累计求和" },
-        { type: "code", lang: "sql", title: "每天的累计销售额", code: "SELECT sale_date, amount,\n    SUM(amount) OVER (ORDER BY sale_date) AS 累计销售额\nFROM daily_sale;\n-- 从第一行加到当前行：1月1日、1月1+2日、1月1+2+3日...\n-- 没有 PARTITION 表示全表按日期累计" },
-        { type: "h", text: "分区累计（按组累计）" },
-        { type: "code", lang: "sql", title: "按部门累计工资", code: "SELECT name, dept_id, salary,\n    SUM(salary) OVER (\n        PARTITION BY dept_id ORDER BY id\n    ) AS 部门内累计工资\nFROM emp;\n-- PARTITION BY dept_id 把数据按部门分成块\n-- ORDER BY id 决定块内累计顺序" },
-        { type: "h", text: "占比与平均（移动平均）" },
-        { type: "code", lang: "sql", title: "每行占总和的比例", code: "SELECT name, salary,\n    ROUND(salary / SUM(salary) OVER (), 4) AS 占全司比例\nFROM emp;\n-- SUM(salary) OVER () 括号里空着 = 全表总和\n\n-- 移动平均（含当前行的前 2 行）\nSELECT sale_date, amount,\n    AVG(amount) OVER (ORDER BY sale_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS 三日均\nFROM daily_sale;" },
-        { type: "h", text: "窗口函数还能配 LAG/LEAD" },
-        { type: "code", lang: "sql", title: "和前一天对比", code: "SELECT sale_date, amount,\n    LAG(amount) OVER (ORDER BY sale_date) AS 前一天金额,\n    amount - LAG(amount) OVER (ORDER BY sale_date) AS 环比变化\nFROM daily_sale;\n-- LAG 取上一行的值，LEAD 取下一行的值" },
-        { type: "tip", title: "看懂 OVER 括号", text: "OVER () 空括号=全表；OVER (PARTITION BY 列)=按列分组；OVER (ORDER BY 列)=排序并累计。三要素：PARTITION BY 分区、ORDER BY 排序、ROWS 框定范围。" },
-        { type: "keypoints", items: ["SUM() OVER (ORDER BY ...) 做累计求和", "PARTITION BY 让计算按组进行", "SUM() OVER () 空括号表示全表总和", "LAG/LEAD 取前后行，做环比对比", "窗口函数不合并行，每行都有上下文结果"] },
-      ],
-      templates: [
-        { name: "每日累计销售额", code: "SELECT sale_date, amount,\n    SUM(amount) OVER (ORDER BY sale_date) AS 累计销售额\nFROM daily_sale;" },
-      ],
-    },
-    {
-      id: "sql-62",
-      title: "字符串处理函数进阶（SUBSTRING/REPLACE/REGEXP）",
-      summary: "截取、替换、正则匹配，字符串处理一网打尽。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "数据清洗时字符串函数是主力。这一章讲截取 SUBSTRING、替换 REPLACE、正则 REGEXP，以及拼接、去空格等常用处理。" },
-        { type: "h", text: "截取与拼接" },
-        { type: "code", lang: "sql", title: "SUBSTRING 截取", code: "SELECT SUBSTRING('hello world', 1, 5);   -- hello（第1位起取5个）\nSELECT SUBSTRING('hello world', 7);       -- world（第7位到最后）\nSELECT LEFT('hello', 2), RIGHT('hello', 2);  -- he / lo\nSELECT CONCAT(first_name, ' ', last_name) FROM user;   -- 拼接" },
-        { type: "h", text: "替换与清理" },
-        { type: "code", lang: "sql", title: "REPLACE 和 TRIM", code: "SELECT REPLACE('手机号: 138-0000-0000', '-', '');\n-- 去掉所有 '-'：13800000000\n\nSELECT TRIM('   hi   ');     -- 去掉首尾空格\nSELECT LTRIM('   hi');       -- 去掉左边空格\nSELECT RTRIM('hi   ');       -- 去掉右边空格\nSELECT UPPER('abc'), LOWER('ABC');  -- 大小写" },
-        { type: "h", text: "正则匹配 REGEXP" },
-        { type: "code", lang: "sql", title: "REGEXP 高级匹配", code: "SELECT * FROM user WHERE phone REGEXP '^1[3-9][0-9]{9}$';\n-- 手机号：1 开头，第二位 3-9，后面 9 位数字\n\nSELECT * FROM user WHERE email REGEXP '@gmail\\.com$';\n-- 邮箱以 @gmail.com 结尾（注意点号要转义 \\.）\n\nSELECT * FROM user WHERE name REGEXP '^[张王李]';\n-- 姓氏是 张/王/李 开头" },
-        { type: "table", head: ["函数", "作用", "例子"], rows: [["SUBSTRING(s, i, n)", "从 i 位截 n 个", "SUBSTRING('abc',2,1)→b"], ["LEFT/RIGHT(s, n)", "取左边/右边 n 个", "LEFT('abc',2)→ab"], ["REPLACE(s,a,b)", "把 a 全替换成 b", "REPLACE('a-b','-','')→ab"], ["TRIM/LTRIM/RTRIM", "去空格", "TRIM(' hi ')→hi"], ["REGEXP '正则'", "正则匹配", "字段 REGEXP '^1[0-9]{10}$'"]] },
-        { type: "warn", title: "正则点号要转义", text: "正则里 . 表示『任意字符』，想匹配字面量小数点要写成 \\.。例如匹配 gmail.com 结尾要写 REGEXP '@gmail\\.com$'，少写斜杠会误匹配 gmailXcom。" },
-        { type: "keypoints", items: ["SUBSTRING/LEFT/RIGHT 截取字符串", "REPLACE 批量替换，TRIM 去空格", "REGEXP 支持正则匹配，能校验手机号/邮箱格式", "正则里的 . 匹配任意字符，字面量点要写 \\.", "字符串函数是数据清洗的主力"] },
-      ],
-      templates: [
-        { name: "清洗手机号", code: "SELECT phone, REPLACE(phone, '-', '') AS 清洗后\nFROM user;\nSELECT * FROM user WHERE phone REGEXP '^1[3-9][0-9]{9}$';" },
-      ],
-    },
-    {
-      id: "sql-63",
-      title: "数值与日期运算进阶",
-      summary: "ROUND 取整、数值函数、日期运算的组合用法。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "报表里常常要做取整、四舍五入、日期加减、算年龄。这一章把数值函数和日期运算的进阶用法集中讲一遍。" },
-        { type: "h", text: "数值函数" },
-        { type: "code", lang: "sql", title: "取整与四舍五入", code: "SELECT ROUND(3.14159, 2);   -- 3.14 四舍五入保留2位\nSELECT ROUND(3.6);           -- 4 取整四舍五入\nSELECT CEIL(3.1);            -- 4 向上取整\nSELECT FLOOR(3.9);           -- 3 向下取整\nSELECT ABS(-5);              -- 5 绝对值\nSELECT MOD(7, 2);            -- 1 取余\nSELECT RAND();               -- 0~1 随机数" },
-        { type: "h", text: "日期运算组合" },
-        { type: "code", lang: "sql", title: "日期加减与差异", code: "SELECT DATE_ADD('2026-08-28', INTERVAL 1 MONTH);  -- 加一个月\nSELECT DATE_SUB('2026-08-28', INTERVAL 10 DAY);    -- 减10天\nSELECT DATEDIFF('2026-08-28', '2026-08-01');       -- 27 天\nSELECT TIMESTAMPDIFF(YEAR, '2000-06-15', CURDATE()); -- 年龄\nSELECT DATE_FORMAT(NOW(), '%Y年%m月%d日');           -- 格式化" },
-        { type: "h", text: "算年龄" },
-        { type: "code", lang: "sql", title: "根据生日算年龄", code: "SELECT name, birthday,\n    TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS 年龄\nFROM user;\n-- TIMESTAMPDIFF(单位, 起始, 结束) 计算两个日期的差值" },
-        { type: "h", text: "日期分组报表" },
-        { type: "code", lang: "sql", title: "按年月统计订单", code: "SELECT DATE_FORMAT(created_at, '%Y-%m') AS 年月,\n       COUNT(*) AS 订单数,\n       SUM(total) AS 销售额\nFROM orders\nGROUP BY DATE_FORMAT(created_at, '%Y-%m')\nORDER BY 年月;" },
-        { type: "tip", title: "DATE_FORMAT 格式符", text: "%Y 四位年、%m 两位月、%d 两位日、%H 小时、%i 分钟。组合出你想要的显示格式，如 '%Y-%m-%d'。" },
-        { type: "warn", title: "函数包列会让索引失效", text: "WHERE DATE_FORMAT(created_at, '%Y-%m') = '2026-08' 用不上索引。改成范围写法：WHERE created_at >= '2026-08-01' AND created_at < '2026-09-01'，性能天差地别。" },
-        { type: "keypoints", items: ["ROUND/CEIL/FLOOR 取整，MOD 取余", "DATE_ADD/DATE_SUB 日期加减，DATEDIFF 算差", "TIMESTAMPDIFF 能按年算年龄", "DATE_FORMAT 格式化日期做年月分组报表", "条件里对列套函数会令索引失效"] },
-      ],
-      templates: [
-        { name: "按年月统计", code: "SELECT DATE_FORMAT(created_at, '%Y-%m') AS 年月,\n       COUNT(*) AS 订单数, SUM(total) AS 销售额\nFROM orders\nGROUP BY DATE_FORMAT(created_at, '%Y-%m');" },
-      ],
-    },
-    {
-      id: "sql-64",
-      title: "数据备份与恢复概念（mysqldump 简介）",
-      summary: "用 mysqldump 备份数据库，理解备份恢复的基本套路。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "数据库最怕数据丢失。备份与恢复是每个数据库使用者的必修课。MySQL 自带 mysqldump 工具，把数据库导出成 SQL 文件，出问题时再导回去。" },
-        { type: "h", text: "用 mysqldump 备份" },
-        { type: "code", lang: "text", title: "命令行备份（shell 命令）", code: "rem 备份整个库到文件\nmysqldump -u root -p school > school_backup.sql\n\nrem 只备份表结构（不要数据）\nmysqldump -u root -p --no-data school > school_schema.sql\n\nrem 备份多个库\nmysqldump -u root -p --databases school blog > backup.sql" },
-        { type: "h", text: "恢复数据" },
-        { type: "code", lang: "text", title: "把备份导回去", code: "rem 方式一：直接导入\nmysql -u root -p school < school_backup.sql\n\nrem 方式二：先进 MySQL 再 source\nmysql -u root -p\n> USE school;\n> SOURCE school_backup.sql;" },
-        { type: "h", text: "备份策略" },
-        { type: "list", items: ["全量备份：定期把整个库备份一次（如每天凌晨）", "增量备份：基于二进制日志（binlog）恢复两次备份之间的改动", "异地备份：备份文件别放在同一台机器上，防止机器一起挂了", "定期演练：经常测试『能不能真的恢复』，别等出事才发现备份是坏的"] },
-        { type: "table", head: ["对比", "mysqldump 逻辑备份", "物理备份"], rows: [["内容", "导出成 SQL 语句文件", "直接拷贝数据文件"], ["可读性", "可读可改", "二进制不可读"], ["恢复速度", "较慢（重放 SQL）", "快"], ["适用", "中小库、跨平台迁移", "大库、追求速度"]] },
-        { type: "warn", title: "只备份不演练等于没备份", text: "很多公司备份文件躺在那里，真出事恢复失败才发现备份损坏或缺少依赖。定期在测试库上完整恢复一遍，才能确认备份可靠。" },
-        { type: "keypoints", items: ["mysqldump -u root -p 库名 > 文件 备份", "mysql -u root -p 库名 < 文件 恢复", "备份分全量、增量，还要异地存放", "SQLite 直接拷贝 .db 文件即可备份", "定期演练恢复，别等出事再发现备份坏了"] },
-      ],
-      templates: [
-        { name: "备份并恢复", code: "mysqldump -u root -p school > school_backup.sql\nmysql -u root -p school < school_backup.sql" },
-      ],
-    },
-    {
-      id: "sql-65",
-      title: "数据库安全与用户权限（GRANT 简介）",
-      summary: "创建用户、授权 GRANT、回收 REVOKE，管好访问权限。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "数据库不是所有人都能随便操作。生产环境会给不同人/程序开不同权限：开发只读、运维全权、应用只操作某几个表。这就用到 DCL（数据控制语言）。" },
-        { type: "h", text: "创建用户" },
-        { type: "code", lang: "sql", title: "创建用户并设置密码", code: "CREATE USER 'app'@'localhost' IDENTIFIED BY 'StrongPass123';\n-- 'app'@'localhost' 表示只允许本机登录\n-- 生产密码务必用强密码，别用 123456" },
-        { type: "h", text: "授权 GRANT" },
-        { type: "code", lang: "sql", title: "给用户开权限", code: "-- 只给 app 用户 school 库的查询权限\nGRANT SELECT ON school.* TO 'app'@'localhost';\n\n-- 给读写权限（增删改查）\nGRANT SELECT, INSERT, UPDATE, DELETE ON school.* TO 'app'@'localhost';\n\n-- 给所有库的所有权限（慎用！只给管理员）\nGRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';\n\nFLUSH PRIVILEGES;   -- 刷新使权限生效" },
-        { type: "h", text: "查看与回收权限" },
-        { type: "code", lang: "sql", title: "权限管理", code: "SHOW GRANTS FOR 'app'@'localhost';   -- 查看权限\n\nREVOKE DELETE ON school.* FROM 'app'@'localhost';  -- 收回删除权限\n\nDROP USER 'app'@'localhost';   -- 删除用户" },
-        { type: "table", head: ["权限", "作用"], rows: [["SELECT", "查询"], ["INSERT / UPDATE / DELETE", "增删改"], ["CREATE / DROP / ALTER", "建表删表改表结构"], ["ALL PRIVILEGES", "所有权限（超级权限）"], ["GRANT OPTION", "能否再给别人授权"]] },
-        { type: "danger", title: "安全铁律", text: "永远别用 root 跑业务！给每个程序开最小权限账号，密码用强密码并定期更换。不要把数据库端口直接暴露公网，也不要硬编码密码在代码里。权限按需最小化（Principle of Least Privilege）。" },
-        { type: "keypoints", items: ["CREATE USER 建用户，IDENTIFIED BY 设密码", "GRANT 权限 ON 库.表 TO 用户 授权", "REVOKE 回收权限，SHOW GRANTS 查看", "最小权限原则：业务账号不给 ALL，别用 root 跑业务", "强密码 + 不暴露公网 + 密码不入代码"] },
-      ],
-      templates: [
-        { name: "最小权限授权", code: "CREATE USER 'app'@'localhost' IDENTIFIED BY 'StrongPass123';\nGRANT SELECT, INSERT, UPDATE, DELETE ON school.* TO 'app'@'localhost';\nFLUSH PRIVILEGES;" },
-      ],
-    },
-    {
-      id: "sql-66",
-      title: "性能优化与执行计划（EXPLAIN 简介）",
-      summary: "用 EXPLAIN 看 SQL 怎么执行，找出慢查询的原因。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "SQL 跑得慢，别瞎猜，用 EXPLAIN 让数据库告诉你它打算怎么执行这条查询。看懂执行计划，优化就有方向。" },
-        { type: "h", text: "EXPLAIN 基本用法" },
-        { type: "code", lang: "sql", title: "查看执行计划", code: "EXPLAIN SELECT * FROM student WHERE name = '小明';\n-- 不真正执行，只返回执行计划表\n\n-- 实际执行并带分析信息\nEXPLAIN ANALYZE SELECT * FROM student WHERE name = '小明';" },
-        { type: "h", text: "执行计划关键列" },
-        { type: "table", head: ["列", "含义", "关注点"], rows: [["type", "访问方式", "最好 const/eq_ref，最差 ALL 全表扫"], ["key", "实际用到的索引", "NULL 表示没用索引"], ["rows", "预计扫描行数", "越小越好"], ["Extra", "额外信息", "Using filesort/Using temporary 要警惕"]] },
-        { type: "h", text: "看懂 type" },
-        { type: "code", lang: "sql", title: "不同 type 的例子", code: "EXPLAIN SELECT * FROM user WHERE id = 1;\n-- type=const：按主键等值查，最快\n\nEXPLAIN SELECT * FROM user WHERE name = '小明';\n-- 没索引时 type=ALL：全表扫描，慢\n\nEXPLAIN SELECT * FROM orders o INNER JOIN user u ON o.user_id = u.id;\n-- 连接时 u 用主键，type 可能是 eq_ref/ref" },
-        { type: "tip", title: "优化的一般套路", text: "先 EXPLAIN 看 type 是不是 ALL（全表扫）、rows 是不是巨大、key 是不是 NULL。三者出现就优先考虑建索引、改写条件、避免在列上套函数。" },
-        { type: "warn", title: "EXPLAIN 只是预估", text: "EXPLAIN 返回的是优化器的估算，不是真实耗时。它是定位问题的起点，真正的瓶颈还要结合数据量、索引实际使用、硬件来综合判断。" },
-        { type: "keypoints", items: ["EXPLAIN 显示 SQL 的执行计划", "type=ALL 全表扫描最慢，const/ref 快", "key 为 NULL 说明没用索引", "rows 越小越好，Extra 里出现 filesort 要警惕", "优化套路：先 EXPLAIN，再针对慢点优化"] },
-      ],
-      templates: [
-        { name: "诊断慢查询", code: "EXPLAIN SELECT * FROM student WHERE name = '小明';\n-- 看 type/key/rows 三列判断要不要加索引" },
-      ],
-    },
-    {
-      id: "sql-67",
-      title: "SQL 注入原理与防范",
-      summary: "SQL 注入怎么发生、怎么防范，安全必学。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "SQL 注入（SQL Injection）是最经典的 Web 安全漏洞：攻击者把恶意 SQL 拼进你的查询里，窃取数据甚至删库。这一章用最简单的例子讲透原理和防范。" },
-        { type: "h", text: "注入是怎么发生的" },
-        { type: "code", lang: "sql", title: "不安全的拼接 SQL", code: "-- 假设应用代码这样拼 SQL：\n-- 输入用户名 name，拼进字符串\nSELECT * FROM user WHERE name = '小明';\n\n-- 如果攻击者输入：' OR '1'='1\n-- 拼出来变成：\nSELECT * FROM user WHERE name = '' OR '1'='1';\n-- '1'='1' 恒为真 → 查出了全部用户！" },
-        { type: "p", text: "输入里的单引号把 SQL 的引号闭合，再塞进 OR 条件，就篡改了原查询的语义。更狠的输入可以是 '; DROP TABLE user;-- 直接删表。" },
-        { type: "h", text: "输入被截断的例子" },
-        { type: "code", lang: "sql", title: "用注释截断剩余 SQL", code: "-- 输入：abc' OR '1'='1'; DROP TABLE user;--\n-- 拼出来：\nSELECT * FROM user WHERE name = 'abc' OR '1'='1'; DROP TABLE user;--';\n-- 多语句执行：先查出所有用户，再删掉 user 表！" },
-        { type: "h", text: "如何防范" },
-        { type: "list", items: ["参数化查询/预编译语句：把 SQL 和数据分开传，数据永远当数据，这是根本解法", "输入校验：限制长度、白名单过滤特殊字符", "最小权限：数据库账号不给 DROP 权限，降低被删库的影响", "转义特殊字符：作为兜底手段，但不能替代参数化"] },
-        { type: "code", lang: "text", title: "参数化查询示意（伪代码）", code: "-- Java 的 PreparedStatement、Python 的 ? 占位符\n-- 都是把输入当参数绑定，不拼进 SQL 字符串\nSELECT * FROM user WHERE name = ?;\n-- 传入的值无论是什么，都只是一个字符串值" },
-        { type: "danger", title: "记住一句话", text: "永远不要把外部输入直接拼进 SQL 字符串！用参数化查询 + 最小权限 + 输入校验三层防护。SQL 注入造成的损失可能是整个库。" },
-        { type: "keypoints", items: ["注入原理：输入闭合引号并拼接 SQL 篡改语义", "经典攻击：' OR '1'='1 恒真，; DROP TABLE 删库", "根本防范：参数化查询（预编译）", "辅助防护：输入校验 + 最小权限", "外部输入绝不直接拼进 SQL"] },
-      ],
-      templates: [
-        { name: "参数化查询示意", code: "SELECT * FROM user WHERE name = ?;\n-- 用占位符 ? 绑定参数，而不是拼接字符串" },
-      ],
-    },
-    {
-      id: "sql-68",
-      title: "数据库 vs 文件存储",
-      summary: "为什么不用文本文件存数据？对比数据库与文件。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "文件也能存数据，为什么还要数据库？这一章把两者的差距讲清楚，你就能明白数据库不可替代的价值。" },
-        { type: "h", text: "用文件存数据的痛点" },
-        { type: "list", items: ["查询靠翻文件：几十万条数据在文件里查一条，得全读一遍", "并发读写冲突：两个人同时改一个文件会互相覆盖", "没有约束：随便写什么格式都能存，脏数据无法控制", "没有事务：写一半断电，文件就坏了", "没有权限/索引/统计：这些能力全要自己造"] },
-        { type: "table", head: ["对比", "文本/Excel 文件", "关系数据库"], rows: [["查询速度", "全文件扫描，慢", "索引定位，毫秒级"], ["并发", "几乎不支持", "锁 + 事务，多人安全读写"], ["数据一致性", "靠自觉，易脏", "约束 + 事务保证"], ["崩溃恢复", "可能损坏", "日志 + 事务恢复"], ["适用范围", "小数据、人工查看", "业务系统核心数据"]] },
-        { type: "p", text: "那文件一点用没有吗？也不是。配置文件、日志、导入导出的中间格式（CSV、JSON）都用文件。数据库适合『结构化、要查询、要一致』的核心业务数据。" },
-        { type: "h", text: "什么时候用文件就行" },
-        { type: "list", items: ["一次性数据、读完就不再用的（如导出报表）", "极少量配置（如 config.ini）", "日志类只追加的数据（也可以用专门的日志系统）", "性能要求不高、无并发的小工具"] },
-        { type: "tip", title: "两者常搭配使用", text: "实际系统里文件和数据常常合作：用文件存图片、附件等大对象（BLOB），用数据库存文件的路径和元数据。各取所长。" },
-        { type: "keypoints", items: ["文件存数据：查询慢、并发差、无约束、易损坏", "数据库：索引快、事务安全、约束强、支持并发", "文件适合配置/日志/导出，核心数据用数据库", "大文件存磁盘，数据库只存路径和元数据"] },
-      ],
-      templates: [
-        { name: "为什么慢（伪代码）", code: "SELECT * FROM student WHERE name = '小明';\n-- 文件版要遍历每一行比较，数据库版走索引直达" },
-      ],
-    },
-    {
-      id: "sql-69",
-      title: "关系数据库 vs NoSQL",
-      summary: "关系型与 NoSQL 的差别，什么时候选哪个。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "除了关系型数据库，还有一大类 NoSQL（Not Only SQL）数据库：MongoDB、Redis、Cassandra 等。这一章搞清楚它们和关系库的本质区别，别再二选一纠结。" },
-        { type: "h", text: "关系型数据库的特点" },
-        { type: "list", items: ["有表结构（Schema），列的类型固定", "用 SQL 查询，支持 JOIN、事务、复杂统计", "强一致性，数据关系严格", "代表：MySQL、PostgreSQL、SQLite、Oracle"] },
-        { type: "h", text: "NoSQL 的特点" },
-        { type: "table", head: ["NoSQL 类型", "代表", "特点", "典型场景"], rows: [["文档型", "MongoDB", "存 JSON 文档，结构灵活", "内容、商品、用户画像"], ["键值型", "Redis", "超快读写，内存存储", "缓存、会话、排行榜"], ["列族型", "Cassandra/HBase", "海量写入，水平扩展", "日志、时序、大数据"], ["图数据库", "Neo4j", "擅长关系网络查询", "社交关系、推荐"]] },
-        { type: "h", text: "怎么选" },
-        { type: "code", lang: "text", title: "选择决策", code: "-- 数据强关联、需要事务/复杂报表 → 关系型\n-- 结构多变、追求开发灵活 → 文档型 MongoDB\n-- 需要超高并发读（热点数据） → Redis 缓存\n-- 海量日志写入 → 列族型\n-- 关系网查询（好友的好友） → 图数据库" },
-        { type: "p", text: "现代架构常用『混合』：关系库做核心业务，Redis 做缓存，ES 做搜索，MongoDB 存灵活内容。数据库没有最好，只有最合适。" },
-        { type: "tip", title: "理解取舍", text: "关系型赢了『一致性和查询能力』，输了『灵活性和扩展性』；NoSQL 反过来。业务的核心账务、订单必须关系型+事务，边缘的灵活数据可以交给 NoSQL。" },
-        { type: "keypoints", items: ["关系型：固定结构、SQL、事务、强一致", "NoSQL 分文档/键值/列族/图四类", "Redis 缓存、MongoDB 灵活文档、Cassandra 海量日志", "选型看场景：核心账务用关系型，热点缓存用 Redis", "现代系统常是关系型 + NoSQL 混合使用"] },
-      ],
-      templates: [
-        { name: "MongoDB 文档示例", code: "-- MongoDB 存的是 JSON 文档，没有固定列\n{ \"name\": \"小明\", \"tags\": [\"后端\", \"SQL\"], \"profile\": { \"age\": 20 } }" },
-      ],
-    },
-    {
-      id: "sql-70",
-      title: "索引失效场景与慢查询优化",
-      summary: "盘点常见索引失效场景，学会慢查询排查套路。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "建了索引查询还是慢？很可能是索引『失效』了。这一章把最常见的索引失效场景盘一遍，再讲慢查询的排查流程。" },
-        { type: "h", text: "常见索引失效场景" },
-        { type: "table", head: ["场景", "错误写法", "正确写法"], rows: [["列上套函数", "WHERE YEAR(d)=2026", "WHERE d >= '2026-01-01' AND d < '2027-01-01'"], ["隐式类型转换", "VARCHAR 列和数字比 WHERE phone=138", "WHERE phone='138...'"], ["LIKE 以 % 开头", "LIKE '%abc'", "LIKE 'abc%'"], ["复合索引没走最左列", "只用第二列", "带上第一列"], ["OR 前后有一边没索引", "a=1 OR b=2（b 无索引）", "分别建索引或用 UNION"]] },
-        { type: "h", text: "用 EXPLAIN 验证" },
-        { type: "code", lang: "sql", title: "对比索引是否生效", code: "-- 失效：列上套函数\nEXPLAIN SELECT * FROM user WHERE YEAR(created_at) = 2026;\n-- key 列可能为 NULL\n\n-- 生效：范围写法\nEXPLAIN SELECT * FROM user WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01';\n-- key 显示索引名" },
-        { type: "h", text: "慢查询排查套路" },
-        { type: "list", items: ["开慢查询日志：定位到底哪些 SQL 慢", "对慢 SQL 跑 EXPLAIN，看 type/key/rows", "根据失效原因改写 SQL 或补索引", "数据量大的表考虑分区、分表", "反复 EXPLAIN 对比优化前后"] },
-        { type: "code", lang: "sql", title: "开启慢查询日志（MySQL）", code: "SET GLOBAL slow_query_log = ON;\nSET GLOBAL long_query_time = 1;   -- 超过 1 秒的记录\nSHOW VARIABLES LIKE 'slow_query_log%';" },
-        { type: "warn", title: "别迷信索引", text: "索引不是万能药：低区分度、数据量本身很小、查询要返回表的大部分数据时，走全表扫描反而更快。数据库优化器会自己判断，用 EXPLAIN 确认即可。" },
-        { type: "keypoints", items: ["索引失效：列上套函数、隐式转换、LIKE '%xx'、OR 一边无索引", "复合索引要遵守最左前缀", "EXPLAIN 的 key=NULL 说明索引没被用上", "慢查询优化：日志定位 → EXPLAIN → 改写/建索引", "小表/低区分度列，全表扫描可能更快"] },
-      ],
-      templates: [
-        { name: "用范围代替函数", code: "EXPLAIN SELECT * FROM user\nWHERE created_at >= '2026-01-01' AND created_at < '2027-01-01';" },
-      ],
-    },
-    {
-      id: "sql-71",
-      title: "大数据量查询优化技巧",
-      summary: "千万级数据下的查询优化：分页、索引、避免 SELECT *。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "数据量上千万时，普通的小技巧都不够用了。这一章讲几个实战中反复验证有效的大表查询优化手段。" },
-        { type: "h", text: "用覆盖索引减少回表" },
-        { type: "code", lang: "sql", title: "只查索引里的列", code: "-- 建复合索引 (name, age)\nCREATE INDEX idx_name_age ON student(name, age);\n\n-- 这条查询只用到 name 和 age，全在索引里，无需回表\nSELECT name, age FROM student WHERE name = '小明';\n-- Extra 里出现 Using index 说明是覆盖索引，很高效" },
-        { type: "h", text: "大分页的键集分页" },
-        { type: "code", lang: "sql", title: "用 WHERE 代替大 OFFSET", code: "-- 传统分页：OFFSET 太大很慢\nSELECT * FROM student ORDER BY id LIMIT 10 OFFSET 1000000;\n\n-- 键集分页：记住上一页最后一条 id\nSELECT * FROM student\nWHERE id > 1000000\nORDER BY id\nLIMIT 10;" },
-        { type: "h", text: "其他实用技巧" },
-        { type: "list", items: ["避免 SELECT *：只取需要的列，减少 IO", "WHERE 条件尽量用索引列，避免对列套函数", "大范围聚合先按时间切块，分批统计", "只查前 N 条就用 LIMIT，别全查出来再砍", "高频只读数据考虑加缓存层，别硬打数据库"] },
-        { type: "code", lang: "sql", title: "时间分片统计大表", code: "-- 大表按天统计，一天一天查，避免一次扫全表\nSELECT DATE(created_at) AS 日期, COUNT(*) AS 数\nFROM orders\nWHERE created_at >= '2026-08-01' AND created_at < '2026-08-02'\nGROUP BY DATE(created_at);\n-- 配合索引，每次都只读一天的数据" },
-        { type: "warn", title: "数据量级的顺序", text: "优化讲究循序渐进：先优化 SQL 本身（索引、覆盖、分页），再考虑缓存，最后才是分库分表。一上来就上分库分表，架构复杂度会急剧上升。" },
-        { type: "keypoints", items: ["覆盖索引只查索引列，避免回表", "大分页用键集分页（WHERE id > 上一页末尾）", "避免 SELECT *、对列套函数", "大表统计按时间分片分批查", "先优化 SQL → 再缓存 → 最后分库分表"] },
-      ],
-      templates: [
-        { name: "键集分页", code: "SELECT * FROM student\nWHERE id > 1000000\nORDER BY id\nLIMIT 10;" },
-      ],
-    },
-    {
-      id: "sql-72",
-      title: "事务实战：转账与库存扣减",
-      summary: "用事务实现安全转账和库存扣减，防止超卖。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "这一章把事务用在两个真实场景：转账（钱不能丢）和库存扣减（不能超卖）。你会看到事务 + 条件判断 + 锁的配合。" },
-        { type: "h", text: "场景一：安全转账" },
-        { type: "code", lang: "sql", title: "转账必须用事务", code: "START TRANSACTION;\n\n-- 检查 A 余额是否足够\nSELECT balance FROM account WHERE id = 1 FOR UPDATE;\n-- FOR UPDATE 给这行加锁，防止别人同时改\n\nUPDATE account SET balance = balance - 100 WHERE id = 1;\nUPDATE account SET balance = balance + 100 WHERE id = 2;\n\nCOMMIT;\n-- 任何一步失败就 ROLLBACK，钱不会消失" },
-        { type: "h", text: "场景二：库存扣减防超卖" },
-        { type: "code", lang: "sql", title: "扣库存 + 条件更新", code: "START TRANSACTION;\n\n-- 关键：条件更新，库存不足时影响行数为 0\nUPDATE product\nSET stock = stock - 1\nWHERE id = 1 AND stock >= 1;\n\n-- 检查刚才是否真的扣成功（影响行数=1 才成功）\nSELECT ROW_COUNT();\n-- 如果影响 0 行，说明库存不够，直接回滚\nROLLBACK;\n\n-- 扣成功了才提交\nCOMMIT;" },
-        { type: "p", text: "防超卖的关键：把『检查库存』和『扣库存』合成一条条件 UPDATE（WHERE stock >= 1）。如果两条分开做，两个请求可能同时读到库存 1，都通过检查，就超卖了。" },
-        { type: "h", text: "流程总结" },
-        { type: "code", lang: "sql", title: "完整下单扣库存", code: "START TRANSACTION;\n-- 1. 锁定并扣减库存（条件更新防超卖）\nUPDATE product SET stock = stock - 1 WHERE id = 1 AND stock >= 1;\n-- 2. 若影响行数为 0 → ROLLBACK 结束\n-- 3. 生成订单\nINSERT INTO orders (user_id, product_id, qty) VALUES (1, 1, 1);\n-- 4. 全部成功\nCOMMIT;" },
-        { type: "warn", title: "FOR UPDATE 别滥用", text: "SELECT ... FOR UPDATE 会锁行，锁的时间越长并发越低。只在需要『读后改』且怕并发竞争时用，事务尽快提交释放锁。" },
-        { type: "keypoints", items: ["转账必须用事务包裹，防止钱消失", "SELECT ... FOR UPDATE 锁定行，防并发竞争", "库存扣减用条件更新 WHERE stock >= 1 防超卖", "影响行数为 0 表示条件不满足，回滚", "事务尽快提交，减少锁占用时间"] },
-      ],
-      templates: [
-        { name: "防超卖扣库存", code: "START TRANSACTION;\nUPDATE product SET stock = stock - 1 WHERE id = 1 AND stock >= 1;\nINSERT INTO orders (user_id, product_id, qty) VALUES (1, 1, 1);\nCOMMIT;" },
-      ],
-    },
-    {
-      id: "sql-73",
-      title: "数据清洗 SQL 实战",
-      summary: "用 SQL 清洗脏数据：去重、补全、格式化、合并。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "真实数据永远是脏的：重复、空值、格式不统一、多余空格。这一章教用 SQL 做数据清洗的几板斧。" },
-        { type: "h", text: "去重" },
-        { type: "code", lang: "sql", title: "找出并删除重复行", code: "-- 找出重复的邮箱\nSELECT email, COUNT(*) FROM user\nGROUP BY email HAVING COUNT(*) > 1;\n\n-- 保留每组 id 最小的一条，删掉其余重复\nDELETE u1 FROM user u1\nINNER JOIN user u2\n  ON u1.email = u2.email AND u1.id > u2.id;" },
-        { type: "h", text: "清洗空值与默认值" },
-        { type: "code", lang: "sql", title: "空值补全与替换", code: "UPDATE user\nSET phone = '未填写'\nWHERE phone IS NULL OR TRIM(phone) = '';\n\n-- 或者查询时用 IFNULL 兜底显示\nSELECT name, IFNULL(phone, '未填写') AS 电话 FROM user;" },
-        { type: "h", text: "格式统一" },
-        { type: "code", lang: "sql", title: "去掉空格、统一大小写", code: "UPDATE user\nSET name = TRIM(name);          -- 去掉名字首尾空格\n\nUPDATE user\nSET email = LOWER(TRIM(email)); -- 邮箱去空格转小写\n\nUPDATE user\nSET phone = REPLACE(phone, '-', '');  -- 去掉电话里的横杠" },
-        { type: "h", text: "拆分与合并字段" },
-        { type: "code", lang: "sql", title: "拆列和拼列", code: "-- 拆：把全名拆成姓和名\nSELECT name,\n    SUBSTRING_INDEX(name, ' ', 1) AS 名,\n    SUBSTRING_INDEX(name, ' ', -1) AS 姓\nFROM user;\n\n-- 合并：把多行记录拼成一行\nSELECT user_id, GROUP_CONCAT(product_name) AS 商品列表\nFROM order_item GROUP BY user_id;" },
-        { type: "tip", title: "清洗原则", text: "清洗前先备份（CREATE TABLE ... AS SELECT 复制一份），清洗后检查行数变化，确认没有误删。清洗 SQL 最好写成可重复运行的脚本。" },
-        { type: "warn", title: "DELETE 去重先验证", text: "去重 DELETE 之前，先用 SELECT 把要删的行查出来核对数量，再用同条件执行 DELETE。宁可多花两步，别误删数据。" },
-        { type: "keypoints", items: ["去重：GROUP BY + HAVING COUNT>1 找出，自连接删除", "空值：IS NULL 判断，IFNULL 兜底", "格式：TRIM 去空格、LOWER 统一大小写、REPLACE 替换", "拆列用 SUBSTRING_INDEX，合并用 GROUP_CONCAT", "清洗前先备份，删除前先 SELECT 验证"] },
-      ],
-      templates: [
-        { name: "去重清洗", code: "SELECT email, COUNT(*) FROM user GROUP BY email HAVING COUNT(*) > 1;\nUPDATE user SET email = LOWER(TRIM(email));" },
-      ],
-    },
-    {
-      id: "sql-74",
-      title: "报表 SQL 实战（汇总/环比/分组）",
-      summary: "做报表的三大套路：汇总、分组、环比对比。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "报表是数据分析师和开发者的日常。这一章把报表最常用的三类 SQL 讲透：多级汇总、维度分组、环比/同比对比。" },
-        { type: "h", text: "多级汇总（GROUP BY + ROLLUP）" },
-        { type: "code", lang: "sql", title: "带小计的汇总", code: "SELECT dept_id,\n       IFNULL(GROUPING(dept_id), 0),\n       SUM(salary) AS 工资合计\nFROM emp\nGROUP BY dept_id WITH ROLLUP;\n-- WITH ROLLUP 会在末尾加一行总计\n-- SQLite 用 UNION ALL 手动加总计" },
-        { type: "h", text: "维度分组" },
-        { type: "code", lang: "sql", title: "多维报表", code: "SELECT DATE_FORMAT(created_at, '%Y-%m') AS 年月,\n       status AS 订单状态,\n       COUNT(*) AS 订单数,\n       SUM(total) AS 销售额\nFROM orders\nGROUP BY DATE_FORMAT(created_at, '%Y-%m'), status\nORDER BY 年月, 订单状态;" },
-        { type: "h", text: "环比对比（和上一周期比）" },
-        { type: "code", lang: "sql", title: "用 LAG 算环比", code: "WITH monthly AS (\n    SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym,\n           SUM(total) AS total\n    FROM orders\n    GROUP BY DATE_FORMAT(created_at, '%Y-%m')\n)\nSELECT ym, total,\n    LAG(total) OVER (ORDER BY ym) AS 上月销售额,\n    ROUND((total - LAG(total) OVER (ORDER BY ym)) / LAG(total) OVER (ORDER BY ym) * 100, 2) AS 环比增长率\nFROM monthly;\n-- WITH ... AS 是 CTE 公用表表达式，先定义临时结果集再查询" },
-        { type: "h", text: "CTE 让复杂报表可读" },
-        { type: "code", lang: "sql", title: "WITH 复用中间结果", code: "WITH top_product AS (\n    SELECT product_id, SUM(quantity) AS qty\n    FROM order_item GROUP BY product_id\n    ORDER BY qty DESC LIMIT 5\n)\nSELECT p.name, t.qty\nFROM top_product t\nINNER JOIN product p ON p.id = t.product_id;" },
-        { type: "tip", title: "报表心法", text: "先把『指标』算出来（SUM/COUNT/AVG），再定『维度』（按什么分组），最后做『对比』（环比/同比）。三步组合几乎能覆盖所有报表。" },
-        { type: "keypoints", items: ["汇总：GROUP BY + 聚合，WITH ROLLUP 加总计", "分组报表：多列 GROUP BY + 排序", "环比：窗口函数 LAG 取上一周期做对比", "CTE（WITH ... AS）让复杂查询更可读", "报表 = 指标 + 维度 + 对比三要素"] },
-      ],
-      templates: [
-        { name: "月度环比报表", code: "WITH monthly AS (\n    SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym, SUM(total) AS total\n    FROM orders GROUP BY DATE_FORMAT(created_at, '%Y-%m')\n)\nSELECT ym, total,\n    LAG(total) OVER (ORDER BY ym) AS 上月,\n    (total - LAG(total) OVER (ORDER BY ym)) AS 环比增量\nFROM monthly;" },
-      ],
-    },
-    {
-      id: "sql-75",
-      title: "面试题：基础查询",
-      summary: "SQL 面试热身：SELECT、WHERE、LIKE、排序、去重。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "进入面试环节！从第 75 章到第 80 章，都是真实面试常见题目。每一题先看题目，再自己想答案，最后对照讲解。这一章是基础查询题。" },
-        { type: "h", text: "第 1 题：查询所有学生中分数最高的前 3 名" },
-        { type: "code", lang: "sql", title: "答案", code: "SELECT name, score\nFROM student\nORDER BY score DESC\nLIMIT 3;" },
-        { type: "h", text: "第 2 题：找出名字里含『小』字的用户" },
-        { type: "code", lang: "sql", title: "答案：LIKE 模糊查询", code: "SELECT * FROM user WHERE name LIKE '%小%';" },
-        { type: "h", text: "第 3 题：统计去重后的城市数量" },
-        { type: "code", lang: "sql", title: "答案：COUNT + DISTINCT", code: "SELECT COUNT(DISTINCT city) AS 城市数 FROM user;\n-- 注意：不是 COUNT(city)，那是数非空个数不排除重复" },
-        { type: "h", text: "第 4 题：查询 18~25 岁之间（含）的男生" },
-        { type: "code", lang: "sql", title: "答案：BETWEEN + AND", code: "SELECT * FROM student\nWHERE gender = '男' AND age BETWEEN 18 AND 25;" },
-        { type: "h", text: "第 5 题：按班级升序、分数降序排序" },
-        { type: "code", lang: "sql", title: "答案：多列排序", code: "SELECT * FROM student\nORDER BY class ASC, score DESC;" },
-        { type: "h", text: "第 6 题：查询没有填写手机号的用户" },
-        { type: "code", lang: "sql", title: "答案：IS NULL", code: "SELECT * FROM user WHERE phone IS NULL;\n-- 陷阱：写成 phone = NULL 是错的，什么都查不到" },
-        { type: "info", title: "考点", text: "基础题主要考：LIMIT、LIKE 通配符、COUNT(DISTINCT)、BETWEEN、多列排序、IS NULL。每一个都是高频考点，务必记牢。" },
-        { type: "keypoints", items: ["TOP N 用 ORDER BY + LIMIT", "模糊匹配用 LIKE '%xx%'", "去重计数用 COUNT(DISTINCT 列)", "边界区间用 BETWEEN 且含两端", "空值判断只能用 IS NULL", "多列排序：ORDER BY 列1, 列2"] },
-      ],
-      templates: [
-        { name: "前三名", code: "SELECT name, score FROM student ORDER BY score DESC LIMIT 3;" },
-      ],
-    },
-    {
-      id: "sql-76",
-      title: "面试题：聚合与分组",
-      summary: "GROUP BY、HAVING、聚合函数的面试常考题。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "聚合与分组是面试出题重灾区。记住核心规则：SELECT 的普通列必须在 GROUP BY 里；对组的过滤用 HAVING。" },
-        { type: "h", text: "第 1 题：每个部门的平均工资，只显示平均工资大于 10000 的" },
-        { type: "code", lang: "sql", title: "答案：GROUP BY + HAVING", code: "SELECT dept_id, AVG(salary) AS 平均工资\nFROM emp\nGROUP BY dept_id\nHAVING AVG(salary) > 10000;\n-- 对组过滤必须用 HAVING，不能用 WHERE" },
-        { type: "h", text: "第 2 题：统计每个班级的人数，按人数降序" },
-        { type: "code", lang: "sql", title: "答案：COUNT + ORDER BY 别名", code: "SELECT class, COUNT(*) AS 人数\nFROM student\nGROUP BY class\nORDER BY 人数 DESC;" },
-        { type: "h", text: "第 3 题：为什么 SELECT class, name FROM student GROUP BY class 报错？" },
-        { type: "code", lang: "sql", title: "解析", code: "-- 因为分组后每组有多个 name，数据库不知道该显示哪个\n-- 要么 name 也加进 GROUP BY，要么用聚合/GROUP_CONCAT\nSELECT class, GROUP_CONCAT(name) FROM student GROUP BY class;" },
-        { type: "h", text: "第 4 题：统计分数 ≥90 的男生和女生各多少人" },
-        { type: "code", lang: "sql", title: "答案：CASE WHEN 条件聚合", code: "SELECT\n    SUM(CASE WHEN gender = '男' THEN 1 ELSE 0 END) AS 男生,\n    SUM(CASE WHEN gender = '女' THEN 1 ELSE 0 END) AS 女生\nFROM student WHERE score >= 90;" },
-        { type: "h", text: "第 5 题：WHERE 和 HAVING 的区别" },
-        { type: "table", head: ["对比", "WHERE", "HAVING"], rows: [["时机", "分组前过滤行", "分组后过滤组"], ["聚合函数", "不能", "能"], ["位置", "GROUP BY 之前", "GROUP BY 之后"]] },
-        { type: "tip", title: "答题加分点", text: "面试答聚合题，主动说出『WHERE 先于 GROUP BY、HAVING 用于组过滤、普通列必须进 GROUP BY』，会显得理解到位。" },
-        { type: "keypoints", items: ["组过滤用 HAVING，行过滤用 WHERE", "SELECT 的普通列必须在 GROUP BY 里", "GROUP_CONCAT 可把组内多值拼成一行", "条件计数用 SUM(CASE WHEN ... THEN 1 ELSE 0 END)", "ORDER BY 可用聚合别名"] },
-      ],
-      templates: [
-        { name: "部门平均工资", code: "SELECT dept_id, AVG(salary) AS 平均工资\nFROM emp\nGROUP BY dept_id\nHAVING AVG(salary) > 10000;" },
-      ],
-    },
-    {
-      id: "sql-77",
-      title: "面试题：JOIN 与子查询",
-      summary: "JOIN、自连接、子查询的面试高频题与易错点。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "JOIN 和子查询是 SQL 面试的灵魂。面试官喜欢问：内连接和外连接的区别、怎么找没匹配的数据、子查询里 IN 和 EXISTS 的区别。" },
-        { type: "h", text: "第 1 题：INNER JOIN 和 LEFT JOIN 的区别" },
-        { type: "code", lang: "sql", title: "答案", code: "-- INNER：只返回两表匹配上的行\nSELECT * FROM orders o\nINNER JOIN user u ON o.user_id = u.id;\n\n-- LEFT：左表全部保留，右表没匹配填 NULL\nSELECT * FROM user u\nLEFT JOIN orders o ON o.user_id = u.id;" },
-        { type: "h", text: "第 2 题：找出没有下过单的用户" },
-        { type: "code", lang: "sql", title: "答案：LEFT JOIN + IS NULL", code: "SELECT u.*\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.id IS NULL;\n-- 等价写法：NOT EXISTS 子查询" },
-        { type: "h", text: "第 3 题：查每个员工的经理名字（自连接）" },
-        { type: "code", lang: "sql", title: "答案：SELF JOIN", code: "SELECT e.name AS 员工, m.name AS 经理\nFROM emp e\nLEFT JOIN emp m ON e.manager_id = m.id;" },
-        { type: "h", text: "第 4 题：查分数高于全班平均分的学生" },
-        { type: "code", lang: "sql", title: "答案：标量子查询", code: "SELECT * FROM student\nWHERE score > (SELECT AVG(score) FROM student);" },
-        { type: "h", text: "第 5 题：IN 和 EXISTS 的区别" },
-        { type: "table", head: ["对比", "IN", "EXISTS"], rows: [["逻辑", "值是否在子查询结果集里", "是否存在满足条件的记录"], ["大结果集", "可能较慢", "通常更快（找到即停）"], ["NULL 坑", "NOT IN 遇 NULL 失效", "NOT EXISTS 不受影响"]] },
-        { type: "code", lang: "sql", title: "IN 与 EXISTS 互换", code: "-- IN 写法\nSELECT * FROM user WHERE id IN (SELECT user_id FROM orders);\n\n-- EXISTS 写法\nSELECT * FROM user u\nWHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);" },
-        { type: "tip", title: "答题加分点", text: "面试官问 JOIN 时，主动提『笛卡尔积风险』；问子查询时主动提『NOT IN 的 NULL 陷阱』。这两个点能体现你踩过坑、有实战经验。" },
-        { type: "keypoints", items: ["INNER 只要匹配，LEFT 保留左表全部", "找缺失数据：LEFT JOIN + 右表主键 IS NULL", "自连接需要两个不同别名", "标量子查询返回单值做条件比较", "IN 判断值在集合，EXISTS 判断记录存在"] },
-      ],
-      templates: [
-        { name: "没下单的用户", code: "SELECT u.*\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.id IS NULL;" },
-      ],
-    },
-    {
-      id: "sql-78",
-      title: "面试题：索引与优化",
-      summary: "索引原理、失效场景、EXPLAIN 的面试考点。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "索引题考的是『懂不懂原理』。面试官会问索引为什么快、什么情况失效、怎么定位慢查询。" },
-        { type: "h", text: "第 1 题：索引为什么能加速查询" },
-        { type: "p", text: "答案：索引底层通常是 B+ 树结构，数据按顺序组织成树，查询从根节点一路下探，复杂度从全表扫描的 O(n) 降到 O(log n)。就像查字典不用从第一页翻起，直接按拼音定位。" },
-        { type: "h", text: "第 2 题：什么情况下索引会失效" },
-        { type: "list", items: ["对列使用函数或运算：WHERE YEAR(d)=2026", "隐式类型转换：VARCHAR 列和数字比较", "LIKE 以 % 开头：LIKE '%abc'", "复合索引不满足最左前缀", "OR 条件中某列无索引"] },
-        { type: "h", text: "第 3 题：如何定位和优化一条慢查询" },
-        { type: "code", lang: "sql", title: "标准流程", code: "EXPLAIN SELECT ...;  -- 1. 看执行计划\n-- 关注 type（是不是 ALL）、key（有没有用索引）、rows（扫多少行）\n\n-- 2. 根据结果建索引\nCREATE INDEX idx_xxx ON table(col);\n\n-- 3. 改写 SQL（避免函数/隐式转换/%开头LIKE）\n\n-- 4. 再 EXPLAIN 对比，确认 type 改善、rows 变小" },
-        { type: "h", text: "第 4 题：聚簇索引和非聚簇索引的区别" },
-        { type: "table", head: ["对比", "聚簇索引（如主键）", "非聚簇索引（普通索引）"], rows: [["数据存储", "索引叶子直接存整行数据", "叶子只存索引列和主键"], ["回表", "不需要，数据就在索引里", "可能要回表查主键再取数据"], ["数量", "一张表一般一个", "可以有很多个"]] },
-        { type: "h", text: "第 5 题：索引为什么不是越多越好" },
-        { type: "p", text: "答案：索引能加速读，但会拖慢写（每次增删改都要维护索引树）、占磁盘空间、还可能干扰优化器选择。所以只给高频查询列建索引。" },
-        { type: "tip", title: "答题加分点", text: "能说出 B+ 树、覆盖索引（Using index）、回表、最左前缀这几个词，并解释含义，基本能拿高分。原理比背语法更值钱。" },
-        { type: "keypoints", items: ["索引底层 B+ 树，查询 O(log n)", "失效场景：函数/隐式转换/%LIKE/最左前缀/OR", "优化流程：EXPLAIN → 建索引 → 改写 → 复验", "聚簇索引存数据免回表，普通索引可能要回表", "索引有维护成本，读多写少的列才值得建"] },
-      ],
-      templates: [
-        { name: "EXPLAIN 体检", code: "EXPLAIN SELECT * FROM user WHERE email = 'a@b.com';\n-- 查看 type/key/rows 三列" },
-      ],
-    },
-    {
-      id: "sql-79",
-      title: "面试题：事务与锁",
-      summary: "ACID、隔离级别、脏读幻读、锁的面试高频题。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "事务与锁是数据库面试的压轴题。把 ACID、隔离级别、并发问题、锁的类型这些概念串起来答，就能过关。" },
-        { type: "h", text: "第 1 题：说清楚 ACID 是什么" },
-        { type: "table", head: ["特性", "含义", "通俗"], rows: [["A 原子性", "要么全成要么全败", "转账不会只扣不加"], ["C 一致性", "操作前后数据合法", "金额守恒，账是平的"], ["I 隔离性", "事务间互不干扰", "看不到别人的中间态"], ["D 持久性", "提交后永久保存", "断电不丢"]] },
-        { type: "h", text: "第 2 题：脏读、不可重复读、幻读各是什么" },
-        { type: "list", items: ["脏读：读到别人未提交的修改（危害最大）", "不可重复读：同一事务两次读同一行值不同", "幻读：同一事务两次查询行数不同（多出行）"] },
-        { type: "h", text: "第 3 题：四个隔离级别分别防住什么" },
-        { type: "table", head: ["隔离级别", "脏读", "不可重复读", "幻读"], rows: [["READ UNCOMMITTED", "可能", "可能", "可能"], ["READ COMMITTED", "不会", "可能", "可能"], ["REPEATABLE READ", "不会", "不会", "可能"], ["SERIALIZABLE", "不会", "不会", "不会"]] },
-        { type: "h", text: "第 4 题：锁有哪些类型" },
-        { type: "table", head: ["分类", "类型", "作用"], rows: [["按粒度", "表锁 / 行锁", "行锁并发更好，表锁简单"], ["按模式", "共享锁 S / 排他锁 X", "S 可共存，X 独占"], ["乐观 vs 悲观", "乐观锁 / 悲观锁", "乐观锁靠版本号，悲观锁靠加锁"]] },
-        { type: "code", lang: "sql", title: "悲观锁与乐观锁示意", code: "-- 悲观锁：查出来就锁住\nSELECT * FROM product WHERE id = 1 FOR UPDATE;\n\n-- 乐观锁：用版本号判断是否被别人改过\nUPDATE product\nSET stock = stock - 1, version = version + 1\nWHERE id = 1 AND version = 5;\n-- version 不匹配说明被别人改过，本次更新影响 0 行，重试" },
-        { type: "warn", title: "死锁是什么", text: "两个事务各自锁了对方需要的资源，互相等对方释放，就死锁了。数据库会自动检测并回滚其中一个事务。写代码要控制加锁顺序一致，减少死锁。" },
-        { type: "keypoints", items: ["ACID：原子性、一致性、隔离性、持久性", "脏读/不可重复读/幻读是三大并发问题", "隔离级别从低到高防得越多，并发越差", "锁分表锁/行锁、S/X 锁、乐观/悲观锁", "乐观锁用版本号，悲观锁用 FOR UPDATE"] },
-      ],
-      templates: [
-        { name: "乐观锁更新", code: "UPDATE product\nSET stock = stock - 1, version = version + 1\nWHERE id = 1 AND version = 5;\n-- 影响 0 行说明版本冲突，需要重试" },
-      ],
-    },
-    {
-      id: "sql-80",
-      title: "面试题：综合与实战场景",
-      summary: "综合性面试题：设计题、场景题、综合 SQL 题。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "最后一章是综合题：没有标准答案，考察你能否把 SQL 知识综合运用。面试官看的是思路和逻辑。" },
-        { type: "h", text: "第 1 题：设计一个用户订单系统，讲出表结构" },
-        { type: "code", lang: "sql", title: "答案框架", code: "CREATE TABLE user (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) NOT NULL\n);\n\nCREATE TABLE orders (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    user_id INT NOT NULL,\n    total DECIMAL(12,2) DEFAULT 0,\n    status VARCHAR(20) DEFAULT '待付款',\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE order_item (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    order_id INT NOT NULL,\n    product_id INT,\n    product_name VARCHAR(50),\n    price DECIMAL(10,2),\n    quantity INT\n);\n-- 要点：订单与明细 1:N；明细存快照；外键关联；时间默认值" },
-        { type: "h", text: "第 2 题：一条 SQL 查『每个班级分数最高的学生』" },
-        { type: "code", lang: "sql", title: "答案：窗口函数", code: "SELECT class, name, score FROM (\n    SELECT class, name, score,\n           ROW_NUMBER() OVER (PARTITION BY class ORDER BY score DESC) AS rn\n    FROM student\n) t\nWHERE t.rn = 1;\n-- 窗口函数给每班排名，再取第 1 名" },
-        { type: "h", text: "第 3 题：订单超时未支付如何设计" },
-        { type: "p", text: "思路：orders.status 标记『待付款』，created_at 记录下单时间。定时任务扫 status='待付款' 且 created_at 超过 30 分钟的记录，更新为『已取消』并释放库存。SQL 大致是：UPDATE orders SET status='已取消' WHERE status='待付款' AND created_at < NOW() - INTERVAL 30 MINUTE;" },
-        { type: "h", text: "第 4 题：统计每个用户最近一笔订单" },
-        { type: "code", lang: "sql", title: "答案：窗口函数 + 子查询", code: "SELECT * FROM (\n    SELECT user_id, id, total,\n           ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY created_at DESC) AS rn\n    FROM orders\n) t\nWHERE t.rn = 1;" },
-        { type: "h", text: "第 5 题：面试自我介绍式总结" },
-        { type: "list", items: ["基础：增删改查、过滤、排序、分页、聚合", "进阶：JOIN、子查询、事务、索引、窗口函数", "实战：设计过博客/电商/选课等系统", "优化：EXPLAIN、慢查询定位、索引失效排查", "安全：SQL 注入防范、权限最小化"] },
-        { type: "tip", title: "综合题的答题框架", text: "拿到综合题：先拆需求 → 画表关系（1:1/1:N/N:M）→ 建表（外键+约束+索引）→ 写查询（JOIN/聚合/窗口）→ 讲优化（索引/EXPLAIN）。按这个顺序答，思路清晰不易漏点。" },
-        { type: "keypoints", items: ["设计题：先关系后建表，讲清外键、约束、快照", "每班最高分：窗口函数 ROW_NUMBER + 外层过滤", "场景题：状态字段 + 时间字段 + 定时任务", "最近一笔：PARTITION BY + ROW_NUMBER", "综合题按：拆需求→画关系→建表→查询→优化"] },
-      ],
-      templates: [
-        { name: "每班最高分", code: "SELECT class, name, score FROM (\n    SELECT class, name, score,\n           ROW_NUMBER() OVER (PARTITION BY class ORDER BY score DESC) AS rn\n    FROM student\n) t\nWHERE t.rn = 1;" },
-      ],
+  'id': "sql",
+  'name': "SQL",
+  'icon': "Sq",
+  'tagline': "和数据库对话的语言，所有数据应用的地基。",
+  'intro': "这是一套从零开始的 SQL 完整课程。第 1 章教你下载安装数据库，之后从建表、增删改查，一路讲到多表 JOIN、聚合、子查询、事务、索引与性能优化，最后是 5 个实战项目和 10 章面试题。学完这套课程，你将能自己设计数据库表结构、写出复杂的查询和报表 SQL，为后端开发和数据分析打下扎实基础。",
+  'meta': {
+    "难度": "从零到进阶",
+    "章节": "80 章",
+    "场景": "后端/数据分析/存储"
+  },
+  'lessons': [
+    {
+      'id': "sql-1",
+      'title': "数据库概念与安装（SQLite / MySQL）",
+      'summary': "搞懂数据库是什么，装好 SQLite 或 MySQL，验证安装成功。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据库（Database）就是用来『存数据』的地方。你可以把它想象成一个超级有组织的 Excel 表格，但它比 Excel 强大得多：能存几千万条数据、能多个人同时访问、能快速查询、不会因为文件太大而卡死。这一章我们先搞明白数据库是什么，然后把最常用的免费数据库装到电脑上。"
+        },
+        {
+          'type': "list",
+          'items': [
+            "程序运行时要存用户信息、订单、文章等数据",
+            "数据要长期保存（文件会丢失，数据库更可靠）",
+            "要能快速查询（几百万条数据也能瞬间查出来）",
+            "要支持多人同时读写和权限控制"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "选哪种数据库？SQLite 还是 MySQL"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比项",
+            "SQLite",
+            "MySQL Community Server"
+          ],
+          'rows': [
+            [
+              "安装难度",
+              "几乎零安装，一个文件即数据库",
+              "需要安装服务，稍复杂"
+            ],
+            [
+              "适用场景",
+              "学习、小应用、单机",
+              "网站后端、生产环境"
+            ],
+            [
+              "费用",
+              "完全免费",
+              "社区版免费"
+            ],
+            [
+              "上手速度",
+              "最快，推荐新手入门",
+              "接近真实开发环境"
+            ]
+          ]
+        },
+        {
+          'type': "tip",
+          'title': "新手建议",
+          'text': "零基础入门强烈推荐先用 SQLite，装起来最省事，语法和 MySQL 几乎一样（后面章节的 SQL 两者基本通用）。想感受真实服务器环境，再装 MySQL Community Server。"
+        },
+        {
+          'type': "h",
+          'text': "方案一：安装 SQLite"
+        },
+        {
+          'type': "list",
+          'items': [
+            "打开官方下载页：<a href='https://www.sqlite.org/download.html' target='_blank' rel='noopener'>https://www.sqlite.org/download.html</a>",
+            "Windows 用户下载 precompiled binaries 里的 sqlite-tools-win-x64 压缩包",
+            "解压后把 sqlite3.exe 放到一个文件夹，比如 D:\\sqlite",
+            "把 D:\\sqlite 加入系统环境变量 PATH（这样命令行到处都能用）"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "方案二：安装 MySQL Community Server"
+        },
+        {
+          'type': "list",
+          'items': [
+            "打开官方下载页：<a href='https://dev.mysql.com/downloads/' target='_blank' rel='noopener'>https://dev.mysql.com/downloads/</a>",
+            "进入 MySQL Community Server 下载，选 Windows (x86, 64-bit) 的 ZIP Archive 或 MSI 安装包",
+            "按向导安装，设置 root 密码（一定要记住）",
+            "可选安装 MySQL Workbench 图形工具，方便操作"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "text",
+          'title': "验证安装是否成功",
+          'code': "sqlite3 --version\nrem 或者 MySQL 打开命令行输入：\nmysql --version"
+        },
+        {
+          'type': "warn",
+          'title': "最常见的问题：命令找不到",
+          'text': "如果在命令行输入 sqlite3 或 mysql 提示『不是内部或外部命令』，说明没有把程序目录加入 PATH 环境变量。解决方法：系统设置 → 高级系统设置 → 环境变量 → 编辑 Path → 把 sqlite3.exe 所在文件夹加进去，然后重开命令行。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据库概念与安装（SQLite / MySQL）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据库概念与安装（SQLite / MySQL）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据库概念与安装（SQLite / MySQL）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "数据库用来长期、高效、安全地存数据",
+            "SQLite 零安装最快上手，MySQL 更接近生产环境",
+            "SQLite 官网 sqlite.org/download.html，MySQL 官网 dev.mysql.com/downloads/",
+            "用 sqlite3 --version 或 mysql --version 验证安装",
+            "命令找不到 = 没加 PATH，手动加环境变量"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "SQLite 快速自检",
+          'code': "SELECT 1 + 1;\n-- 能输出 2 就说明 SQLite 可用"
+        }
+      ]
+    },
+    {
+      'id': "sql-2",
+      'title': "SQL 分类（DDL/DML/DQL/DCL）",
+      'summary': "把 SQL 命令分成四大类，学习顺序一目了然。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "SQL 全称 Structured Query Language（结构化查询语言），是一门用来和数据库『对话』的语言。不管是 SQLite、MySQL、PostgreSQL、Oracle，只要用 SQL 就能操作它们。SQL 命令非常多，但我们可以把它分成四大类，记住了分类，学起来就井井有条。"
+        },
+        {
+          'type': "table",
+          'head': [
+            "分类",
+            "全称",
+            "作用",
+            "代表命令"
+          ],
+          'rows': [
+            [
+              "DDL",
+              "数据定义语言",
+              "定义数据结构（建库、建表、删表）",
+              "CREATE / DROP / ALTER"
+            ],
+            [
+              "DML",
+              "数据操纵语言",
+              "对数据增删改",
+              "INSERT / UPDATE / DELETE"
+            ],
+            [
+              "DQL",
+              "数据查询语言",
+              "查询数据（用得最多）",
+              "SELECT"
+            ],
+            [
+              "DCL",
+              "数据控制语言",
+              "管理权限和用户",
+              "GRANT / REVOKE"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "每种分类看一眼示例"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "四大分类的命令示例",
+          'code': "CREATE DATABASE school;            -- DDL：建库\nCREATE TABLE student (id INT);      -- DDL：建表\nINSERT INTO student VALUES (1);     -- DML：插入\nSELECT * FROM student;              -- DQL：查询\nGRANT ALL ON *.* TO 'root';         -- DCL：授权"
+        },
+        {
+          'type': "info",
+          'title': "DQL 为什么单独拎出来",
+          'text': "在真实开发里，查询（SELECT）占了所有 SQL 的七八成，所以专门分成一类。后面章节大部分时间都在学 DQL。"
+        },
+        {
+          'type': "tip",
+          'title': "学习顺序建议",
+          'text': "先学 DDL（建表）→ 再学 DML（插入数据）→ 然后重点啃 DQL（查询）→ 最后了解 DCL（权限）。本章之后的路线也大致如此。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"SQL 分类（DDL/DML/DQL/DCL）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"SQL 分类（DDL/DML/DQL/DCL）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"SQL 分类（DDL/DML/DQL/DCL）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "SQL 是操作关系型数据库的通用语言",
+            "DDL 管结构：CREATE/DROP/ALTER",
+            "DML 管数据：INSERT/UPDATE/DELETE",
+            "DQL 查数据：SELECT（最重要）",
+            "DCL 管权限：GRANT/REVOKE"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "四分类小演示",
+          'code': "CREATE DATABASE demo;\nCREATE TABLE student (id INT, name VARCHAR(20));\nINSERT INTO student VALUES (1, '小明');\nSELECT * FROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-3",
+      'title': "数据库与表的基本操作",
+      'summary': "CREATE DATABASE、USE、SHOW、DROP，管好数据库本身。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据库好比一栋大楼，里面有很多房间（表），每个房间放一类东西。本章先学会『怎么建大楼、怎么进入房间、怎么查看、怎么拆楼』——也就是数据库本身的增删查操作。"
+        },
+        {
+          'type': "h",
+          'text': "创建数据库 CREATE DATABASE"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "创建并查看数据库",
+          'code': "CREATE DATABASE school;\nCREATE DATABASE IF NOT EXISTS school;  -- 存在就不报错\nSHOW DATABASES;                         -- 查看所有数据库"
+        },
+        {
+          'type': "h",
+          'text': "使用数据库 USE"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "进入指定数据库",
+          'code': "USE school;    -- 之后的操作都在 school 里进行\nSELECT DATABASE();  -- 查看当前在哪个库"
+        },
+        {
+          'type': "h",
+          'text': "删除数据库 DROP"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "删除数据库（慎用）",
+          'code': "DROP DATABASE school;   -- 整个库和所有表一起没了\nDROP DATABASE IF EXISTS school;"
+        },
+        {
+          'type': "danger",
+          'title': "DROP 无法撤销",
+          'text': "DROP DATABASE 会连同里面的所有表和数据一起彻底删除，且无法恢复。练习时建议多用临时数据库（比如 demo、test），千万别在重要数据库上乱试。"
+        },
+        {
+          'type': "h",
+          'text': "MySQL 与 SQLite 的小区别"
+        },
+        {
+          'type': "table",
+          'head': [
+            "操作",
+            "MySQL",
+            "SQLite"
+          ],
+          'rows': [
+            [
+              "建库",
+              "CREATE DATABASE 库名",
+              "不需要，一个 .db 文件即一个库"
+            ],
+            [
+              "查看库",
+              "SHOW DATABASES",
+              "没有这个概念"
+            ],
+            [
+              "进库",
+              "USE 库名",
+              "打开文件时指定 sqlite3 文件名"
+            ]
+          ]
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据库与表的基本操作\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据库与表的基本操作\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据库与表的基本操作\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "CREATE DATABASE 创建库，SHOW DATABASES 查看库",
+            "USE 库名 进入某个库",
+            "DROP DATABASE 删库，危险且不可恢复",
+            "SQLite 一个文件即一个库，无需建库语句"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "建库三步走",
+          'code': "CREATE DATABASE IF NOT EXISTS school;\nSHOW DATABASES;\nUSE school;"
+        }
+      ]
+    },
+    {
+      'id': "sql-4",
+      'title': "CREATE TABLE 建表",
+      'summary': "用 CREATE TABLE 定义表结构和列，建出第一张表。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据库建好后，要在里面『盖房间』——这个房间就是表（Table）。表由列（字段）组成，每一列有名字和类型。建表是后续一切操作的地基，语法也很直观。"
+        },
+        {
+          'type': "h",
+          'text': "最基础的建表语句"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "创建学生表",
+          'code': "CREATE TABLE student (\n    id   INT,\n    name VARCHAR(20),\n    age  INT,\n    score DECIMAL(5,2)\n);"
+        },
+        {
+          'type': "p",
+          'text': "语法解读：<code.inline>CREATE TABLE 表名 (列名 类型, 列名 类型, ...)</code.inline>。上面建了一张 student 表，有 4 列：id 是整数，name 是最多 20 个字符的字符串，age 是整数，score 是保留 2 位小数的小数。"
+        },
+        {
+          'type': "h",
+          'text': "查看表结构"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查看表有哪些列",
+          'code': "DESC student;       -- MySQL\nSHOW CREATE TABLE student;  -- 查看建表语句\n-- SQLite 用：.schema student"
+        },
+        {
+          'type': "h",
+          'text': "带约束建表（提前体验）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "加上主键等约束",
+          'code': "CREATE TABLE student (\n    id   INT PRIMARY KEY AUTO_INCREMENT,  -- 主键且自动递增\n    name VARCHAR(20) NOT NULL,            -- 不能为空\n    age  INT DEFAULT 0                    -- 默认值 0\n);"
+        },
+        {
+          'type': "tip",
+          'title': "列名/表名注意",
+          'text': "表名和列名不要用中文、不要用空格，用英文小写加下划线，例如 user_info、order_detail。这样在不同数据库之间兼容性最好。"
+        },
+        {
+          'type': "warn",
+          'title': "分号别丢",
+          'text': "SQL 语句以分号 ; 结尾是习惯（SQLite 里每条命令必须有分号）。漏了分号，命令行里按回车不执行，会一直等待，新手经常卡在这一步。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"CREATE TABLE 建表\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"CREATE TABLE 建表\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"CREATE TABLE 建表\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "建表语法：CREATE TABLE 表名 (列名 类型, ...)",
+            "列由『名字 + 类型』组成，如 INT、VARCHAR",
+            "DESC 表名 / SHOW CREATE TABLE 查看结构",
+            "PRIMARY KEY 主键、NOT NULL 非空、DEFAULT 默认值",
+            "语句以分号结尾"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "建一张商品表",
+          'code': "CREATE TABLE product (\n    id       INT PRIMARY KEY AUTO_INCREMENT,\n    name     VARCHAR(50) NOT NULL,\n    price    DECIMAL(10,2),\n    stock    INT DEFAULT 0,\n    category VARCHAR(20)\n);"
+        }
+      ]
+    },
+    {
+      'id': "sql-5",
+      'title': "数据类型（INT/VARCHAR/DATE/DECIMAL/TEXT）",
+      'summary': "数值、字符串、日期三类类型逐个吃透，选对类型很重要。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "每一列都要声明『类型』，就像盒子要标明装什么：装数字的、装文字的、装日期的。类型决定了能存什么、占多少空间、怎么比较。SQL 常用的数据类型可以归为三类：数值、字符串、日期时间。"
+        },
+        {
+          'type': "h",
+          'text': "数值类型"
+        },
+        {
+          'type': "table",
+          'head': [
+            "类型",
+            "说明",
+            "例子"
+          ],
+          'rows': [
+            [
+              "INT / INTEGER",
+              "整数",
+              "年龄、数量 25"
+            ],
+            [
+              "DECIMAL(m,d)",
+              "精确小数，m 总位数 d 小数位",
+              "价格 1999.99"
+            ],
+            [
+              "FLOAT / DOUBLE",
+              "近似小数",
+              "科学计算"
+            ],
+            [
+              "BIGINT",
+              "超大整数",
+              "订单号"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "字符串类型"
+        },
+        {
+          'type': "table",
+          'head': [
+            "类型",
+            "说明",
+            "例子"
+          ],
+          'rows': [
+            [
+              "VARCHAR(n)",
+              "可变长字符串，最多 n 字符",
+              "姓名、标题"
+            ],
+            [
+              "TEXT",
+              "长文本",
+              "文章正文"
+            ],
+            [
+              "CHAR(n)",
+              "定长字符串",
+              "固定长度编码"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "日期时间类型"
+        },
+        {
+          'type': "table",
+          'head': [
+            "类型",
+            "说明",
+            "例子"
+          ],
+          'rows': [
+            [
+              "DATE",
+              "仅日期",
+              "2026-08-28"
+            ],
+            [
+              "TIME",
+              "仅时间",
+              "14:30:00"
+            ],
+            [
+              "DATETIME / TIMESTAMP",
+              "日期 + 时间",
+              "2026-08-28 14:30:00"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "使用各种类型建表",
+          'code': "CREATE TABLE article (\n    id         INT PRIMARY KEY,\n    title      VARCHAR(100),\n    content    TEXT,\n    price      DECIMAL(10,2),\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);"
+        },
+        {
+          'type': "warn",
+          'title': "用 DECIMAL 别用 FLOAT 存钱",
+          'text': "金额这种需要精确的数据，一定用 DECIMAL，不要用 FLOAT/DOUBLE。因为浮点数在计算机里是近似存储，0.1 + 0.2 可能等于 0.30000000000000004，钱算错是要出大问题的。"
+        },
+        {
+          'type': "info",
+          'title': "不同数据库类型略有差别",
+          'text': "MySQL 用 VARCHAR、DATETIME；SQLite 的类型更宽松，甚至可以不写类型。本章以 MySQL 语法为主，但概念通用。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据类型（INT/VARCHAR/DATE/DECIMAL/TEXT）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据类型（INT/VARCHAR/DATE/DECIMAL/TEXT）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据类型（INT/VARCHAR/DATE/DECIMAL/TEXT）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "数值：INT 整数、DECIMAL 精确小数、FLOAT 近似小数",
+            "字符串：VARCHAR(n) 变长、TEXT 长文本",
+            "日期：DATE 日期、DATETIME 日期时间",
+            "存钱用 DECIMAL，不用 FLOAT",
+            "建表时给每列定好类型，是数据规范的第一步"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "文章表模板",
+          'code': "CREATE TABLE article (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    title      VARCHAR(100) NOT NULL,\n    content    TEXT,\n    views      INT DEFAULT 0,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);"
+        }
+      ]
+    },
+    {
+      'id': "sql-6",
+      'title': "约束初步（PRIMARY KEY、NOT NULL、UNIQUE）",
+      'summary': "用主键、非空、唯一三种约束，拦住脏数据。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "约束（Constraint）就是给列定规矩，防止垃圾数据进表。比如身份证号不能重复、年龄不能为空、性别只能填男女。本章学三个最常用的约束：PRIMARY KEY、NOT NULL、UNIQUE。"
+        },
+        {
+          'type': "h",
+          'text': "PRIMARY KEY 主键"
+        },
+        {
+          'type': "p",
+          'text': "主键是每行数据的唯一身份标识，就像身份证号。主键值不能重复、不能为空。一张表通常只有一个主键。"
+        },
+        {
+          'type': "h",
+          'text': "NOT NULL 非空"
+        },
+        {
+          'type': "p",
+          'text': "加上 NOT NULL 的列，插入数据时必须给值，不能留空。适合姓名、标题这类必须有的字段。"
+        },
+        {
+          'type': "h",
+          'text': "UNIQUE 唯一"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "三个约束一起用",
+          'code': "CREATE TABLE user (\n    id       INT PRIMARY KEY,           -- 主键：不能重复不能空\n    email    VARCHAR(50) UNIQUE,        -- 唯一：不能重复，可以为空\n    nickname VARCHAR(20) NOT NULL,      -- 非空：必须填\n    age      INT\n);"
+        },
+        {
+          'type': "h",
+          'text': "违反约束会怎样"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "插入违反约束的数据会报错",
+          'code': "INSERT INTO user (id, email, nickname, age)\nVALUES (1, 'a@b.com', '小明', 20);\n\nINSERT INTO user (id, email, nickname, age)\nVALUES (1, 'c@d.com', '小红', 21);  -- 错误！id=1 重复了"
+        },
+        {
+          'type': "warn",
+          'title': "主键 vs 唯一，别混淆",
+          'text': "主键（PRIMARY KEY）默认就自带非空+唯一，通常只有一个；唯一（UNIQUE）只限制不能重复，但允许多个 UNIQUE 列，且 UNIQUE 列可以留空。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"约束初步（PRIMARY KEY、NOT NULL、UNIQUE）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"约束初步（PRIMARY KEY、NOT NULL、UNIQUE）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"约束初步（PRIMARY KEY、NOT NULL、UNIQUE）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "约束是给数据定的规矩，防止脏数据",
+            "PRIMARY KEY 主键：唯一且非空，一张表一个",
+            "NOT NULL：该列必须有值",
+            "UNIQUE：该列不能重复",
+            "违反约束时 INSERT/UPDATE 会直接报错"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "用户表约束演示",
+          'code': "CREATE TABLE user (\n    id    INT PRIMARY KEY,\n    email VARCHAR(50) UNIQUE,\n    name  VARCHAR(20) NOT NULL\n);\nINSERT INTO user VALUES (1, 'a@b.com', '小明');"
+        }
+      ]
+    },
+    {
+      'id': "sql-7",
+      'title': "INSERT 插入数据（单行/多行）",
+      'summary': "把数据一行行或一批批塞进表里，学会正确姿势。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "表建好了是空的，像一张没有内容的表格。用 INSERT 往里加数据，就像往表格里填一行。本章学单行插入和多行插入。"
+        },
+        {
+          'type': "h",
+          'text': "单行插入"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按顺序插入",
+          'code': "CREATE TABLE student (id INT, name VARCHAR(20), age INT);\nINSERT INTO student VALUES (1, '小明', 18);\n-- 字符串用单引号，数字不用引号"
+        },
+        {
+          'type': "h",
+          'text': "指定列插入（推荐）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "明确列出列名",
+          'code': "INSERT INTO student (id, name, age) VALUES (2, '小红', 19);\nINSERT INTO student (name, id) VALUES ('小刚', 3);  -- 列的顺序可以换\nINSERT INTO student (id, name) VALUES (4, '小丽');  -- 没写的 age 是 NULL"
+        },
+        {
+          'type': "h",
+          'text': "多行插入"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "一次插多行，逗号分隔",
+          'code': "INSERT INTO student (id, name, age) VALUES\n    (5, '王五', 20),\n    (6, '赵六', 21),\n    (7, '钱七', 22);"
+        },
+        {
+          'type': "warn",
+          'title': "三个最常见的坑",
+          'text': "第一：值的个数必须和列数一致，少一个都报错。第二：字符串必须加单引号，数字不要加。第三：如果某列有 NOT NULL 约束却不给它赋值，会插入失败。"
+        },
+        {
+          'type': "tip",
+          'title': "AUTO_INCREMENT 自动编号",
+          'text': "如果主键列设置了 AUTO_INCREMENT（MySQL），插入时可以不用写主键值，数据库会自动生成：INSERT INTO student (name, age) VALUES ('小美', 20); 主键自动从 1 开始递增。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"INSERT 插入数据（单行/多行）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"INSERT 插入数据（单行/多行）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"INSERT 插入数据（单行/多行）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "INSERT INTO 表 VALUES (...) 按顺序插入",
+            "推荐写清楚列名：INSERT INTO 表 (列...) VALUES (...)",
+            "一次可插多行，用逗号分隔多个值组",
+            "字符串加单引号，数字不加",
+            "有 NOT NULL 的列必须给值"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "批量插入学生",
+          'code': "INSERT INTO student (id, name, age) VALUES\n    (1, '小明', 18),\n    (2, '小红', 19),\n    (3, '小刚', 20);\nSELECT * FROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-8",
+      'title': "SELECT 基础（列与 *）",
+      'summary': "用 SELECT 从表里取出想要的列，查询从这里起步。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "SELECT 是 SQL 里最重要的命令，用来从表里『取数据』。可以把表想成一张成绩单，SELECT 就是回答『我想看哪些列、哪些行』。"
+        },
+        {
+          'type': "h",
+          'text': "准备一张表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "建表并插入示例数据",
+          'code': "CREATE TABLE student (id INT, name VARCHAR(20), age INT, score DECIMAL(5,2));\nINSERT INTO student VALUES\n    (1, '小明', 18, 92.5),\n    (2, '小红', 19, 88.0),\n    (3, '小刚', 20, 95.5);"
+        },
+        {
+          'type': "h",
+          'text': "选择指定列"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "只要名字和分数",
+          'code': "SELECT name, score FROM student;\n-- 结果只有两列：name 和 score"
+        },
+        {
+          'type': "h",
+          'text': "选择所有列"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "* 表示所有列",
+          'code': "SELECT * FROM student;\n-- 结果包含全部列"
+        },
+        {
+          'type': "tip",
+          'title': "生产环境少用 *",
+          'text': "SELECT * 会把所有列都查出来，浪费带宽。真实项目里建议明确写出要的列名，既能看清要什么，也方便后续加列时不受影响。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"SELECT 基础（列与 *）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"SELECT 基础（列与 *）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"SELECT 基础（列与 *）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "SELECT 列名, 列名 FROM 表名 查询指定列",
+            "SELECT * FROM 表名 查询所有列",
+            "SELECT 只读不写，不会改动数据",
+            "生产环境尽量写明确列名而非 *"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "查询所有学生",
+          'code': "SELECT id, name, age, score FROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-9",
+      'title': "别名 AS 与去重 DISTINCT",
+      'summary': "用 AS 给列起别名，用 DISTINCT 去掉重复行。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "给列或表起个『外号』叫别名（AS），让查询结果更好读；用 DISTINCT 去掉重复的行，让数据更干净。本章两个小技巧，开发中天天用。"
+        },
+        {
+          'type': "h",
+          'text': "列别名 AS"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "给列起中文别名",
+          'code': "SELECT name AS 姓名, score AS 分数\nFROM student;\n-- 结果表头显示『姓名』『分数』"
+        },
+        {
+          'type': "p",
+          'text': "AS 可以省略，直接写空格：<code.inline>SELECT name 姓名 FROM student</code.inline>。但为了清晰，推荐写上 AS。"
+        },
+        {
+          'type': "h",
+          'text': "去重 DISTINCT"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "看有哪些不重复的班级",
+          'code': "SELECT DISTINCT class FROM student;\n-- 比如 student 表里 class 有 1班 1班 2班 3班\n-- 结果只有 1班 2班 3班 三行"
+        },
+        {
+          'type': "warn",
+          'title': "DISTINCT 是对整行去重",
+          'text': "DISTINCT 比较的是你选出的『那一整行』是否相同。比如 SELECT DISTINCT class, age FROM student，只有 class 和 age 两列都相同才算重复；如果一列相同一列不同，会全部保留。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"别名 AS 与去重 DISTINCT\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"别名 AS 与去重 DISTINCT\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"别名 AS 与去重 DISTINCT\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "别名用 AS：SELECT 列 AS 别名",
+            "别名只是显示名，不改表里真实数据",
+            "DISTINCT 去重：SELECT DISTINCT 列",
+            "DISTINCT 对选出的整行判断重复"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "别名 + 去重",
+          'code': "SELECT name AS 姓名, score AS 分数 FROM student;\nSELECT DISTINCT class FROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-10",
+      'title': "WHERE 条件过滤",
+      'summary': "用 WHERE 只留下满足条件的行，过滤出想要的数据。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "SELECT 选出列，WHERE 筛选行。WHERE 后面写条件，只有满足条件的行才会出现在结果里，就像成绩单里『只挑出及格的同学』。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "基础 WHERE",
+          'code': "SELECT * FROM student\nWHERE age = 18;\n-- 只显示 age 等于 18 的学生"
+        },
+        {
+          'type': "h",
+          'text': "配合比较运算符"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "各种条件写法",
+          'code': "SELECT name FROM student WHERE age > 18;   -- 大于\nSELECT name FROM student WHERE age >= 18;  -- 大于等于\nSELECT name FROM student WHERE age < 18;   -- 小于\nSELECT name FROM student WHERE age <> 18;  -- 不等于（也可以写 !=）\nSELECT name FROM student WHERE score > 90;\nSELECT name FROM student WHERE name = '小明';  -- 字符串比较用等号"
+        },
+        {
+          'type': "info",
+          'title': "WHERE 写在 FROM 后面",
+          'text': "SELECT 语句的顺序是：SELECT 列 → FROM 表 → WHERE 条件。WHERE 一定在 FROM 之后，写在别的位置会语法报错。"
+        },
+        {
+          'type': "warn",
+          'title': "字符串要加引号",
+          'text': "比较字符串时值要加单引号：WHERE name = '小明'，写 WHERE name = 小明 会报错（小明被当成列名）。数字不需要引号。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"WHERE 条件过滤\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"WHERE 条件过滤\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"WHERE 条件过滤\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "WHERE 用于筛选行，跟在 FROM 后面",
+            "比较符：> < >= <= = <> (!=)",
+            "字符串值必须加单引号",
+            "WHERE 选行，SELECT 选列，互不冲突"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "筛选及格学生",
+          'code': "SELECT name, score FROM student\nWHERE score >= 60;"
+        }
+      ]
+    },
+    {
+      'id': "sql-11",
+      'title': "比较运算符与逻辑运算符（AND/OR/NOT）",
+      'summary': "用 AND/OR/NOT 组合多个条件，精准圈出目标数据。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "一个条件不够用时，可以用 AND、OR、NOT 把多个条件组合起来。AND 表示『并且』，OR 表示『或者』，NOT 表示『取反』。这是 WHERE 里最常用的组合技巧。"
+        },
+        {
+          'type': "table",
+          'head': [
+            "运算符",
+            "含义",
+            "例子"
+          ],
+          'rows': [
+            [
+              "AND",
+              "两个条件都满足才留下",
+              "age > 18 AND score > 90"
+            ],
+            [
+              "OR",
+              "满足其中一个就留下",
+              "age > 18 OR score > 90"
+            ],
+            [
+              "NOT",
+              "取反",
+              "NOT age = 18"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "组合条件示例",
+          'code': "SELECT name, age, score FROM student\nWHERE age >= 18 AND score >= 90;\n-- 成年 且 高分\n\nSELECT name, age FROM student\nWHERE age < 18 OR age > 22;\n-- 未成年 或 大于22\n\nSELECT name FROM student\nWHERE NOT class = '1班';\n-- 不是1班的学生"
+        },
+        {
+          'type': "h",
+          'text': "优先级与括号"
+        },
+        {
+          'type': "p",
+          'text': "NOT 优先级最高，然后 AND，最后 OR。当条件混在一起容易读错时，用括号强制顺序、提升可读性。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用括号改变逻辑",
+          'code': "SELECT * FROM student\nWHERE (age >= 18 AND score >= 90)\n   OR (age < 18 AND score >= 95);"
+        },
+        {
+          'type': "warn",
+          'title': "新手经典错误",
+          'text': "想表达『年龄不是 18 也不是 20』，写 WHERE age <> 18 OR age <> 20 是错的——这样任何年龄都满足。正确写法：WHERE age <> 18 AND age <> 20，或 WHERE age NOT IN (18, 20)。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"比较运算符与逻辑运算符（AND/OR/NOT）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"比较运算符与逻辑运算符（AND/OR/NOT）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"比较运算符与逻辑运算符（AND/OR/NOT）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "AND 并且、OR 或者、NOT 取反",
+            "优先级：NOT > AND > OR",
+            "复杂条件用括号分隔，清晰又安全",
+            "否定多个条件时用 AND 连接，别用 OR"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "组合筛选",
+          'code': "SELECT name, age, score FROM student\nWHERE age >= 18 AND score >= 90;"
+        }
+      ]
+    },
+    {
+      'id': "sql-12",
+      'title': "模糊查询 LIKE 与通配符（% _）",
+      'summary': "用 LIKE 配合 % 和 _ 做模糊匹配，搜名字搜关键词。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "WHERE 里用 LIKE 做模糊匹配，适合『记不全、搜部分』的场景，比如搜名字里带『小』字的人、搜邮箱以 @gmail.com 结尾的用户。"
+        },
+        {
+          'type': "table",
+          'head': [
+            "通配符",
+            "含义",
+            "例子"
+          ],
+          'rows': [
+            [
+              "%",
+              "任意多个字符（含 0 个）",
+              "小% 匹配 小明、小刚、小"
+            ],
+            [
+              "_",
+              "恰好一个字符",
+              "小_ 匹配 小明、小刚，不匹配 小"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "LIKE 的常见用法",
+          'code': "SELECT * FROM student WHERE name LIKE '小%';\n-- 名字以『小』开头\n\nSELECT * FROM student WHERE name LIKE '%明';\n-- 名字以『明』结尾\n\nSELECT * FROM student WHERE name LIKE '%小%';\n-- 名字中间任何位置有『小』\n\nSELECT * FROM student WHERE name LIKE '小_';\n-- 以『小』开头且总共 2 个字\n\nSELECT * FROM student WHERE name NOT LIKE '%小%';\n-- 名字里不含『小』"
+        },
+        {
+          'type': "tip",
+          'title': "% 放哪边很关键",
+          'text': "字符串 '%小%' 前后都有 %，表示任意位置；'小%' 只有后面有 %，表示以『小』开头。放的位置决定匹配的形态。"
+        },
+        {
+          'type': "warn",
+          'title': "LIKE 性能问题",
+          'text': "以 % 开头的模糊查询（如 LIKE '%小%'）无法利用索引，数据量大时会很慢。如果确实要搜『包含』，建议用全文检索方案，或至少避免在超大表上频繁使用。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"模糊查询 LIKE 与通配符（% _）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"模糊查询 LIKE 与通配符（% _）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"模糊查询 LIKE 与通配符（% _）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "LIKE 做模糊匹配，配合 % 和 _ 通配符",
+            "% 代表任意多个字符，_ 代表一个字符",
+            "% 的位置决定匹配方式（开头/结尾/任意位置）",
+            "NOT LIKE 表示不匹配",
+            "以 % 开头的 LIKE 无法走索引，大表慎用"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "搜名字含小的人",
+          'code': "SELECT * FROM student WHERE name LIKE '%小%';"
+        }
+      ]
+    },
+    {
+      'id': "sql-13",
+      'title': "BETWEEN 与 IN",
+      'summary': "区间用 BETWEEN，多值匹配用 IN，让 WHERE 更简洁。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "判断『在一个范围内』用 BETWEEN，判断『在几个值里』用 IN。它们让 WHERE 条件更简洁。"
+        },
+        {
+          'type': "h",
+          'text': "BETWEEN 范围查询"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "BETWEEN 包含边界",
+          'code': "SELECT name, score FROM student\nWHERE score BETWEEN 80 AND 90;\n-- 等价于 score >= 80 AND score <= 90（含 80 和 90）\n\nSELECT name, age FROM student\nWHERE age NOT BETWEEN 18 AND 20;\n-- 不在 18~20 之间"
+        },
+        {
+          'type': "h",
+          'text': "IN 多值匹配"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "IN 匹配多个值",
+          'code': "SELECT name, class FROM student\nWHERE class IN ('1班', '3班');\n-- 等价于 class = '1班' OR class = '3班'\n\nSELECT name FROM student\nWHERE id IN (1, 3, 5);\n\nSELECT name FROM student\nWHERE class NOT IN ('1班', '2班');"
+        },
+        {
+          'type': "info",
+          'title': "IN 比多个 OR 好读",
+          'text': "IN (…) 本质就是多个 OR 的简写，但可读性好得多。以后学子查询时，IN 还能接一个子查询的结果集，非常强大。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"BETWEEN 与 IN\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"BETWEEN 与 IN\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"BETWEEN 与 IN\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "BETWEEN 前后都包含边界",
+            "IN (值1,值2,...) 匹配集合中任意一个",
+            "BETWEEN 和 IN 都支持前面加 NOT",
+            "IN 可理解为多个 OR 的优雅写法"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "范围与多值",
+          'code': "SELECT name, score FROM student WHERE score BETWEEN 60 AND 90;\nSELECT name, class FROM student WHERE class IN ('1班', '3班');"
+        }
+      ]
+    },
+    {
+      'id': "sql-14",
+      'title': "空值处理 IS NULL 与 IS NOT NULL",
+      'summary': "NULL 表示没有值，判断空必须用 IS NULL，踩坑预警。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "NULL 表示『不知道/没填』，它不是 0、不是空字符串，而是『没有值』。处理 NULL 是 SQL 新手最容易翻车的点，因为 NULL 的运算规则很特别。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "构造含 NULL 的数据",
+          'code': "CREATE TABLE student (id INT, name VARCHAR(20), phone VARCHAR(20));\nINSERT INTO student VALUES\n    (1, '小明', '13800000000'),\n    (2, '小红', NULL),        -- 小红没填电话\n    (3, '小刚', NULL);"
+        },
+        {
+          'type': "h",
+          'text': "判断是否为 NULL"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用 IS NULL / IS NOT NULL",
+          'code': "SELECT * FROM student WHERE phone IS NULL;\n-- 找出没填电话的人\n\nSELECT * FROM student WHERE phone IS NOT NULL;\n-- 找出填了电话的人"
+        },
+        {
+          'type': "danger",
+          'title': "最经典的坑：= NULL 永远查不到",
+          'text': "用 WHERE phone = NULL 查不出来任何东西！NULL 不是一个值，不能用 = 或 <> 比较。判断空必须用 IS NULL / IS NOT NULL。同理 NOT phone = NULL 也什么都查不到，要用 phone IS NOT NULL。"
+        },
+        {
+          'type': "h",
+          'text': "NULL 参与运算"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "NULL 运算结果是 NULL",
+          'code': "SELECT 1 + NULL;   -- 结果是 NULL\nSELECT 'a' || NULL;  -- 结果是 NULL（拼接含 NULL 得 NULL）\n-- NULL 与任何值运算/比较结果都是 NULL（未知）"
+        },
+        {
+          'type': "tip",
+          'title': "用 IFNULL / COALESCE 兜底",
+          'text': "想给空值一个默认显示值，MySQL 用 IFNULL(phone, '未填写')，标准写法 COALESCE(phone, '未填写')：如果 phone 是 NULL 就显示『未填写』。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"空值处理 IS NULL 与 IS NOT NULL\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"空值处理 IS NULL 与 IS NOT NULL\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"空值处理 IS NULL 与 IS NOT NULL\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "NULL 表示没有值，不是 0 也不是空字符串",
+            "判断空用 IS NULL / IS NOT NULL，绝不能用 =",
+            "NULL 参与任何运算结果都是 NULL",
+            "用 IFNULL / COALESCE 给空值设默认显示"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "查找没填电话的人",
+          'code': "SELECT * FROM student WHERE phone IS NULL;\nSELECT name, IFNULL(phone, '未填写') FROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-15",
+      'title': "ORDER BY 排序（ASC/DESC、多列排序）",
+      'summary': "用 ORDER BY 给结果排序，升序降序加多列组合。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "查询结果默认是无序的。用 ORDER BY 按某一列排序：ASC 升序（默认）、DESC 降序，还能多列组合排序，让结果整整齐齐。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按分数排序",
+          'code': "SELECT name, score FROM student\nORDER BY score;          -- 升序（默认，低到高）\n\nSELECT name, score FROM student\nORDER BY score DESC;     -- 降序（高到低）"
+        },
+        {
+          'type': "h",
+          'text': "多列排序"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "先按班级再按分数",
+          'code': "SELECT class, name, score FROM student\nORDER BY class ASC, score DESC;\n-- 先按 class 升序，同班级的再按 score 降序"
+        },
+        {
+          'type': "tip",
+          'title': "NULL 的排序位置",
+          'text': "ORDER BY 时，NULL 默认排在最前（ASC）或最后（DESC），不同数据库略有差别。想控制可以在排序字段上用 IS NULL 表达式。"
+        },
+        {
+          'type': "warn",
+          'title': "ORDER BY 放最后",
+          'text': "SELECT 语句里 ORDER BY 必须写在最后（在 WHERE、GROUP BY 等之后）。把它写到 FROM 后面或 WHERE 前面都会语法报错。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"ORDER BY 排序（ASC/DESC、多列排序）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"ORDER BY 排序（ASC/DESC、多列排序）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"ORDER BY 排序（ASC/DESC、多列排序）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "ORDER BY 列 ASC 升序 / DESC 降序",
+            "不写 ASC/DESC 默认升序",
+            "多列排序：ORDER BY 列1, 列2，先按列1",
+            "ORDER BY 必须写在 SELECT 语句最后"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "成绩榜",
+          'code': "SELECT name, score FROM student ORDER BY score DESC;"
+        }
+      ]
+    },
+    {
+      'id': "sql-16",
+      'title': "LIMIT/OFFSET 分页",
+      'summary': "用 LIMIT 和 OFFSET 实现分页，学会分页公式。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据多了不可能一次全显示，分页是最常见的需求（比如论坛第 1 页、第 2 页）。LIMIT 控制取多少条，OFFSET 控制从第几条开始。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "LIMIT 取前几条",
+          'code': "SELECT * FROM student ORDER BY id\nLIMIT 5;   -- 只取前 5 条\n\nSELECT * FROM student\nLIMIT 5 OFFSET 5;   -- 跳过前 5 条，取第 6~10 条"
+        },
+        {
+          'type': "h",
+          'text': "分页公式"
+        },
+        {
+          'type': "table",
+          'head': [
+            "页码 n",
+            "每页 m 条",
+            "SQL 写法"
+          ],
+          'rows': [
+            [
+              "第 1 页",
+              "10 条",
+              "LIMIT 10 OFFSET 0"
+            ],
+            [
+              "第 2 页",
+              "10 条",
+              "LIMIT 10 OFFSET 10"
+            ],
+            [
+              "第 3 页",
+              "10 条",
+              "LIMIT 10 OFFSET 20"
+            ]
+          ]
+        },
+        {
+          'type': "p",
+          'text': "规律：OFFSET = (页码 - 1) × 每页条数。比如第 3 页每页 10 条，OFFSET = (3-1)×10 = 20。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "结合排序的分页",
+          'code': "SELECT id, name FROM student\nORDER BY id\nLIMIT 10 OFFSET 0;   -- 第 1 页\n\n-- 用变量写通用分页（MySQL）\nSET @page = 3; SET @size = 10;\nSELECT * FROM student\nLIMIT @size OFFSET (@page - 1) * @size;"
+        },
+        {
+          'type': "warn",
+          'title': "大 OFFSET 很慢",
+          'text': "OFFSET 太大（比如第 10000 页）时，数据库要先跳过前面所有行，很慢。数据量大时更推荐『键集分页』：WHERE id > 上一页最后一条的 id ORDER BY id LIMIT 10。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"LIMIT/OFFSET 分页\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"LIMIT/OFFSET 分页\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"LIMIT/OFFSET 分页\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "LIMIT n 取前 n 条",
+            "OFFSET m 跳过前 m 条",
+            "分页公式：OFFSET = (页码-1) × 每页条数",
+            "大 OFFSET 性能差，数据多时用键集分页"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "每页3条取第2页",
+          'code': "SELECT * FROM student ORDER BY id\nLIMIT 3 OFFSET 3;"
+        }
+      ]
+    },
+    {
+      'id': "sql-17",
+      'title': "算术运算与字符串函数（CONCAT/UPPER/LENGTH）",
+      'summary': "把 SELECT 当计算器，对列做算术和字符串变换。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "SELECT 不止能取列，还能对列做计算。数字可以加减乘除，字符串可以用函数变换。这一章把 SQL 当计算器使。"
+        },
+        {
+          'type': "h",
+          'text': "算术运算"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "对列做算术",
+          'code': "SELECT price, price * 0.9 AS discount_price\nFROM product;\n-- 打 9 折后的价格\n\nSELECT score, score + 5 AS bonus_score\nFROM student;\n-- 平时分加 5 分\n\nSELECT 7 / 2;    -- 3.5\nSELECT 7 DIV 2;  -- 3 整除\nSELECT 7 % 2;    -- 1 取余"
+        },
+        {
+          'type': "h",
+          'text': "字符串函数"
+        },
+        {
+          'type': "table",
+          'head': [
+            "函数",
+            "作用",
+            "例子"
+          ],
+          'rows': [
+            [
+              "CONCAT(a, b)",
+              "拼接字符串",
+              "CONCAT('小','明') → 小明"
+            ],
+            [
+              "UPPER(s)",
+              "转大写",
+              "UPPER('abc') → ABC"
+            ],
+            [
+              "LOWER(s)",
+              "转小写",
+              "LOWER('ABC') → abc"
+            ],
+            [
+              "LENGTH(s)",
+              "长度",
+              "LENGTH('abc') → 3"
+            ],
+            [
+              "SUBSTRING(s, i, n)",
+              "截取子串",
+              "SUBSTRING('hello',2,3) → ell"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "字符串函数实战",
+          'code': "SELECT CONCAT(first_name, last_name) AS full_name FROM user;\nSELECT UPPER(email) FROM user;\nSELECT name, LENGTH(name) AS name_len FROM student;\nSELECT CONCAT('分数：', score) FROM student;"
+        },
+        {
+          'type': "info",
+          'title': "函数不影响原数据",
+          'text': "函数作用在查询结果上，只是『显示成什么』，不会修改表里的真实数据。想永久修改要用 UPDATE（后面会学）。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"算术运算与字符串函数（CONCAT/UPPER/LENGTH）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"算术运算与字符串函数（CONCAT/UPPER/LENGTH）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"算术运算与字符串函数（CONCAT/UPPER/LENGTH）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "SELECT 里可以直接做四则运算",
+            "DIV 整除、% 取余",
+            "CONCAT 拼接、UPPER/LOWER 大小写、LENGTH 长度",
+            "函数只影响查询结果，不改表中数据"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "打九折计算",
+          'code': "SELECT name, price, price * 0.9 AS discount_price FROM product;"
+        }
+      ]
+    },
+    {
+      'id': "sql-18",
+      'title': "日期时间函数（NOW/DATE/YEAR）",
+      'summary': "拿当前时间、拆年月日、算日期差，处理时间数据。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "业务里到处是时间：注册时间、下单时间、生日。SQL 提供一堆日期函数，让你能取出当前时间、拆出年月日、做日期加减。"
+        },
+        {
+          'type': "table",
+          'head': [
+            "函数",
+            "作用",
+            "返回例子"
+          ],
+          'rows': [
+            [
+              "NOW()",
+              "当前日期时间",
+              "2026-08-28 14:30:00"
+            ],
+            [
+              "CURDATE()",
+              "当前日期",
+              "2026-08-28"
+            ],
+            [
+              "YEAR(d)",
+              "取年份",
+              "2026"
+            ],
+            [
+              "MONTH(d)",
+              "取月份",
+              "8"
+            ],
+            [
+              "DAY(d)",
+              "取日",
+              "28"
+            ],
+            [
+              "DATEDIFF(a,b)",
+              "相差天数",
+              "a 减 b 的天数"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "日期函数使用",
+          'code': "SELECT NOW();              -- 当前日期时间\nSELECT YEAR(NOW());        -- 今年\nSELECT MONTH(NOW());       -- 这个月\nSELECT DATE_ADD(NOW(), INTERVAL 7 DAY);  -- 7 天后\nSELECT DATEDIFF('2026-08-28', '2026-01-01');  -- 相距天数\n\n-- 查出某年注册的用户\nSELECT * FROM user WHERE YEAR(created_at) = 2026;"
+        },
+        {
+          'type': "tip",
+          'title': "日期比较小技巧",
+          'text': "日期之间可以直接用 > < = 比较，字符串格式 '2026-08-28' 和 DATE 类型可以互换，因为日期字符串是排序友好的格式。比如 WHERE created_at >= '2026-08-01' 就能查 8 月以来的记录。"
+        },
+        {
+          'type': "warn",
+          'title': "别在列上套函数导致索引失效",
+          'text': "WHERE YEAR(created_at) = 2026 虽然能查出来，但无法用上 created_at 的索引，数据量大时慢。更优写法：WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"日期时间函数（NOW/DATE/YEAR）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"日期时间函数（NOW/DATE/YEAR）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"日期时间函数（NOW/DATE/YEAR）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "NOW() 当前时间、CURDATE() 当前日期",
+            "YEAR/MONTH/DAY 拆出年月日",
+            "DATE_ADD 日期加减、DATEDIFF 相差天数",
+            "日期可字符串比较，'YYYY-MM-DD' 排序友好",
+            "条件里对列套函数会让索引失效"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "查今年注册用户",
+          'code': "SELECT * FROM user WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01';"
+        }
+      ]
+    },
+    {
+      'id': "sql-19",
+      'title': "聚合函数（COUNT/SUM/AVG/MAX/MIN）",
+      'summary': "用聚合函数把多行压成一个结果，掌握统计的基本功。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "有时候我们不关心每一条数据，而关心『整体情况』：一共多少人？总分多少？平均分多少？最高分最低分？聚合函数把多行数据『压』成一个结果。"
+        },
+        {
+          'type': "table",
+          'head': [
+            "函数",
+            "作用",
+            "例子"
+          ],
+          'rows': [
+            [
+              "COUNT(*)",
+              "统计行数",
+              "总共有多少学生"
+            ],
+            [
+              "COUNT(列)",
+              "统计非空值个数",
+              "有多少人填了电话"
+            ],
+            [
+              "SUM(列)",
+              "求和",
+              "总分"
+            ],
+            [
+              "AVG(列)",
+              "平均值",
+              "平均分"
+            ],
+            [
+              "MAX(列)",
+              "最大值",
+              "最高分"
+            ],
+            [
+              "MIN(列)",
+              "最小值",
+              "最低分"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "聚合函数实战",
+          'code': "SELECT COUNT(*)   AS total_student FROM student;   -- 学生总数\nSELECT AVG(score)  AS avg_score FROM student;        -- 平均分\nSELECT MAX(score)  AS max_score FROM student;        -- 最高分\nSELECT MIN(score)  AS min_score FROM student;        -- 最低分\nSELECT SUM(price)  AS total_sales FROM orders;       -- 销售额总和"
+        },
+        {
+          'type': "warn",
+          'title': "COUNT(*) 和 COUNT(列) 不一样",
+          'text': "COUNT(*) 数所有行；COUNT(列) 只数该列非 NULL 的行。如果某列有空值，两个结果可能不同。想数『有效记录』用 COUNT(列)。"
+        },
+        {
+          'type': "info",
+          'title': "SUM/AVG 忽略 NULL",
+          'text': "SUM 和 AVG 计算时会自动跳过 NULL 行，不需要手动排除。但如果某列全是 NULL，SUM 结果是 NULL，AVG 也返回 NULL。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"聚合函数（COUNT/SUM/AVG/MAX/MIN）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"聚合函数（COUNT/SUM/AVG/MAX/MIN）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"聚合函数（COUNT/SUM/AVG/MAX/MIN）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "聚合函数把多行压成一个结果",
+            "COUNT 数行数、SUM 求和、AVG 平均、MAX/MIN 极值",
+            "COUNT(*) 数全部，COUNT(列) 数非空",
+            "SUM/AVG 自动忽略 NULL",
+            "聚合函数常配别名使用，如 AS avg_score"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "班级统计",
+          'code': "SELECT\n    COUNT(*) AS 人数,\n    AVG(score) AS 平均分,\n    MAX(score) AS 最高分,\n    MIN(score) AS 最低分\nFROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-20",
+      'title': "GROUP BY 分组",
+      'summary': "按维度把数据分堆再统计，数据分析的核心手法。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "聚合函数算的是『整体』，GROUP BY 能把数据按某个维度『分堆』再分别统计。比如按班级统计平均分、按省份统计订单量，这是数据分析的核心手法。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按班级分组统计",
+          'code': "SELECT class, COUNT(*) AS 人数, AVG(score) AS 平均分\nFROM student\nGROUP BY class;\n-- 结果：每个班级一行，分别显示人数和平均分"
+        },
+        {
+          'type': "h",
+          'text': "分组原理"
+        },
+        {
+          'type': "list",
+          'items': [
+            "GROUP BY class 把相同 class 的行归为一组",
+            "每组再用聚合函数（COUNT/AVG/SUM...）计算",
+            "最终每组输出一行结果"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "更多分组统计",
+          'code': "-- 按性别统计人数\nSELECT gender, COUNT(*) FROM student GROUP BY gender;\n\n-- 按班级统计最高最低分\nSELECT class, MAX(score), MIN(score)\nFROM student GROUP BY class;\n\n-- 按年份统计注册人数\nSELECT YEAR(created_at), COUNT(*)\nFROM user GROUP BY YEAR(created_at);"
+        },
+        {
+          'type': "danger",
+          'title': "分组后 SELECT 的列必须有限制",
+          'text': "SELECT 里出现的『普通列』必须出现在 GROUP BY 里。SELECT class, name FROM student GROUP BY class 会报错——因为每组有多个人，name 该显示谁的？数据库不知道。要显示所有人的名字可以用 GROUP_CONCAT(name)。"
+        },
+        {
+          'type': "tip",
+          'title': "先 WHERE 再 GROUP",
+          'text': "WHERE 在分组之前过滤行，GROUP BY 在之后分组。想『只统计及格的人再分组』就写 WHERE score >= 60 然后再 GROUP BY。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"GROUP BY 分组\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"GROUP BY 分组\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"GROUP BY 分组\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "GROUP BY 把数据按列分堆再聚合",
+            "SELECT 的普通列必须在 GROUP BY 里",
+            "每组输出一行聚合结果",
+            "WHERE 先于 GROUP BY 过滤",
+            "分组 + 聚合是统计报表的基础"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "按班级统计",
+          'code': "SELECT class, COUNT(*) AS 人数, AVG(score) AS 平均分\nFROM student\nGROUP BY class;"
+        }
+      ]
+    },
+    null,
+    {
+      'id': "sql-21",
+      'title': "HAVING 过滤分组",
+      'summary': "用 HAVING 对分组后的结果再过滤，配合聚合条件。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "WHERE 在分组之前过滤行，而 HAVING 在分组之后过滤『组』。比如『只显示平均分超过 90 的班级』，这种对聚合结果的筛选必须用 HAVING。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "HAVING 基本用法",
+          'code': "SELECT class, AVG(score) AS avg_score\nFROM student\nGROUP BY class\nHAVING AVG(score) > 90;\n-- 只保留平均分 > 90 的班级"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "WHERE",
+            "HAVING"
+          ],
+          'rows': [
+            [
+              "过滤时机",
+              "分组之前过滤行",
+              "分组之后过滤组"
+            ],
+            [
+              "能不能用聚合函数",
+              "不能（如 WHERE COUNT(*) > 5 报错）",
+              "可以（HAVING COUNT(*) > 5 合法）"
+            ],
+            [
+              "能不能用别名",
+              "不能",
+              "可以引用别名"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "WHERE + HAVING 组合",
+          'code': "SELECT class, COUNT(*) AS 人数, AVG(score) AS 平均分\nFROM student\nWHERE score >= 60       -- 先只统计及格的人\nGROUP BY class\nHAVING COUNT(*) >= 3;   -- 再只要人数 >= 3 的班级"
+        },
+        {
+          'type': "danger",
+          'title': "WHERE 里不能用聚合函数",
+          'text': "写 WHERE COUNT(*) > 3 会直接语法报错。聚合函数只能在 SELECT、HAVING、ORDER BY 里用。想对分组过滤就用 HAVING。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"HAVING 过滤分组\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"HAVING 过滤分组\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"HAVING 过滤分组\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "HAVING 对分组结果（组）过滤，WHERE 对行过滤",
+            "HAVING 可以用聚合函数，WHERE 不行",
+            "WHERE 在 GROUP BY 前，HAVING 在 GROUP BY 后",
+            "HAVING 里可以引用 SELECT 的别名"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "平均分超90的班",
+          'code': "SELECT class, AVG(score) AS avg_score\nFROM student\nGROUP BY class\nHAVING AVG(score) > 90;"
+        }
+      ]
+    },
+    {
+      'id': "sql-22",
+      'title': "GROUP BY 进阶（多列分组、与 DISTINCT 区别）",
+      'summary': "多列分组、GROUP_CONCAT，以及和 DISTINCT 的本质区别。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "GROUP BY 不止能按一列分组，还能按多列组合分组；它和 DISTINCT 都能去重，但本质不同。这一章把这些进阶点讲透。"
+        },
+        {
+          'type': "h",
+          'text': "多列分组"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按 班级+性别 分组",
+          'code': "SELECT class, gender, COUNT(*) AS 人数\nFROM student\nGROUP BY class, gender;\n-- 先按班级分，每个班再按性别分\n-- 结果形如：1班 男 12 / 1班 女 8 / 2班 男 15 ..."
+        },
+        {
+          'type': "h",
+          'text': "GROUP BY 与 DISTINCT 的区别"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "DISTINCT",
+            "GROUP BY"
+          ],
+          'rows': [
+            [
+              "作用",
+              "只去重，不统计",
+              "分组，常用于配聚合函数统计"
+            ],
+            [
+              "能不能配 COUNT/AVG",
+              "不能",
+              "可以，这是它的核心用途"
+            ],
+            [
+              "结果",
+              "只返回不重复的行",
+              "每组返回一行，可带统计值"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "两者对比",
+          'code': "SELECT DISTINCT class FROM student;\n-- 只是把班级列出去重\n\nSELECT class, COUNT(*) FROM student GROUP BY class;\n-- 每个班级一行，并统计人数（DISTINCT 做不到）"
+        },
+        {
+          'type': "h",
+          'text': "GROUP_CONCAT 把组内值拼起来"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "每组的学生名单",
+          'code': "SELECT class, GROUP_CONCAT(name) AS 名单\nFROM student\nGROUP BY class;\n-- 结果：1班 → 小明,小红,小刚"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"GROUP BY 进阶（多列分组、与 DISTINCT 区别）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"GROUP BY 进阶（多列分组、与 DISTINCT 区别）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"GROUP BY 进阶（多列分组、与 DISTINCT 区别）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "GROUP BY 列1, 列2 支持多列组合分组",
+            "DISTINCT 只去重，GROUP BY 用于分组统计",
+            "想统计每组就用 GROUP BY + 聚合函数",
+            "GROUP_CONCAT 把组内多个值拼成一行字符串"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "多列分组统计",
+          'code': "SELECT class, gender, COUNT(*) AS 人数\nFROM student\nGROUP BY class, gender;"
+        }
+      ]
+    },
+    {
+      'id': "sql-23",
+      'title': "子查询基础（标量子查询）",
+      'summary': "把一条 SELECT 嵌进另一条里，理解子查询的思想。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "子查询就是『查询里套查询』：外层查询叫外查询，括号里的内层 SELECT 叫子查询。子查询的结果可以当作一个值、一个集合或一张临时表来用。先从最简单的标量子查询（返回单个值）学起。"
+        },
+        {
+          'type': "h",
+          'text': "标量子查询：返回一个值"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查分数最高的学生",
+          'code': "-- 第一步先算出最高分\nSELECT MAX(score) FROM student;   -- 结果是 95.5\n\n-- 第二步用它当条件\nSELECT name, score FROM student\nWHERE score = (SELECT MAX(score) FROM student);\n-- 括号里的子查询返回单个值 95.5，再和外层比较"
+        },
+        {
+          'type': "p",
+          'text': "注意子查询必须用括号 () 包起来，并且标量子查询只能返回一行一列，多返回一个都会报错。"
+        },
+        {
+          'type': "h",
+          'text': "子查询放在 SELECT 里当列"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "子查询当普通列用",
+          'code': "SELECT name, score,\n       (SELECT AVG(score) FROM student) AS 全表平均分\nFROM student;\n-- 每个学生旁边都显示一次全表平均分"
+        },
+        {
+          'type': "h",
+          'text': "子查询放在 FROM 里当临时表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "FROM 子查询要起别名",
+          'code': "SELECT *\nFROM (SELECT name, score FROM student WHERE score >= 90) AS top;\n-- 子查询结果像一张临时表，MySQL 要求必须起别名 AS top"
+        },
+        {
+          'type': "tip",
+          'title': "从里往外读",
+          'text': "读子查询时先看括号里面，搞清它返回什么（一个值？一列？一张表？），再回到外层理解怎么用它。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"子查询基础（标量子查询）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"子查询基础（标量子查询）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"子查询基础（标量子查询）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "子查询是括号里再套一条 SELECT",
+            "标量子查询返回单个值，可当条件或当列",
+            "子查询在 FROM 里当临时表，且必须起别名",
+            "读法：先内后外，搞清返回的是值还是表"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "最高分学生",
+          'code': "SELECT name, score FROM student\nWHERE score = (SELECT MAX(score) FROM student);"
+        }
+      ]
+    },
+    {
+      'id': "sql-24",
+      'title': "子查询进阶（IN/EXISTS/ANY/ALL）",
+      'summary': "IN 和 EXISTS 判断存在性，ANY/ALL 做高级比较。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "标量子查询返回单个值，这一章的子查询返回『一列多个值』甚至『多列』，配合 IN、EXISTS、ANY、ALL 使用，能解决很多复杂问题。"
+        },
+        {
+          'type': "h",
+          'text': "IN 子查询：值在不在集合里"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "IN 接子查询",
+          'code': "-- 找出选过课的学生的名字\nSELECT name FROM student\nWHERE id IN (SELECT student_id FROM score);\n-- 子查询返回一列 student_id，IN 判断 id 是否在里面"
+        },
+        {
+          'type': "h",
+          'text': "EXISTS 子查询：判断是否存在"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "EXISTS 存在性判断",
+          'code': "SELECT name FROM student s\nWHERE EXISTS (\n    SELECT 1 FROM score sc\n    WHERE sc.student_id = s.id\n);\n-- 对每个学生，检查他有没有成绩记录\n-- 有就留下，返回 SELECT 1 只是占位，多少无所谓"
+        },
+        {
+          'type': "h",
+          'text': "ANY 与 ALL"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "ANY 任意 / ALL 全部",
+          'code': "-- 分数大于任意一个 1班 学生分数\nSELECT name, score FROM student\nWHERE score > ANY (SELECT score FROM student WHERE class = '1班');\n\n-- 分数大于所有 1班 学生分数（即大于 1班 最高分）\nSELECT name, score FROM student\nWHERE score > ALL (SELECT score FROM student WHERE class = '1班');"
+        },
+        {
+          'type': "table",
+          'head': [
+            "关键字",
+            "含义",
+            "等价写法"
+          ],
+          'rows': [
+            [
+              "IN",
+              "等于其中任意一个",
+              "= ANY"
+            ],
+            [
+              "NOT IN",
+              "不等于其中任意一个",
+              "<> ALL"
+            ],
+            [
+              "ANY",
+              "与其中任意一个满足比较",
+              "如 > ANY 即大于最小值"
+            ],
+            [
+              "ALL",
+              "与所有值都满足比较",
+              "如 > ALL 即大于最大值"
+            ]
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "IN 子查询遇到 NULL 的坑",
+          'text': "NOT IN (…) 如果子查询结果里包含 NULL，整个条件会变成『未知』，什么都查不到。避免办法：子查询里过滤掉 NULL，或者改用 NOT EXISTS。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"子查询进阶（IN/EXISTS/ANY/ALL）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"子查询进阶（IN/EXISTS/ANY/ALL）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"子查询进阶（IN/EXISTS/ANY/ALL）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "IN 判断值在集合里，EXISTS 判断记录存在",
+            "ANY 满足其中一个，ALL 必须全部满足",
+            "> ANY 相当于大于最小值，> ALL 相当于大于最大值",
+            "NOT IN 遇到 NULL 会失效，可用 NOT EXISTS 替代"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "选过课的学生",
+          'code': "SELECT name FROM student\nWHERE id IN (SELECT student_id FROM score);"
+        }
+      ]
+    },
+    {
+      'id': "sql-25",
+      'title': "多表设计基础与外键概念",
+      'summary': "为什么拆表、什么是外键，学会多表设计的思想。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "真实业务很少只用一个表。比如订单、商品、用户，如果全塞一张表，数据会大量重复、改一处要改好多行。多表设计的核心思想：拆开存、用外键联系。"
+        },
+        {
+          'type': "h",
+          'text': "不拆表的麻烦"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "反例：一张表塞所有订单",
+          'code': "CREATE TABLE bad_order (\n    id INT,\n    product_name VARCHAR(50),\n    product_price DECIMAL(10,2),\n    user_name VARCHAR(20),\n    user_phone VARCHAR(20)\n);\n-- 同一个用户买 10 次，user_name、user_phone 就重复 10 次\n-- 用户改手机号要改 10 行，很容易漏改"
+        },
+        {
+          'type': "h",
+          'text': "正确做法：拆成多张表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用户表 + 商品表 + 订单表",
+          'code': "CREATE TABLE user (\n    id INT PRIMARY KEY,\n    name VARCHAR(20),\n    phone VARCHAR(20)\n);\n\nCREATE TABLE product (\n    id INT PRIMARY KEY,\n    name VARCHAR(50),\n    price DECIMAL(10,2)\n);\n\nCREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,        -- 只存用户的 id\n    product_id INT,     -- 只存商品的 id\n    quantity INT\n);"
+        },
+        {
+          'type': "h",
+          'text': "外键 FOREIGN KEY"
+        },
+        {
+          'type': "p",
+          'text': "外键是一列，它引用了另一张表的主键。比如 orders.user_id 指向 user.id。外键保证『引用的值必须真实存在』，防止订单指向一个不存在的用户。完整的 JOIN 会在后面章节展开，这里先建立概念。"
+        },
+        {
+          'type': "table",
+          'head': [
+            "关系类型",
+            "举例",
+            "实现方式"
+          ],
+          'rows': [
+            [
+              "一对多 1:N",
+              "一个用户多个订单",
+              "『多』的一方存外键 user_id"
+            ],
+            [
+              "一对一 1:1",
+              "一个用户一个档案",
+              "任一表存对方主键做外键"
+            ],
+            [
+              "多对多 N:M",
+              "学生和课程",
+              "中间表存两个外键"
+            ]
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "外键不是强制的",
+          'text': "很多项目为了性能和管理方便，不在数据库层声明 FOREIGN KEY，只在应用层保证引用关系。学习阶段建议建表时加上外键，能帮你理解关系；实际生产按团队规范来。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"多表设计基础与外键概念\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"多表设计基础与外键概念\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"多表设计基础与外键概念\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "多表设计 = 拆开存 + 用外键联系",
+            "重复数据应该抽成独立表，避免冗余",
+            "外键引用另一张表的主键，保证引用合法",
+            "关系类型：1:1、1:N、N:M，用外键或中间表表达"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "用户+订单两表",
+          'code': "CREATE TABLE user (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,\n    amount DECIMAL(10,2)\n);"
+        }
+      ]
+    },
+    {
+      'id': "sql-26",
+      'title': "INNER JOIN 内连接",
+      'summary': "用 INNER JOIN 把两张表按条件拼起来，只留匹配的行。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据拆到了多张表，查询时就要『拼回去』——这就是 JOIN。INNER JOIN（内连接）只返回两张表中匹配上的行，像把两张表的相同部分对齐。"
+        },
+        {
+          'type': "h",
+          'text': "准备两张表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "建表并插入数据",
+          'code': "CREATE TABLE user (id INT, name VARCHAR(20));\nCREATE TABLE orders (id INT, user_id INT, amount DECIMAL(10,2));\nINSERT INTO user VALUES (1,'小明'),(2,'小红');\nINSERT INTO orders VALUES\n    (101, 1, 99.0),\n    (102, 1, 150.0),\n    (103, 2, 200.0);"
+        },
+        {
+          'type': "h",
+          'text': "JOIN 语法"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查询每个订单是谁下的",
+          'code': "SELECT o.id AS 订单号, u.name AS 用户名, o.amount AS 金额\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id;\n-- o、u 是表别名\n-- ON 后面写匹配条件：订单的 user_id = 用户的 id"
+        },
+        {
+          'type': "p",
+          'text': "解读：FROM orders o INNER JOIN user u ON o.user_id = u.id，意思是把 orders 的每一行，去 user 里找 user_id 相等的行拼在一起。只有匹配上的行才会出现在结果里。"
+        },
+        {
+          'type': "h",
+          'text': "三张表 JOIN"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "订单+用户+商品",
+          'code': "SELECT o.id, u.name, p.name, o.quantity\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id;"
+        },
+        {
+          'type': "warn",
+          'title': "忘了 ON 就是笛卡尔积",
+          'text': "写 INNER JOIN 却漏掉 ON，会变成笛卡尔积：两表所有行两两组合。比如 100 行 × 100 行 = 10000 行，数据会暴涨。写完 JOIN 一定检查 ON 条件。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"INNER JOIN 内连接\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"INNER JOIN 内连接\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"INNER JOIN 内连接\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "INNER JOIN 只返回两张表匹配上的行",
+            "ON 写连接条件，如 o.user_id = u.id",
+            "表可以起别名：FROM orders o",
+            "多个 JOIN 可以连用，拼多张表",
+            "漏写 ON 会产生笛卡尔积，务必检查"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "订单看用户",
+          'code': "SELECT o.id AS 订单号, u.name AS 用户名, o.amount AS 金额\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id;"
+        }
+      ]
+    },
+    {
+      'id': "sql-27",
+      'title': "LEFT JOIN 左连接",
+      'summary': "LEFT JOIN 保留左表全部行，没匹配的用 NULL 填充。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "LEFT JOIN（左连接）以左边的表为主，左表每一行都会保留在结果里；右表有匹配就拼接，没匹配就用 NULL 填空。特别适合『谁还没有下单』这类问题。"
+        },
+        {
+          'type': "h",
+          'text': "基础用法"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "所有用户以及他们的订单",
+          'code': "SELECT u.name, o.id AS 订单号, o.amount\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id;\n-- 用户『小明』没下单，也会出现一行，订单号是 NULL"
+        },
+        {
+          'type': "h",
+          'text': "找没有匹配的记录"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "找出没下过单的用户",
+          'code': "SELECT u.name\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.id IS NULL;\n-- 右表没匹配上的行，o.id 是 NULL\n-- 用 IS NULL 就能圈出『没下过单的人』"
+        },
+        {
+          'type': "p",
+          'text': "这个套路（LEFT JOIN + 右表主键 IS NULL）非常经典，一定要记住：它等价于『左表里在右表找不到对应的行』。"
+        },
+        {
+          'type': "tip",
+          'title': "INNER 与 LEFT 怎么选",
+          'text': "只要匹配行 → INNER JOIN；要以左表为主、保留全部 → LEFT JOIN。做『补全、对账、找缺失』时几乎都用 LEFT JOIN。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"LEFT JOIN 左连接\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"LEFT JOIN 左连接\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"LEFT JOIN 左连接\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "LEFT JOIN 保留左表所有行，右表没匹配填 NULL",
+            "JOIN 顺序决定谁是『主表』",
+            "LEFT JOIN + 右表主键 IS NULL 可找缺失记录",
+            "对账、找缺失、补全用 LEFT JOIN"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "没下过单的用户",
+          'code': "SELECT u.name\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.id IS NULL;"
+        }
+      ]
+    },
+    {
+      'id': "sql-28",
+      'title': "RIGHT JOIN 与 FULL OUTER JOIN 概念",
+      'summary': "RIGHT JOIN 以右表为主，FULL OUTER JOIN 全保留。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "LEFT JOIN 以左表为主，RIGHT JOIN 正好相反，以右表为主。FULL OUTER JOIN 两边都保留。MySQL 不支持 FULL OUTER JOIN，但可以用 UNION 模拟。"
+        },
+        {
+          'type': "h",
+          'text': "RIGHT JOIN"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "以右表 user 为主",
+          'code': "SELECT u.name, o.amount\nFROM orders o\nRIGHT JOIN user u ON o.user_id = u.id;\n-- user 表每一行都保留，没订单的用户 amount 为 NULL"
+        },
+        {
+          'type': "h",
+          'text': "FULL OUTER JOIN 概念"
+        },
+        {
+          'type': "p",
+          'text': "FULL OUTER JOIN = LEFT JOIN 的结果 ∪ RIGHT JOIN 的结果，两边没匹配的都保留。它等价于『A 的全部 + B 的全部，去掉重复匹配』。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "MySQL 用 UNION 模拟 FULL JOIN",
+          'code': "SELECT u.name, o.amount\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nUNION\nSELECT u.name, o.amount\nFROM user u\nRIGHT JOIN orders o ON o.user_id = u.id;"
+        },
+        {
+          'type': "table",
+          'head': [
+            "连接方式",
+            "保留哪些行",
+            "适用"
+          ],
+          'rows': [
+            [
+              "INNER JOIN",
+              "两边都匹配的行",
+              "只关心有关联的数据"
+            ],
+            [
+              "LEFT JOIN",
+              "左表全部 + 匹配的右表",
+              "以左表为主"
+            ],
+            [
+              "RIGHT JOIN",
+              "右表全部 + 匹配的左表",
+              "以右表为主"
+            ],
+            [
+              "FULL OUTER JOIN",
+              "两边全部",
+              "两边数据都要保留"
+            ]
+          ]
+        },
+        {
+          'type': "info",
+          'title': "实践建议",
+          'text': "大多数场景用 LEFT JOIN 就够了，需要右表为主时把两表顺序换一下写 LEFT JOIN 也行（RIGHT 只是把方向反过来）。真正的 FULL 在 MySQL 里用 UNION 模拟。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"RIGHT JOIN 与 FULL OUTER JOIN 概念\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"RIGHT JOIN 与 FULL OUTER JOIN 概念\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"RIGHT JOIN 与 FULL OUTER JOIN 概念\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "RIGHT JOIN 以右表为主，是 LEFT 的镜像",
+            "FULL OUTER JOIN 两边全保留",
+            "MySQL 不支持 FULL，用 LEFT+UNION+RIGHT 模拟",
+            "大部分场景 LEFT JOIN 已够用"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "RIGHT JOIN 示例",
+          'code': "SELECT u.name, o.amount\nFROM orders o\nRIGHT JOIN user u ON o.user_id = u.id;"
+        }
+      ]
+    },
+    {
+      'id': "sql-29",
+      'title': "UNION 与 UNION ALL",
+      'summary': "纵向拼接两个查询结果，UNION 去重、UNION ALL 不去重。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "JOIN 是横向拼（列变多），UNION 是纵向拼（行变多）。UNION 把两个查询的结果上下叠在一起，适合『合并两个班级的名单』这类需求。"
+        },
+        {
+          'type': "h",
+          'text': "基本用法"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "合并两个班级的学生",
+          'code': "SELECT name FROM class1_student\nUNION\nSELECT name FROM class2_student;\n-- 结果自动去重：同名的人只出现一次"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "UNION ALL 不去重",
+          'code': "SELECT name FROM class1_student\nUNION ALL\nSELECT name FROM class2_student;\n-- 不去重：同名的人会出现两次，速度快"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "UNION",
+            "UNION ALL"
+          ],
+          'rows': [
+            [
+              "去重",
+              "自动去掉重复行",
+              "保留所有行"
+            ],
+            [
+              "速度",
+              "稍慢（要比较去重）",
+              "更快"
+            ],
+            [
+              "用途",
+              "结果集不允许重复",
+              "要原始全部数据"
+            ]
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "两个查询的列必须一致",
+          'text': "UNION 要求两边 SELECT 的列数相同，且对应列类型要兼容。SELECT name FROM a UNION SELECT id, name FROM b 会报错（一个 1 列一个 2 列）。"
+        },
+        {
+          'type': "tip",
+          'title': "配合排序",
+          'text': "UNION 结果想排序，把 ORDER BY 写在最后一个查询末尾：SELECT a FROM t1 UNION SELECT a FROM t2 ORDER BY a;（作用于整个合并结果）。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"UNION 与 UNION ALL\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"UNION 与 UNION ALL\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"UNION 与 UNION ALL\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "UNION 纵向合并两个查询结果",
+            "UNION 去重，UNION ALL 不去重",
+            "UNION ALL 更快，无重复需求时优先",
+            "两边列数必须一致，类型要兼容"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "合并并去重",
+          'code': "SELECT name FROM class1_student\nUNION\nSELECT name FROM class2_student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-30",
+      'title': "自连接 SELF JOIN",
+      'summary': "表和自己连接，解决员工-经理、父子类目等场景。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "自连接就是一张表跟自己 JOIN。听起来奇怪，但很常用：比如员工表里存了 manager_id 指向另一个员工，查『每个员工的经理是谁』就要用自连接。"
+        },
+        {
+          'type': "h",
+          'text': "准备员工表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "员工表，manager_id 指向自己的 id",
+          'code': "CREATE TABLE emp (\n    id INT,\n    name VARCHAR(20),\n    manager_id INT   -- 指向本表另一个员工的 id，老板为 NULL\n);\nINSERT INTO emp VALUES\n    (1, '老板', NULL),\n    (2, '张三', 1),\n    (3, '李四', 1),\n    (4, '王五', 2);"
+        },
+        {
+          'type': "h",
+          'text': "自连接查询"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查每个员工的经理",
+          'code': "SELECT e.name AS 员工, m.name AS 经理\nFROM emp e\nLEFT JOIN emp m ON e.manager_id = m.id;\n-- e 和 m 都指向 emp 表，只是起了两个别名\n-- LEFT JOIN 保证老板也显示（经理为 NULL）"
+        },
+        {
+          'type': "p",
+          'text': "关键点：给同一张表起两个不同的别名（e、m），然后当成两张表来 JOIN。自连接也常用 INNER JOIN，取决于要不要保留无上级的人。"
+        },
+        {
+          'type': "h",
+          'text': "另一个经典场景：商品父子类目"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查每个子类的父类",
+          'code': "SELECT c.name AS 子类, p.name AS 父类\nFROM category c\nLEFT JOIN category p ON c.parent_id = p.id;"
+        },
+        {
+          'type': "tip",
+          'title': "别名必须不同",
+          'text': "自连接最大的要求就是起两个不同的别名，否则数据库分不清哪个是哪个。改别名别写错，自连接的 ON 条件要写清楚：e.manager_id = m.id。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"自连接 SELF JOIN\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"自连接 SELF JOIN\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"自连接 SELF JOIN\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "自连接是表和自己 JOIN，需要两个不同别名",
+            "经典场景：员工-经理、父子类目",
+            "LEFT JOIN 保留无上级的根节点",
+            "ON 条件要写清 别名.外键 = 别名.主键"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "员工和他们的经理",
+          'code': "SELECT e.name AS 员工, m.name AS 经理\nFROM emp e\nLEFT JOIN emp m ON e.manager_id = m.id;"
+        }
+      ]
+    },
+    {
+      'id': "sql-31",
+      'title': "多表 JOIN 综合查询",
+      'summary': "三表四表 JOIN 连查，把前面学的 JOIN 串起来。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "真实业务常常一次要拼 3 张以上的表。这一章用『订单-用户-商品』的完整例子，把多表 JOIN 的套路讲清楚。"
+        },
+        {
+          'type': "h",
+          'text': "准备三张表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用户、商品、订单三表",
+          'code': "CREATE TABLE user (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE product (id INT PRIMARY KEY, name VARCHAR(50), price DECIMAL(10,2));\nCREATE TABLE orders (id INT, user_id INT, product_id INT, qty INT);\nINSERT INTO user VALUES (1,'小明'),(2,'小红');\nINSERT INTO product VALUES (1,'键盘',199),(2,'鼠标',99);\nINSERT INTO orders VALUES\n    (101,1,1,2),(102,1,2,1),(103,2,1,1);"
+        },
+        {
+          'type': "h",
+          'text': "三表连接"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "订单关联用户和商品",
+          'code': "SELECT o.id AS 订单号,\n       u.name AS 买家,\n       p.name AS 商品,\n       o.qty AS 数量,\n       p.price * o.qty AS 小计\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id;\n-- 顺序：先 orders 拼 user，再拼 product，一路拼下去"
+        },
+        {
+          'type': "h",
+          'text': "综合统计"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按用户统计消费总额",
+          'code': "SELECT u.name, SUM(p.price * o.qty) AS 总消费\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id\nGROUP BY u.id, u.name\nORDER BY 总消费 DESC;"
+        },
+        {
+          'type': "tip",
+          'title': "JOIN 的万能套路",
+          'text': "写多表 JOIN：先定主表（FROM），然后依次 JOIN 每张关联表并写 ON，最后再 WHERE/GROUP BY/ORDER BY。一次 JOIN 一张表，慢慢拼，别一次想太多。"
+        },
+        {
+          'type': "warn",
+          'title': "列名冲突要加前缀",
+          'text': "多表 JOIN 后列名可能重复（比如都有 id、name）。SELECT 时建议都用 别名.列名 的写法，如 u.name、p.name，否则可能报『列不唯一』错误。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"多表 JOIN 综合查询\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"多表 JOIN 综合查询\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"多表 JOIN 综合查询\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "多表 JOIN 一次拼一张表，从主表出发",
+            "用 别名.列名 消除同名列歧义",
+            "JOIN 后可继续 GROUP BY / ORDER BY 做统计",
+            "先写对结果，再优化性能"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "订单明细大查询",
+          'code': "SELECT o.id AS 订单号, u.name AS 买家, p.name AS 商品, p.price * o.qty AS 小计\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id;"
+        }
+      ]
+    },
+    {
+      'id': "sql-32",
+      'title': "UPDATE 更新数据",
+      'summary': "用 UPDATE 修改已有数据，记住带 WHERE。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据错了、要改了，用 UPDATE。语法：UPDATE 表 SET 列=新值 WHERE 条件。关键提醒：一定要带 WHERE，否则会更新全表。"
+        },
+        {
+          'type': "h",
+          'text': "基本 UPDATE"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "把 id=1 的学生年龄改成 20",
+          'code': "UPDATE student\nSET age = 20\nWHERE id = 1;\n-- 只有 id=1 这一行被改"
+        },
+        {
+          'type': "h",
+          'text': "同时改多个字段"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "一次改多列，逗号分隔",
+          'code': "UPDATE student\nSET age = 21, score = 95.5\nWHERE name = '小明';"
+        },
+        {
+          'type': "h",
+          'text': "UPDATE 里也能用表达式"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用原值计算新值",
+          'code': "UPDATE product\nSET price = price * 0.9\nWHERE category = '电子产品';\n-- 电子产品统一打 9 折，新值 = 原值 * 0.9"
+        },
+        {
+          'type': "danger",
+          'title': "忘写 WHERE 会全表更新",
+          'text': "UPDATE student SET age = 20;（没有 WHERE）会把所有学生的年龄都改成 20，无法轻易撤销。写 UPDATE 前先想清楚 WHERE 圈定了哪些行，最好先用 SELECT 验证一下条件。"
+        },
+        {
+          'type': "tip",
+          'title': "先 SELECT 再 UPDATE",
+          'text': "拿不准 WHERE 对不对时，先把 UPDATE 换成 SELECT 跑一遍：SELECT * FROM student WHERE id = 1;，确认圈定的正是要改的行，再执行 UPDATE。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"UPDATE 更新数据\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"UPDATE 更新数据\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"UPDATE 更新数据\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "UPDATE 表 SET 列=新值 WHERE 条件",
+            "多列更新用逗号分隔",
+            "SET 里可以用原值做运算（如 price*0.9）",
+            "忘写 WHERE = 全表更新，极其危险",
+            "改前先 SELECT 验证 WHERE"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "安全更新",
+          'code': "UPDATE student SET age = 20 WHERE id = 1;\n-- 先查询确认\nSELECT * FROM student WHERE id = 1;"
+        }
+      ]
+    },
+    {
+      'id': "sql-33",
+      'title': "DELETE 删除数据",
+      'summary': "用 DELETE 删行、TRUNCATE 清表，都不可轻易撤销。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "DELETE 用来删掉指定的行，语法简单但危险程度最高。这一章还讲 TRUNCATE 清空整张表，以及两者的区别。"
+        },
+        {
+          'type': "h",
+          'text': "DELETE 删指定行"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "删除 id=3 的学生",
+          'code': "DELETE FROM student WHERE id = 3;\n-- 只删满足条件的行\n\nDELETE FROM student WHERE score < 60;\n-- 删除所有不及格的学生"
+        },
+        {
+          'type': "danger",
+          'title': "忘写 WHERE 就清空了",
+          'text': "DELETE FROM student;（没有 WHERE）会删光整张表所有行。有些数据库默认有保护，但千万别赌。执行前先想清楚，或用事务包起来以便后悔（见第 36 章）。"
+        },
+        {
+          'type': "h",
+          'text': "TRUNCATE 清空整表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "清空整张表",
+          'code': "TRUNCATE TABLE student;\n-- 把所有行一次性删光，速度很快\n-- 但无法按条件删，也不能加 WHERE"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "DELETE",
+            "TRUNCATE"
+          ],
+          'rows': [
+            [
+              "能否按条件删",
+              "可以（WHERE）",
+              "只能全清"
+            ],
+            [
+              "删除方式",
+              "逐行删，可回滚（事务内）",
+              "直接重建表，通常不可回滚"
+            ],
+            [
+              "速度",
+              "慢",
+              "快"
+            ],
+            [
+              "主键自增",
+              "保留当前值",
+              "重置回起点"
+            ]
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "DELETE 不释放空间",
+          'text': "DELETE 只是把行标记删除，表文件空间不一定会变小。要彻底释放空间可考虑 TRUNCATE 或优化表（OPTIMIZE TABLE），小表不必在意。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"DELETE 删除数据\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"DELETE 删除数据\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"DELETE 删除数据\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "DELETE FROM 表 WHERE 条件 删指定行",
+            "忘写 WHERE 会删光全表",
+            "TRUNCATE 一次性清空整表，速度更快",
+            "DELETE 可配事务回滚，TRUNCATE 通常不能",
+            "删除前先 SELECT 确认范围"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "删除不及格学生",
+          'code': "DELETE FROM student WHERE score < 60;\nSELECT * FROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-34",
+      'title': "INSERT 进阶（多行插入、INSERT SELECT 复制）",
+      'summary': "批量插入、从查询结果直接导数据，复制表的妙招。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "第 7 章学了基础插入，这一章讲两个进阶玩法：批量多行插入提升性能，以及用 INSERT ... SELECT 从别的表直接搬数据。"
+        },
+        {
+          'type': "h",
+          'text': "批量多行插入"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "一条语句插多行",
+          'code': "INSERT INTO student (id, name, age) VALUES\n    (1, '小明', 18),\n    (2, '小红', 19),\n    (3, '小刚', 20);\n-- 比分开三条 INSERT 快得多，一次网络往返"
+        },
+        {
+          'type': "h",
+          'text': "INSERT ... SELECT 从查询导入"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "把 A 表的数据复制到 B 表",
+          'code': "INSERT INTO student_copy (id, name, age)\nSELECT id, name, age FROM student;\n-- 子查询的结果一行行插入目标表\n-- 适合备份、归档、把数据搬进新表"
+        },
+        {
+          'type': "h",
+          'text': "一条语句建表并复制"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "CREATE TABLE AS SELECT",
+          'code': "CREATE TABLE student_backup AS\nSELECT * FROM student;\n-- 一步到位：创建新表并填充数据（注意不会复制索引）\n\n-- 只复制结构不复制数据\nCREATE TABLE student_empty LIKE student;"
+        },
+        {
+          'type': "tip",
+          'title': "什么时候用批量插入",
+          'text': "一次性要插几百上千条时，一定要拼成一条多行 INSERT 或 INSERT ... SELECT。逐条 INSERT 在真实环境会非常慢。"
+        },
+        {
+          'type': "warn",
+          'title': "列要对齐，类型要兼容",
+          'text': "INSERT ... SELECT 要求两边列数、顺序、类型能对上，否则报错。SELECT 里可以写表达式：INSERT INTO t (a) SELECT price * 2 FROM other;"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"INSERT 进阶（多行插入、INSERT SELECT 复制）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"INSERT 进阶（多行插入、INSERT SELECT 复制）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"INSERT 进阶（多行插入、INSERT SELECT 复制）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "多行 INSERT 一次插多条，性能好",
+            "INSERT ... SELECT 把查询结果导进表",
+            "CREATE TABLE ... AS SELECT 一步建表复制",
+            "数据复制时注意列对齐与类型兼容"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "备份学生表",
+          'code': "CREATE TABLE student_backup AS SELECT * FROM student;\nSELECT * FROM student_backup;"
+        }
+      ]
+    },
+    {
+      'id': "sql-35",
+      'title': "事务 ACID 概念",
+      'summary': "理解事务四大特性 ACID，这是数据库可靠性的根基。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "事务（Transaction）就是一组 SQL 操作的『打包』：要么全部成功，要么全部失败。最经典的是转账：A 扣 100，B 加 100，中间任何一步失败，整个转账都要撤销。"
+        },
+        {
+          'type': "h",
+          'text': "没有事务的可怕场景"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "转账的两条 SQL",
+          'code': "-- 第一步：A 账户扣 100 元\nUPDATE account SET balance = balance - 100 WHERE id = 1;\n-- 第二步：B 账户加 100 元\nUPDATE account SET balance = balance + 100 WHERE id = 2;\n-- 如果第一步成功、第二步断电了，钱就凭空消失了"
+        },
+        {
+          'type': "h",
+          'text': "ACID 四大特性"
+        },
+        {
+          'type': "table",
+          'head': [
+            "特性",
+            "含义",
+            "通俗理解"
+          ],
+          'rows': [
+            [
+              "A 原子性",
+              "Atomicity，一组操作要么全成要么全败",
+              "转账不能只扣不加"
+            ],
+            [
+              "C 一致性",
+              "Consistency，操作前后数据保持合法",
+              "账总是平的，金额守恒"
+            ],
+            [
+              "I 隔离性",
+              "Isolation，事务之间互不干扰",
+              "你转账时不看到别人的中间态"
+            ],
+            [
+              "D 持久性",
+              "Durability，提交后永久保存",
+              "断电重启数据不丢"
+            ]
+          ]
+        },
+        {
+          'type': "p",
+          'text': "原子性是基础：数据库把所有操作记录成一份『清单』，只要有一步失败，就按清单把前面做过的全部回滚（UNDO），保证不留半截操作。"
+        },
+        {
+          'type': "tip",
+          'title': "记法",
+          'text': "记 ACID 可以这样联想：原子性管『全成或全败』，一致性管『数据合法』，隔离性管『互不干扰』，持久性管『永不丢失』。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"事务 ACID 概念\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"事务 ACID 概念\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"事务 ACID 概念\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "事务是把一组 SQL 打包：全成或全败",
+            "ACID = 原子性、一致性、隔离性、持久性",
+            "转账、下单、扣库存都依赖事务",
+            "原子性靠回滚实现，持久性靠落盘实现"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "转账两条SQL",
+          'code': "UPDATE account SET balance = balance - 100 WHERE id = 1;\nUPDATE account SET balance = balance + 100 WHERE id = 2;"
+        }
+      ]
+    },
+    {
+      'id': "sql-36",
+      'title': "事务操作 COMMIT/ROLLBACK/SAVEPOINT",
+      'summary': "用 BEGIN/COMMIT/ROLLBACK/SAVEPOINT 手动控制事务。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "默认情况下每条 SQL 自动提交（改完就生效）。想要『要么全成要么全败』，就要显式开启事务，再决定是 COMMIT（提交）还是 ROLLBACK（回滚）。"
+        },
+        {
+          'type': "h",
+          'text': "事务三连：开始-提交/回滚"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "手动控制转账事务",
+          'code': "START TRANSACTION;   -- 1. 开启事务\n\nUPDATE account SET balance = balance - 100 WHERE id = 1;\nUPDATE account SET balance = balance + 100 WHERE id = 2;\n\nCOMMIT;              -- 3. 全部成功，正式生效\n\n-- 如果中途发现错了：\nROLLBACK;            -- 放弃所有改动，回到开启前"
+        },
+        {
+          'type': "h",
+          'text': "SAVEPOINT 保存点"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "部分回滚",
+          'code': "START TRANSACTION;\nUPDATE account SET balance = balance - 100 WHERE id = 1;\n\nSAVEPOINT s1;        -- 打个保存点\nUPDATE account SET balance = balance - 50 WHERE id = 1;\n\nROLLBACK TO s1;      -- 只撤销 s1 之后的操作，保留之前\nCOMMIT;"
+        },
+        {
+          'type': "info",
+          'title': "自动提交模式",
+          'text': "MySQL 默认 autocommit=1，每条语句自动提交。想每次都手动控制，可以 SET autocommit = 0;，或用 START TRANSACTION 显式开启（本语句开启，用完 COMMIT/ROLLBACK 结束）。"
+        },
+        {
+          'type': "warn",
+          'title': "忘了 COMMIT 的坑",
+          'text': "开着事务不 COMMIT 也不 ROLLBACK，表会被锁住，别的会话读不到/改不了这些数据，还可能造成连接堆积。事务用完立刻提交或回滚。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"事务操作 COMMIT/ROLLBACK/SAVEPOINT\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"事务操作 COMMIT/ROLLBACK/SAVEPOINT\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"事务操作 COMMIT/ROLLBACK/SAVEPOINT\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "START TRANSACTION 开启，COMMIT 提交，ROLLBACK 回滚",
+            "COMMIT 让改动永久生效，ROLLBACK 全部撤销",
+            "SAVEPOINT 可设置部分回滚点",
+            "不提交的事务会锁数据，用完记得 COMMIT/ROLLBACK"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "安全转账",
+          'code': "START TRANSACTION;\nUPDATE account SET balance = balance - 100 WHERE id = 1;\nUPDATE account SET balance = balance + 100 WHERE id = 2;\nCOMMIT;"
+        }
+      ]
+    },
+    {
+      'id': "sql-37",
+      'title': "事务隔离级别简介",
+      'summary': "四个隔离级别解决并发问题，理解脏读/不可重复读/幻读。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "多个事务同时操作同一份数据时会产生各种问题（脏读、不可重复读、幻读）。隔离级别就是数据库提供的『防干扰程度』开关，级别越高越安全，但并发性能越低。"
+        },
+        {
+          'type': "h",
+          'text': "三个并发问题"
+        },
+        {
+          'type': "table",
+          'head': [
+            "问题",
+            "含义",
+            "例子"
+          ],
+          'rows': [
+            [
+              "脏读",
+              "读到别的未提交事务的修改",
+              "A 改钱没提交，B 读到了这笔假修改"
+            ],
+            [
+              "不可重复读",
+              "同一次事务里两次读到不同值",
+              "先读到 100，别人改了，再读是 50"
+            ],
+            [
+              "幻读",
+              "两次查询行数不同，凭空多出行",
+              "第一次查 2 行，别人插入后查到 3 行"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "四个隔离级别"
+        },
+        {
+          'type': "table",
+          'head': [
+            "隔离级别",
+            "脏读",
+            "不可重复读",
+            "幻读"
+          ],
+          'rows': [
+            [
+              "READ UNCOMMITTED 读未提交",
+              "可能",
+              "可能",
+              "可能"
+            ],
+            [
+              "READ COMMITTED 读已提交",
+              "不会",
+              "可能",
+              "可能"
+            ],
+            [
+              "REPEATABLE READ 可重复读",
+              "不会",
+              "不会",
+              "可能"
+            ],
+            [
+              "SERIALIZABLE 串行化",
+              "不会",
+              "不会",
+              "不会"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查看与设置隔离级别",
+          'code': "SELECT @@transaction_isolation;   -- 查看当前级别\n\nSET SESSION TRANSACTION ISOLATION LEVEL\n    READ COMMITTED;   -- 修改当前会话级别"
+        },
+        {
+          'type': "p",
+          'text': "MySQL 默认是 REPEATABLE READ（可重复读）；PostgreSQL 和 Oracle 默认是 READ COMMITTED。大多数业务场景 READ COMMITTED 已经够用。"
+        },
+        {
+          'type': "warn",
+          'title': "级别不是越高越好",
+          'text': "SERIALIZABLE 几乎完全杜绝并发问题，但会让大量事务排队，性能暴跌。生产环境按需选择，别无脑拉满。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"事务隔离级别简介\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"事务隔离级别简介\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"事务隔离级别简介\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "并发三大问题：脏读、不可重复读、幻读",
+            "四个级别：读未提交 < 读已提交 < 可重复读 < 串行化",
+            "级别越高越安全，并发性能越低",
+            "MySQL 默认可重复读，业务常用读已提交",
+            "隔离级别是并发与一致性的权衡"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "查看隔离级别",
+          'code': "SELECT @@transaction_isolation;"
+        }
+      ]
+    },
+    {
+      'id': "sql-38",
+      'title': "主键与外键约束详解（FOREIGN KEY、级联）",
+      'summary': "外键语法与 ON DELETE 级联策略，把表关联得更牢固。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "第 25 章认识了外键概念，这一章讲完整的 FOREIGN KEY 语法、以及删除父表数据时的级联行为（ON DELETE）。"
+        },
+        {
+          'type': "h",
+          'text': "定义外键"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "建表时加外键",
+          'code': "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,\n    amount DECIMAL(10,2),\n    FOREIGN KEY (user_id) REFERENCES user(id)\n);\n-- 声明 orders.user_id 指向 user.id\n-- 插入不存在的 user_id 会报错"
+        },
+        {
+          'type': "h",
+          'text': "级联删除 ON DELETE"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "删用户时连带删他的订单",
+          'code': "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,\n    FOREIGN KEY (user_id) REFERENCES user(id)\n        ON DELETE CASCADE\n);\n-- 删除 user 里某行时，orders 里引用的行也会自动删除"
+        },
+        {
+          'type': "table",
+          'head': [
+            "策略",
+            "含义",
+            "适用"
+          ],
+          'rows': [
+            [
+              "CASCADE",
+              "父删子也删",
+              "订单随用户删除"
+            ],
+            [
+              "RESTRICT / NO ACTION",
+              "有子记录就拒绝删除",
+              "默认安全行为"
+            ],
+            [
+              "SET NULL",
+              "父删后子表外键变 NULL",
+              "保留历史记录"
+            ],
+            [
+              "SET DEFAULT",
+              "父删后子表外键恢复默认值",
+              "较少用"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "已有表添加外键",
+          'code': "ALTER TABLE orders\nADD FOREIGN KEY (user_id) REFERENCES user(id);\n\n-- 删除外键（MySQL）\nALTER TABLE orders DROP FOREIGN KEY 约束名;"
+        },
+        {
+          'type': "warn",
+          'title': "外键不是免费的",
+          'text': "外键会带来写入时的校验开销，高并发写入时可能成为瓶颈。大厂常见做法：表结构不写 FOREIGN KEY，由应用层保证引用完整。理解外键的意义，按团队规范取舍。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"主键与外键约束详解（FOREIGN KEY、级联）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"主键与外键约束详解（FOREIGN KEY、级联）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"主键与外键约束详解（FOREIGN KEY、级联）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "FOREIGN KEY (列) REFERENCES 父表(主键) 定义外键",
+            "ON DELETE 级联策略：CASCADE/RESTRICT/SET NULL",
+            "CASCADE 删父带删子，RESTRICT 有子拒删",
+            "外键保证引用完整，但有性能开销",
+            "可用 ALTER TABLE 后补外键"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "带级联的订单表",
+          'code': "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,\n    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE\n);"
+        }
+      ]
+    },
+    {
+      'id': "sql-39",
+      'title': "UNIQUE/NOT NULL/CHECK/DEFAULT 约束",
+      'summary': "四种常用约束完整讲解，用 CHECK 限制取值范围。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "第 6 章学了三种约束，这一章系统补全：UNIQUE、NOT NULL、CHECK（检查取值范围）、DEFAULT（默认值）。把约束用好，数据质量就有保障。"
+        },
+        {
+          'type': "h",
+          'text': "UNIQUE 与 NOT NULL"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "唯一 + 非空",
+          'code': "CREATE TABLE user (\n    id       INT PRIMARY KEY,\n    email    VARCHAR(50) UNIQUE NOT NULL,   -- 邮箱唯一且必填\n    phone    VARCHAR(20) UNIQUE,            -- 电话唯一，可空\n    name     VARCHAR(20) NOT NULL\n);"
+        },
+        {
+          'type': "h",
+          'text': "CHECK 检查取值"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "限制年龄和分数的范围",
+          'code': "CREATE TABLE student (\n    id    INT PRIMARY KEY,\n    name  VARCHAR(20),\n    age   INT CHECK (age BETWEEN 0 AND 150),\n    score DECIMAL(5,2) CHECK (score >= 0 AND score <= 100)\n);\n-- 插入 age=200 或 score=999 会直接报错"
+        },
+        {
+          'type': "h",
+          'text': "DEFAULT 默认值"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "给列设默认值",
+          'code': "CREATE TABLE article (\n    id         INT PRIMARY KEY,\n    title      VARCHAR(100),\n    views      INT DEFAULT 0,\n    status     VARCHAR(10) DEFAULT 'draft',\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n-- 不写 views/status/created_at 时自动填默认值"
+        },
+        {
+          'type': "h",
+          'text': "用 ALTER TABLE 追加约束"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "给已有表加约束",
+          'code': "ALTER TABLE student ADD UNIQUE (email);\nALTER TABLE student ALTER COLUMN name SET NOT NULL;\nALTER TABLE student ADD CONSTRAINT ck_age CHECK (age >= 0);"
+        },
+        {
+          'type': "table",
+          'head': [
+            "约束",
+            "作用",
+            "写在哪"
+          ],
+          'rows': [
+            [
+              "PRIMARY KEY",
+              "唯一非空的主键",
+              "建表时"
+            ],
+            [
+              "UNIQUE",
+              "值不能重复",
+              "建表/ALTER"
+            ],
+            [
+              "NOT NULL",
+              "必须填值",
+              "建表/ALTER"
+            ],
+            [
+              "CHECK",
+              "限制取值合法",
+              "建表/ALTER"
+            ],
+            [
+              "DEFAULT",
+              "缺省时自动填",
+              "建表/ALTER"
+            ]
+          ]
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"UNIQUE/NOT NULL/CHECK/DEFAULT 约束\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"UNIQUE/NOT NULL/CHECK/DEFAULT 约束\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"UNIQUE/NOT NULL/CHECK/DEFAULT 约束\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "UNIQUE 值不重复、NOT NULL 必须填",
+            "CHECK 限制取值范围（如分数 0~100）",
+            "DEFAULT 给缺省值（如 views DEFAULT 0）",
+            "ALTER TABLE 可对已有表追加约束",
+            "约束是数据质量的第一道防线"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "带CHECK的学生表",
+          'code': "CREATE TABLE student (\n    id    INT PRIMARY KEY,\n    name  VARCHAR(20),\n    score DECIMAL(5,2) CHECK (score >= 0 AND score <= 100)\n);"
+        }
+      ]
+    },
+    {
+      'id': "sql-40",
+      'title': "索引概念与创建（CREATE INDEX）",
+      'summary': "索引像书的目录，创建索引让查询提速。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据少时查询无所谓快慢，但到了几百万行，没索引的查询会慢到让人崩溃。索引就像书的目录：没有目录要翻遍全书，有目录直接翻到对应页。"
+        },
+        {
+          'type': "h",
+          'text': "没有索引时发生了什么"
+        },
+        {
+          'type': "p",
+          'text': "没有索引时，WHERE name = '小明' 要把整张表每一行都扫一遍（全表扫描，Full Table Scan）。表有 500 万行就要读 500 万行，非常慢。"
+        },
+        {
+          'type': "h",
+          'text': "创建索引"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "创建普通索引",
+          'code': "CREATE INDEX idx_name ON student(name);\n-- 给 student.name 建索引\n\nCREATE INDEX idx_age ON student(age);\n\n-- 建表时直接指定索引\nCREATE TABLE student (\n    id INT PRIMARY KEY,\n    name VARCHAR(20),\n    INDEX idx_name (name)\n);"
+        },
+        {
+          'type': "h",
+          'text': "查看与删除索引"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "管理索引",
+          'code': "SHOW INDEX FROM student;   -- 查看表的索引\nDROP INDEX idx_name ON student;   -- 删除索引"
+        },
+        {
+          'type': "tip",
+          'title': "主键自动建索引",
+          'text': "PRIMARY KEY 和 UNIQUE 约束会自动生成索引，不需要手动建。我们要手动建的是那些经常在 WHERE、JOIN、ORDER BY 里用到的普通列。"
+        },
+        {
+          'type': "warn",
+          'title': "索引不是越多越好",
+          'text': "索引能加速查询，但每次 INSERT/UPDATE/DELETE 都要同步维护索引，写会变慢，还占磁盘。只给『真正常查的列』建索引，别见列就建。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"索引概念与创建（CREATE INDEX）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"索引概念与创建（CREATE INDEX）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"索引概念与创建（CREATE INDEX）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "索引像书目录，加速 WHERE/JOIN/ORDER BY",
+            "CREATE INDEX 索引名 ON 表(列) 创建",
+            "主键、UNIQUE 自动建索引",
+            "索引不是免费的：拖慢写入、占磁盘",
+            "只给高频查询的列建索引"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "建索引提速",
+          'code': "CREATE INDEX idx_name ON student(name);\nSELECT * FROM student WHERE name = '小明';"
+        }
+      ]
+    },
+    null,
+    {
+      'id': "sql-41",
+      'title': "索引类型（普通/唯一/复合）与使用原则",
+      'summary': "普通索引、唯一索引、复合索引的区别和适用场景。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "上一章会创建基本索引了，这一章把索引分类讲清：普通索引、唯一索引、复合索引。并且重点讲『最左前缀』这个复合索引的关键原则。"
+        },
+        {
+          'type': "h",
+          'text': "三种索引"
+        },
+        {
+          'type': "table",
+          'head': [
+            "类型",
+            "特点",
+            "场景"
+          ],
+          'rows': [
+            [
+              "普通索引 INDEX",
+              "不限制值重复",
+              "经常查询的列"
+            ],
+            [
+              "唯一索引 UNIQUE",
+              "值不能重复",
+              "邮箱、手机号、订单号"
+            ],
+            [
+              "复合索引",
+              "多列组合成一个索引",
+              "多条件联合查询"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "创建不同类型的索引",
+          'code': "CREATE INDEX idx_name ON student(name);           -- 普通索引\nCREATE UNIQUE INDEX idx_email ON user(email);    -- 唯一索引\nCREATE INDEX idx_class_score ON student(class, score);  -- 复合索引\n\n-- 建表时指定\nCREATE TABLE user (\n    id INT PRIMARY KEY,\n    email VARCHAR(50) UNIQUE,   -- UNIQUE 自动生成唯一索引\n    name VARCHAR(20),\n    INDEX idx_name (name)\n);"
+        },
+        {
+          'type': "h",
+          'text': "复合索引的最左前缀原则"
+        },
+        {
+          'type': "p",
+          'text': "复合索引 idx_class_score (class, score) 相当于先按 class 排、再按 score 排。它能命中以下查询：只看 class 的、class+score 一起的。但只查 score 用不上它（最左前缀原则：必须从第一列开始用）。"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "哪些查询能用到复合索引",
+          'code': "-- 能用上 idx_class_score：\nSELECT * FROM student WHERE class = '1班';                    -- 用到左列 class\nSELECT * FROM student WHERE class = '1班' AND score > 90;    -- 两列都用\n\n-- 用不上 idx_class_score：\nSELECT * FROM student WHERE score > 90;   -- 没用第一列 class，索引失效"
+        },
+        {
+          'type': "h",
+          'text': "使用原则"
+        },
+        {
+          'type': "list",
+          'items': [
+            "高区分度优先：像性别这种只有两三个值的列，索引意义不大",
+            "优先给 WHERE、JOIN ON、ORDER BY 里的列建索引",
+            "复合索引把最常查的列放最左边",
+            "少而精：索引过多会拖慢写入、吃磁盘"
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "区分度低不要建索引",
+          'text': "比如 status 只有『正常/禁用』两个值，建索引后扫描一半数据还要回表，数据库很可能干脆不用这个索引。低区分度列别白费力气。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"索引类型（普通/唯一/复合）与使用原则\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"索引类型（普通/唯一/复合）与使用原则\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"索引类型（普通/唯一/复合）与使用原则\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "普通索引不限制重复，唯一索引值不能重复",
+            "复合索引是多列组合，按最左列排序",
+            "最左前缀：复合索引必须从第一列开始用",
+            "索引要少而精，优先高区分度、高频查询列"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "建复合索引",
+          'code': "CREATE INDEX idx_class_score ON student(class, score);\nSELECT * FROM student WHERE class = '1班' AND score > 90;"
+        }
+      ]
+    },
+    {
+      'id': "sql-42",
+      'title': "视图 VIEW（创建、使用、更新限制）",
+      'summary': "视图是保存好的查询，像虚拟表，复用复杂查询。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "视图（VIEW）就是一条存起来的 SELECT 查询，用的时候像一个虚拟的表。它不存真实数据，数据仍来自原始表，但能帮你把复杂查询封装成一张『假表』复用。"
+        },
+        {
+          'type': "h",
+          'text': "创建视图"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "把三表 JOIN 存成视图",
+          'code': "CREATE VIEW v_order_detail AS\nSELECT o.id AS 订单号, u.name AS 买家, p.name AS 商品, o.qty AS 数量\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nINNER JOIN product p ON o.product_id = p.id;"
+        },
+        {
+          'type': "h",
+          'text': "使用视图"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "视图当成普通表查",
+          'code': "SELECT * FROM v_order_detail;              -- 全部订单明细\nSELECT * FROM v_order_detail WHERE 买家 = '小明';\nSELECT 商品, SUM(数量) FROM v_order_detail GROUP BY 商品;"
+        },
+        {
+          'type': "h",
+          'text': "修改与删除视图"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "管理视图",
+          'code': "CREATE OR REPLACE VIEW v_order_detail AS\nSELECT ...;      -- 覆盖式更新视图定义\n\nDROP VIEW v_order_detail;   -- 删除视图"
+        },
+        {
+          'type': "warn",
+          'title': "视图能否更新有限制",
+          'text': "简单视图（单表、无聚合、无 DISTINCT）可以 UPDATE/INSERT；包含聚合、GROUP BY、JOIN 多表的复杂视图一般不能直接改数据。视图大多用于查询，别指望它帮你改数据。"
+        },
+        {
+          'type': "info",
+          'title': "视图的好处",
+          'text': "一是复用，复杂查询只写一遍；二是安全，可以只给用户开视图权限而不给原始表；三是屏蔽表结构变化，改底层表不影响用视图的代码。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"视图 VIEW（创建、使用、更新限制）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"视图 VIEW（创建、使用、更新限制）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"视图 VIEW（创建、使用、更新限制）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "视图是存起来的 SELECT，像虚拟表，不存数据",
+            "CREATE VIEW 视图名 AS SELECT ... 创建",
+            "视图可当普通表 SELECT，也能再聚合",
+            "复杂视图（聚合/JOIN）通常不能直接改数据",
+            "视图用于复用查询和权限控制"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "订单明细视图",
+          'code': "CREATE VIEW v_order AS\nSELECT o.id, u.name AS 买家, o.amount\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id;\n\nSELECT * FROM v_order WHERE 买家 = '小明';"
+        }
+      ]
+    },
+    {
+      'id': "sql-43",
+      'title': "存储过程 PROCEDURE（创建与调用）",
+      'summary': "把一段 SQL 存起来反复调用，理解存储过程。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "存储过程（Stored Procedure）把一段或多条 SQL 打包成一个『函数』存在数据库里，调用时传参执行。适合固定流程、减少网络往返。注意不同数据库语法有差异，本章以 MySQL 为例。"
+        },
+        {
+          'type': "h",
+          'text': "创建一个简单的存储过程"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "无参数存储过程",
+          'code': "DELIMITER $$\nCREATE PROCEDURE get_all_student()\nBEGIN\n    SELECT * FROM student;\nEND $$\nDELIMITER ;\n\n-- 调用\nCALL get_all_student();"
+        },
+        {
+          'type': "h",
+          'text': "带参数的存储过程"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按班级查询",
+          'code': "DELIMITER $$\nCREATE PROCEDURE get_student_by_class(IN c VARCHAR(20))\nBEGIN\n    SELECT * FROM student WHERE class = c;\nEND $$\nDELIMITER ;\n\nCALL get_student_by_class('1班');"
+        },
+        {
+          'type': "h",
+          'text': "删除存储过程"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "管理存储过程",
+          'code': "DROP PROCEDURE IF EXISTS get_all_student;\n\n-- 查看有哪些\nSHOW PROCEDURE STATUS;"
+        },
+        {
+          'type': "info",
+          'title': "DELIMITER 是什么",
+          'text': "存储过程体里有很多分号，MySQL 会把第一个分号误认为语句结束。DELIMITER $$ 临时把结束符改成 $$，让整个 BEGIN...END 作为一个整体创建，用完再改回分号。SQLite 不支持存储过程。"
+        },
+        {
+          'type': "warn",
+          'title': "别滥用存储过程",
+          'text': "存储过程把业务逻辑藏在数据库里，难调试、难版本管理。现代开发趋势是『业务逻辑放应用层』，存储过程只用于少量固定、追求性能的流程。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"存储过程 PROCEDURE（创建与调用）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"存储过程 PROCEDURE（创建与调用）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"存储过程 PROCEDURE（创建与调用）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "存储过程把多条 SQL 打包存库，用 CALL 调用",
+            "DELIMITER $$ 配合创建带 BEGIN...END 的过程",
+            "参数用 IN 声明，调用时传值",
+            "适合固定流程，但业务逻辑别全塞进数据库"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "按班级查学生",
+          'code': "DELIMITER $$\nCREATE PROCEDURE get_stu(IN c VARCHAR(20))\nBEGIN\n    SELECT * FROM student WHERE class = c;\nEND $$\nDELIMITER ;\nCALL get_stu('1班');"
+        }
+      ]
+    },
+    {
+      'id': "sql-44",
+      'title': "函数与流程控制（IF、CASE WHEN）",
+      'summary': "在 SQL 里写条件判断，掌握 IF 与 CASE WHEN。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "SQL 里也能写条件分支。IF 适合二选一，CASE WHEN 适合多分支。这一章教你在查询结果里『动态生成』一列。"
+        },
+        {
+          'type': "h",
+          'text': "IF(条件, 是, 否)"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "判断及格与否",
+          'code': "SELECT name, score,\n       IF(score >= 60, '及格', '不及格') AS result\nFROM student;\n-- IF(条件, 条件为真时的值, 条件为假时的值)"
+        },
+        {
+          'type': "h",
+          'text': "CASE WHEN 多分支"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "给分数评等级",
+          'code': "SELECT name, score,\n    CASE\n        WHEN score >= 90 THEN '优秀'\n        WHEN score >= 80 THEN '良好'\n        WHEN score >= 60 THEN '及格'\n        ELSE '不及格'\n    END AS grade\nFROM student;\n-- 从上往下匹配，命中第一个 WHEN 就停"
+        },
+        {
+          'type': "h",
+          'text': "CASE 的另一种简写"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "CASE 列 WHEN 值",
+          'code': "SELECT name,\n    CASE class\n        WHEN '1班' THEN '一班'\n        WHEN '2班' THEN '二班'\n        ELSE '其他'\n    END AS class_name\nFROM student;\n-- 简写形式：CASE 列 WHEN 值 WHEN 值..."
+        },
+        {
+          'type': "h",
+          'text': "CASE 配合聚合做行列转换"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "统计每门课男生女生人数",
+          'code': "SELECT\n    SUM(CASE WHEN gender = '男' THEN 1 ELSE 0 END) AS 男生,\n    SUM(CASE WHEN gender = '女' THEN 1 ELSE 0 END) AS 女生\nFROM student;"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"函数与流程控制（IF、CASE WHEN）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"函数与流程控制（IF、CASE WHEN）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"函数与流程控制（IF、CASE WHEN）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "IF(条件, 真值, 假值) 适合二选一",
+            "CASE WHEN ... THEN ... ELSE ... END 多分支",
+            "CASE 从上往下匹配，命中即停",
+            "CASE 可配 SUM/COUNT 做行列转换统计"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "成绩评等级",
+          'code': "SELECT name, score,\n    CASE\n        WHEN score >= 90 THEN '优秀'\n        WHEN score >= 60 THEN '及格'\n        ELSE '不及格'\n    END AS grade\nFROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-45",
+      'title': "触发器 TRIGGER（创建与使用）",
+      'summary': "在增删改前后自动执行 SQL，理解触发器机制。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "触发器（TRIGGER）是挂在表上的『自动程序』：当你对这张表 INSERT/UPDATE/DELETE 时，它自动执行一段 SQL。适合写日志、自动更新统计等场景。本章以 MySQL 为例。"
+        },
+        {
+          'type': "h",
+          'text': "创建一个记录日志的触发器"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "删除用户时自动记日志",
+          'code': "CREATE TRIGGER trg_user_delete\nAFTER DELETE ON user\nFOR EACH ROW\nBEGIN\n    INSERT INTO user_log (content, created_at)\n    VALUES (CONCAT('删除了用户: ', OLD.name), NOW());\nEND;\n-- OLD 表示被删除的那一行"
+        },
+        {
+          'type': "h",
+          'text': "INSERT 和 UPDATE 触发器"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "插入订单时自动更新统计",
+          'code': "CREATE TRIGGER trg_order_insert\nAFTER INSERT ON orders\nFOR EACH ROW\nBEGIN\n    UPDATE stat SET order_count = order_count + 1;\nEND;\n-- NEW 表示刚插入的那一行"
+        },
+        {
+          'type': "table",
+          'head': [
+            "触发时机",
+            "关键字",
+            "可访问的记录"
+          ],
+          'rows': [
+            [
+              "AFTER/BEFORE INSERT",
+              "INSERT",
+              "NEW（新行）"
+            ],
+            [
+              "AFTER/BEFORE UPDATE",
+              "UPDATE",
+              "NEW（新值）、OLD（旧值）"
+            ],
+            [
+              "AFTER/BEFORE DELETE",
+              "DELETE",
+              "OLD（被删行）"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "查看与删除触发器"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "管理触发器",
+          'code': "SHOW TRIGGERS;      -- 查看所有触发器\nDROP TRIGGER trg_user_delete;   -- 删除触发器"
+        },
+        {
+          'type': "warn",
+          'title': "触发器别做复杂逻辑",
+          'text': "触发器是『隐式』执行的，出问题很难排查：一条 INSERT 可能悄悄触发一串操作，还容易和事务、外键叠加出怪问题。日志、简单统计可以，复杂业务逻辑放应用层。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"触发器 TRIGGER（创建与使用）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"触发器 TRIGGER（创建与使用）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"触发器 TRIGGER（创建与使用）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "触发器在 INSERT/UPDATE/DELETE 前后自动执行",
+            "NEW 是新行，OLD 是旧行/被删行",
+            "常用于写日志、自动更新统计",
+            "触发器隐式执行难排查，别写复杂逻辑"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "删除日志触发器",
+          'code': "CREATE TRIGGER trg_user_delete\nAFTER DELETE ON user\nFOR EACH ROW\nBEGIN\n    INSERT INTO user_log (content) VALUES (CONCAT('删除了用户: ', OLD.name));\nEND;"
+        }
+      ]
+    },
+    {
+      'id': "sql-46",
+      'title': "数据库设计范式（1NF/2NF/3NF）",
+      'summary': "用三范式规范表设计，消除冗余与更新异常。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "范式（Normal Form）是规范表设计的一套规则，用来消除数据冗余和更新异常。最常见的三范式：1NF、2NF、3NF。理解它们，你设计的表会更规范。"
+        },
+        {
+          'type': "h",
+          'text': "第一范式 1NF：字段不可再分"
+        },
+        {
+          'type': "p",
+          'text': "每个字段都必须是原子的，不能再拆。比如『地址』字段存了『上海市-浦东-xx路』，就违反 1NF，应该拆成省、市、区多个字段（具体拆分粒度看业务）。"
+        },
+        {
+          'type': "h",
+          'text': "第二范式 2NF：消除部分依赖"
+        },
+        {
+          'type': "p",
+          'text': "在满足 1NF 基础上，非主键列必须完全依赖于主键，不能只依赖主键的一部分。常见于复合主键的表中。比如选课表主键是 (student_id, course_id)，『课程名』只依赖 course_id 部分，就应拆出去。"
+        },
+        {
+          'type': "h",
+          'text': "第三范式 3NF：消除传递依赖"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "违反 3NF 的例子",
+          'code': "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    product_id INT,\n    product_name VARCHAR(50)   -- 产品名只依赖 product_id，不是主键 id\n);\n-- product_name 通过 product_id 间接依赖主键，这叫传递依赖\n-- 应拆出 product 表，orders 只留 product_id"
+        },
+        {
+          'type': "table",
+          'head': [
+            "范式",
+            "规则",
+            "消除的问题"
+          ],
+          'rows': [
+            [
+              "1NF",
+              "字段不可再分",
+              "字段不原子"
+            ],
+            [
+              "2NF",
+              "非主键列完全依赖主键",
+              "部分依赖、冗余"
+            ],
+            [
+              "3NF",
+              "非主键列不传递依赖主键",
+              "传递依赖、更新异常"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "符合 3NF 的设计",
+          'code': "CREATE TABLE product (id INT PRIMARY KEY, name VARCHAR(50));\nCREATE TABLE orders (id INT PRIMARY KEY, product_id INT);\n-- orders 只存 product_id，名字在 product 表里\n-- 改产品名只改 product 一行"
+        },
+        {
+          'type': "tip",
+          'title': "实践心法",
+          'text': "别死记概念，记住目的：避免重复、避免改了这边漏了那边。大多数正常业务设计到 3NF 就够用了，个别场景才需要反范式（下一章）。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据库设计范式（1NF/2NF/3NF）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据库设计范式（1NF/2NF/3NF）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据库设计范式（1NF/2NF/3NF）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "范式是规范表设计、消除冗余的规则",
+            "1NF 字段不可再分，2NF 消除部分依赖，3NF 消除传递依赖",
+            "符合 3NF 的表重复数据少、改一处即可",
+            "实际项目做到 3NF 通常足够"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "符合3NF的订单",
+          'code': "CREATE TABLE product (id INT PRIMARY KEY, name VARCHAR(50));\nCREATE TABLE orders (id INT PRIMARY KEY, product_id INT);"
+        }
+      ]
+    },
+    {
+      'id': "sql-47",
+      'title': "反范式与设计权衡",
+      'summary': "为什么有时要故意违反范式？理解冗余的代价与收益。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "上一章的范式追求『零冗余』，但真实系统为了性能，常常故意保留一些冗余——这叫反范式（Denormalization）。这一章讲清楚什么时候该『反』。"
+        },
+        {
+          'type': "h",
+          'text': "为什么反范式"
+        },
+        {
+          'type': "list",
+          'items': [
+            "JOIN 很贵：每次查都要连表，数据量大时慢",
+            "统计报表频繁：冗余一份聚合结果，查得飞快",
+            "读多写少：多存一份冗余换查询速度，划算"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "典型例子：订单快照"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "订单里冗余商品名和价格",
+          'code': "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    product_id INT,\n    product_name VARCHAR(50),    -- 冗余字段\n    price DECIMAL(10,2),         -- 冗余字段\n    quantity INT\n);\n-- 好处：订单列表不用 JOIN 商品表就能显示商品名和价格\n-- 代价：商品改名/改价时，历史订单不受影响（反而是期望行为！）"
+        },
+        {
+          'type': "h",
+          'text': "范式 vs 反范式的权衡"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "范式化",
+            "反范式"
+          ],
+          'rows': [
+            [
+              "冗余",
+              "少",
+              "多"
+            ],
+            [
+              "写入一致性",
+              "好（改一处）",
+              "差（可能多处不一致）"
+            ],
+            [
+              "查询性能",
+              "慢（要 JOIN）",
+              "快（直接读）"
+            ],
+            [
+              "适用",
+              "写多、一致性要求高",
+              "读多、追求查询速度"
+            ]
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "反范式的代价",
+          'text': "冗余字段要保证多处同步更新，靠应用层或触发器维护，否则会出现『两个地方数据不一致』的脏状态。为性能反范式时，一定想好怎么保证一致性。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"反范式与设计权衡\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"反范式与设计权衡\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"反范式与设计权衡\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "反范式 = 故意留冗余换查询性能",
+            "订单快照存商品名/价是经典反范式",
+            "读多写少、查询频繁的场景适合反范式",
+            "反范式要负责维护冗余一致性，别随意用"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "带快照的订单",
+          'code': "CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    product_id INT,\n    product_name VARCHAR(50),\n    price DECIMAL(10,2),\n    quantity INT\n);"
+        }
+      ]
+    },
+    {
+      'id': "sql-48",
+      'title': "实体关系图 ER 设计与表关系（1:1/1:N/N:M）",
+      'summary': "画 ER 图理清实体与关系，把 1:1/1:N/N:M 落到建表。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "动手建表前，先画一张 ER 图（实体关系图）：把业务里的『实体』（人、订单、商品）和它们之间的『关系』画出来。这张图就是你的建表蓝图。"
+        },
+        {
+          'type': "h",
+          'text': "ER 图的基本元素"
+        },
+        {
+          'type': "list",
+          'items': [
+            "实体（Entity）：矩形，如『用户』『订单』，对应一张表",
+            "属性（Attribute）：椭圆，如『姓名』『价格』，对应列",
+            "关系（Relationship）：菱形，如『下单』，表示实体间的联系"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "三种关系如何建表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "1:N 一对多",
+          'code': "-- 一个用户有多个订单\nCREATE TABLE user (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE orders (\n    id INT PRIMARY KEY,\n    user_id INT,          -- 『多』的一方放外键\n    amount DECIMAL(10,2)\n);"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "N:M 多对多（中间表）",
+          'code': "-- 一个学生选多门课，一门课有多名学生\nCREATE TABLE student (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE course (id INT PRIMARY KEY, title VARCHAR(50));\nCREATE TABLE student_course (          -- 中间表\n    student_id INT,\n    course_id INT,\n    score DECIMAL(5,2),                -- 关系自身可带属性\n    PRIMARY KEY (student_id, course_id)\n);"
+        },
+        {
+          'type': "h",
+          'text': "1:1 一对一"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用户和档案一一对应",
+          'code': "CREATE TABLE user (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE user_profile (\n    user_id INT PRIMARY KEY,   -- 直接拿对方主键做自己的主键\n    bio VARCHAR(200)\n);\n-- 一对一：任意一方用对方主键做外键，通常设为 UNIQUE"
+        },
+        {
+          'type': "table",
+          'head': [
+            "关系",
+            "表达方式",
+            "例子"
+          ],
+          'rows': [
+            [
+              "1:1",
+              "一方存对方主键（加 UNIQUE）",
+              "用户 ↔ 档案"
+            ],
+            [
+              "1:N",
+              "N 的一方存外键",
+              "用户 1 — N 订单"
+            ],
+            [
+              "N:M",
+              "新建中间表存两个外键",
+              "学生 N — M 课程"
+            ]
+          ]
+        },
+        {
+          'type': "tip",
+          'title': "先画图再建表",
+          'text': "笔头功夫：先列出实体，标出关系类型，再决定外键放哪、要不要中间表。图对了，建表就是抄答案。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实体关系图 ER 设计与表关系（1:1/1:N/N:M）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实体关系图 ER 设计与表关系（1:1/1:N/N:M）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实体关系图 ER 设计与表关系（1:1/1:N/N:M）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "ER 图 = 实体 + 属性 + 关系，是建表蓝图",
+            "1:1 一方存对方主键；1:N 多方存外键；N:M 用中间表",
+            "中间表可带属性（如成绩）",
+            "先画关系图，再动手建表"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "多对多中间表",
+          'code': "CREATE TABLE student (id INT PRIMARY KEY, name VARCHAR(20));\nCREATE TABLE course (id INT PRIMARY KEY, title VARCHAR(50));\nCREATE TABLE student_course (\n    student_id INT,\n    course_id INT,\n    PRIMARY KEY (student_id, course_id)\n);"
+        }
+      ]
+    },
+    {
+      'id': "sql-49",
+      'title': "实战：设计博客系统数据库",
+      'summary': "从零设计博客系统：用户、文章、评论、标签四张表。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "从这一章开始进入实战。第一个项目是博客系统：用户写文章、读者评论、文章打标签。先按上一章的思路画关系、再建表。"
+        },
+        {
+          'type': "h",
+          'text': "理清实体与关系"
+        },
+        {
+          'type': "list",
+          'items': [
+            "用户 User：一个用户写多篇文章（1:N）",
+            "文章 Article：一个文章有多个评论（1:N）",
+            "评论 Comment：归属一个用户和一篇文章（N:1）",
+            "标签 Tag：一篇文章多个标签，一个标签多篇文章（N:M，用中间表）"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "建表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "博客系统四张表",
+          'code': "CREATE TABLE user (\n    id       INT PRIMARY KEY AUTO_INCREMENT,\n    name     VARCHAR(20) NOT NULL,\n    email    VARCHAR(50) UNIQUE,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE article (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    user_id    INT NOT NULL,\n    title      VARCHAR(100) NOT NULL,\n    content    TEXT,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE comment (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    article_id INT NOT NULL,\n    user_id    INT NOT NULL,\n    content    TEXT,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE tag (\n    id   INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) UNIQUE\n);\n\nCREATE TABLE article_tag (\n    article_id INT,\n    tag_id     INT,\n    PRIMARY KEY (article_id, tag_id)\n);"
+        },
+        {
+          'type': "h",
+          'text': "插入演示数据"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "填几行数据",
+          'code': "INSERT INTO user (name, email) VALUES ('小明','a@b.com'),('小红','c@d.com');\nINSERT INTO article (user_id, title) VALUES\n    (1, '我的第一篇博客'),\n    (1, 'SQL 学习笔记'),\n    (2, '前端入门');\nINSERT INTO comment (article_id, user_id, content) VALUES\n    (1, 2, '写得好！'),\n    (2, 2, '收藏了');\nINSERT INTO tag (name) VALUES ('随笔'),('技术'),('教程');\nINSERT INTO article_tag VALUES (1,1),(2,2),(2,3),(3,2);"
+        },
+        {
+          'type': "tip",
+          'title': "主键自增",
+          'text': "MySQL 里 INT PRIMARY KEY AUTO_INCREMENT 让主键自动编号，插入时不用管 id，省心又不会撞号。SQLite 对应写法是 INTEGER PRIMARY KEY AUTOINCREMENT。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：设计博客系统数据库\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：设计博客系统数据库\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：设计博客系统数据库\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "博客系统核心：用户、文章、评论、标签",
+            "用户-文章-评论是 1:N 链，存 user_id/article_id 外键",
+            "文章-标签是 N:M，用 article_tag 中间表",
+            "主键自增 AUTO_INCREMENT 自动编号",
+            "设计先行：先画关系，再建表，再插数据"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "博客核心建表",
+          'code': "CREATE TABLE user (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20));\nCREATE TABLE article (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, title VARCHAR(100));\nCREATE TABLE tag (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20));\nCREATE TABLE article_tag (article_id INT, tag_id INT, PRIMARY KEY (article_id, tag_id));"
+        }
+      ]
+    },
+    {
+      'id': "sql-50",
+      'title': "实战：博客系统增删改查",
+      'summary': "对博客四张表做完整 CRUD：增、查、改、删。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "表建好了，这一章练博客系统的完整增删改查（CRUD：Create 增、Read 查、Update 改、Delete 删）。用真实业务场景把前面学的 INSERT/SELECT/UPDATE/DELETE 用起来。"
+        },
+        {
+          'type': "h",
+          'text': "C 增：写文章、注册用户"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "插入新数据",
+          'code': "INSERT INTO user (name, email) VALUES ('小刚', 'e@f.com');\nINSERT INTO article (user_id, title, content) VALUES\n    (1, 'SQL 实战总结', '今天学会了 JOIN...');"
+        },
+        {
+          'type': "h",
+          'text': "R 查：各种查询"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查文章列表和详情",
+          'code': "SELECT id, title, created_at FROM article ORDER BY created_at DESC;\n\n-- 查某用户的所有文章\nSELECT * FROM article WHERE user_id = 1;\n\n-- 查某篇文章的评论\nSELECT * FROM comment WHERE article_id = 1;\n\n-- 统计每篇文章评论数\nSELECT article_id, COUNT(*) AS 评论数\nFROM comment GROUP BY article_id;"
+        },
+        {
+          'type': "h",
+          'text': "U 改：更新文章"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "修改标题和内容",
+          'code': "UPDATE article\nSET title = 'SQL 实战总结（修订版）', content = '补充了索引部分'\nWHERE id = 1;"
+        },
+        {
+          'type': "h",
+          'text': "D 删：删除评论与文章"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "删除数据",
+          'code': "DELETE FROM comment WHERE id = 1;\nDELETE FROM article WHERE id = 3;\n-- 删除文章时，它的评论如果没有外键级联，需一并处理"
+        },
+        {
+          'type': "warn",
+          'title': "删除带关联的数据要小心",
+          'text': "删文章时它的评论、标签关联可能残留。要么建表时用 ON DELETE CASCADE 自动清，要么先删评论再删文章。正式系统常用『软删除』：加一列 is_deleted 标记，而不是真删。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：博客系统增删改查\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：博客系统增删改查\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：博客系统增删改查\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "CRUD = 增 INSERT、查 SELECT、改 UPDATE、删 DELETE",
+            "查询先按业务拆需求：列表/详情/统计",
+            "UPDATE/DELETE 必须带 WHERE",
+            "删除有关联的数据要处理级联或软删除"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "博客 CRUD 全家桶",
+          'code': "INSERT INTO article (user_id, title) VALUES (1, '新文章');\nSELECT * FROM article ORDER BY created_at DESC;\nUPDATE article SET title = '改名了' WHERE id = 1;\nDELETE FROM article WHERE id = 2;"
+        }
+      ]
+    },
+    {
+      'id': "sql-51",
+      'title': "实战：博客系统查询（文章+作者+标签 JOIN）",
+      'summary': "用 JOIN 把文章、作者、标签、评论串成完整查询。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "博客系统的查询往往要把多张表拼起来：文章要显示作者名、标签列表、评论数。这一章综合运用 JOIN、GROUP BY、子查询。"
+        },
+        {
+          'type': "h",
+          'text': "文章 + 作者"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "JOIN 出作者名",
+          'code': "SELECT a.id, a.title, u.name AS 作者, a.created_at\nFROM article a\nINNER JOIN user u ON a.user_id = u.id\nORDER BY a.created_at DESC;"
+        },
+        {
+          'type': "h",
+          'text': "文章 + 评论数"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用子查询统计评论数",
+          'code': "SELECT a.id, a.title,\n       (SELECT COUNT(*) FROM comment c WHERE c.article_id = a.id) AS 评论数\nFROM article a;"
+        },
+        {
+          'type': "h",
+          'text': "文章 + 标签（多对多）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "三表 JOIN 出标签",
+          'code': "SELECT a.title, t.name AS 标签\nFROM article a\nINNER JOIN article_tag at ON at.article_id = a.id\nINNER JOIN tag t ON at.tag_id = t.id\nORDER BY a.id;"
+        },
+        {
+          'type': "h",
+          'text': "综合：一篇文章的完整信息"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "文章详情页一条 SQL",
+          'code': "SELECT a.id, a.title, u.name AS 作者,\n       (SELECT COUNT(*) FROM comment c WHERE c.article_id = a.id) AS 评论数,\n       (SELECT GROUP_CONCAT(t.name) FROM article_tag at\n        INNER JOIN tag t ON at.tag_id = t.id\n        WHERE at.article_id = a.id) AS 标签\nFROM article a\nINNER JOIN user u ON a.user_id = u.id\nWHERE a.id = 1;"
+        },
+        {
+          'type': "tip",
+          'title': "子查询当列用要注意性能",
+          'text': "上面的子查询对每篇文章执行一次，文章多时会变慢。数据量大时可用 LEFT JOIN + GROUP_CONCAT + COUNT 一次性算好，更高效。先把思路跑通，再谈优化。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：博客系统查询（文章+作者+标签 JOIN）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：博客系统查询（文章+作者+标签 JOIN）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：博客系统查询（文章+作者+标签 JOIN）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "文章作者用 INNER JOIN user 拼出",
+            "评论数用 COUNT 子查询或 GROUP BY",
+            "多对多标签用 article_tag 中间表三表 JOIN",
+            "GROUP_CONCAT 能把多个标签拼成一行",
+            "复杂查询先搭骨架，再逐步优化"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "文章列表带作者",
+          'code': "SELECT a.id, a.title, u.name AS 作者, a.created_at\nFROM article a\nINNER JOIN user u ON a.user_id = u.id\nORDER BY a.created_at DESC;"
+        }
+      ]
+    },
+    {
+      'id': "sql-52",
+      'title': "实战：电商数据库设计",
+      'summary': "设计电商核心四表：用户、商品、订单、订单明细。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "电商系统是数据库设计的经典考题。核心是四张表：用户、商品、订单（主表）、订单明细（子表）。一个订单可以包含多种商品，所以订单和明细是一对多。"
+        },
+        {
+          'type': "h",
+          'text': "表关系"
+        },
+        {
+          'type': "list",
+          'items': [
+            "用户 User 1:N 订单 Orders",
+            "订单 Orders 1:N 订单明细 Order_item",
+            "订单明细 Order_item N:1 商品 Product（冗余快照）"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "建表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "电商四张表",
+          'code': "CREATE TABLE user (\n    id       INT PRIMARY KEY AUTO_INCREMENT,\n    name     VARCHAR(20) NOT NULL,\n    phone    VARCHAR(20)\n);\n\nCREATE TABLE product (\n    id     INT PRIMARY KEY AUTO_INCREMENT,\n    name   VARCHAR(50) NOT NULL,\n    price  DECIMAL(10,2) NOT NULL,\n    stock  INT DEFAULT 0\n);\n\nCREATE TABLE orders (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    user_id    INT NOT NULL,\n    total      DECIMAL(12,2) DEFAULT 0,\n    status     VARCHAR(20) DEFAULT '待付款',\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE order_item (\n    id          INT PRIMARY KEY AUTO_INCREMENT,\n    order_id    INT NOT NULL,\n    product_id  INT NOT NULL,\n    product_name VARCHAR(50),     -- 快照：历史商品名\n    price       DECIMAL(10,2),    -- 快照：成交价\n    quantity    INT DEFAULT 1\n);"
+        },
+        {
+          'type': "h",
+          'text': "插入演示数据"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用户下单",
+          'code': "INSERT INTO user (name, phone) VALUES ('小明','13800000000');\nINSERT INTO product (name, price, stock) VALUES\n    ('键盘', 199, 100),\n    ('鼠标', 99, 200);\n\nINSERT INTO orders (user_id, total) VALUES (1, 497);\nINSERT INTO order_item (order_id, product_id, product_name, price, quantity)\nVALUES\n    (1, 1, '键盘', 199, 2),\n    (1, 2, '鼠标', 99, 1);"
+        },
+        {
+          'type': "info",
+          'title': "为什么要订单明细",
+          'text': "一个订单可能包含多个商品，如果只在一行里塞『键盘 x2，鼠标 x1』没法查询和统计。拆成明细表，每行一个商品，还能记录成交价快照（商品以后改价不影响历史订单）。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：电商数据库设计\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：电商数据库设计\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：电商数据库设计\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "电商核心：用户、商品、订单、订单明细四表",
+            "订单与明细是 1:N，明细每行一个商品",
+            "明细存商品名/价格快照，历史订单不受改价影响",
+            "订单总金额 total 可冗余，或由明细汇总"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "电商核心建表",
+          'code': "CREATE TABLE user (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20));\nCREATE TABLE product (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50), price DECIMAL(10,2));\nCREATE TABLE orders (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, total DECIMAL(12,2));\nCREATE TABLE order_item (id INT PRIMARY KEY AUTO_INCREMENT, order_id INT, product_id INT, quantity INT);"
+        }
+      ]
+    },
+    {
+      'id': "sql-53",
+      'title': "实战：电商订单查询（多表 JOIN）",
+      'summary': "把电商四张表 JOIN 起来，查订单完整信息。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "订单列表要显示：买家是谁、买了哪些商品、每件多少、总价多少。这需要把订单、用户、明细、商品四张表串起来。"
+        },
+        {
+          'type': "h",
+          'text': "订单 + 用户"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "订单列表显示买家",
+          'code': "SELECT o.id AS 订单号, u.name AS 买家, o.total AS 金额, o.status\nFROM orders o\nINNER JOIN user u ON o.user_id = u.id\nORDER BY o.id DESC;"
+        },
+        {
+          'type': "h",
+          'text': "订单 + 明细 + 商品"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "订单里有哪些商品",
+          'code': "SELECT o.id AS 订单号, p.name AS 商品, oi.price AS 单价,\n       oi.quantity AS 数量, oi.price * oi.quantity AS 小计\nFROM order_item oi\nINNER JOIN orders o ON oi.order_id = o.id\nINNER JOIN product p ON oi.product_id = p.id\nWHERE o.id = 1;"
+        },
+        {
+          'type': "h",
+          'text': "每个订单的总金额明细"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按订单汇总",
+          'code': "SELECT oi.order_id, SUM(oi.price * oi.quantity) AS 订单实付\nFROM order_item oi\nGROUP BY oi.order_id;\n-- 和 orders.total 对比，可以核对金额是否一致"
+        },
+        {
+          'type': "h",
+          'text': "某用户的历史订单"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查用户买过什么",
+          'code': "SELECT o.id AS 订单号, p.name AS 商品, oi.quantity AS 数量,\n       oi.price * oi.quantity AS 小计\nFROM orders o\nINNER JOIN order_item oi ON oi.order_id = o.id\nINNER JOIN product p ON oi.product_id = p.id\nWHERE o.user_id = 1\nORDER BY o.id DESC;"
+        },
+        {
+          'type': "tip",
+          'title': "JOIN 顺序不影响结果",
+          'text': "FROM 后面 JOIN 的先后顺序在 INNER JOIN 下不影响最终结果，只影响执行计划。按逻辑从主表出发写，读起来顺就行。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：电商订单查询（多表 JOIN）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：电商订单查询（多表 JOIN）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：电商订单查询（多表 JOIN）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "订单+用户用 user_id 拼，订单+明细+商品三段 JOIN",
+            "明细的 price 是快照，统计用小计=price*quantity",
+            "GROUP BY 可汇总每单金额用于对账",
+            "多表查询先写清每步 JOIN 的 ON 条件"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "订单商品明细",
+          'code': "SELECT o.id AS 订单号, p.name AS 商品, oi.price AS 单价, oi.quantity AS 数量\nFROM order_item oi\nINNER JOIN orders o ON oi.order_id = o.id\nINNER JOIN product p ON oi.product_id = p.id;"
+        }
+      ]
+    },
+    {
+      'id': "sql-54",
+      'title': "实战：电商统计报表（GROUP BY + 聚合）",
+      'summary': "用分组聚合做销量、销售额、TOP 排行等报表。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "电商运营最关心数据：卖了多少钱、哪个商品最好卖、谁买得最多。这一章用 GROUP BY + 聚合函数做统计报表。"
+        },
+        {
+          'type': "h",
+          'text': "总销售额与订单数"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "整体大盘",
+          'code': "SELECT COUNT(*) AS 订单数,\n       SUM(total) AS 总销售额,\n       AVG(total) AS 客单价\nFROM orders;"
+        },
+        {
+          'type': "h",
+          'text': "按商品统计销量"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "商品销量排行",
+          'code': "SELECT product_id,\n       (SELECT name FROM product p WHERE p.id = oi.product_id) AS 商品名,\n       SUM(quantity) AS 销量,\n       SUM(price * quantity) AS 销售额\nFROM order_item oi\nGROUP BY product_id\nORDER BY 销售额 DESC;"
+        },
+        {
+          'type': "h",
+          'text': "按用户统计消费"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "客户消费 TOP 榜",
+          'code': "SELECT u.name, COUNT(o.id) AS 下单次数, SUM(o.total) AS 消费总额\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nGROUP BY u.id, u.name\nORDER BY 消费总额 DESC\nLIMIT 5;   -- 只看前 5 名"
+        },
+        {
+          'type': "h",
+          'text': "按日期统计"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "每日销售额",
+          'code': "SELECT DATE(created_at) AS 日期, SUM(total) AS 销售额\nFROM orders\nWHERE status = '已完成'\nGROUP BY DATE(created_at)\nORDER BY 日期;"
+        },
+        {
+          'type': "warn",
+          'title': "LEFT JOIN 统计要防 NULL",
+          'text': "用 LEFT JOIN 统计时，没下过单的用户 SUM(total) 是 NULL。用 IFNULL(SUM(o.total), 0) 把 NULL 变成 0，报表才好看。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：电商统计报表（GROUP BY + 聚合）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：电商统计报表（GROUP BY + 聚合）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：电商统计报表（GROUP BY + 聚合）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "大盘统计：COUNT 订单数、SUM 销售额、AVG 客单价",
+            "商品排行：GROUP BY product_id + SUM 销量",
+            "客户排行：LEFT JOIN + GROUP BY + ORDER BY + LIMIT",
+            "日报表：GROUP BY DATE(created_at)",
+            "LEFT JOIN 的 SUM 用 IFNULL 兜底"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "商品销售排行",
+          'code': "SELECT product_id, SUM(quantity) AS 销量, SUM(price * quantity) AS 销售额\nFROM order_item\nGROUP BY product_id\nORDER BY 销售额 DESC;"
+        }
+      ]
+    },
+    {
+      'id': "sql-55",
+      'title': "实战：员工部门管理库",
+      'summary': "设计并查询员工-部门库，覆盖 1:N 和自连接场景。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "员工管理是另一套经典系统：部门（Department）和员工（Employee），一个部门多个员工（1:N）。再加上经理关系（自连接），把前面学的都练一遍。"
+        },
+        {
+          'type': "h",
+          'text': "建表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "部门表和员工表",
+          'code': "CREATE TABLE dept (\n    id   INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) NOT NULL\n);\n\nCREATE TABLE emp (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    name       VARCHAR(20) NOT NULL,\n    dept_id    INT NOT NULL,      -- 所属部门\n    manager_id INT,               -- 上级经理（自连接）\n    salary     DECIMAL(10,2),\n    hire_date  DATE\n);\n\nINSERT INTO dept (name) VALUES ('技术部'),('市场部'),('人事部');\nINSERT INTO emp (name, dept_id, manager_id, salary) VALUES\n    ('张三', 1, NULL, 20000),\n    ('李四', 1, 1, 12000),\n    ('王五', 1, 1, 11000),\n    ('赵六', 2, 2, 10000),\n    ('钱七', 3, 3, 9000);"
+        },
+        {
+          'type': "h",
+          'text': "查询：员工 + 部门名"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "INNER JOIN 拼部门",
+          'code': "SELECT e.name AS 员工, d.name AS 部门, e.salary AS 工资\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nORDER BY e.salary DESC;"
+        },
+        {
+          'type': "h",
+          'text': "查询：员工 + 经理（自连接）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "SELF JOIN 拼经理",
+          'code': "SELECT e.name AS 员工, m.name AS 经理, d.name AS 部门\nFROM emp e\nLEFT JOIN emp m ON e.manager_id = m.id\nINNER JOIN dept d ON e.dept_id = d.id;"
+        },
+        {
+          'type': "h",
+          'text': "统计：各部门平均工资"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "GROUP BY 部门统计",
+          'code': "SELECT d.name AS 部门,\n       COUNT(e.id) AS 人数,\n       AVG(e.salary) AS 平均工资,\n       MAX(e.salary) AS 最高工资\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nGROUP BY d.id, d.name\nORDER BY 平均工资 DESC;"
+        },
+        {
+          'type': "warn",
+          'title': "部门没员工时别丢",
+          'text': "想显示『所有部门含空部门』，用 dept 做主表 LEFT JOIN emp：FROM dept d LEFT JOIN emp e ON e.dept_id = d.id，这样没人的部门人数是 0（COUNT(e.id) 为 0）。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：员工部门管理库\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：员工部门管理库\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：员工部门管理库\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "员工-部门是 1:N，员工表存 dept_id 外键",
+            "经理关系用自连接（manager_id 指向本表）",
+            "部门统计：GROUP BY + COUNT/AVG/MAX",
+            "要显示空部门用 dept 作主表 LEFT JOIN"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "部门平均工资",
+          'code': "SELECT d.name AS 部门, COUNT(e.id) AS 人数, AVG(e.salary) AS 平均工资\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nGROUP BY d.id, d.name;"
+        }
+      ]
+    },
+    {
+      'id': "sql-56",
+      'title': "实战：学生选课系统（多对多）",
+      'summary': "学生-课程-成绩，用中间表实现多对多与成绩管理。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "学生选课是最标准的多对多场景：一个学生选多门课，一门课有多个学生，成绩存在中间表里。把关系建清楚，查询就水到渠成。"
+        },
+        {
+          'type': "h",
+          'text': "建表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "学生、课程、选课成绩三表",
+          'code': "CREATE TABLE student (\n    id   INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) NOT NULL\n);\n\nCREATE TABLE course (\n    id    INT PRIMARY KEY AUTO_INCREMENT,\n    title VARCHAR(50) NOT NULL\n);\n\nCREATE TABLE score (\n    student_id INT,\n    course_id  INT,\n    score      DECIMAL(5,2),\n    PRIMARY KEY (student_id, course_id),   -- 联合主键\n    FOREIGN KEY (student_id) REFERENCES student(id),\n    FOREIGN KEY (course_id) REFERENCES course(id)\n);\n\nINSERT INTO student (name) VALUES ('小明'),('小红'),('小刚');\nINSERT INTO course (title) VALUES ('数学'),('语文'),('英语');\nINSERT INTO score VALUES\n    (1,1,95),(1,2,88),(2,1,76),(2,3,90),(3,2,82);"
+        },
+        {
+          'type': "h",
+          'text': "查询：学生选了哪些课"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "三表 JOIN",
+          'code': "SELECT s.name AS 学生, c.title AS 课程, sc.score AS 成绩\nFROM student s\nINNER JOIN score sc ON sc.student_id = s.id\nINNER JOIN course c ON sc.course_id = c.id\nORDER BY s.id;"
+        },
+        {
+          'type': "h",
+          'text': "统计：每门课的平均分"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "课程难度分析",
+          'code': "SELECT c.title AS 课程,\n       COUNT(sc.student_id) AS 选课人数,\n       AVG(sc.score) AS 平均分\nFROM course c\nLEFT JOIN score sc ON sc.course_id = c.id\nGROUP BY c.id, c.title;"
+        },
+        {
+          'type': "h",
+          'text': "统计：每个学生总分与排名"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "学生成绩汇总",
+          'code': "SELECT s.name AS 学生,\n       COUNT(sc.course_id) AS 选课数,\n       SUM(sc.score) AS 总分,\n       AVG(sc.score) AS 平均分\nFROM student s\nLEFT JOIN score sc ON sc.student_id = s.id\nGROUP BY s.id, s.name\nORDER BY 总分 DESC;"
+        },
+        {
+          'type': "tip",
+          'title': "联合主键 vs 独立主键",
+          'text': "中间表用 (student_id, course_id) 联合主键，能防止同一学生重复选同一门课，这是业务上的合理约束。也可以加一个自增 id 做主键，另加 UNIQUE 约束达到同样效果。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：学生选课系统（多对多）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：学生选课系统（多对多）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：学生选课系统（多对多）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "多对多用中间表 score 存两个外键",
+            "联合主键 (student_id, course_id) 防重复选课",
+            "查询要三表 JOIN：学生+中间表+课程",
+            "统计用 LEFT JOIN 保证没选课的人/课也在"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "学生选课成绩",
+          'code': "SELECT s.name AS 学生, c.title AS 课程, sc.score AS 成绩\nFROM student s\nINNER JOIN score sc ON sc.student_id = s.id\nINNER JOIN course c ON sc.course_id = c.id;"
+        }
+      ]
+    },
+    {
+      'id': "sql-57",
+      'title': "实战：图书馆管理系统（图书/读者/借阅）",
+      'summary': "设计图书、读者、借阅记录，练日期和状态管理。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "图书馆系统：图书（Book）、读者（Reader）、借阅记录（Borrow）。一个读者可借多本书，一本书可被借多次（历史记录），借阅里要管借期、还期、状态。"
+        },
+        {
+          'type': "h",
+          'text': "建表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "图书、读者、借阅三表",
+          'code': "CREATE TABLE book (\n    id     INT PRIMARY KEY AUTO_INCREMENT,\n    title  VARCHAR(50) NOT NULL,\n    author VARCHAR(20),\n    stock  INT DEFAULT 1     -- 库存本数\n);\n\nCREATE TABLE reader (\n    id   INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) NOT NULL\n);\n\nCREATE TABLE borrow (\n    id         INT PRIMARY KEY AUTO_INCREMENT,\n    book_id    INT NOT NULL,\n    reader_id  INT NOT NULL,\n    borrow_date DATE NOT NULL,\n    return_date DATE,          -- NULL 表示还没还\n    FOREIGN KEY (book_id) REFERENCES book(id),\n    FOREIGN KEY (reader_id) REFERENCES reader(id)\n);\n\nINSERT INTO book (title, author) VALUES\n    ('SQL 入门', '张三'),('数据库原理', '李四');\nINSERT INTO reader (name) VALUES ('小明'),('小红');\nINSERT INTO borrow (book_id, reader_id, borrow_date)\nVALUES (1, 1, '2026-08-01'), (2, 2, '2026-08-05');"
+        },
+        {
+          'type': "h",
+          'text': "查询：当前借阅情况"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "谁借了什么书、还了吗",
+          'code': "SELECT r.name AS 读者, b.title AS 书名,\n       br.borrow_date AS 借出日,\n       IFNULL(br.return_date, '未归还') AS 归还日\nFROM borrow br\nINNER JOIN reader r ON br.reader_id = r.id\nINNER JOIN book b ON br.book_id = b.id\nORDER BY br.borrow_date;"
+        },
+        {
+          'type': "h",
+          'text': "查询：还没还的书（逾期）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查找逾期未还",
+          'code': "SELECT r.name AS 读者, b.title AS 书名, br.borrow_date,\n       DATEDIFF(CURDATE(), br.borrow_date) AS 借了几天\nFROM borrow br\nINNER JOIN reader r ON br.reader_id = r.id\nINNER JOIN book b ON br.book_id = b.id\nWHERE br.return_date IS NULL\n  AND DATEDIFF(CURDATE(), br.borrow_date) > 30;\n-- 借了 30 天以上还没还"
+        },
+        {
+          'type': "h",
+          'text': "还书：更新状态"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "归还图书",
+          'code': "UPDATE borrow\nSET return_date = CURDATE()\nWHERE id = 1 AND return_date IS NULL;\n\n-- 同时把库存加回来\nUPDATE book SET stock = stock + 1 WHERE id = 1;"
+        },
+        {
+          'type': "tip",
+          'title': "用日期函数做业务判断",
+          'text': "『借了几天』= DATEDIFF(CURDATE(), borrow_date)；『逾期』= return_date IS NULL 且天数超限。日期函数 + 空值判断组合，能覆盖很多真实业务逻辑。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：图书馆管理系统（图书/读者/借阅）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：图书馆管理系统（图书/读者/借阅）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：图书馆管理系统（图书/读者/借阅）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "图书馆核心：图书、读者、借阅三表",
+            "return_date 为 NULL 表示未归还",
+            "逾期查询：IS NULL + DATEDIFF 超期",
+            "还书 = 更新 return_date + 恢复库存",
+            "日期字段配合状态字段驱动业务"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "借阅明细查询",
+          'code': "SELECT r.name AS 读者, b.title AS 书名, br.borrow_date AS 借出日,\n       IFNULL(br.return_date, '未归还') AS 归还日\nFROM borrow br\nINNER JOIN reader r ON br.reader_id = r.id\nINNER JOIN book b ON br.book_id = b.id;"
+        }
+      ]
+    },
+    {
+      'id': "sql-58",
+      'title': "实战：工资统计（部门/员工/聚合）",
+      'summary': "用聚合函数做工资统计：平均、最高、分布区间。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "HR 关心的工资统计：部门平均、全司最高、工资分布。这一章把聚合、CASE WHEN、排序全用上，做一份工资报表。"
+        },
+        {
+          'type': "h",
+          'text': "整体工资概览"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "全司统计",
+          'code': "SELECT COUNT(*) AS 员工数,\n       SUM(salary) AS 总工资,\n       AVG(salary) AS 平均工资,\n       MAX(salary) AS 最高工资,\n       MIN(salary) AS 最低工资\nFROM emp;"
+        },
+        {
+          'type': "h",
+          'text': "部门工资排行"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "各部门平均与总工资",
+          'code': "SELECT d.name AS 部门,\n       COUNT(e.id) AS 人数,\n       AVG(e.salary) AS 平均工资,\n       SUM(e.salary) AS 工资总额\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nGROUP BY d.id, d.name\nORDER BY 平均工资 DESC;"
+        },
+        {
+          'type': "h",
+          'text': "工资分布区间"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用 CASE WHEN 分档",
+          'code': "SELECT\n    CASE\n        WHEN salary >= 15000 THEN '高薪(>=15000)'\n        WHEN salary >= 10000 THEN '中薪(10000~15000)'\n        ELSE '普通(<10000)'\n    END AS 档位,\n    COUNT(*) AS 人数\nFROM emp\nGROUP BY 档位\nORDER BY 档位;"
+        },
+        {
+          'type': "h",
+          'text': "超过部门平均工资的人"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "子查询对比部门平均",
+          'code': "SELECT e.name, e.salary, d.name AS 部门\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nWHERE e.salary > (\n    SELECT AVG(e2.salary) FROM emp e2 WHERE e2.dept_id = e.dept_id\n);\n-- 每个人的工资 > 他所在部门的平均工资"
+        },
+        {
+          'type': "warn",
+          'title': "GROUP BY 别名",
+          'text': "MySQL 里 GROUP BY 后面可以用 SELECT 里定义的别名（如 GROUP BY 档位）。但为兼容性，最好写完整表达式或换个写法。ORDER BY 用别名是通用的。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"实战：工资统计（部门/员工/聚合）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"实战：工资统计（部门/员工/聚合）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"实战：工资统计（部门/员工/聚合）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "工资概览用 COUNT/SUM/AVG/MAX/MIN",
+            "部门排行：GROUP BY + 排序",
+            "分布区间：CASE WHEN 分档 + GROUP BY",
+            "和部门平均比：相关子查询对比",
+            "报表类 SQL 就是聚合 + 条件 + 排序的组合"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "部门工资统计",
+          'code': "SELECT d.name AS 部门, COUNT(e.id) AS 人数, AVG(e.salary) AS 平均工资\nFROM emp e\nINNER JOIN dept d ON e.dept_id = d.id\nGROUP BY d.id, d.name\nORDER BY 平均工资 DESC;"
+        }
+      ]
+    },
+    {
+      'id': "sql-59",
+      'title': "条件逻辑 CASE WHEN",
+      'summary': "深入 CASE WHEN：多分支、嵌套、聚合中应用。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "第 44 章初识了 CASE WHEN，这一章系统深挖：它的两种写法、和 NULL 的配合、在聚合里的妙用（条件计数、条件求和）。"
+        },
+        {
+          'type': "h",
+          'text': "两种写法回顾"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "搜索式 vs 简单式",
+          'code': "-- 写法一：搜索式 CASE（最灵活）\nSELECT name,\n  CASE WHEN score >= 90 THEN 'A'\n       WHEN score >= 80 THEN 'B'\n       ELSE 'C' END AS grade\nFROM student;\n\n-- 写法二：简单式 CASE（等值判断）\nSELECT name,\n  CASE class WHEN '1班' THEN '一班'\n            WHEN '2班' THEN '二班'\n            ELSE '其他' END AS c\nFROM student;"
+        },
+        {
+          'type': "h",
+          'text': "CASE 与 NULL"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "处理 NULL 用 IS NULL",
+          'code': "SELECT name, phone,\n  CASE WHEN phone IS NULL THEN '未填写' ELSE phone END AS 电话\nFROM student;\n-- 注意：CASE WHEN phone = NULL 是错的，必须用 IS NULL"
+        },
+        {
+          'type': "h",
+          'text': "CASE + 聚合做条件统计"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "一行统计及格/不及格人数",
+          'code': "SELECT\n    SUM(CASE WHEN score >= 60 THEN 1 ELSE 0 END) AS 及格人数,\n    SUM(CASE WHEN score < 60 THEN 1 ELSE 0 END) AS 不及格人数,\n    COUNT(*) AS 总人数\nFROM student;\n-- 把满足条件的行计成 1，再求和"
+        },
+        {
+          'type': "h",
+          'text': "CASE 实现行转列"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按班级转成列",
+          'code': "SELECT\n    SUM(CASE WHEN class = '1班' THEN 1 ELSE 0 END) AS 一班,\n    SUM(CASE WHEN class = '2班' THEN 1 ELSE 0 END) AS 二班,\n    SUM(CASE WHEN class = '3班' THEN 1 ELSE 0 END) AS 三班\nFROM student;"
+        },
+        {
+          'type': "tip",
+          'title': "CASE 很强大，别用成面条",
+          'text': "CASE WHEN 是最常用的条件表达式，但它出现在 SELECT 的每一行计算中。分支太多时考虑拆查询或在应用层处理，保持可读性。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"条件逻辑 CASE WHEN\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"条件逻辑 CASE WHEN\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"条件逻辑 CASE WHEN\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "搜索式 CASE WHEN 条件灵活，简单式 CASE 列=值",
+            "NULL 判断用 CASE WHEN x IS NULL",
+            "CASE+SUM 可做条件计数、条件求和",
+            "CASE 配合 GROUP BY 可做行转列统计"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "条件计数",
+          'code': "SELECT\n    SUM(CASE WHEN score >= 60 THEN 1 ELSE 0 END) AS 及格,\n    SUM(CASE WHEN score < 60 THEN 1 ELSE 0 END) AS 不及格\nFROM student;"
+        }
+      ]
+    },
+    {
+      'id': "sql-60",
+      'title': "窗口函数基础（ROW_NUMBER/RANK/DENSE_RANK）",
+      'summary': "窗口函数不合并行也能排名，先学三大排名函数。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "窗口函数（Window Function）是进阶利器：它和聚合函数一样能对一组行计算，但不会把多行压成一行，每行都能保留自己的信息并看到『名次』。先学三大排名函数。"
+        },
+        {
+          'type': "h",
+          'text': "三个排名函数对比"
+        },
+        {
+          'type': "table",
+          'head': [
+            "函数",
+            "行为",
+            "并列怎么排"
+          ],
+          'rows': [
+            [
+              "ROW_NUMBER()",
+              "连续编号 1,2,3...",
+              "并列也按顺序给不同号"
+            ],
+            [
+              "RANK()",
+              "有并列时跳过",
+              "1,1,3（2 被跳过）"
+            ],
+            [
+              "DENSE_RANK()",
+              "有并列不跳过",
+              "1,1,2"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "给分数排名",
+          'code': "SELECT name, score,\n    ROW_NUMBER() OVER (ORDER BY score DESC) AS 行号,\n    RANK()       OVER (ORDER BY score DESC) AS 名次,\n    DENSE_RANK() OVER (ORDER BY score DESC) AS 密集名次\nFROM student;"
+        },
+        {
+          'type': "p",
+          'text': "语法解读：函数() OVER (ORDER BY ...)。OVER 里写排序规则，决定按什么顺序编号。OVER (ORDER BY score DESC) 就是按分数从高到低排名。"
+        },
+        {
+          'type': "h",
+          'text': "实战：每组内排名"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按部门给员工工资排名",
+          'code': "SELECT name, dept_id, salary,\n    RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS 部门内名次\nFROM emp;\n-- PARTITION BY 把数据分块，块内各自排名"
+        },
+        {
+          'type': "tip",
+          'title': "窗口函数 vs GROUP BY",
+          'text': "GROUP BY 把多行合并成一行（会丢明细）；窗口函数不合并行，每行都在，只是多一列排名结果。要『排名、累计、移动平均』这类带上下文的计算就用窗口函数。"
+        },
+        {
+          'type': "warn",
+          'title': "支持情况",
+          'text': "MySQL 8.0+、PostgreSQL、SQL Server、Oracle 都支持窗口函数；MySQL 5.7 及以下、SQLite 老版本不支持。用前确认版本。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"窗口函数基础（ROW_NUMBER/RANK/DENSE_RANK）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"窗口函数基础（ROW_NUMBER/RANK/DENSE_RANK）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"窗口函数基础（ROW_NUMBER/RANK/DENSE_RANK）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "窗口函数 = OVER(ORDER BY ...)，不合并行",
+            "ROW_NUMBER 连续编号、RANK 并列跳号、DENSE_RANK 并列不跳",
+            "PARTITION BY 分组后组内排名",
+            "要排名/累计用窗口函数，要汇总合并用 GROUP BY"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "分数排名",
+          'code': "SELECT name, score,\n    ROW_NUMBER() OVER (ORDER BY score DESC) AS 行号,\n    RANK()       OVER (ORDER BY score DESC) AS 名次\nFROM student;"
+        }
+      ]
+    },
+    null,
+    {
+      'id': "sql-61",
+      'title': "窗口函数进阶（SUM() OVER、PARTITION BY）",
+      'summary': "用 SUM() OVER 算累计、占比、移动平均，窗口函数实战。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "排名只是窗口函数的第一步。真正厉害的是用聚合函数 + OVER 做『累计、占比、移动平均』，且不丢失任何一行明细。这一章深入 SUM() OVER 和 PARTITION BY。"
+        },
+        {
+          'type': "h",
+          'text': "累计求和"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "每天的累计销售额",
+          'code': "SELECT sale_date, amount,\n    SUM(amount) OVER (ORDER BY sale_date) AS 累计销售额\nFROM daily_sale;\n-- 从第一行加到当前行：1月1日、1月1+2日、1月1+2+3日...\n-- 没有 PARTITION 表示全表按日期累计"
+        },
+        {
+          'type': "h",
+          'text': "分区累计（按组累计）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按部门累计工资",
+          'code': "SELECT name, dept_id, salary,\n    SUM(salary) OVER (\n        PARTITION BY dept_id ORDER BY id\n    ) AS 部门内累计工资\nFROM emp;\n-- PARTITION BY dept_id 把数据按部门分成块\n-- ORDER BY id 决定块内累计顺序"
+        },
+        {
+          'type': "h",
+          'text': "占比与平均（移动平均）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "每行占总和的比例",
+          'code': "SELECT name, salary,\n    ROUND(salary / SUM(salary) OVER (), 4) AS 占全司比例\nFROM emp;\n-- SUM(salary) OVER () 括号里空着 = 全表总和\n\n-- 移动平均（含当前行的前 2 行）\nSELECT sale_date, amount,\n    AVG(amount) OVER (ORDER BY sale_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS 三日均\nFROM daily_sale;"
+        },
+        {
+          'type': "h",
+          'text': "窗口函数还能配 LAG/LEAD"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "和前一天对比",
+          'code': "SELECT sale_date, amount,\n    LAG(amount) OVER (ORDER BY sale_date) AS 前一天金额,\n    amount - LAG(amount) OVER (ORDER BY sale_date) AS 环比变化\nFROM daily_sale;\n-- LAG 取上一行的值，LEAD 取下一行的值"
+        },
+        {
+          'type': "tip",
+          'title': "看懂 OVER 括号",
+          'text': "OVER () 空括号=全表；OVER (PARTITION BY 列)=按列分组；OVER (ORDER BY 列)=排序并累计。三要素：PARTITION BY 分区、ORDER BY 排序、ROWS 框定范围。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"窗口函数进阶（SUM() OVER、PARTITION BY）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"窗口函数进阶（SUM() OVER、PARTITION BY）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"窗口函数进阶（SUM() OVER、PARTITION BY）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "SUM() OVER (ORDER BY ...) 做累计求和",
+            "PARTITION BY 让计算按组进行",
+            "SUM() OVER () 空括号表示全表总和",
+            "LAG/LEAD 取前后行，做环比对比",
+            "窗口函数不合并行，每行都有上下文结果"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "每日累计销售额",
+          'code': "SELECT sale_date, amount,\n    SUM(amount) OVER (ORDER BY sale_date) AS 累计销售额\nFROM daily_sale;"
+        }
+      ]
+    },
+    {
+      'id': "sql-62",
+      'title': "字符串处理函数进阶（SUBSTRING/REPLACE/REGEXP）",
+      'summary': "截取、替换、正则匹配，字符串处理一网打尽。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据清洗时字符串函数是主力。这一章讲截取 SUBSTRING、替换 REPLACE、正则 REGEXP，以及拼接、去空格等常用处理。"
+        },
+        {
+          'type': "h",
+          'text': "截取与拼接"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "SUBSTRING 截取",
+          'code': "SELECT SUBSTRING('hello world', 1, 5);   -- hello（第1位起取5个）\nSELECT SUBSTRING('hello world', 7);       -- world（第7位到最后）\nSELECT LEFT('hello', 2), RIGHT('hello', 2);  -- he / lo\nSELECT CONCAT(first_name, ' ', last_name) FROM user;   -- 拼接"
+        },
+        {
+          'type': "h",
+          'text': "替换与清理"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "REPLACE 和 TRIM",
+          'code': "SELECT REPLACE('手机号: 138-0000-0000', '-', '');\n-- 去掉所有 '-'：13800000000\n\nSELECT TRIM('   hi   ');     -- 去掉首尾空格\nSELECT LTRIM('   hi');       -- 去掉左边空格\nSELECT RTRIM('hi   ');       -- 去掉右边空格\nSELECT UPPER('abc'), LOWER('ABC');  -- 大小写"
+        },
+        {
+          'type': "h",
+          'text': "正则匹配 REGEXP"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "REGEXP 高级匹配",
+          'code': "SELECT * FROM user WHERE phone REGEXP '^1[3-9][0-9]{9}$';\n-- 手机号：1 开头，第二位 3-9，后面 9 位数字\n\nSELECT * FROM user WHERE email REGEXP '@gmail\\.com$';\n-- 邮箱以 @gmail.com 结尾（注意点号要转义 \\.）\n\nSELECT * FROM user WHERE name REGEXP '^[张王李]';\n-- 姓氏是 张/王/李 开头"
+        },
+        {
+          'type': "table",
+          'head': [
+            "函数",
+            "作用",
+            "例子"
+          ],
+          'rows': [
+            [
+              "SUBSTRING(s, i, n)",
+              "从 i 位截 n 个",
+              "SUBSTRING('abc',2,1)→b"
+            ],
+            [
+              "LEFT/RIGHT(s, n)",
+              "取左边/右边 n 个",
+              "LEFT('abc',2)→ab"
+            ],
+            [
+              "REPLACE(s,a,b)",
+              "把 a 全替换成 b",
+              "REPLACE('a-b','-','')→ab"
+            ],
+            [
+              "TRIM/LTRIM/RTRIM",
+              "去空格",
+              "TRIM(' hi ')→hi"
+            ],
+            [
+              "REGEXP '正则'",
+              "正则匹配",
+              "字段 REGEXP '^1[0-9]{10}$'"
+            ]
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "正则点号要转义",
+          'text': "正则里 . 表示『任意字符』，想匹配字面量小数点要写成 \\.。例如匹配 gmail.com 结尾要写 REGEXP '@gmail\\.com$'，少写斜杠会误匹配 gmailXcom。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"字符串处理函数进阶（SUBSTRING/REPLACE/REGEXP）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"字符串处理函数进阶（SUBSTRING/REPLACE/REGEXP）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"字符串处理函数进阶（SUBSTRING/REPLACE/REGEXP）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "SUBSTRING/LEFT/RIGHT 截取字符串",
+            "REPLACE 批量替换，TRIM 去空格",
+            "REGEXP 支持正则匹配，能校验手机号/邮箱格式",
+            "正则里的 . 匹配任意字符，字面量点要写 \\.",
+            "字符串函数是数据清洗的主力"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "清洗手机号",
+          'code': "SELECT phone, REPLACE(phone, '-', '') AS 清洗后\nFROM user;\nSELECT * FROM user WHERE phone REGEXP '^1[3-9][0-9]{9}$';"
+        }
+      ]
+    },
+    {
+      'id': "sql-63",
+      'title': "数值与日期运算进阶",
+      'summary': "ROUND 取整、数值函数、日期运算的组合用法。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "报表里常常要做取整、四舍五入、日期加减、算年龄。这一章把数值函数和日期运算的进阶用法集中讲一遍。"
+        },
+        {
+          'type': "h",
+          'text': "数值函数"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "取整与四舍五入",
+          'code': "SELECT ROUND(3.14159, 2);   -- 3.14 四舍五入保留2位\nSELECT ROUND(3.6);           -- 4 取整四舍五入\nSELECT CEIL(3.1);            -- 4 向上取整\nSELECT FLOOR(3.9);           -- 3 向下取整\nSELECT ABS(-5);              -- 5 绝对值\nSELECT MOD(7, 2);            -- 1 取余\nSELECT RAND();               -- 0~1 随机数"
+        },
+        {
+          'type': "h",
+          'text': "日期运算组合"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "日期加减与差异",
+          'code': "SELECT DATE_ADD('2026-08-28', INTERVAL 1 MONTH);  -- 加一个月\nSELECT DATE_SUB('2026-08-28', INTERVAL 10 DAY);    -- 减10天\nSELECT DATEDIFF('2026-08-28', '2026-08-01');       -- 27 天\nSELECT TIMESTAMPDIFF(YEAR, '2000-06-15', CURDATE()); -- 年龄\nSELECT DATE_FORMAT(NOW(), '%Y年%m月%d日');           -- 格式化"
+        },
+        {
+          'type': "h",
+          'text': "算年龄"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "根据生日算年龄",
+          'code': "SELECT name, birthday,\n    TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS 年龄\nFROM user;\n-- TIMESTAMPDIFF(单位, 起始, 结束) 计算两个日期的差值"
+        },
+        {
+          'type': "h",
+          'text': "日期分组报表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "按年月统计订单",
+          'code': "SELECT DATE_FORMAT(created_at, '%Y-%m') AS 年月,\n       COUNT(*) AS 订单数,\n       SUM(total) AS 销售额\nFROM orders\nGROUP BY DATE_FORMAT(created_at, '%Y-%m')\nORDER BY 年月;"
+        },
+        {
+          'type': "tip",
+          'title': "DATE_FORMAT 格式符",
+          'text': "%Y 四位年、%m 两位月、%d 两位日、%H 小时、%i 分钟。组合出你想要的显示格式，如 '%Y-%m-%d'。"
+        },
+        {
+          'type': "warn",
+          'title': "函数包列会让索引失效",
+          'text': "WHERE DATE_FORMAT(created_at, '%Y-%m') = '2026-08' 用不上索引。改成范围写法：WHERE created_at >= '2026-08-01' AND created_at < '2026-09-01'，性能天差地别。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数值与日期运算进阶\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数值与日期运算进阶\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数值与日期运算进阶\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "ROUND/CEIL/FLOOR 取整，MOD 取余",
+            "DATE_ADD/DATE_SUB 日期加减，DATEDIFF 算差",
+            "TIMESTAMPDIFF 能按年算年龄",
+            "DATE_FORMAT 格式化日期做年月分组报表",
+            "条件里对列套函数会令索引失效"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "按年月统计",
+          'code': "SELECT DATE_FORMAT(created_at, '%Y-%m') AS 年月,\n       COUNT(*) AS 订单数, SUM(total) AS 销售额\nFROM orders\nGROUP BY DATE_FORMAT(created_at, '%Y-%m');"
+        }
+      ]
+    },
+    {
+      'id': "sql-64",
+      'title': "数据备份与恢复概念（mysqldump 简介）",
+      'summary': "用 mysqldump 备份数据库，理解备份恢复的基本套路。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据库最怕数据丢失。备份与恢复是每个数据库使用者的必修课。MySQL 自带 mysqldump 工具，把数据库导出成 SQL 文件，出问题时再导回去。"
+        },
+        {
+          'type': "h",
+          'text': "用 mysqldump 备份"
+        },
+        {
+          'type': "code",
+          'lang': "text",
+          'title': "命令行备份（shell 命令）",
+          'code': "rem 备份整个库到文件\nmysqldump -u root -p school > school_backup.sql\n\nrem 只备份表结构（不要数据）\nmysqldump -u root -p --no-data school > school_schema.sql\n\nrem 备份多个库\nmysqldump -u root -p --databases school blog > backup.sql"
+        },
+        {
+          'type': "h",
+          'text': "恢复数据"
+        },
+        {
+          'type': "code",
+          'lang': "text",
+          'title': "把备份导回去",
+          'code': "rem 方式一：直接导入\nmysql -u root -p school < school_backup.sql\n\nrem 方式二：先进 MySQL 再 source\nmysql -u root -p\n> USE school;\n> SOURCE school_backup.sql;"
+        },
+        {
+          'type': "h",
+          'text': "备份策略"
+        },
+        {
+          'type': "list",
+          'items': [
+            "全量备份：定期把整个库备份一次（如每天凌晨）",
+            "增量备份：基于二进制日志（binlog）恢复两次备份之间的改动",
+            "异地备份：备份文件别放在同一台机器上，防止机器一起挂了",
+            "定期演练：经常测试『能不能真的恢复』，别等出事才发现备份是坏的"
+          ]
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "mysqldump 逻辑备份",
+            "物理备份"
+          ],
+          'rows': [
+            [
+              "内容",
+              "导出成 SQL 语句文件",
+              "直接拷贝数据文件"
+            ],
+            [
+              "可读性",
+              "可读可改",
+              "二进制不可读"
+            ],
+            [
+              "恢复速度",
+              "较慢（重放 SQL）",
+              "快"
+            ],
+            [
+              "适用",
+              "中小库、跨平台迁移",
+              "大库、追求速度"
+            ]
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "只备份不演练等于没备份",
+          'text': "很多公司备份文件躺在那里，真出事恢复失败才发现备份损坏或缺少依赖。定期在测试库上完整恢复一遍，才能确认备份可靠。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据备份与恢复概念（mysqldump 简介）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据备份与恢复概念（mysqldump 简介）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据备份与恢复概念（mysqldump 简介）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "mysqldump -u root -p 库名 > 文件 备份",
+            "mysql -u root -p 库名 < 文件 恢复",
+            "备份分全量、增量，还要异地存放",
+            "SQLite 直接拷贝 .db 文件即可备份",
+            "定期演练恢复，别等出事再发现备份坏了"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "备份并恢复",
+          'code': "mysqldump -u root -p school > school_backup.sql\nmysql -u root -p school < school_backup.sql"
+        }
+      ]
+    },
+    {
+      'id': "sql-65",
+      'title': "数据库安全与用户权限（GRANT 简介）",
+      'summary': "创建用户、授权 GRANT、回收 REVOKE，管好访问权限。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据库不是所有人都能随便操作。生产环境会给不同人/程序开不同权限：开发只读、运维全权、应用只操作某几个表。这就用到 DCL（数据控制语言）。"
+        },
+        {
+          'type': "h",
+          'text': "创建用户"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "创建用户并设置密码",
+          'code': "CREATE USER 'app'@'localhost' IDENTIFIED BY 'StrongPass123';\n-- 'app'@'localhost' 表示只允许本机登录\n-- 生产密码务必用强密码，别用 123456"
+        },
+        {
+          'type': "h",
+          'text': "授权 GRANT"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "给用户开权限",
+          'code': "-- 只给 app 用户 school 库的查询权限\nGRANT SELECT ON school.* TO 'app'@'localhost';\n\n-- 给读写权限（增删改查）\nGRANT SELECT, INSERT, UPDATE, DELETE ON school.* TO 'app'@'localhost';\n\n-- 给所有库的所有权限（慎用！只给管理员）\nGRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';\n\nFLUSH PRIVILEGES;   -- 刷新使权限生效"
+        },
+        {
+          'type': "h",
+          'text': "查看与回收权限"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "权限管理",
+          'code': "SHOW GRANTS FOR 'app'@'localhost';   -- 查看权限\n\nREVOKE DELETE ON school.* FROM 'app'@'localhost';  -- 收回删除权限\n\nDROP USER 'app'@'localhost';   -- 删除用户"
+        },
+        {
+          'type': "table",
+          'head': [
+            "权限",
+            "作用"
+          ],
+          'rows': [
+            [
+              "SELECT",
+              "查询"
+            ],
+            [
+              "INSERT / UPDATE / DELETE",
+              "增删改"
+            ],
+            [
+              "CREATE / DROP / ALTER",
+              "建表删表改表结构"
+            ],
+            [
+              "ALL PRIVILEGES",
+              "所有权限（超级权限）"
+            ],
+            [
+              "GRANT OPTION",
+              "能否再给别人授权"
+            ]
+          ]
+        },
+        {
+          'type': "danger",
+          'title': "安全铁律",
+          'text': "永远别用 root 跑业务！给每个程序开最小权限账号，密码用强密码并定期更换。不要把数据库端口直接暴露公网，也不要硬编码密码在代码里。权限按需最小化（Principle of Least Privilege）。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据库安全与用户权限（GRANT 简介）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据库安全与用户权限（GRANT 简介）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据库安全与用户权限（GRANT 简介）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "CREATE USER 建用户，IDENTIFIED BY 设密码",
+            "GRANT 权限 ON 库.表 TO 用户 授权",
+            "REVOKE 回收权限，SHOW GRANTS 查看",
+            "最小权限原则：业务账号不给 ALL，别用 root 跑业务",
+            "强密码 + 不暴露公网 + 密码不入代码"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "最小权限授权",
+          'code': "CREATE USER 'app'@'localhost' IDENTIFIED BY 'StrongPass123';\nGRANT SELECT, INSERT, UPDATE, DELETE ON school.* TO 'app'@'localhost';\nFLUSH PRIVILEGES;"
+        }
+      ]
+    },
+    {
+      'id': "sql-66",
+      'title': "性能优化与执行计划（EXPLAIN 简介）",
+      'summary': "用 EXPLAIN 看 SQL 怎么执行，找出慢查询的原因。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "SQL 跑得慢，别瞎猜，用 EXPLAIN 让数据库告诉你它打算怎么执行这条查询。看懂执行计划，优化就有方向。"
+        },
+        {
+          'type': "h",
+          'text': "EXPLAIN 基本用法"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "查看执行计划",
+          'code': "EXPLAIN SELECT * FROM student WHERE name = '小明';\n-- 不真正执行，只返回执行计划表\n\n-- 实际执行并带分析信息\nEXPLAIN ANALYZE SELECT * FROM student WHERE name = '小明';"
+        },
+        {
+          'type': "h",
+          'text': "执行计划关键列"
+        },
+        {
+          'type': "table",
+          'head': [
+            "列",
+            "含义",
+            "关注点"
+          ],
+          'rows': [
+            [
+              "type",
+              "访问方式",
+              "最好 const/eq_ref，最差 ALL 全表扫"
+            ],
+            [
+              "key",
+              "实际用到的索引",
+              "NULL 表示没用索引"
+            ],
+            [
+              "rows",
+              "预计扫描行数",
+              "越小越好"
+            ],
+            [
+              "Extra",
+              "额外信息",
+              "Using filesort/Using temporary 要警惕"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "看懂 type"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "不同 type 的例子",
+          'code': "EXPLAIN SELECT * FROM user WHERE id = 1;\n-- type=const：按主键等值查，最快\n\nEXPLAIN SELECT * FROM user WHERE name = '小明';\n-- 没索引时 type=ALL：全表扫描，慢\n\nEXPLAIN SELECT * FROM orders o INNER JOIN user u ON o.user_id = u.id;\n-- 连接时 u 用主键，type 可能是 eq_ref/ref"
+        },
+        {
+          'type': "tip",
+          'title': "优化的一般套路",
+          'text': "先 EXPLAIN 看 type 是不是 ALL（全表扫）、rows 是不是巨大、key 是不是 NULL。三者出现就优先考虑建索引、改写条件、避免在列上套函数。"
+        },
+        {
+          'type': "warn",
+          'title': "EXPLAIN 只是预估",
+          'text': "EXPLAIN 返回的是优化器的估算，不是真实耗时。它是定位问题的起点，真正的瓶颈还要结合数据量、索引实际使用、硬件来综合判断。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"性能优化与执行计划（EXPLAIN 简介）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"性能优化与执行计划（EXPLAIN 简介）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"性能优化与执行计划（EXPLAIN 简介）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "EXPLAIN 显示 SQL 的执行计划",
+            "type=ALL 全表扫描最慢，const/ref 快",
+            "key 为 NULL 说明没用索引",
+            "rows 越小越好，Extra 里出现 filesort 要警惕",
+            "优化套路：先 EXPLAIN，再针对慢点优化"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "诊断慢查询",
+          'code': "EXPLAIN SELECT * FROM student WHERE name = '小明';\n-- 看 type/key/rows 三列判断要不要加索引"
+        }
+      ]
+    },
+    {
+      'id': "sql-67",
+      'title': "SQL 注入原理与防范",
+      'summary': "SQL 注入怎么发生、怎么防范，安全必学。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "SQL 注入（SQL Injection）是最经典的 Web 安全漏洞：攻击者把恶意 SQL 拼进你的查询里，窃取数据甚至删库。这一章用最简单的例子讲透原理和防范。"
+        },
+        {
+          'type': "h",
+          'text': "注入是怎么发生的"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "不安全的拼接 SQL",
+          'code': "-- 假设应用代码这样拼 SQL：\n-- 输入用户名 name，拼进字符串\nSELECT * FROM user WHERE name = '小明';\n\n-- 如果攻击者输入：' OR '1'='1\n-- 拼出来变成：\nSELECT * FROM user WHERE name = '' OR '1'='1';\n-- '1'='1' 恒为真 → 查出了全部用户！"
+        },
+        {
+          'type': "p",
+          'text': "输入里的单引号把 SQL 的引号闭合，再塞进 OR 条件，就篡改了原查询的语义。更狠的输入可以是 '; DROP TABLE user;-- 直接删表。"
+        },
+        {
+          'type': "h",
+          'text': "输入被截断的例子"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用注释截断剩余 SQL",
+          'code': "-- 输入：abc' OR '1'='1'; DROP TABLE user;--\n-- 拼出来：\nSELECT * FROM user WHERE name = 'abc' OR '1'='1'; DROP TABLE user;--';\n-- 多语句执行：先查出所有用户，再删掉 user 表！"
+        },
+        {
+          'type': "h",
+          'text': "如何防范"
+        },
+        {
+          'type': "list",
+          'items': [
+            "参数化查询/预编译语句：把 SQL 和数据分开传，数据永远当数据，这是根本解法",
+            "输入校验：限制长度、白名单过滤特殊字符",
+            "最小权限：数据库账号不给 DROP 权限，降低被删库的影响",
+            "转义特殊字符：作为兜底手段，但不能替代参数化"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "text",
+          'title': "参数化查询示意（伪代码）",
+          'code': "-- Java 的 PreparedStatement、Python 的 ? 占位符\n-- 都是把输入当参数绑定，不拼进 SQL 字符串\nSELECT * FROM user WHERE name = ?;\n-- 传入的值无论是什么，都只是一个字符串值"
+        },
+        {
+          'type': "danger",
+          'title': "记住一句话",
+          'text': "永远不要把外部输入直接拼进 SQL 字符串！用参数化查询 + 最小权限 + 输入校验三层防护。SQL 注入造成的损失可能是整个库。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"SQL 注入原理与防范\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"SQL 注入原理与防范\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"SQL 注入原理与防范\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "注入原理：输入闭合引号并拼接 SQL 篡改语义",
+            "经典攻击：' OR '1'='1 恒真，; DROP TABLE 删库",
+            "根本防范：参数化查询（预编译）",
+            "辅助防护：输入校验 + 最小权限",
+            "外部输入绝不直接拼进 SQL"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "参数化查询示意",
+          'code': "SELECT * FROM user WHERE name = ?;\n-- 用占位符 ? 绑定参数，而不是拼接字符串"
+        }
+      ]
+    },
+    {
+      'id': "sql-68",
+      'title': "数据库 vs 文件存储",
+      'summary': "为什么不用文本文件存数据？对比数据库与文件。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "文件也能存数据，为什么还要数据库？这一章把两者的差距讲清楚，你就能明白数据库不可替代的价值。"
+        },
+        {
+          'type': "h",
+          'text': "用文件存数据的痛点"
+        },
+        {
+          'type': "list",
+          'items': [
+            "查询靠翻文件：几十万条数据在文件里查一条，得全读一遍",
+            "并发读写冲突：两个人同时改一个文件会互相覆盖",
+            "没有约束：随便写什么格式都能存，脏数据无法控制",
+            "没有事务：写一半断电，文件就坏了",
+            "没有权限/索引/统计：这些能力全要自己造"
+          ]
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "文本/Excel 文件",
+            "关系数据库"
+          ],
+          'rows': [
+            [
+              "查询速度",
+              "全文件扫描，慢",
+              "索引定位，毫秒级"
+            ],
+            [
+              "并发",
+              "几乎不支持",
+              "锁 + 事务，多人安全读写"
+            ],
+            [
+              "数据一致性",
+              "靠自觉，易脏",
+              "约束 + 事务保证"
+            ],
+            [
+              "崩溃恢复",
+              "可能损坏",
+              "日志 + 事务恢复"
+            ],
+            [
+              "适用范围",
+              "小数据、人工查看",
+              "业务系统核心数据"
+            ]
+          ]
+        },
+        {
+          'type': "p",
+          'text': "那文件一点用没有吗？也不是。配置文件、日志、导入导出的中间格式（CSV、JSON）都用文件。数据库适合『结构化、要查询、要一致』的核心业务数据。"
+        },
+        {
+          'type': "h",
+          'text': "什么时候用文件就行"
+        },
+        {
+          'type': "list",
+          'items': [
+            "一次性数据、读完就不再用的（如导出报表）",
+            "极少量配置（如 config.ini）",
+            "日志类只追加的数据（也可以用专门的日志系统）",
+            "性能要求不高、无并发的小工具"
+          ]
+        },
+        {
+          'type': "tip",
+          'title': "两者常搭配使用",
+          'text': "实际系统里文件和数据常常合作：用文件存图片、附件等大对象（BLOB），用数据库存文件的路径和元数据。各取所长。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据库 vs 文件存储\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据库 vs 文件存储\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据库 vs 文件存储\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "文件存数据：查询慢、并发差、无约束、易损坏",
+            "数据库：索引快、事务安全、约束强、支持并发",
+            "文件适合配置/日志/导出，核心数据用数据库",
+            "大文件存磁盘，数据库只存路径和元数据"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "为什么慢（伪代码）",
+          'code': "SELECT * FROM student WHERE name = '小明';\n-- 文件版要遍历每一行比较，数据库版走索引直达"
+        }
+      ]
+    },
+    {
+      'id': "sql-69",
+      'title': "关系数据库 vs NoSQL",
+      'summary': "关系型与 NoSQL 的差别，什么时候选哪个。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "除了关系型数据库，还有一大类 NoSQL（Not Only SQL）数据库：MongoDB、Redis、Cassandra 等。这一章搞清楚它们和关系库的本质区别，别再二选一纠结。"
+        },
+        {
+          'type': "h",
+          'text': "关系型数据库的特点"
+        },
+        {
+          'type': "list",
+          'items': [
+            "有表结构（Schema），列的类型固定",
+            "用 SQL 查询，支持 JOIN、事务、复杂统计",
+            "强一致性，数据关系严格",
+            "代表：MySQL、PostgreSQL、SQLite、Oracle"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "NoSQL 的特点"
+        },
+        {
+          'type': "table",
+          'head': [
+            "NoSQL 类型",
+            "代表",
+            "特点",
+            "典型场景"
+          ],
+          'rows': [
+            [
+              "文档型",
+              "MongoDB",
+              "存 JSON 文档，结构灵活",
+              "内容、商品、用户画像"
+            ],
+            [
+              "键值型",
+              "Redis",
+              "超快读写，内存存储",
+              "缓存、会话、排行榜"
+            ],
+            [
+              "列族型",
+              "Cassandra/HBase",
+              "海量写入，水平扩展",
+              "日志、时序、大数据"
+            ],
+            [
+              "图数据库",
+              "Neo4j",
+              "擅长关系网络查询",
+              "社交关系、推荐"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "怎么选"
+        },
+        {
+          'type': "code",
+          'lang': "text",
+          'title': "选择决策",
+          'code': "-- 数据强关联、需要事务/复杂报表 → 关系型\n-- 结构多变、追求开发灵活 → 文档型 MongoDB\n-- 需要超高并发读（热点数据） → Redis 缓存\n-- 海量日志写入 → 列族型\n-- 关系网查询（好友的好友） → 图数据库"
+        },
+        {
+          'type': "p",
+          'text': "现代架构常用『混合』：关系库做核心业务，Redis 做缓存，ES 做搜索，MongoDB 存灵活内容。数据库没有最好，只有最合适。"
+        },
+        {
+          'type': "tip",
+          'title': "理解取舍",
+          'text': "关系型赢了『一致性和查询能力』，输了『灵活性和扩展性』；NoSQL 反过来。业务的核心账务、订单必须关系型+事务，边缘的灵活数据可以交给 NoSQL。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"关系数据库 vs NoSQL\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"关系数据库 vs NoSQL\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"关系数据库 vs NoSQL\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "关系型：固定结构、SQL、事务、强一致",
+            "NoSQL 分文档/键值/列族/图四类",
+            "Redis 缓存、MongoDB 灵活文档、Cassandra 海量日志",
+            "选型看场景：核心账务用关系型，热点缓存用 Redis",
+            "现代系统常是关系型 + NoSQL 混合使用"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "MongoDB 文档示例",
+          'code': "-- MongoDB 存的是 JSON 文档，没有固定列\n{ \"name\": \"小明\", \"tags\": [\"后端\", \"SQL\"], \"profile\": { \"age\": 20 } }"
+        }
+      ]
+    },
+    {
+      'id': "sql-70",
+      'title': "索引失效场景与慢查询优化",
+      'summary': "盘点常见索引失效场景，学会慢查询排查套路。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "建了索引查询还是慢？很可能是索引『失效』了。这一章把最常见的索引失效场景盘一遍，再讲慢查询的排查流程。"
+        },
+        {
+          'type': "h",
+          'text': "常见索引失效场景"
+        },
+        {
+          'type': "table",
+          'head': [
+            "场景",
+            "错误写法",
+            "正确写法"
+          ],
+          'rows': [
+            [
+              "列上套函数",
+              "WHERE YEAR(d)=2026",
+              "WHERE d >= '2026-01-01' AND d < '2027-01-01'"
+            ],
+            [
+              "隐式类型转换",
+              "VARCHAR 列和数字比 WHERE phone=138",
+              "WHERE phone='138...'"
+            ],
+            [
+              "LIKE 以 % 开头",
+              "LIKE '%abc'",
+              "LIKE 'abc%'"
+            ],
+            [
+              "复合索引没走最左列",
+              "只用第二列",
+              "带上第一列"
+            ],
+            [
+              "OR 前后有一边没索引",
+              "a=1 OR b=2（b 无索引）",
+              "分别建索引或用 UNION"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "用 EXPLAIN 验证"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "对比索引是否生效",
+          'code': "-- 失效：列上套函数\nEXPLAIN SELECT * FROM user WHERE YEAR(created_at) = 2026;\n-- key 列可能为 NULL\n\n-- 生效：范围写法\nEXPLAIN SELECT * FROM user WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01';\n-- key 显示索引名"
+        },
+        {
+          'type': "h",
+          'text': "慢查询排查套路"
+        },
+        {
+          'type': "list",
+          'items': [
+            "开慢查询日志：定位到底哪些 SQL 慢",
+            "对慢 SQL 跑 EXPLAIN，看 type/key/rows",
+            "根据失效原因改写 SQL 或补索引",
+            "数据量大的表考虑分区、分表",
+            "反复 EXPLAIN 对比优化前后"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "开启慢查询日志（MySQL）",
+          'code': "SET GLOBAL slow_query_log = ON;\nSET GLOBAL long_query_time = 1;   -- 超过 1 秒的记录\nSHOW VARIABLES LIKE 'slow_query_log%';"
+        },
+        {
+          'type': "warn",
+          'title': "别迷信索引",
+          'text': "索引不是万能药：低区分度、数据量本身很小、查询要返回表的大部分数据时，走全表扫描反而更快。数据库优化器会自己判断，用 EXPLAIN 确认即可。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"索引失效场景与慢查询优化\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"索引失效场景与慢查询优化\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"索引失效场景与慢查询优化\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "索引失效：列上套函数、隐式转换、LIKE '%xx'、OR 一边无索引",
+            "复合索引要遵守最左前缀",
+            "EXPLAIN 的 key=NULL 说明索引没被用上",
+            "慢查询优化：日志定位 → EXPLAIN → 改写/建索引",
+            "小表/低区分度列，全表扫描可能更快"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "用范围代替函数",
+          'code': "EXPLAIN SELECT * FROM user\nWHERE created_at >= '2026-01-01' AND created_at < '2027-01-01';"
+        }
+      ]
+    },
+    {
+      'id': "sql-71",
+      'title': "大数据量查询优化技巧",
+      'summary': "千万级数据下的查询优化：分页、索引、避免 SELECT *。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "数据量上千万时，普通的小技巧都不够用了。这一章讲几个实战中反复验证有效的大表查询优化手段。"
+        },
+        {
+          'type': "h",
+          'text': "用覆盖索引减少回表"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "只查索引里的列",
+          'code': "-- 建复合索引 (name, age)\nCREATE INDEX idx_name_age ON student(name, age);\n\n-- 这条查询只用到 name 和 age，全在索引里，无需回表\nSELECT name, age FROM student WHERE name = '小明';\n-- Extra 里出现 Using index 说明是覆盖索引，很高效"
+        },
+        {
+          'type': "h",
+          'text': "大分页的键集分页"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用 WHERE 代替大 OFFSET",
+          'code': "-- 传统分页：OFFSET 太大很慢\nSELECT * FROM student ORDER BY id LIMIT 10 OFFSET 1000000;\n\n-- 键集分页：记住上一页最后一条 id\nSELECT * FROM student\nWHERE id > 1000000\nORDER BY id\nLIMIT 10;"
+        },
+        {
+          'type': "h",
+          'text': "其他实用技巧"
+        },
+        {
+          'type': "list",
+          'items': [
+            "避免 SELECT *：只取需要的列，减少 IO",
+            "WHERE 条件尽量用索引列，避免对列套函数",
+            "大范围聚合先按时间切块，分批统计",
+            "只查前 N 条就用 LIMIT，别全查出来再砍",
+            "高频只读数据考虑加缓存层，别硬打数据库"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "时间分片统计大表",
+          'code': "-- 大表按天统计，一天一天查，避免一次扫全表\nSELECT DATE(created_at) AS 日期, COUNT(*) AS 数\nFROM orders\nWHERE created_at >= '2026-08-01' AND created_at < '2026-08-02'\nGROUP BY DATE(created_at);\n-- 配合索引，每次都只读一天的数据"
+        },
+        {
+          'type': "warn",
+          'title': "数据量级的顺序",
+          'text': "优化讲究循序渐进：先优化 SQL 本身（索引、覆盖、分页），再考虑缓存，最后才是分库分表。一上来就上分库分表，架构复杂度会急剧上升。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"大数据量查询优化技巧\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"大数据量查询优化技巧\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"大数据量查询优化技巧\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "覆盖索引只查索引列，避免回表",
+            "大分页用键集分页（WHERE id > 上一页末尾）",
+            "避免 SELECT *、对列套函数",
+            "大表统计按时间分片分批查",
+            "先优化 SQL → 再缓存 → 最后分库分表"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "键集分页",
+          'code': "SELECT * FROM student\nWHERE id > 1000000\nORDER BY id\nLIMIT 10;"
+        }
+      ]
+    },
+    {
+      'id': "sql-72",
+      'title': "事务实战：转账与库存扣减",
+      'summary': "用事务实现安全转账和库存扣减，防止超卖。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "这一章把事务用在两个真实场景：转账（钱不能丢）和库存扣减（不能超卖）。你会看到事务 + 条件判断 + 锁的配合。"
+        },
+        {
+          'type': "h",
+          'text': "场景一：安全转账"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "转账必须用事务",
+          'code': "START TRANSACTION;\n\n-- 检查 A 余额是否足够\nSELECT balance FROM account WHERE id = 1 FOR UPDATE;\n-- FOR UPDATE 给这行加锁，防止别人同时改\n\nUPDATE account SET balance = balance - 100 WHERE id = 1;\nUPDATE account SET balance = balance + 100 WHERE id = 2;\n\nCOMMIT;\n-- 任何一步失败就 ROLLBACK，钱不会消失"
+        },
+        {
+          'type': "h",
+          'text': "场景二：库存扣减防超卖"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "扣库存 + 条件更新",
+          'code': "START TRANSACTION;\n\n-- 关键：条件更新，库存不足时影响行数为 0\nUPDATE product\nSET stock = stock - 1\nWHERE id = 1 AND stock >= 1;\n\n-- 检查刚才是否真的扣成功（影响行数=1 才成功）\nSELECT ROW_COUNT();\n-- 如果影响 0 行，说明库存不够，直接回滚\nROLLBACK;\n\n-- 扣成功了才提交\nCOMMIT;"
+        },
+        {
+          'type': "p",
+          'text': "防超卖的关键：把『检查库存』和『扣库存』合成一条条件 UPDATE（WHERE stock >= 1）。如果两条分开做，两个请求可能同时读到库存 1，都通过检查，就超卖了。"
+        },
+        {
+          'type': "h",
+          'text': "流程总结"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "完整下单扣库存",
+          'code': "START TRANSACTION;\n-- 1. 锁定并扣减库存（条件更新防超卖）\nUPDATE product SET stock = stock - 1 WHERE id = 1 AND stock >= 1;\n-- 2. 若影响行数为 0 → ROLLBACK 结束\n-- 3. 生成订单\nINSERT INTO orders (user_id, product_id, qty) VALUES (1, 1, 1);\n-- 4. 全部成功\nCOMMIT;"
+        },
+        {
+          'type': "warn",
+          'title': "FOR UPDATE 别滥用",
+          'text': "SELECT ... FOR UPDATE 会锁行，锁的时间越长并发越低。只在需要『读后改』且怕并发竞争时用，事务尽快提交释放锁。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"事务实战：转账与库存扣减\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"事务实战：转账与库存扣减\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"事务实战：转账与库存扣减\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "转账必须用事务包裹，防止钱消失",
+            "SELECT ... FOR UPDATE 锁定行，防并发竞争",
+            "库存扣减用条件更新 WHERE stock >= 1 防超卖",
+            "影响行数为 0 表示条件不满足，回滚",
+            "事务尽快提交，减少锁占用时间"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "防超卖扣库存",
+          'code': "START TRANSACTION;\nUPDATE product SET stock = stock - 1 WHERE id = 1 AND stock >= 1;\nINSERT INTO orders (user_id, product_id, qty) VALUES (1, 1, 1);\nCOMMIT;"
+        }
+      ]
+    },
+    {
+      'id': "sql-73",
+      'title': "数据清洗 SQL 实战",
+      'summary': "用 SQL 清洗脏数据：去重、补全、格式化、合并。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "真实数据永远是脏的：重复、空值、格式不统一、多余空格。这一章教用 SQL 做数据清洗的几板斧。"
+        },
+        {
+          'type': "h",
+          'text': "去重"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "找出并删除重复行",
+          'code': "-- 找出重复的邮箱\nSELECT email, COUNT(*) FROM user\nGROUP BY email HAVING COUNT(*) > 1;\n\n-- 保留每组 id 最小的一条，删掉其余重复\nDELETE u1 FROM user u1\nINNER JOIN user u2\n  ON u1.email = u2.email AND u1.id > u2.id;"
+        },
+        {
+          'type': "h",
+          'text': "清洗空值与默认值"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "空值补全与替换",
+          'code': "UPDATE user\nSET phone = '未填写'\nWHERE phone IS NULL OR TRIM(phone) = '';\n\n-- 或者查询时用 IFNULL 兜底显示\nSELECT name, IFNULL(phone, '未填写') AS 电话 FROM user;"
+        },
+        {
+          'type': "h",
+          'text': "格式统一"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "去掉空格、统一大小写",
+          'code': "UPDATE user\nSET name = TRIM(name);          -- 去掉名字首尾空格\n\nUPDATE user\nSET email = LOWER(TRIM(email)); -- 邮箱去空格转小写\n\nUPDATE user\nSET phone = REPLACE(phone, '-', '');  -- 去掉电话里的横杠"
+        },
+        {
+          'type': "h",
+          'text': "拆分与合并字段"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "拆列和拼列",
+          'code': "-- 拆：把全名拆成姓和名\nSELECT name,\n    SUBSTRING_INDEX(name, ' ', 1) AS 名,\n    SUBSTRING_INDEX(name, ' ', -1) AS 姓\nFROM user;\n\n-- 合并：把多行记录拼成一行\nSELECT user_id, GROUP_CONCAT(product_name) AS 商品列表\nFROM order_item GROUP BY user_id;"
+        },
+        {
+          'type': "tip",
+          'title': "清洗原则",
+          'text': "清洗前先备份（CREATE TABLE ... AS SELECT 复制一份），清洗后检查行数变化，确认没有误删。清洗 SQL 最好写成可重复运行的脚本。"
+        },
+        {
+          'type': "warn",
+          'title': "DELETE 去重先验证",
+          'text': "去重 DELETE 之前，先用 SELECT 把要删的行查出来核对数量，再用同条件执行 DELETE。宁可多花两步，别误删数据。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据清洗 SQL 实战\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据清洗 SQL 实战\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据清洗 SQL 实战\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "去重：GROUP BY + HAVING COUNT>1 找出，自连接删除",
+            "空值：IS NULL 判断，IFNULL 兜底",
+            "格式：TRIM 去空格、LOWER 统一大小写、REPLACE 替换",
+            "拆列用 SUBSTRING_INDEX，合并用 GROUP_CONCAT",
+            "清洗前先备份，删除前先 SELECT 验证"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "去重清洗",
+          'code': "SELECT email, COUNT(*) FROM user GROUP BY email HAVING COUNT(*) > 1;\nUPDATE user SET email = LOWER(TRIM(email));"
+        }
+      ]
+    },
+    {
+      'id': "sql-74",
+      'title': "报表 SQL 实战（汇总/环比/分组）",
+      'summary': "做报表的三大套路：汇总、分组、环比对比。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "报表是数据分析师和开发者的日常。这一章把报表最常用的三类 SQL 讲透：多级汇总、维度分组、环比/同比对比。"
+        },
+        {
+          'type': "h",
+          'text': "多级汇总（GROUP BY + ROLLUP）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "带小计的汇总",
+          'code': "SELECT dept_id,\n       IFNULL(GROUPING(dept_id), 0),\n       SUM(salary) AS 工资合计\nFROM emp\nGROUP BY dept_id WITH ROLLUP;\n-- WITH ROLLUP 会在末尾加一行总计\n-- SQLite 用 UNION ALL 手动加总计"
+        },
+        {
+          'type': "h",
+          'text': "维度分组"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "多维报表",
+          'code': "SELECT DATE_FORMAT(created_at, '%Y-%m') AS 年月,\n       status AS 订单状态,\n       COUNT(*) AS 订单数,\n       SUM(total) AS 销售额\nFROM orders\nGROUP BY DATE_FORMAT(created_at, '%Y-%m'), status\nORDER BY 年月, 订单状态;"
+        },
+        {
+          'type': "h",
+          'text': "环比对比（和上一周期比）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "用 LAG 算环比",
+          'code': "WITH monthly AS (\n    SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym,\n           SUM(total) AS total\n    FROM orders\n    GROUP BY DATE_FORMAT(created_at, '%Y-%m')\n)\nSELECT ym, total,\n    LAG(total) OVER (ORDER BY ym) AS 上月销售额,\n    ROUND((total - LAG(total) OVER (ORDER BY ym)) / LAG(total) OVER (ORDER BY ym) * 100, 2) AS 环比增长率\nFROM monthly;\n-- WITH ... AS 是 CTE 公用表表达式，先定义临时结果集再查询"
+        },
+        {
+          'type': "h",
+          'text': "CTE 让复杂报表可读"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "WITH 复用中间结果",
+          'code': "WITH top_product AS (\n    SELECT product_id, SUM(quantity) AS qty\n    FROM order_item GROUP BY product_id\n    ORDER BY qty DESC LIMIT 5\n)\nSELECT p.name, t.qty\nFROM top_product t\nINNER JOIN product p ON p.id = t.product_id;"
+        },
+        {
+          'type': "tip",
+          'title': "报表心法",
+          'text': "先把『指标』算出来（SUM/COUNT/AVG），再定『维度』（按什么分组），最后做『对比』（环比/同比）。三步组合几乎能覆盖所有报表。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"报表 SQL 实战（汇总/环比/分组）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"报表 SQL 实战（汇总/环比/分组）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"报表 SQL 实战（汇总/环比/分组）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "汇总：GROUP BY + 聚合，WITH ROLLUP 加总计",
+            "分组报表：多列 GROUP BY + 排序",
+            "环比：窗口函数 LAG 取上一周期做对比",
+            "CTE（WITH ... AS）让复杂查询更可读",
+            "报表 = 指标 + 维度 + 对比三要素"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "月度环比报表",
+          'code': "WITH monthly AS (\n    SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym, SUM(total) AS total\n    FROM orders GROUP BY DATE_FORMAT(created_at, '%Y-%m')\n)\nSELECT ym, total,\n    LAG(total) OVER (ORDER BY ym) AS 上月,\n    (total - LAG(total) OVER (ORDER BY ym)) AS 环比增量\nFROM monthly;"
+        }
+      ]
+    },
+    {
+      'id': "sql-75",
+      'title': "面试题：基础查询",
+      'summary': "SQL 面试热身：SELECT、WHERE、LIKE、排序、去重。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "进入面试环节！从第 75 章到第 80 章，都是真实面试常见题目。每一题先看题目，再自己想答案，最后对照讲解。这一章是基础查询题。"
+        },
+        {
+          'type': "h",
+          'text': "第 1 题：查询所有学生中分数最高的前 3 名"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案",
+          'code': "SELECT name, score\nFROM student\nORDER BY score DESC\nLIMIT 3;"
+        },
+        {
+          'type': "h",
+          'text': "第 2 题：找出名字里含『小』字的用户"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：LIKE 模糊查询",
+          'code': "SELECT * FROM user WHERE name LIKE '%小%';"
+        },
+        {
+          'type': "h",
+          'text': "第 3 题：统计去重后的城市数量"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：COUNT + DISTINCT",
+          'code': "SELECT COUNT(DISTINCT city) AS 城市数 FROM user;\n-- 注意：不是 COUNT(city)，那是数非空个数不排除重复"
+        },
+        {
+          'type': "h",
+          'text': "第 4 题：查询 18~25 岁之间（含）的男生"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：BETWEEN + AND",
+          'code': "SELECT * FROM student\nWHERE gender = '男' AND age BETWEEN 18 AND 25;"
+        },
+        {
+          'type': "h",
+          'text': "第 5 题：按班级升序、分数降序排序"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：多列排序",
+          'code': "SELECT * FROM student\nORDER BY class ASC, score DESC;"
+        },
+        {
+          'type': "h",
+          'text': "第 6 题：查询没有填写手机号的用户"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：IS NULL",
+          'code': "SELECT * FROM user WHERE phone IS NULL;\n-- 陷阱：写成 phone = NULL 是错的，什么都查不到"
+        },
+        {
+          'type': "info",
+          'title': "考点",
+          'text': "基础题主要考：LIMIT、LIKE 通配符、COUNT(DISTINCT)、BETWEEN、多列排序、IS NULL。每一个都是高频考点，务必记牢。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"面试题：基础查询\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"面试题：基础查询\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"面试题：基础查询\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "TOP N 用 ORDER BY + LIMIT",
+            "模糊匹配用 LIKE '%xx%'",
+            "去重计数用 COUNT(DISTINCT 列)",
+            "边界区间用 BETWEEN 且含两端",
+            "空值判断只能用 IS NULL",
+            "多列排序：ORDER BY 列1, 列2"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "前三名",
+          'code': "SELECT name, score FROM student ORDER BY score DESC LIMIT 3;"
+        }
+      ]
+    },
+    {
+      'id': "sql-76",
+      'title': "面试题：聚合与分组",
+      'summary': "GROUP BY、HAVING、聚合函数的面试常考题。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "聚合与分组是面试出题重灾区。记住核心规则：SELECT 的普通列必须在 GROUP BY 里；对组的过滤用 HAVING。"
+        },
+        {
+          'type': "h",
+          'text': "第 1 题：每个部门的平均工资，只显示平均工资大于 10000 的"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：GROUP BY + HAVING",
+          'code': "SELECT dept_id, AVG(salary) AS 平均工资\nFROM emp\nGROUP BY dept_id\nHAVING AVG(salary) > 10000;\n-- 对组过滤必须用 HAVING，不能用 WHERE"
+        },
+        {
+          'type': "h",
+          'text': "第 2 题：统计每个班级的人数，按人数降序"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：COUNT + ORDER BY 别名",
+          'code': "SELECT class, COUNT(*) AS 人数\nFROM student\nGROUP BY class\nORDER BY 人数 DESC;"
+        },
+        {
+          'type': "h",
+          'text': "第 3 题：为什么 SELECT class, name FROM student GROUP BY class 报错？"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "解析",
+          'code': "-- 因为分组后每组有多个 name，数据库不知道该显示哪个\n-- 要么 name 也加进 GROUP BY，要么用聚合/GROUP_CONCAT\nSELECT class, GROUP_CONCAT(name) FROM student GROUP BY class;"
+        },
+        {
+          'type': "h",
+          'text': "第 4 题：统计分数 ≥90 的男生和女生各多少人"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：CASE WHEN 条件聚合",
+          'code': "SELECT\n    SUM(CASE WHEN gender = '男' THEN 1 ELSE 0 END) AS 男生,\n    SUM(CASE WHEN gender = '女' THEN 1 ELSE 0 END) AS 女生\nFROM student WHERE score >= 90;"
+        },
+        {
+          'type': "h",
+          'text': "第 5 题：WHERE 和 HAVING 的区别"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "WHERE",
+            "HAVING"
+          ],
+          'rows': [
+            [
+              "时机",
+              "分组前过滤行",
+              "分组后过滤组"
+            ],
+            [
+              "聚合函数",
+              "不能",
+              "能"
+            ],
+            [
+              "位置",
+              "GROUP BY 之前",
+              "GROUP BY 之后"
+            ]
+          ]
+        },
+        {
+          'type': "tip",
+          'title': "答题加分点",
+          'text': "面试答聚合题，主动说出『WHERE 先于 GROUP BY、HAVING 用于组过滤、普通列必须进 GROUP BY』，会显得理解到位。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"面试题：聚合与分组\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"面试题：聚合与分组\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"面试题：聚合与分组\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "组过滤用 HAVING，行过滤用 WHERE",
+            "SELECT 的普通列必须在 GROUP BY 里",
+            "GROUP_CONCAT 可把组内多值拼成一行",
+            "条件计数用 SUM(CASE WHEN ... THEN 1 ELSE 0 END)",
+            "ORDER BY 可用聚合别名"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "部门平均工资",
+          'code': "SELECT dept_id, AVG(salary) AS 平均工资\nFROM emp\nGROUP BY dept_id\nHAVING AVG(salary) > 10000;"
+        }
+      ]
+    },
+    {
+      'id': "sql-77",
+      'title': "面试题：JOIN 与子查询",
+      'summary': "JOIN、自连接、子查询的面试高频题与易错点。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "JOIN 和子查询是 SQL 面试的灵魂。面试官喜欢问：内连接和外连接的区别、怎么找没匹配的数据、子查询里 IN 和 EXISTS 的区别。"
+        },
+        {
+          'type': "h",
+          'text': "第 1 题：INNER JOIN 和 LEFT JOIN 的区别"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案",
+          'code': "-- INNER：只返回两表匹配上的行\nSELECT * FROM orders o\nINNER JOIN user u ON o.user_id = u.id;\n\n-- LEFT：左表全部保留，右表没匹配填 NULL\nSELECT * FROM user u\nLEFT JOIN orders o ON o.user_id = u.id;"
+        },
+        {
+          'type': "h",
+          'text': "第 2 题：找出没有下过单的用户"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：LEFT JOIN + IS NULL",
+          'code': "SELECT u.*\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.id IS NULL;\n-- 等价写法：NOT EXISTS 子查询"
+        },
+        {
+          'type': "h",
+          'text': "第 3 题：查每个员工的经理名字（自连接）"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：SELF JOIN",
+          'code': "SELECT e.name AS 员工, m.name AS 经理\nFROM emp e\nLEFT JOIN emp m ON e.manager_id = m.id;"
+        },
+        {
+          'type': "h",
+          'text': "第 4 题：查分数高于全班平均分的学生"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：标量子查询",
+          'code': "SELECT * FROM student\nWHERE score > (SELECT AVG(score) FROM student);"
+        },
+        {
+          'type': "h",
+          'text': "第 5 题：IN 和 EXISTS 的区别"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "IN",
+            "EXISTS"
+          ],
+          'rows': [
+            [
+              "逻辑",
+              "值是否在子查询结果集里",
+              "是否存在满足条件的记录"
+            ],
+            [
+              "大结果集",
+              "可能较慢",
+              "通常更快（找到即停）"
+            ],
+            [
+              "NULL 坑",
+              "NOT IN 遇 NULL 失效",
+              "NOT EXISTS 不受影响"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "IN 与 EXISTS 互换",
+          'code': "-- IN 写法\nSELECT * FROM user WHERE id IN (SELECT user_id FROM orders);\n\n-- EXISTS 写法\nSELECT * FROM user u\nWHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);"
+        },
+        {
+          'type': "tip",
+          'title': "答题加分点",
+          'text': "面试官问 JOIN 时，主动提『笛卡尔积风险』；问子查询时主动提『NOT IN 的 NULL 陷阱』。这两个点能体现你踩过坑、有实战经验。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"面试题：JOIN 与子查询\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"面试题：JOIN 与子查询\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"面试题：JOIN 与子查询\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "INNER 只要匹配，LEFT 保留左表全部",
+            "找缺失数据：LEFT JOIN + 右表主键 IS NULL",
+            "自连接需要两个不同别名",
+            "标量子查询返回单值做条件比较",
+            "IN 判断值在集合，EXISTS 判断记录存在"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "没下单的用户",
+          'code': "SELECT u.*\nFROM user u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.id IS NULL;"
+        }
+      ]
+    },
+    {
+      'id': "sql-78",
+      'title': "面试题：索引与优化",
+      'summary': "索引原理、失效场景、EXPLAIN 的面试考点。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "索引题考的是『懂不懂原理』。面试官会问索引为什么快、什么情况失效、怎么定位慢查询。"
+        },
+        {
+          'type': "h",
+          'text': "第 1 题：索引为什么能加速查询"
+        },
+        {
+          'type': "p",
+          'text': "答案：索引底层通常是 B+ 树结构，数据按顺序组织成树，查询从根节点一路下探，复杂度从全表扫描的 O(n) 降到 O(log n)。就像查字典不用从第一页翻起，直接按拼音定位。"
+        },
+        {
+          'type': "h",
+          'text': "第 2 题：什么情况下索引会失效"
+        },
+        {
+          'type': "list",
+          'items': [
+            "对列使用函数或运算：WHERE YEAR(d)=2026",
+            "隐式类型转换：VARCHAR 列和数字比较",
+            "LIKE 以 % 开头：LIKE '%abc'",
+            "复合索引不满足最左前缀",
+            "OR 条件中某列无索引"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "第 3 题：如何定位和优化一条慢查询"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "标准流程",
+          'code': "EXPLAIN SELECT ...;  -- 1. 看执行计划\n-- 关注 type（是不是 ALL）、key（有没有用索引）、rows（扫多少行）\n\n-- 2. 根据结果建索引\nCREATE INDEX idx_xxx ON table(col);\n\n-- 3. 改写 SQL（避免函数/隐式转换/%开头LIKE）\n\n-- 4. 再 EXPLAIN 对比，确认 type 改善、rows 变小"
+        },
+        {
+          'type': "h",
+          'text': "第 4 题：聚簇索引和非聚簇索引的区别"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比",
+            "聚簇索引（如主键）",
+            "非聚簇索引（普通索引）"
+          ],
+          'rows': [
+            [
+              "数据存储",
+              "索引叶子直接存整行数据",
+              "叶子只存索引列和主键"
+            ],
+            [
+              "回表",
+              "不需要，数据就在索引里",
+              "可能要回表查主键再取数据"
+            ],
+            [
+              "数量",
+              "一张表一般一个",
+              "可以有很多个"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "第 5 题：索引为什么不是越多越好"
+        },
+        {
+          'type': "p",
+          'text': "答案：索引能加速读，但会拖慢写（每次增删改都要维护索引树）、占磁盘空间、还可能干扰优化器选择。所以只给高频查询列建索引。"
+        },
+        {
+          'type': "tip",
+          'title': "答题加分点",
+          'text': "能说出 B+ 树、覆盖索引（Using index）、回表、最左前缀这几个词，并解释含义，基本能拿高分。原理比背语法更值钱。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"面试题：索引与优化\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"面试题：索引与优化\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"面试题：索引与优化\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "索引底层 B+ 树，查询 O(log n)",
+            "失效场景：函数/隐式转换/%LIKE/最左前缀/OR",
+            "优化流程：EXPLAIN → 建索引 → 改写 → 复验",
+            "聚簇索引存数据免回表，普通索引可能要回表",
+            "索引有维护成本，读多写少的列才值得建"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "EXPLAIN 体检",
+          'code': "EXPLAIN SELECT * FROM user WHERE email = 'a@b.com';\n-- 查看 type/key/rows 三列"
+        }
+      ]
+    },
+    {
+      'id': "sql-79",
+      'title': "面试题：事务与锁",
+      'summary': "ACID、隔离级别、脏读幻读、锁的面试高频题。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "事务与锁是数据库面试的压轴题。把 ACID、隔离级别、并发问题、锁的类型这些概念串起来答，就能过关。"
+        },
+        {
+          'type': "h",
+          'text': "第 1 题：说清楚 ACID 是什么"
+        },
+        {
+          'type': "table",
+          'head': [
+            "特性",
+            "含义",
+            "通俗"
+          ],
+          'rows': [
+            [
+              "A 原子性",
+              "要么全成要么全败",
+              "转账不会只扣不加"
+            ],
+            [
+              "C 一致性",
+              "操作前后数据合法",
+              "金额守恒，账是平的"
+            ],
+            [
+              "I 隔离性",
+              "事务间互不干扰",
+              "看不到别人的中间态"
+            ],
+            [
+              "D 持久性",
+              "提交后永久保存",
+              "断电不丢"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "第 2 题：脏读、不可重复读、幻读各是什么"
+        },
+        {
+          'type': "list",
+          'items': [
+            "脏读：读到别人未提交的修改（危害最大）",
+            "不可重复读：同一事务两次读同一行值不同",
+            "幻读：同一事务两次查询行数不同（多出行）"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "第 3 题：四个隔离级别分别防住什么"
+        },
+        {
+          'type': "table",
+          'head': [
+            "隔离级别",
+            "脏读",
+            "不可重复读",
+            "幻读"
+          ],
+          'rows': [
+            [
+              "READ UNCOMMITTED",
+              "可能",
+              "可能",
+              "可能"
+            ],
+            [
+              "READ COMMITTED",
+              "不会",
+              "可能",
+              "可能"
+            ],
+            [
+              "REPEATABLE READ",
+              "不会",
+              "不会",
+              "可能"
+            ],
+            [
+              "SERIALIZABLE",
+              "不会",
+              "不会",
+              "不会"
+            ]
+          ]
+        },
+        {
+          'type': "h",
+          'text': "第 4 题：锁有哪些类型"
+        },
+        {
+          'type': "table",
+          'head': [
+            "分类",
+            "类型",
+            "作用"
+          ],
+          'rows': [
+            [
+              "按粒度",
+              "表锁 / 行锁",
+              "行锁并发更好，表锁简单"
+            ],
+            [
+              "按模式",
+              "共享锁 S / 排他锁 X",
+              "S 可共存，X 独占"
+            ],
+            [
+              "乐观 vs 悲观",
+              "乐观锁 / 悲观锁",
+              "乐观锁靠版本号，悲观锁靠加锁"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "悲观锁与乐观锁示意",
+          'code': "-- 悲观锁：查出来就锁住\nSELECT * FROM product WHERE id = 1 FOR UPDATE;\n\n-- 乐观锁：用版本号判断是否被别人改过\nUPDATE product\nSET stock = stock - 1, version = version + 1\nWHERE id = 1 AND version = 5;\n-- version 不匹配说明被别人改过，本次更新影响 0 行，重试"
+        },
+        {
+          'type': "warn",
+          'title': "死锁是什么",
+          'text': "两个事务各自锁了对方需要的资源，互相等对方释放，就死锁了。数据库会自动检测并回滚其中一个事务。写代码要控制加锁顺序一致，减少死锁。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"面试题：事务与锁\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"面试题：事务与锁\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"面试题：事务与锁\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "ACID：原子性、一致性、隔离性、持久性",
+            "脏读/不可重复读/幻读是三大并发问题",
+            "隔离级别从低到高防得越多，并发越差",
+            "锁分表锁/行锁、S/X 锁、乐观/悲观锁",
+            "乐观锁用版本号，悲观锁用 FOR UPDATE"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "乐观锁更新",
+          'code': "UPDATE product\nSET stock = stock - 1, version = version + 1\nWHERE id = 1 AND version = 5;\n-- 影响 0 行说明版本冲突，需要重试"
+        }
+      ]
+    },
+    {
+      'id': "sql-80",
+      'title': "面试题：综合与实战场景",
+      'summary': "综合性面试题：设计题、场景题、综合 SQL 题。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "最后一章是综合题：没有标准答案，考察你能否把 SQL 知识综合运用。面试官看的是思路和逻辑。"
+        },
+        {
+          'type': "h",
+          'text': "第 1 题：设计一个用户订单系统，讲出表结构"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案框架",
+          'code': "CREATE TABLE user (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(20) NOT NULL\n);\n\nCREATE TABLE orders (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    user_id INT NOT NULL,\n    total DECIMAL(12,2) DEFAULT 0,\n    status VARCHAR(20) DEFAULT '待付款',\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE order_item (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    order_id INT NOT NULL,\n    product_id INT,\n    product_name VARCHAR(50),\n    price DECIMAL(10,2),\n    quantity INT\n);\n-- 要点：订单与明细 1:N；明细存快照；外键关联；时间默认值"
+        },
+        {
+          'type': "h",
+          'text': "第 2 题：一条 SQL 查『每个班级分数最高的学生』"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：窗口函数",
+          'code': "SELECT class, name, score FROM (\n    SELECT class, name, score,\n           ROW_NUMBER() OVER (PARTITION BY class ORDER BY score DESC) AS rn\n    FROM student\n) t\nWHERE t.rn = 1;\n-- 窗口函数给每班排名，再取第 1 名"
+        },
+        {
+          'type': "h",
+          'text': "第 3 题：订单超时未支付如何设计"
+        },
+        {
+          'type': "p",
+          'text': "思路：orders.status 标记『待付款』，created_at 记录下单时间。定时任务扫 status='待付款' 且 created_at 超过 30 分钟的记录，更新为『已取消』并释放库存。SQL 大致是：UPDATE orders SET status='已取消' WHERE status='待付款' AND created_at < NOW() - INTERVAL 30 MINUTE;"
+        },
+        {
+          'type': "h",
+          'text': "第 4 题：统计每个用户最近一笔订单"
+        },
+        {
+          'type': "code",
+          'lang': "sql",
+          'title': "答案：窗口函数 + 子查询",
+          'code': "SELECT * FROM (\n    SELECT user_id, id, total,\n           ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY created_at DESC) AS rn\n    FROM orders\n) t\nWHERE t.rn = 1;"
+        },
+        {
+          'type': "h",
+          'text': "第 5 题：面试自我介绍式总结"
+        },
+        {
+          'type': "list",
+          'items': [
+            "基础：增删改查、过滤、排序、分页、聚合",
+            "进阶：JOIN、子查询、事务、索引、窗口函数",
+            "实战：设计过博客/电商/选课等系统",
+            "优化：EXPLAIN、慢查询定位、索引失效排查",
+            "安全：SQL 注入防范、权限最小化"
+          ]
+        },
+        {
+          'type': "tip",
+          'title': "综合题的答题框架",
+          'text': "拿到综合题：先拆需求 → 画表关系（1:1/1:N/N:M）→ 建表（外键+约束+索引）→ 写查询（JOIN/聚合/窗口）→ 讲优化（索引/EXPLAIN）。按这个顺序答，思路清晰不易漏点。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"面试题：综合与实战场景\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"面试题：综合与实战场景\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"面试题：综合与实战场景\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "设计题：先关系后建表，讲清外键、约束、快照",
+            "每班最高分：窗口函数 ROW_NUMBER + 外层过滤",
+            "场景题：状态字段 + 时间字段 + 定时任务",
+            "最近一笔：PARTITION BY + ROW_NUMBER",
+            "综合题按：拆需求→画关系→建表→查询→优化"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "每班最高分",
+          'code': "SELECT class, name, score FROM (\n    SELECT class, name, score,\n           ROW_NUMBER() OVER (PARTITION BY class ORDER BY score DESC) AS rn\n    FROM student\n) t\nWHERE t.rn = 1;"
+        }
+      ]
     }
   ]
 });
+

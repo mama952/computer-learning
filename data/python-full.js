@@ -3,1350 +3,5147 @@
    ============================================================ */
 window.LANGUAGE_EXTRA = window.LANGUAGE_EXTRA || [];
 window.LANGUAGE_EXTRA.push({
-  id: "python",
-  name: "Python",
-  icon: "Py",
-  tagline: "最友好的入门语言，从下载安装到进阶实战的 80 章完整课程。",
-  intro:
-    "这是一套从零开始的 Python 完整课程。第 1 章教你下载安装，之后每一章都从大白话讲起，配可运行的示例代码和编辑器模板。学完这套课程，你将掌握 Python 的语法、数据结构、面向对象、文件处理、异常、模块、网络、数据库、并发与 Web 开发，足以应对数据分析和后端开发的日常需求。",
-  meta: { 难度: "从零到进阶", 章节: "80 章", 场景: "数据/AI/后端/自动化" },
-  lessons: [
-    {
-      id: "python-1",
-      title: "下载与安装 Python（零基础第一步）",
-      summary: "到官方下载、勾选 PATH、验证版本，三步装好 Python。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "学习 Python 的第一步，是把它装到你的电脑上。别担心，这一步非常简单，跟着做就能完成。Python 官方提供完全免费的安装包，支持 Windows、macOS、Linux 三大系统。" },
-        { type: "h", text: "第一步：下载" },
-        { type: "list", items: ["打开官网下载页：<a href='https://www.python.org/downloads/' target='_blank' rel='noopener'>https://www.python.org/downloads/</a>", "点击黄色大按钮『Download Python 3.x.x』（3.x.x 是版本号，选最新的稳定版即可）", "Windows 用户下载 64-bit installer（64 位安装包）"] },
-        { type: "h", text: "第二步：安装（最关键的一步）" },
-        { type: "p", text: "双击下载好的安装包，**第一屏一定要勾选最底部的『Add python.exe to PATH』**，这一步非常重要！如果不勾，之后在命令行输入 python 会提示找不到命令。勾选后再点『Install Now』，然后等待安装完成即可。" },
-        { type: "warn", title: "新手第一大坑", text: "很多新手装完发现命令行输入 python 没反应，原因就是忘了勾『Add python.exe to PATH』。如果遇到这种情况，卸载重装一遍，记住勾选即可。" },
-        { type: "h", text: "第三步：验证安装" },
-        { type: "code", lang: "python", title: "验证是否装好", code: 'print("Hello, Python!")\nprint("安装成功，我开始学编程了！")' },
-        { type: "p", text: "在电脑上按 <code.inline>Win+R</code.inline>，输入 <code.inline>cmd</code.inline> 回车打开命令行，输入 <code.inline>python --version</code>，如果显示类似 <code.inline>Python 3.12.x</code> 的版本号，就说明安装成功了！" },
-        { type: "tip", title: "顺手装个好编辑器", text: "推荐安装 VS Code（完全免费）：<a href='https://code.visualstudio.com' target='_blank' rel='noopener'>code.visualstudio.com</a>。装好后在扩展商店搜『Python』并安装官方插件，写代码就有自动补全了。" },
-        { type: "keypoints", items: ["官方下载地址是 python.org/downloads，完全免费", "安装时务必勾选 Add python.exe to PATH", "cmd 里运行 python --version 验证是否装好", "推荐配合 VS Code + Python 插件使用"] },
-      ],
-      templates: [
-        { name: "我的第一个程序", code: 'print("Hello, Python!")\nprint("我要学会编程！")' },
-      ],
-    },
-    {
-      id: "python-2",
-      title: "第一个程序与 print 输出",
-      summary: "用 print 把文字输出到屏幕，理解程序运行的本质。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "装好 Python 后，我们写的第一个程序通常是打印一句话。Python 里用 <code.inline>print()</code.inline> 函数把内容输出到屏幕上，括号里放你想显示的内容。" },
-        { type: "code", lang: "python", title: "第一个程序", code: 'print("你好，世界！")\nprint("我的第一个 Python 程序")' },
-        { type: "p", text: "字符串（一串文字）必须用引号包起来，可以是双引号 <code.inline>\"...\"</code.inline> 也可以是单引号 <code.inline>'...'</code.inline>，效果一样。print 默认会在末尾自动换行，所以每个 print 会输出一行。" },
-        { type: "h", text: "print 的进阶用法" },
-        { type: "code", lang: "python", title: "同时输出多个内容", code: '# 用逗号分隔，会在中间自动加空格\nprint("我的名字是", "小明", "今年", 10, "岁")\n\n# sep 参数自定义分隔符\nprint("a", "b", "c", sep="-")   # 输出 a-b-c\n\n# end 参数自定义结尾（默认是换行）\nprint("第一行", end=" ")\nprint("第二行")   # 和第一行在同一行输出' },
-        { type: "info", title: "引号里想用引号怎么办", text: "如果字符串本身包含双引号，可以用单引号包裹，或使用转义字符 <code.inline>\\\"</code.inline>。例如 <code.inline>print('他说：\"你好\"')</code.inline>。" },
-        { type: "keypoints", items: ["print() 用于向屏幕输出内容，字符串要加引号", "多个内容用逗号分隔，自动加空格", "sep 自定义分隔符，end 自定义结尾", "单引号和双引号都可以包字符串"] },
-      ],
-      templates: [
-        { name: "多行自我介绍", code: 'print("大家好！")\nprint("我叫小明")\nprint("我今年 10 岁")\nprint("我正在学 Python")' },
-        { name: "画一条小鱼", code: 'print("  /\\\\_/\\\\")\nprint(" ( o.o )  <-- 小鱼的嘴巴")\nprint("  > ^ <")' },
-      ],
-    },
-    {
-      id: "python-3",
-      title: "注释：给自己和别人的说明",
-      summary: "用 # 写注释，让代码更易读，Python 会忽略注释。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "注释是写在代码里的说明文字，Python 运行时会完全忽略它们。它的作用是帮助你自己和别人理解这段代码在干什么。写注释是优秀程序员的习惯。" },
-        { type: "code", lang: "python", title: "单行注释与多行注释", code: '# 这是单行注释，以 # 开头\na = 10  # 注释也可以写在代码后面\n\n# 多行注释通常用三个引号（实际上是多行字符串）\n"""\n这是多行注释\n可以写很多行说明\n"""\nprint("代码在运行，注释被忽略了")' },
-        { type: "p", text: "Python 里没有专门的『多行注释』语法，但可以用三个引号包起来的字符串来达到类似效果，因为不被赋值的字符串会被忽略。日常开发中，用 <code.inline>#</code.inline> 单行注释就足够了。" },
-        { type: "tip", title: "注释写什么", text: "好的注释解释『为什么』这么做，而不是重复代码在做什么。比如『# 用二分查找提高速度』比『# 查找』更有价值。" },
-        { type: "keypoints", items: ["注释以 # 开头，Python 运行时忽略", "注释帮助理解代码，是良好习惯", "三引号字符串可当多行注释用", "注释应解释『为什么』而非重复代码"] },
-      ],
-      templates: [
-        { name: "带注释的示例", code: '# 计算两个数的和\na = 5\nb = 3\nresult = a + b  # 求和\nprint("结果是：", result)' },
-      ],
-    },
-    {
-      id: "python-4",
-      title: "变量：给数据起个名字",
-      summary: "变量是给数据贴的标签，Python 无需声明类型。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "变量就像一个贴了标签的盒子，你可以把数据放进去，然后通过标签（变量名）随时取用。Python 里给变量赋值用 <code.inline>=</code.inline>，不需要提前声明类型，Python 会自动判断。" },
-        { type: "code", lang: "python", title: "变量赋值与使用", code: 'name = "小明"      # 字符串\nage = 10           # 整数\nheight = 1.45      # 小数（浮点数）\nis_student = True  # 布尔值（真/假）\n\nprint(name)\nprint("年龄：", age)\nprint("身高：", height)\nprint("是学生吗：", is_student)' },
-        { type: "h", text: "变量命名规则" },
-        { type: "list", items: ["只能由字母、数字、下划线组成，且不能以数字开头（如 1name 是错的）", "不能使用 Python 关键字（如 if、for、while、class 等）", "区分大小写：Name 和 name 是两个不同变量", "推荐使用小写字母 + 下划线，如 my_name、user_age（这叫 snake_case）"] },
-        { type: "code", lang: "python", title: "变量的重新赋值", code: 'count = 1\nprint(count)   # 1\ncount = 2      # 重新赋值\nprint(count)   # 2\ncount = count + 1  # 先取旧值加 1 再存回去\nprint(count)   # 3' },
-        { type: "info", title: "等号是赋值不是相等", text: "在 Python 中，<code.inline>=</code.inline> 表示『把右边的值赋给左边的变量』，而『相等比较』用 <code.inline>==</code.inline>（两个等号）。很多新手会混淆，后面讲条件判断时会详细说明。" },
-        { type: "keypoints", items: ["变量 = 给数据贴的标签，用 = 赋值", "Python 变量无需声明类型，自动推断", "命名用字母/数字/下划线，不能数字开头", "区分大小写，推荐 snake_case 命名", "= 是赋值，== 才是相等比较"] },
-      ],
-      templates: [
-        { name: "个人信息变量", code: 'name = "小红"\nage = 9\ncity = "上海"\nprint(name, "住在", city)\nprint("今年", age, "岁")' },
-        { name: "变量计算", code: 'price = 5\ncount = 3\ncost = price * count\nprint("总价：", cost, "元")' },
-      ],
-    },
-    {
-      id: "python-5",
-      title: "基本数据类型详解",
-      summary: "整数、浮点数、字符串、布尔值、None，逐个吃透。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "Python 中常用的基本数据类型有五种：整数（int）、浮点数（float）、字符串（str）、布尔值（bool）和 NoneType。理解它们各自的含义和用法，是编程的基础。" },
-        { type: "h", text: "整数 int" },
-        { type: "code", lang: "python", title: "整数运算", code: 'a = 10\nb = 3\nprint(a + b)    # 13  加法\nprint(a - b)    # 7   减法\nprint(a * b)    # 30  乘法\nprint(a / b)    # 3.333... 除法（结果是浮点数）\nprint(a // b)   # 3   整除（取商的整数部分）\nprint(a % b)    # 1   取余\nprint(a ** b)   # 1000 幂运算' },
-        { type: "h", text: "浮点数 float" },
-        { type: "p", text: "浮点数就是带小数点的数。需要注意浮点数在计算机中可能产生精度误差，例如 0.1 + 0.2 不等于 0.3（后面会专门讲这个坑）。" },
-        { type: "h", text: "字符串 str" },
-        { type: "code", lang: "python", title: "字符串操作", code: 's = "Hello"\nprint(len(s))       # 5  字符串长度\nprint(s.upper())    # HELLO 转大写\nprint(s.lower())    # hello 转小写\nprint(s + " World") # Hello World 字符串拼接\nprint(s * 3)        # HelloHelloHello 字符串重复' },
-        { type: "h", text: "布尔值 bool 与 None" },
-        { type: "code", lang: "python", title: "布尔值", code: 'is_ok = True\nis_no = False\nprint(is_ok)\nprint(not is_ok)   # False 取反\n\n# None 表示『什么都没有/空值』\nnothing = None\nprint(nothing)' },
-        { type: "h", text: "查看类型 type()" },
-        { type: "code", lang: "python", title: "查看变量的类型", code: 'print(type(10))        # <class \'int\'>\nprint(type(1.5))       # <class \'float\'>\nprint(type("abc"))     # <class \'str\'>\nprint(type(True))      # <class \'bool\'>\nprint(type(None))      # <class \'NoneType\'>' },
-        { type: "keypoints", items: ["int 整数、float 浮点数、str 字符串、bool 布尔、None 空值", "// 整除、% 取余、** 幂运算", "浮点数有精度误差（0.1+0.2≠0.3）", "type() 可查看变量类型"] },
-      ],
-      templates: [
-        { name: "类型侦探", code: 'a = 42\nb = 3.14\nc = "hi"\nd = True\ne = None\nprint(type(a))\nprint(type(b))\nprint(type(c))\nprint(type(d))\nprint(type(e))' },
-      ],
-    },
-    {
-      id: "python-6",
-      title: "字符串进阶：切片、方法、f-string",
-      summary: "索引、切片、常用方法与格式化字符串，字符串操作一网打尽。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "字符串是编程中最常用的数据类型。这一章我们深入字符串的索引、切片和常用方法，以及非常好用的 f-string 格式化。" },
-        { type: "h", text: "索引：拿到某个字符" },
-        { type: "code", lang: "python", title: "字符串索引", code: 's = "Python"\n# 索引从 0 开始\nprint(s[0])    # P\nprint(s[1])    # y\nprint(s[-1])   # n  负数表示从末尾开始\nprint(s[-2])   # o' },
-        { type: "h", text: "切片：取一段子串" },
-        { type: "code", lang: "python", title: "切片语法 起点:终点:步长", code: 's = "Python is fun"\nprint(s[0:6])    # Python  从0到6（不含6）\nprint(s[7:9])    # is\nprint(s[:6])     # Python  开头到6\nprint(s[7:])     # is fun  7到结尾\nprint(s[::2])    # Pto sfn  每2个取1个\nprint(s[::-1])   # nuf si nohtyP 反转字符串' },
-        { type: "h", text: "常用字符串方法" },
-        { type: "code", lang: "python", title: "常用方法", code: 's = "  Hello World  "\nprint(s.strip())        # "Hello World" 去掉两端空格\nprint(s.replace("World", "Python"))  # 替换\nprint("hello,world".split(","))  # [\'hello\', \'world\'] 按逗号分割\nprint("-".join(["a", "b", "c"]))  # a-b-c 用-连接列表\nprint("abc123".isalpha())  # False 全是字母吗\nprint("abc".isalpha())     # True\nprint("123".isdigit())     # True 全是数字吗' },
-        { type: "h", text: "f-string：最推荐的格式化方式" },
-        { type: "code", lang: "python", title: "f-string 格式化", code: 'name = "小明"\nage = 10\n# f 开头，用 {变量名} 插入值\nprint(f"我叫{name}，今年{age}岁")\n\n# 还可以加格式控制：{变量:宽度} 或 :.2f 保留两位小数\npi = 3.1415926\nprint(f"圆周率保留两位：{pi:.2f}")\nprint(f"右对齐占10位：{age:>10}")' },
-        { type: "tip", title: "f-string 支持表达式", text: "花括号里甚至可以写表达式：<code.inline>f\"3+5={3+5}\"</code.inline> 会输出 <code.inline>3+5=8</code.inline>。" },
-        { type: "keypoints", items: ["索引从0开始，负数从末尾数", "切片 s[起点:终点:步长]，终点不含", "split 分割、join 连接、strip 去空格、replace 替换", "f-string 用 {变量} 插入值，最推荐使用"] },
-      ],
-      templates: [
-        { name: "名字反转", code: 'name = "小明"\nprint("反转：", name[::-1])\n\nmsg = "hello"\nprint("大写：", msg.upper())\nprint("长度：", len(msg))' },
-        { name: "成绩单格式化", code: 'name = "小红"\nscore = 92.5\nprint(f"{name}的数学成绩是 {score:.1f} 分")' },
-      ],
-    },
-    {
-      id: "python-7",
-      title: "输入 input：让程序和人对话",
-      summary: "用 input() 接收用户输入，程序从此会『听』人说话。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "之前的程序都是固定输出。用 <code.inline>input()</code.inline> 可以让程序停下来等待用户输入，输入的**永远是字符串**。这是程序交互的基础。" },
-        { type: "code", lang: "python", title: "获取用户输入", code: 'name = input("请输入你的名字：")\nprint("你好，" + name + "！")\n\nage = input("请输入你的年龄：")\nprint("你输入的类型是：", type(age))  # 注意：是 str 字符串' },
-        { type: "warn", title: "input 返回的是字符串", text: "即使你输入的是数字，input() 返回的也是字符串。如果要当数字用，必须用 int() 或 float() 转换，否则参与数学运算会报错。" },
-        { type: "code", lang: "python", title: "把输入转成数字", code: 'age = input("请输入年龄：")\nage = int(age)   # 转成整数\nprint("十年后你", age + 10, "岁")\n\nheight = float(input("请输入身高(米)："))\nprint("身高：", height, "米")' },
-        { type: "info", title: "转换函数", text: "int() 转整数，float() 转浮点数，str() 转字符串。转换失败会报 ValueError，后面异常处理章节会教你怎么友好处理。" },
-        { type: "keypoints", items: ["input() 等待用户输入，返回字符串", "数字输入需要 int() 或 float() 转换", "input 括号里的文字会显示在屏幕上", "转换失败会报 ValueError"] },
-      ],
-      templates: [
-        { name: "打招呼程序", code: 'name = input("你好，请问怎么称呼？")\nprint(f"欢迎你，{name}！开始学习 Python 吧")' },
-        { name: "年龄计算器", code: 'age = int(input("你今年几岁？"))\nprint(f"10年后你 {age+10} 岁")\nprint(f"10年前你 {age-10} 岁")' },
-      ],
-    },
-    {
-      id: "python-8",
-      title: "条件判断 if / elif / else",
-      summary: "让程序根据条件走不同的路，逻辑从此活起来。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "if 语句让程序能够『判断』：满足条件就执行一段代码，不满足就执行另一段。这是编程最核心的逻辑之一。注意 Python 用**缩进**表示代码块，条件下面的代码要缩进 4 个空格。" },
-        { type: "code", lang: "python", title: "if / else 基本用法", code: 'score = 85\nif score >= 60:\n    print("及格了！")\nelse:\n    print("不及格，继续加油")' },
-        { type: "code", lang: "python", title: "if / elif / else 多分支", code: 'score = 88\nif score >= 90:\n    print("优秀")\nelif score >= 80:\n    print("良好")\nelif score >= 60:\n    print("及格")\nelse:\n    print("不及格")' },
-        { type: "h", text: "比较运算符" },
-        { type: "list", items: ["== 等于；!= 不等于", "> 大于；< 小于；>= 大于等于；<= 小于等于", "in 判断是否在容器里；not 取反"] },
-        { type: "code", lang: "python", title: "逻辑运算符 and / or / not", code: 'age = 18\nhas_id = True\n\n# and：两个都满足才为真\nif age >= 18 and has_id:\n    print("可以进入网吧")\n\n# or：满足一个就为真\nif age < 18 or has_id:\n    print("至少满足一个条件")\n\n# not：取反\nif not False:\n    print("not False 是 True")' },
-        { type: "code", lang: "python", title: "判断字符是否在字符串中", code: 'name = "小明"\nif "明" in name:\n    print("名字里有『明』字")\n\nfruits = ["苹果", "香蕉"]\nif "香蕉" in fruits:\n    print("列表里有香蕉")' },
-        { type: "warn", title: "缩进就是语法", text: "Python 用缩进来区分代码块。条件判断下面的代码如果没有缩进，会直接报 <code.inline>IndentationError</code.inline>。这是新手最先遇到的错误之一。" },
-        { type: "keypoints", items: ["if/elif/else 实现多分支判断", "比较用 ==、!=、>、< 等", "and/or/not 做逻辑组合", "缩进 4 个空格是 Python 语法要求", "in 判断是否在容器中"] },
-      ],
-      templates: [
-        { name: "成绩等级判断", code: 'score = int(input("输入成绩："))\nif score >= 90:\n    print("优秀")\nelif score >= 80:\n    print("良好")\nelif score >= 60:\n    print("及格")\nelse:\n    print("不及格")' },
-        { name: "奇偶判断", code: 'num = int(input("输入一个整数："))\nif num % 2 == 0:\n    print(f"{num} 是偶数")\nelse:\n    print(f"{num} 是奇数")' },
-      ],
-    },
-    {
-      id: "python-9",
-      title: "while 循环：重复做一件事",
-      summary: "while 让代码在条件满足时反复执行，注意别死循环。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "当我们需要反复执行某段代码时，就用循环。while 循环的逻辑是：只要条件为真，就一直执行循环体（缩进的代码块）。" },
-        { type: "code", lang: "python", title: "while 基本用法", code: 'count = 1\nwhile count <= 5:\n    print("第", count, "次")\n    count = count + 1   # 别忘了更新计数器，否则死循环\nprint("循环结束")' },
-        { type: "h", text: "break：提前跳出循环" },
-        { type: "code", lang: "python", title: "break 终止循环", code: 'count = 1\nwhile True:      # 死循环\n    print("计数：", count)\n    if count >= 3:\n        break    # 达到条件立即跳出\n    count += 1\nprint("跳出循环了")' },
-        { type: "h", text: "continue：跳过本次" },
-        { type: "code", lang: "python", title: "continue 跳过本次循环", code: 'n = 0\nwhile n < 6:\n    n += 1\n    if n == 3:\n        continue   # 跳过 n==3 这次，不打印3\n    print(n)' },
-        { type: "warn", title: "小心死循环", text: "如果 while 的条件永远为真，且循环体里没有 break，程序就会一直运行下去。比如 <code.inline>while True:</code.inline> 且没有 break。我们的在线编辑器有超时保护（5秒自动终止），但本地运行时要注意。" },
-        { type: "keypoints", items: ["while 条件为真就反复执行循环体", "循环体要缩进，用 break 跳出", "continue 跳过本次剩余代码", "记得更新计数器或用 break，避免死循环"] },
-      ],
-      templates: [
-        { name: "从1数到10", code: 'n = 1\nwhile n <= 10:\n    print(n)\n    n += 1' },
-        { name: "只打印偶数", code: 'n = 1\nwhile n <= 10:\n    if n % 2 == 0:\n        print(n, "是偶数")\n    n += 1' },
-      ],
-    },
-    {
-      id: "python-10",
-      title: "for 循环：遍历序列",
-      summary: "for 逐个取出序列中的元素，最常用的循环方式。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "for 循环用于遍历（逐个取出）序列中的元素，比如遍历一个列表、字符串或 range 生成的一系列数字。它是 Python 中最常用的循环。" },
-        { type: "code", lang: "python", title: "遍历列表", code: 'fruits = ["苹果", "香蕉", "橙子"]\nfor fruit in fruits:\n    print(fruit)' },
-        { type: "code", lang: "python", title: "range 生成数字序列", code: '# range(开始, 结束, 步长)，结束不含\nfor i in range(5):\n    print(i)        # 0 1 2 3 4\n\nfor i in range(1, 6):\n    print(i)        # 1 2 3 4 5\n\nfor i in range(0, 10, 2):\n    print(i)        # 0 2 4 6 8  偶数' },
-        { type: "code", lang: "python", title: "遍历字符串", code: 'for ch in "Python":\n    print(ch)' },
-        { type: "h", text: "enumerate：同时拿到序号和值" },
-        { type: "code", lang: "python", title: "enumerate 用法", code: 'names = ["小明", "小红", "小刚"]\nfor index, name in enumerate(names):\n    print(index, name)' },
-        { type: "code", lang: "python", title: "循环里用 break 和 continue", code: 'for i in range(1, 11):\n    if i == 5:\n        continue    # 跳过5\n    if i == 9:\n        break       # 到9就停\n    print(i)' },
-        { type: "keypoints", items: ["for 遍历列表/字符串/range 等序列", "range(开始,结束,步长) 生成数字，结束不含", "enumerate 同时拿序号和值", "break 跳出、continue 跳过"] },
-      ],
-      templates: [
-        { name: "求和 1 到 100", code: 'total = 0\nfor i in range(1, 101):\n    total += i\nprint("1到100的和：", total)' },
-        { name: "打印乘法口诀", code: 'for i in range(1, 10):\n    for j in range(1, i + 1):\n        print(f"{j}x{i}={i*j}", end=" ")\n    print()' },
-      ],
-    },
-    {
-      id: "python-11",
-      title: "列表 List：可变的元素集合",
-      summary: "增删改查列表元素，Python 最常用的容器之一。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "列表用方括号 <code.inline>[]</code.inline> 表示，可以放任意多个、任意类型的数据，并且可以修改（增删改）。它就像能装很多东西的盒子串。" },
-        { type: "code", lang: "python", title: "创建列表", code: 'nums = [1, 2, 3, 4, 5]\nmixed = [1, "hello", 3.14, True]\nempty = []\nprint(nums)\nprint(mixed)\nprint(len(nums))   # 5 元素个数' },
-        { type: "h", text: "访问与修改" },
-        { type: "code", lang: "python", title: "索引与切片", code: 'nums = [10, 20, 30, 40, 50]\nprint(nums[0])     # 10\nprint(nums[-1])    # 50\nprint(nums[1:3])   # [20, 30]  切片\n\nnums[0] = 99       # 修改元素\nprint(nums)        # [99, 20, 30, 40, 50]' },
-        { type: "h", text: "添加与删除" },
-        { type: "code", lang: "python", title: "增删元素", code: 'nums = [1, 2, 3]\nnums.append(4)       # 末尾添加\nprint(nums)          # [1, 2, 3, 4]\nnums.insert(0, 0)    # 指定位置插入\nprint(nums)          # [0, 1, 2, 3, 4]\nnums.remove(2)       # 删除值为2的元素\nprint(nums)          # [0, 1, 3, 4]\npopped = nums.pop()  # 弹出末尾元素\nprint(popped, nums)  # 4 [0, 1, 3]' },
-        { type: "code", lang: "python", title: "其他常用操作", code: 'nums = [3, 1, 4, 1, 5, 9]\nnums.sort()          # 排序\nprint(nums)          # [1, 1, 3, 4, 5, 9]\nnums.reverse()       # 反转\nprint(nums)\nprint(3 in nums)     # True 判断是否存在\nprint(len(nums))     # 长度\nprint(max([1,5,2]))  # 5 最大值\nprint(sum([1,2,3]))  # 6 求和' },
-        { type: "info", title: "列表 vs 字符串", text: "字符串是不可变的（不能修改某个字符），而列表是可变的（可以增删改）。要把字符串拆成字符列表，用 <code.inline>list(\"abc\")</code.inline>。" },
-        { type: "keypoints", items: ["列表用 [] 表示，可增删改", "append 末尾加、insert 指定位置加", "remove 删指定值、pop 弹末尾", "sort 排序、reverse 反转、len 长度", "in 判断是否存在"] },
-      ],
-      templates: [
-        { name: "成绩列表统计", code: 'scores = [88, 92, 76, 85, 90]\nprint("总分：", sum(scores))\nprint("平均分：", sum(scores) / len(scores))\nprint("最高分：", max(scores))\nprint("最低分：", min(scores))\nscores.append(95)\nprint("加分后：", scores)' },
-        { name: "去重（用集合）", code: 'nums = [1, 2, 2, 3, 3, 3]\nunique = list(set(nums))\nprint(unique)' },
-      ],
-    },
-    {
-      id: "python-12",
-      title: "元组 Tuple：不可变的列表",
-      summary: "元组用圆括号，内容不可修改，适合放固定数据。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "元组和列表很像，用圆括号 <code.inline>()</code.inline> 表示，区别是元组**创建后不能修改**（不可变）。这保证了数据不会被意外改动，更安全。" },
-        { type: "code", lang: "python", title: "创建元组", code: 't = (1, 2, 3)\nprint(t)\nprint(t[0])     # 1  可以访问\nprint(t[1:])    # (2, 3) 可以切片\n\n# 单元素元组要加逗号\nsingle = (5,)\nprint(single)\n\n# 不加括号也是元组\nt2 = 1, 2, 3\nprint(t2)' },
-        { type: "code", lang: "python", title: "元组不可修改", code: 't = (1, 2, 3)\n# t[0] = 99  这行会报错 TypeError: tuple object does not support item assignment\nprint("元组内容不可修改，这就是保护")\n\n# 但元组里的列表可以改\nmixed = (1, [2, 3])\nmixed[1].append(4)\nprint(mixed)   # (1, [2, 3, 4])' },
-        { type: "h", text: "解包：把元组拆开" },
-        { type: "code", lang: "python", title: "元组解包", code: 'point = (3, 5)\nx, y = point   # 解包\nprint("x =", x, "y =", y)\n\n# 交换两个变量（利用解包）\na, b = 1, 2\na, b = b, a\nprint(a, b)   # 2 1' },
-        { type: "keypoints", items: ["元组用 ()，创建后不可修改", "单元素元组要加逗号 (5,)", "元组比列表更安全，适合固定数据", "解包可一次取出多个值，还能交换变量"] },
-      ],
-      templates: [
-        { name: "坐标计算", code: 'p1 = (1, 2)\np2 = (4, 6)\ndx = p2[0] - p1[0]\ndy = p2[1] - p1[1]\nprint(f"水平距离 {dx}，垂直距离 {dy}")\n\n# 解包\nx1, y1 = p1\nx2, y2 = p2\nprint(f"两点：({x1},{y1}) 和 ({x2},{y2})")' },
-      ],
-    },
-    {
-      id: "python-13",
-      title: "字典 Dict：键值对映射",
-      summary: "用 key 找 value，字典是 Python 的『查字典』数据结构。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "字典用花括号 <code.inline>{}</code.inline> 表示，里面是一对对『键:值』（key: value）。通过键可以快速找到对应的值，就像查字典一样按字找解释。" },
-        { type: "code", lang: "python", title: "创建字典", code: 'person = {\n    "name": "小明",\n    "age": 10,\n    "city": "北京"\n}\nprint(person)\nprint(person["name"])   # 通过键取值' },
-        { type: "code", lang: "python", title: "增删改查", code: 'person = {"name": "小明", "age": 10}\nperson["city"] = "北京"   # 新增\nperson["age"] = 11       # 修改\nprint(person)\n\ndel person["city"]       # 删除\nprint(person)\n\nprint("name" in person)  # True 判断键是否存在\n\n# get：找不到返回默认值，不报错\nprint(person.get("city", "未知"))' },
-        { type: "h", text: "遍历字典" },
-        { type: "code", lang: "python", title: "遍历键值", code: 'person = {"name": "小明", "age": 10, "city": "北京"}\n# 遍历所有键\nfor key in person:\n    print("键：", key)\n\n# 遍历键和值\nfor key, value in person.items():\n    print(key, "=>", value)\n\n# 只遍历值\nfor v in person.values():\n    print("值：", v)' },
-        { type: "code", lang: "python", title: "字典的典型用途：计数", code: 'text = "banana"\ncount = {}\nfor ch in text:\n    count[ch] = count.get(ch, 0) + 1\nprint(count)   # {\'b\': 1, \'a\': 3, \'n\': 2}' },
-        { type: "keypoints", items: ["字典 {} 存键值对，用键快速取值", "person[\"key\"] 取值，del 删除", "get 找不到返回默认值不报错", "items() 遍历键值、keys() 键、values() 值", "字典适合做计数、映射、配置表"] },
-      ],
-      templates: [
-        { name: "学生成绩表", code: 'scores = {\n    "小明": 92,\n    "小红": 85,\n    "小刚": 78\n}\nfor name, score in scores.items():\n    print(f"{name}：{score} 分")\n\n# 加一个学生\nscores["小丽"] = 99\nprint("总分：", sum(scores.values()))' },
-      ],
-    },
-    {
-      id: "python-14",
-      title: "集合 Set：去重与集合运算",
-      summary: "集合自动去重，支持交集并集差集运算。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "集合用花括号或 <code.inline>set()</code.inline> 表示，特点：**元素不重复**、**无序**。它最常用的两个场景：去重、集合运算（交集/并集/差集）。" },
-        { type: "code", lang: "python", title: "创建集合与去重", code: 's = {1, 2, 2, 3, 3, 3}\nprint(s)   # {1, 2, 3}  自动去重\n\n# 列表转集合去重\nnums = [1, 2, 2, 3, 3, 4]\nunique = set(nums)\nprint(unique)              # {1, 2, 3, 4}\nprint(list(unique))        # 再转回列表' },
-        { type: "code", lang: "python", title: "集合运算", code: 'a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nprint(a | b)   # 并集 {1,2,3,4,5,6}\nprint(a & b)   # 交集 {3,4}\nprint(a - b)   # 差集 {1,2} 在a不在b\nprint(a ^ b)   # 对称差 {1,2,5,6} 只在一边的\nprint(1 in a)  # True 判断存在' },
-        { type: "code", lang: "python", title: "增删集合", code: 's = {1, 2, 3}\ns.add(4)\nprint(s)          # {1,2,3,4}\ns.remove(2)\nprint(s)          # {1,3,4}\ns.discard(99)     # 删除不存在的也不报错\nprint(s)' },
-        { type: "keypoints", items: ["集合 {} 或 set()，元素不重复无序", "用 set() 对列表去重最方便", "| 并集、& 交集、- 差集、^ 对称差", "add 添加、remove 删除（不存在报错）、discard（不报错）"] },
-      ],
-      templates: [
-        { name: "两个班的学生", code: 'class_a = {"小明", "小红", "小刚"}\nclass_b = {"小红", "小丽", "小强"}\nprint("共同学生：", class_a & class_b)\nprint("所有学生：", class_a | class_b)\nprint("只在A班：", class_a - class_b)' },
-      ],
-    },
-    {
-      id: "python-15",
-      title: "函数基础：把代码打包成工具",
-      summary: "def 定义函数、参数、返回值，学会复用代码。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "函数是一段可以重复调用的代码块。用 <code.inline>def</code.inline> 定义，函数名后跟括号，括号里可以放参数。定义函数就像造一个工具，调用函数就是用这个工具。" },
-        { type: "code", lang: "python", title: "定义并调用函数", code: 'def say_hello():\n    print("你好！")\n\n# 调用函数\nsay_hello()\nsay_hello()' },
-        { type: "code", lang: "python", title: "带参数的函数", code: 'def greet(name):\n    print(f"你好，{name}！")\n\ngreet("小明")\ngreet("小红")' },
-        { type: "code", lang: "python", title: "返回值 return", code: 'def add(a, b):\n    return a + b\n\nresult = add(3, 5)\nprint("结果：", result)\n\n# return 会立即结束函数\n\ndef check(n):\n    if n > 0:\n        return "正数"\n    elif n < 0:\n        return "负数"\n    return "零"\n\nprint(check(5))\nprint(check(-3))\nprint(check(0))' },
-        { type: "code", lang: "python", title: "多返回值（本质是返回元组）", code: 'def get_point():\n    return 3, 5\n\nx, y = get_point()   # 解包接收\nprint(x, y)' },
-        { type: "info", title: "函数要先定义再调用", text: "Python 是逐行执行的，函数必须在使用前定义。如果你在定义之前就调用它，会报 <code.inline>NameError</code.inline>。" },
-        { type: "keypoints", items: ["def 定义函数，() 里放参数", "return 返回结果并结束函数", "函数可以没有参数、没有返回值", "多返回值本质是返回元组，用解包接收"] },
-      ],
-      templates: [
-        { name: "面积计算器", code: 'def area_of_rect(w, h):\n    return w * h\n\nprint("长方形面积：", area_of_rect(4, 5))\nprint("正方形面积：", area_of_rect(3, 3))' },
-        { name: "判断奇偶函数", code: 'def is_even(n):\n    return n % 2 == 0\n\nfor i in range(1, 7):\n    print(i, "是偶数" if is_even(i) else "是奇数")' },
-      ],
-    },
-    {
-      id: "python-16",
-      title: "函数进阶：默认参数与关键字参数",
-      summary: "默认值、关键字调用、可变参数，让函数更灵活。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "这一章让函数更好用：给参数设默认值、用关键字指定参数、支持任意数量的参数。" },
-        { type: "h", text: "默认参数" },
-        { type: "code", lang: "python", title: "默认参数", code: 'def greet(name, greeting="你好"):\n    print(f"{greeting}，{name}！")\n\ngreet("小明")              # 用默认问候\n greet("小红", "早上好")    # 自定义问候' },
-        { type: "warn", title: "默认参数的大坑", text: "默认参数如果是可变对象（如列表、字典），会被多次调用共享！正确写法是默认设为 None，函数内再判断。这个坑非常经典，后面常见错误章节还会细讲。" },
-        { type: "h", text: "关键字参数" },
-        { type: "code", lang: "python", title: "关键字参数调用", code: 'def info(name, age, city):\n    print(f"{name}住在{city}，{age}岁")\n\n# 位置参数\ninfo("小明", 10, "北京")\n# 关键字参数，可以不按顺序\ninfo(age=10, city="上海", name="小红")\n# 混用：位置参数在前，关键字在后\ninfo("小刚", 9, city="广州")' },
-        { type: "h", text: "可变参数 *args 和 **kwargs" },
-        { type: "code", lang: "python", title: "*args 接收任意数量位置参数", code: 'def total(*nums):\n    return sum(nums)\n\nprint(total(1, 2, 3))\nprint(total(1, 2, 3, 4, 5))' },
-        { type: "code", lang: "python", title: "**kwargs 接收任意关键字参数", code: 'def show(**kwargs):\n    for key, value in kwargs.items():\n        print(f"{key} = {value}")\n\nshow(name="小明", age=10)' },
-        { type: "keypoints", items: ["默认参数让调用更简洁", "关键字参数调用可以不按顺序", "*args 收位置参数、**kwargs 收关键字参数", "默认参数避免用可变对象（列表/字典）"] },
-      ],
-      templates: [
-        { name: "灵活的多功能函数", code: 'def make_sentence(subject, verb="喜欢", *objects):\n    parts = [subject, verb] + list(objects)\n    return " ".join(parts)\n\nprint(make_sentence("我", "喜欢", "Python"))\nprint(make_sentence("小明", "吃", "苹果", "香蕉"))' },
-      ],
-    },
-    {
-      id: "python-17",
-      title: "lambda 匿名函数",
-      summary: "一行定义小函数，配合 map/filter/sort 非常好用。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "lambda 用来创建没有名字的『一次性』小函数，语法是 <code.inline>lambda 参数: 表达式</code.inline>。它经常配合排序、过滤等操作使用。" },
-        { type: "code", lang: "python", title: "lambda 基本用法", code: '# 定义普通函数\n# def square(x): return x * x\n\n# 等价 lambda\nsquare = lambda x: x * x\nprint(square(5))   # 25\n\n# 两个参数\ntotal = lambda a, b: a + b\nprint(total(3, 4))  # 7' },
-        { type: "code", lang: "python", title: "配合 sort 按指定规则排序", code: 'students = [\n    {"name": "小明", "score": 88},\n    {"name": "小红", "score": 95},\n    {"name": "小刚", "score": 72}\n]\n# 按成绩排序\nstudents.sort(key=lambda s: s["score"])\nfor s in students:\n    print(s["name"], s["score"])' },
-        { type: "code", lang: "python", title: "配合 map / filter", code: 'nums = [1, 2, 3, 4, 5]\n# map：对每个元素做操作\nsquares = list(map(lambda x: x * x, nums))\nprint(squares)   # [1, 4, 9, 16, 25]\n\n# filter：过滤出满足条件的\nevens = list(filter(lambda x: x % 2 == 0, nums))\nprint(evens)     # [2, 4]' },
-        { type: "keypoints", items: ["lambda 参数: 表达式 创建匿名函数", "常用于 sort 的 key、map、filter", "lambda 只能写单行表达式", "列表推导式通常是更 Pythonic 的选择"] },
-      ],
-      templates: [
-        { name: "按长度排序", code: 'words = ["apple", "kiwi", "banana", "pear"]\nwords.sort(key=lambda w: len(w))\nprint(words)' },
-      ],
-    },
-    {
-      id: "python-18",
-      title: "列表推导式：一行生成列表",
-      summary: "用一行代码生成新列表，Python 的标志性写法。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "列表推导式（list comprehension）是 Python 非常优雅的特性：用一行代码从可迭代对象生成新列表，比 for 循环更简洁易读。" },
-        { type: "code", lang: "python", title: "基本语法", code: '# 普通写法\nsquares = []\nfor i in range(1, 6):\n    squares.append(i * i)\n\n# 列表推导式\nsquares = [i * i for i in range(1, 6)]\nprint(squares)   # [1, 4, 9, 16, 25]' },
-        { type: "code", lang: "python", title: "带条件的推导式", code: '# 只保留偶数\nnums = list(range(1, 11))\nevens = [n for n in nums if n % 2 == 0]\nprint(evens)   # [2, 4, 6, 8, 10]\n\n# 三目表达式\nlabels = ["大" if n >= 5 else "小" for n in nums]\nprint(labels)' },
-        { type: "code", lang: "python", title: "嵌套推导式与字符串处理", code: '# 字符串处理\nwords = ["hello", "world"]\nupper_words = [w.upper() for w in words]\nprint(upper_words)\n\n# 嵌套循环\nmatrix = [[1, 2], [3, 4]]\nflatten = [num for row in matrix for num in row]\nprint(flatten)   # [1, 2, 3, 4]\n\n# 字典推导式\nsquare_dict = {n: n * n for n in range(1, 5)}\nprint(square_dict)' },
-        { type: "keypoints", items: ["[表达式 for 变量 in 序列] 生成列表", "可用 if 过滤、用三目变换值", "可嵌套循环展平二维结构", "字典推导式 {} 类似"] },
-      ],
-      templates: [
-        { name: "生成 1-20 的偶数平方", code: 'result = [n * n for n in range(1, 21) if n % 2 == 0]\nprint(result)' },
-      ],
-    },
-    {
-      id: "python-19",
-      title: "文件读写：与磁盘打交道",
-      summary: "open 打开文件、读内容、写内容，最后一定记得关闭。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "程序除了和屏幕、键盘交互，还经常要读写文件（保存数据、读取配置）。Python 用 <code.inline>open()</code.inline> 打开文件，模式 <code.inline>r</code.inline> 读、<code.inline>w</code.inline> 写（覆盖）、<code.inline>a</code.inline> 追加。" },
-        { type: "code", lang: "python", title: "写入文件", code: '# 写文件（w 模式，会覆盖旧内容）\nwith open("notes.txt", "w", encoding="utf-8") as f:\n    f.write("第一行内容\\n")\n    f.write("第二行内容\\n")\nprint("写入完成")' },
-        { type: "code", lang: "python", title: "读取文件", code: '# 读文件\nwith open("notes.txt", "r", encoding="utf-8") as f:\n    content = f.read()      # 读全部\n    print(content)\n\n# 逐行读\nwith open("notes.txt", "r", encoding="utf-8") as f:\n    for line in f:\n        print("行：", line.strip())' },
-        { type: "code", lang: "python", title: "追加模式", code: 'with open("notes.txt", "a", encoding="utf-8") as f:\n    f.write("追加的第三行\\n")\n\nwith open("notes.txt", "r", encoding="utf-8") as f:\n    print(f.read())' },
-        { type: "warn", title: "为什么用 with 而不是手动 close", text: "with 语句会在代码块结束后**自动关闭文件**，即使中途出错也会关闭，避免文件句柄泄漏。手动 <code.inline>f.close()</code.inline> 容易忘，新手务必养成用 with 的习惯。" },
-        { type: "tip", title: "编码参数", text: "读写中文建议都加 <code.inline>encoding=\"utf-8\"</code.inline>，否则 Windows 默认编码可能乱码或报错。" },
-        { type: "keypoints", items: ["open(路径, 模式, encoding) 打开文件", "r 读、w 写覆盖、a 追加", "with open(...) as f 自动关闭文件", "f.read() 读全部、for line in f 逐行读", "中文加 encoding='utf-8'"] },
-      ],
-      templates: [
-        { name: "保存用户信息", code: 'name = "小明"\nage = 10\nwith open("user.txt", "w", encoding="utf-8") as f:\n    f.write(f"姓名：{name}\\n年龄：{age}\\n")\nprint("已保存")\n\nwith open("user.txt", "r", encoding="utf-8") as f:\n    print(f.read())' },
-      ],
-    },
-    {
-      id: "python-20",
-      title: "异常处理 try / except",
-      summary: "捕获错误不让程序崩溃，写出健壮的程序。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "程序运行中可能会出错（比如把 'abc' 转成数字、除数为 0、文件不存在）。用 try/except 可以把这些错误『接住』，让程序不崩溃，给出友好提示。" },
-        { type: "code", lang: "python", title: "捕获异常", code: 'try:\n    num = int(input("请输入一个数字："))\n    result = 10 / num\n    print("结果是：", result)\nexcept ZeroDivisionError:\n    print("除数不能为 0！")\nexcept ValueError:\n    print("你输入的不是有效数字！")\nprint("程序继续运行")' },
-        { type: "code", lang: "python", title: "捕获所有异常与 finally", code: 'try:\n    with open("不存在.txt", "r") as f:\n        content = f.read()\nexcept FileNotFoundError:\n    print("文件不存在！")\nexcept Exception as e:\n    print("发生错误：", e)\nfinally:\n    print("无论成功失败都会执行这里")\n\n# except Exception as e 捕获所有异常并拿到错误信息' },
-        { type: "code", lang: "python", title: "else 分支：没出错才执行", code: 'try:\n    num = int("42")\nexcept ValueError:\n    print("转换失败")\nelse:\n    print("转换成功：", num)   # 只有没异常才执行' },
-        { type: "code", lang: "python", title: "手动抛出异常 raise", code: 'def set_age(age):\n    if age < 0:\n        raise ValueError("年龄不能为负数！")\n    print(f"年龄设为 {age}")\n\nset_age(20)\n# set_age(-5)   # 会触发 raise，抛异常' },
-        { type: "info", title: "常见的异常类型", text: "ValueError 值错误、TypeError 类型错误、ZeroDivisionError 除零、FileNotFoundError 文件不存在、IndexError 索引越界、KeyError 键不存在、NameError 变量未定义。" },
-        { type: "keypoints", items: ["try/except 捕获异常不让程序崩溃", "可针对不同异常写多个 except", "finally 无论成败都执行，else 无异常才执行", "raise 手动抛出自定义异常"] },
-      ],
-      templates: [
-        { name: "安全的除法", code: 'def safe_div(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return "不能除以0"\n\nprint(safe_div(10, 2))\nprint(safe_div(10, 0))' },
-      ],
-    },
-    {
-      id: "python-21",
-      title: "模块与 import：站在巨人肩膀上",
-      summary: "import 导入模块，用别人写好的功能，别重复造轮子。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "Python 强大的一大原因是有海量现成的『模块』（module）和『包』（package）。用 <code.inline>import</code.inline> 导入后，就能用里面的函数，不用自己从头写。" },
-        { type: "code", lang: "python", title: "导入模块的几种方式", code: 'import math\nprint(math.sqrt(16))      # 4.0  平方根\nprint(math.pi)            # 圆周率\n\nfrom random import randint\nprint(randint(1, 10))     # 1-10 随机整数\n\nfrom datetime import datetime\nnow = datetime.now()\nprint(now)\nprint(now.year, now.month, now.day)' },
-        { type: "code", lang: "python", title: "标准库常用模块", code: 'import os\nimport sys\n\nprint("当前目录：", os.getcwd())\nprint("Python 版本：", sys.version)\n\nimport time\nprint("等待前")\ntime.sleep(1)   # 暂停1秒\nprint("等待后")' },
-        { type: "h", text: "安装第三方包 pip" },
-        { type: "code", lang: "python", title: "pip 安装包", code: '# 在命令行运行（不是Python里）：\n# pip install requests\n# 然后就能用了：\nimport requests\nresp = requests.get("https://api.github.com")\nprint(resp.status_code)' },
-        { type: "info", title: "怎么找想要的库", text: "在命令行输入 <code.inline>pip list</code.inline> 查看已装的包；用 <code.inline>pip install 包名</code.inline> 安装；搜索库可以去 PyPI（pypi.org）官网。" },
-        { type: "keypoints", items: ["import 模块名 导入，用 模块.函数 调用", "from 模块 import 函数 直接导入函数", "标准库自带：math/random/datetime/os/sys/time", "pip install 包名 安装第三方包"] },
-      ],
-      templates: [
-        { name: "随机数游戏", code: 'import random\nsecret = random.randint(1, 100)\nprint("我想到一个 1-100 的数，猜猜看")\nguess = int(input("你的猜测："))\nif guess == secret:\n    print("猜对了！")\nelse:\n    print(f"不对哦，答案是 {secret}")' },
-      ],
-    },
-    {
-      id: "python-22",
-      title: "面向对象：类与对象",
-      summary: "class 定义模板，实例化出对象，理解 OOP 的起点。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "面向对象编程（OOP）把数据和操作数据的方法打包成一个『对象』。类（class）是模板，对象（instance）是根据模板造出来的具体实例。比如『狗』是类，你家那只叫旺财的狗是对象。" },
-        { type: "code", lang: "python", title: "定义类与创建对象", code: 'class Dog:\n    # __init__ 是构造方法，创建对象时自动调用\n    def __init__(self, name, age):\n        self.name = name   # 实例属性\n        self.age = age\n\n    # 方法：属于这个类的函数\n    def bark(self):\n        print(f"{self.name}：汪汪！")\n\n# 创建对象\nwangcai = Dog("旺财", 2)\nprint(wangcai.name)\nprint(wangcai.age)\nwangcai.bark()' },
-        { type: "p", text: "关键点：<code.inline>self</code.inline> 代表对象自己，在方法里通过 <code.inline>self.属性</code.inline> 访问这个对象的属性。__init__ 方法（两个下划线）在创建对象时自动执行，用来初始化属性。" },
-        { type: "code", lang: "python", title: "类属性 vs 实例属性", code: 'class Dog:\n    species = "犬科"   # 类属性：所有实例共享\n\n    def __init__(self, name):\n        self.name = name  # 实例属性：每个对象独立\n\na = Dog("旺财")\nb = Dog("大黄")\nprint(a.species, b.species)   # 共享类属性\nprint(a.name, b.name)         # 各自独立' },
-        { type: "code", lang: "python", title: "更完整的类示例", code: 'class Student:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\n    def grade(self):\n        if self.score >= 90:\n            return "优秀"\n        elif self.score >= 60:\n            return "及格"\n        return "不及格"\n\ns1 = Student("小明", 92)\ns2 = Student("小红", 55)\nprint(f"{s1.name}：{s1.grade()}")\nprint(f"{s2.name}：{s2.grade()}")' },
-        { type: "keypoints", items: ["class 定义类，__init__ 初始化属性", "self 代表对象自己", "实例属性每个对象独立，类属性共享", "对象调用方法：对象.方法()"] },
-      ],
-      templates: [
-        { name: "银行卡类", code: 'class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n        print(f"{self.owner} 存入 {amount}，余额 {self.balance}")\n\n    def withdraw(self, amount):\n        if amount > self.balance:\n            print("余额不足！")\n        else:\n            self.balance -= amount\n            print(f"取出 {amount}，余额 {self.balance}")\n\nacc = BankAccount("小明", 100)\nacc.deposit(50)\nacc.withdraw(30)\nacc.withdraw(200)' },
-      ],
-    },
-    {
-      id: "python-23",
-      title: "继承：子类复用父类",
-      summary: "继承父类的属性和方法，再扩展自己的，代码复用神器。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "继承允许一个类（子类）从另一个类（父类）继承属性和方法，避免重复写相同的代码。子类可以覆盖（override）父类的方法，也可以新增自己的方法。" },
-        { type: "code", lang: "python", title: "基本的继承", code: 'class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def eat(self):\n        print(f"{self.name} 在吃东西")\n\nclass Dog(Animal):      # 继承 Animal\n    def bark(self):\n        print(f"{self.name}：汪汪！")\n\nclass Cat(Animal):\n    def meow(self):\n        print(f"{self.name}：喵喵！")\n\nd = Dog("旺财")\nc = Cat("咪咪")\nd.eat()    # 用父类的方法\nd.bark()\nc.eat()\nc.meow()' },
-        { type: "code", lang: "python", title: "方法重写 override", code: 'class Animal:\n    def speak(self):\n        print("动物在叫")\n\nclass Dog(Animal):\n    def speak(self):   # 重写父类方法\n        print("汪汪！")\n\nclass Cat(Animal):\n    def speak(self):\n        print("喵喵！")\n\n# 多态：同一方法，不同表现\nanimals = [Dog(), Cat(), Animal()]\nfor a in animals:\n    a.speak()' },
-        { type: "code", lang: "python", title: "super() 调用父类方法", code: 'class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Dog(Animal):\n    def __init__(self, name, breed):\n        super().__init__(name)   # 调用父类的 __init__\n        self.breed = breed\n\n    def describe(self):\n        print(f"{self.name} 是一只 {self.breed}")\n\nd = Dog("旺财", "金毛")\nd.describe()' },
-        { type: "keypoints", items: ["子类(父类) 实现继承，复用父类属性和方法", "重写父类方法实现多态", "super() 调用父类方法", "继承减少重复代码，is-a 关系"] },
-      ],
-      templates: [
-        { name: "形状继承体系", code: 'class Shape:\n    def area(self):\n        return 0\n\nclass Square(Shape):\n    def __init__(self, side):\n        self.side = side\n    def area(self):\n        return self.side ** 2\n\nclass Circle(Shape):\n    def __init__(self, r):\n        self.r = r\n    def area(self):\n        return 3.14 * self.r ** 2\n\nshapes = [Square(4), Circle(3)]\nfor s in shapes:\n    print(s.area())' },
-      ],
-    },
-    {
-      id: "python-24",
-      title: "封装与私有属性",
-      summary: "用下划线约定和 property 保护数据，OOP 三大特性之一。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "封装（Encapsulation）就是隐藏对象的内部细节，只暴露必要的接口。Python 没有严格的 private，但用约定：单下划线 <code.inline>_name</code.inline> 表示『内部使用』，双下划线 <code.inline>__name</code.inline> 触发名称改写。" },
-        { type: "code", lang: "python", title: "私有属性约定", code: 'class BankAccount:\n    def __init__(self, owner, balance):\n        self.owner = owner\n        self._balance = balance   # 约定：内部属性\n\n    def get_balance(self):\n        return self._balance\n\n    def set_balance(self, amount):\n        if amount < 0:\n            print("余额不能为负！")\n        else:\n            self._balance = amount\n\nacc = BankAccount("小明", 100)\nprint(acc.get_balance())\nacc.set_balance(-50)   # 被拦截\nacc.set_balance(200)\nprint(acc.get_balance())' },
-        { type: "code", lang: "python", title: "用 property 做属性控制", code: 'class BankAccount:\n    def __init__(self, balance):\n        self._balance = balance\n\n    @property\n    def balance(self):\n        """读取余额"""\n        return self._balance\n\n    @balance.setter\n    def balance(self, amount):\n        if amount < 0:\n            raise ValueError("余额不能为负！")\n        self._balance = amount\n\nacc = BankAccount(100)\nprint(acc.balance)     # 像访问属性一样\nacc.balance = 300      # 走 setter 检查\nprint(acc.balance)\n# acc.balance = -5     # 会抛异常' },
-        { type: "keypoints", items: ["封装：隐藏内部细节，暴露接口", "_单下划线表示内部约定，__双下划线名称改写", "property 把方法伪装成属性，可在赋值时校验", "getter/setter 控制对属性的访问"] },
-      ],
-      templates: [
-        { name: "温度类", code: 'class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n\n    @property\n    def fahrenheit(self):\n        return self._celsius * 9 / 5 + 32\n\n    @fahrenheit.setter\n    def fahrenheit(self, value):\n        self._celsius = (value - 32) * 5 / 9\n\nt = Temperature(25)\nprint("摄氏", t._celsius, "华氏", t.fahrenheit)\nt.fahrenheit = 100\nprint("现在摄氏", round(t._celsius, 1))' },
-      ],
-    },
-    {
-      id: "python-25",
-      title: "常用标准库巡礼（一）：math / random / datetime",
-      summary: "数学计算、随机数、日期时间，三个最常用的标准库。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "Python 标准库自带很多功能，无需安装。这一章看看最常用的三个：math（数学）、random（随机）、datetime（日期时间）。" },
-        { type: "code", lang: "python", title: "math 数学库", code: 'import math\nprint(math.sqrt(16))        # 4.0 平方根\nprint(math.floor(3.7))      # 3 向下取整\nprint(math.ceil(3.2))       # 4 向上取整\nprint(round(3.14159, 2))    # 3.14 四舍五入保留2位\nprint(math.fabs(-5))        # 5.0 绝对值\nprint(math.pow(2, 10))      # 1024.0 幂' },
-        { type: "code", lang: "python", title: "random 随机库", code: 'import random\nprint(random.randint(1, 6))      # 1-6 整数（骰子）\nprint(random.random())           # 0-1 之间的浮点数\nprint(random.choice(["石头", "剪刀", "布"]))  # 随机选一个\ncards = [1, 2, 3, 4, 5]\nrandom.shuffle(cards)            # 洗牌\nprint(cards)\nprint(random.sample(range(1, 50), 5))  # 不重复抽5个' },
-        { type: "code", lang: "python", title: "datetime 日期时间库", code: 'from datetime import datetime, timedelta, date\n\nnow = datetime.now()\nprint("现在：", now)\nprint("年：", now.year, "月：", now.month, "日：", now.day)\nprint("时：", now.hour, "分：", now.minute)\n\n# 格式化\nprint(now.strftime("%Y-%m-%d %H:%M:%S"))\nprint(now.strftime("%A"))   # 星期几\n\n# 日期运算\ntomorrow = date.today() + timedelta(days=1)\nprint("明天：", tomorrow)' },
-        { type: "keypoints", items: ["math：sqrt/floor/ceil/round/pow", "random：randint/random/choice/shuffle/sample", "datetime：now/strftime/strptime/timedelta", "strftime 格式：%Y年 %m月 %d日 %H时 %M分 %S秒"] },
-      ],
-      templates: [
-        { name: "随机密码生成器", code: 'import random\nimport string\n\nlength = 12\nchars = string.ascii_letters + string.digits\npassword = "".join(random.choice(chars) for _ in range(length))\nprint("随机密码：", password)' },
-      ],
-    },
-    {
-      id: "python-26",
-      title: "常用标准库巡礼（二）：json / os / sys / collections",
-      summary: "JSON 数据交换、路径操作、命令行参数、Counter 统计。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "这一章继续看标准库：json（JSON 数据交换）、os/pathlib（路径与文件）、sys（系统参数）、collections（高级容器）。" },
-        { type: "code", lang: "python", title: "json 序列化与反序列化", code: 'import json\n\n# 字典 -> JSON 字符串\ndata = {"name": "小明", "age": 10, "tags": ["python", "student"]}\njson_str = json.dumps(data, ensure_ascii=False, indent=2)\nprint(json_str)\n\n# JSON 字符串 -> 字典\nback = json.loads(json_str)\nprint(back["name"])\nprint(back["tags"][0])' },
-        { type: "code", lang: "python", title: "os 与 pathlib 操作路径", code: 'import os\nfrom pathlib import Path\n\nprint("当前目录：", os.getcwd())\n\n# 用 pathlib 更现代\np = Path("my_folder/notes.txt")\nprint("文件名：", p.name)\nprint("父目录：", p.parent)\nprint("后缀：", p.suffix)\n\n# 创建目录\nPath("test_dir").mkdir(exist_ok=True)\nprint("目录创建成功")\n\n# 列出当前目录\nfor item in os.listdir("."):\n    print(item)' },
-        { type: "code", lang: "python", title: "collections.Counter 统计", code: 'from collections import Counter\n\nwords = ["apple", "banana", "apple", "orange", "apple", "banana"]\ncount = Counter(words)\nprint(count)\nprint(count.most_common(2))   # 出现最多的前2个\n\n# Counter 也用于字符统计\ntext = "hello world"\nprint(Counter(text))' },
-        { type: "keypoints", items: ["json.dumps 转字符串，json.loads 解析", "pathlib.Path 更现代地处理路径", "Counter 一键做频次统计，most_common 排序", "os.getcwd 当前目录，os.listdir 列目录"] },
-      ],
-      templates: [
-        { name: "词频统计器", code: 'from collections import Counter\n\ntext = "python is great python is powerful python is easy"\nwords = text.split()\ncount = Counter(words)\nfor word, n in count.most_common():\n    print(f"{word}: {n}次")' },
-      ],
-    },
-    {
-      id: "python-27",
-      title: "正则表达式基础",
-      summary: "用 re 模块做字符串匹配、查找、替换，文本处理利器。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "正则表达式（regex）是一套描述字符串模式的语法，用来匹配、查找、提取、替换文本。Python 用 <code.inline>re</code.inline> 模块。虽然一开始有点绕，但掌握基础模式非常有用。" },
-        { type: "code", lang: "python", title: "re 基本函数", code: 'import re\n\n# search：查找第一个匹配\nmatch = re.search(r"\\d+", "订单号 12345 已发货")\nprint(match.group())   # 12345\n\n# findall：找到所有匹配，返回列表\nnums = re.findall(r"\\d+", "苹果2个 香蕉3个 橙子5个")\nprint(nums)   # [\'2\', \'3\', \'5\']\n\n# match：从开头匹配\nprint(re.match(r"\\d+", "123abc"))   # 有匹配\nprint(re.match(r"\\d+", "abc123"))   # None 不匹配' },
-        { type: "code", lang: "python", title: "常用元字符", code: 'import re\n\n# \\d 数字  \\w 字母数字下划线  \\s 空白\n# . 任意字符  * 前一个重复0次以上  + 1次以上  ? 0或1次\nprint(re.findall(r"\\w+", "hello, world!"))   # [\'hello\', \'world\']\nprint(re.findall(r"\\d{3}", "电话 123-456-7890"))  # 3位数字\n\n# [ ] 字符集  | 或  ^ 取反\nprint(re.findall(r"[aeiou]", "hello"))   # [\'e\', \'o\'] 元音\nprint(re.findall(r"cat|dog", "I have a cat and a dog"))' },
-        { type: "code", lang: "python", title: "sub 替换与 split 分割", code: 'import re\n\n# 替换\nphone = "138-1234-5678"\nmasked = re.sub(r"\\d", "*", phone)\nprint(masked)   # ***-****-****\n\n# 用正则分割\ntext = "apple,banana;orange grape"\nparts = re.split(r"[,; ]", text)\nprint(parts)' },
-        { type: "info", title: "r 前缀是什么", text: "字符串前的 <code.inline>r</code.inline> 表示原始字符串（raw string），让反斜杠不被转义。写正则强烈建议加 r，例如 <code.inline>r\"\\d+\"</code.inline>。" },
-        { type: "keypoints", items: ["re.search 找第一个、findall 找所有、match 从头匹配", "\\d 数字、\\w 单词字符、. 任意、* + ? 数量", "[字符集]、| 或、sub 替换、split 分割", "写正则用原始字符串 r\"...\""] },
-      ],
-      templates: [
-        { name: "提取邮箱", code: 'import re\n\ntext = "联系我：alice@example.com 或 bob@test.org"\npattern = r"[\\w.]+@[\\w.]+\\.[a-z]+"\nemails = re.findall(pattern, text)\nprint(emails)' },
-      ],
-    },
-    {
-      id: "python-28",
-      title: "生成器与迭代器",
-      summary: "yield 关键字、惰性求值，处理大数据不占内存。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "生成器（generator）是一种特殊的迭代器：用 <code.inline>yield</code.inline> 代替 return，每次调用产出**一个**值并暂停，下次从暂停处继续。它的好处是惰性求值——需要时才生成，不一次性占满内存。" },
-        { type: "code", lang: "python", title: "生成器基本用法", code: 'def count_up(n):\n    i = 1\n    while i <= n:\n        yield i     # 产出 i 并暂停\n        i += 1\n\n# 逐个取（惰性）\ng = count_up(3)\nprint(next(g))   # 1\nprint(next(g))   # 2\nprint(next(g))   # 3\n# print(next(g))  # 取完会报 StopIteration\n\n# 或直接遍历\nfor num in count_up(5):\n    print(num)' },
-        { type: "code", lang: "python", title: "生成器表达式", code: '# 生成器表达式：(表达式 for 变量 in 序列)\n# 对比列表推导式 []\ng = (x * x for x in range(5))\nprint(sum(g))   # 0+1+4+9+16 = 30\n\n# 好处：不一次性占用大内存\nbig = (x for x in range(1000000))\nprint(next(big))\nprint(next(big))' },
-        { type: "code", lang: "python", title: "斐波那契数列生成器", code: 'def fibonacci(n):\n    a, b = 0, 1\n    count = 0\n    while count < n:\n        yield a\n        a, b = b, a + b\n        count += 1\n\nfor num in fibonacci(10):\n    print(num, end=" ")\nprint()' },
-        { type: "keypoints", items: ["yield 产出值并暂停，next() 逐个取", "生成器惰性求值，省内存", "生成器表达式 (x for x in ...)", "适合处理大数据流"] },
-      ],
-      templates: [
-        { name: "无限自然数（配合 break 用）", code: 'def natural_numbers():\n    n = 1\n    while True:\n        yield n\n        n += 1\n\n# 取前5个\nfor n in natural_numbers():\n    if n > 5:\n        break\n    print(n)' },
-      ],
-    },
-    {
-      id: "python-29",
-      title: "装饰器：给函数加‘外挂’",
-      summary: "不修改原函数，给它附加功能，AOP 思想的体现。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "装饰器（decorator）是一种『给函数包装功能』的语法糖：在不修改原函数代码的情况下，给函数增加额外行为（比如计时、日志、权限检查）。用 <code.inline>@装饰器名</code.inline> 加在函数上面。" },
-        { type: "code", lang: "python", title: "最简单的装饰器", code: 'def my_decorator(func):\n    def wrapper():\n        print("=== 函数开始前 ===")\n        func()\n        print("=== 函数结束后 ===")\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print("你好！")\n\nsay_hello()' },
-        { type: "code", lang: "python", title: "计时装饰器（实用）", code: 'import time\n\ndef timer(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f"{func.__name__} 耗时 {end - start:.4f} 秒")\n        return result\n    return wrapper\n\n@timer\ndef slow_task():\n    time.sleep(0.2)\n    print("任务完成")\n\nslow_task()' },
-        { type: "code", lang: "python", title: "带参数的装饰器", code: 'def repeat(times):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                func(*args, **kwargs)\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef hi():\n    print("嗨！")\n\nhi()   # 打印3次' },
-        { type: "info", title: "为什么用装饰器", text: "比如很多函数都要『先检查登录』『记录日志』『计算耗时』，把这些重复逻辑抽成装饰器，函数上 @ 一行就能复用。" },
-        { type: "keypoints", items: ["装饰器包装函数，不修改原代码", "@语法糖 + 内部 wrapper 函数", "*args/**kwargs 让包装器支持任意参数", "常用于计时、日志、权限检查"] },
-      ],
-      templates: [
-        { name: "日志装饰器", code: 'def log(func):\n    def wrapper(*args, **kwargs):\n        print(f"调用 {func.__name__}，参数 {args}")\n        result = func(*args, **kwargs)\n        print(f"返回 {result}")\n        return result\n    return wrapper\n\n@log\ndef add(a, b):\n    return a + b\n\nadd(3, 5)' },
-      ],
-    },
-    {
-      id: "python-30",
-      title: "上下文管理器 with",
-      summary: "自动管理资源，with 打开文件/锁/连接的正确姿势。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "with 语句是上下文管理器（context manager）的入口，它保证在代码块结束后自动做『清理』工作（关闭文件、释放锁、关闭连接），即使中途出错也会执行清理。" },
-        { type: "code", lang: "python", title: "with 的基本用法", code: '# 标准写法\nwith open("data.txt", "w", encoding="utf-8") as f:\n    f.write("内容")\n# 离开 with 块后文件自动关闭，无需手动 close\n\n# 同时管理多个资源\nwith open("a.txt", "w") as fa, open("b.txt", "w") as fb:\n    fa.write("A")\n    fb.write("B")\nprint("两个文件都写好了")' },
-        { type: "code", lang: "python", title: "自定义上下文管理器", code: 'class MyContext:\n    def __enter__(self):\n        print("进入：做准备工作")\n        return "资源对象"\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print("退出：做清理工作")\n        return False   # False 表示不吞掉异常\n\nwith MyContext() as res:\n    print("使用中：", res)' },
-        { type: "p", text: "还有一个更简单的写法：用 <code.inline>contextlib.contextmanager</code.inline> 装饰器，配合 yield 把函数变成上下文管理器。" },
-        { type: "code", lang: "python", title: "contextmanager 装饰器写法", code: 'from contextlib import contextmanager\n\n@contextmanager\ndef managed():\n    print("进入")\n    try:\n        yield "资源"\n    finally:\n        print("退出")\n\nwith managed() as r:\n    print("使用：", r)' },
-        { type: "keypoints", items: ["with 自动管理资源，保证清理执行", "__enter__ 进入时执行、__exit__ 退出时执行", "contextmanager 装饰器 + yield 更简洁", "打开文件、锁、数据库连接都用 with"] },
-      ],
-      templates: [
-        { name: "上下文计时器", code: 'import time\nfrom contextlib import contextmanager\n\n@contextmanager\ndef timed():\n    start = time.time()\n    yield\n    print(f"耗时 {time.time() - start:.4f} 秒")\n\nwith timed():\n    total = sum(range(1000000))\n    print("求和完成")' },
-      ],
-    },
-    {
-      id: "python-31",
-      title: "类型注解与 typing",
-      summary: "给参数和返回值标注类型，让代码更清晰、IDE 更好用。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "类型注解（type hints）给参数和返回值标注期望的类型，它不影响运行，但让代码可读性大增，IDE 能给出更准确的补全和提示。" },
-        { type: "code", lang: "python", title: "基本类型注解", code: 'def greet(name: str, times: int = 1) -> str:\n    return name * times\n\nprint(greet("Hi ", 3))   # Hi Hi Hi\n\n# 注解不会强制类型，传错也能跑，但 IDE 会提示' },
-        { type: "code", lang: "python", title: "集合与 Optional 注解", code: 'from typing import List, Dict, Optional, Tuple\n\ndef total(nums: List[int]) -> int:\n    return sum(nums)\n\ndef find_user(users: Dict[str, int], name: str) -> Optional[int]:\n    return users.get(name)\n\ndef pair() -> Tuple[int, str]:\n    return 1, "one"\n\nprint(total([1, 2, 3]))\nprint(find_user({"a": 1}, "a"))\nprint(pair())' },
-        { type: "code", lang: "python", title: "Union 与类型别名", code: 'from typing import Union\n\ndef parse(value: Union[int, str]) -> int:\n    if isinstance(value, str):\n        return int(value)\n    return value\n\nprint(parse("42"))\nprint(parse(10))' },
-        { type: "info", title: "运行时检查", text: "注解默认只在静态层面起作用（供人读、IDE 用）。若要运行时强制校验，可以用 <code.inline>pydantic</code.inline> 这类库或手动 isinstance 检查。" },
-        { type: "keypoints", items: ["参数: 类型 和 -> 返回值类型 标注", "typing 提供 List/Dict/Optional/Union/Tuple", "注解提升可读性和 IDE 体验，不影响运行", "Optional[X] = X 或 None"] },
-      ],
-      templates: [
-        { name: "带注解的班级类", code: 'from typing import List\n\nclass Student:\n    def __init__(self, name: str, score: float) -> None:\n        self.name = name\n        self.score = score\n\nclass ClassRoom:\n    def __init__(self, students: List[Student]) -> None:\n        self.students = students\n\n    def average(self) -> float:\n        return sum(s.score for s in self.students) / len(self.students)\n\nroom = ClassRoom([Student("小明", 92), Student("小红", 85)])\nprint(f"平均分：{room.average():.1f}")' },
-      ],
-    },
-    {
-      id: "python-32",
-      title: "多线程：同时做多件事",
-      summary: "threading 让程序并行处理，适合 I/O 密集型任务。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "多线程让程序可以『同时』执行多个任务。Python 的 <code.inline>threading</code.inline> 模块提供线程支持。注意：由于 GIL（全局解释器锁），Python 多线程对 CPU 密集任务提升有限，但非常适合 I/O 密集任务（下载、请求、读文件）。" },
-        { type: "code", lang: "python", title: "创建线程", code: 'import threading\nimport time\n\ndef work(name, seconds):\n    print(f"{name} 开始")\n    time.sleep(seconds)\n    print(f"{name} 完成")\n\n# 创建并启动线程\nthreads = []\nfor i in range(3):\n    t = threading.Thread(target=work, args=(f"任务{i}", 1))\n    threads.append(t)\n    t.start()\n\n# 等待所有线程结束\nfor t in threads:\n    t.join()\nprint("所有任务完成")' },
-        { type: "code", lang: "python", title: "线程安全：用锁", code: 'import threading\n\ncounter = 0\nlock = threading.Lock()\n\ndef increment():\n    global counter\n    for _ in range(100000):\n        with lock:      # 加锁保护共享变量\n            counter += 1\n\nthreads = [threading.Thread(target=increment) for _ in range(4)]\nfor t in threads:\n    t.start()\nfor t in threads:\n    t.join()\nprint("计数器：", counter)   # 应该是 400000' },
-        { type: "keypoints", items: ["threading.Thread(target=函数, args=参数) 创建线程", "start() 启动、join() 等待结束", "共享变量要用 Lock 保护，防止数据错乱", "适合 I/O 密集，CPU 密集用多进程"] },
-      ],
-      templates: [
-        { name: "并发下载演示", code: 'import threading\nimport time\n\njobs = [("A", 0.5), ("B", 0.3), ("C", 0.8)]\n\ndef download(name, sec):\n    print(f"下载 {name} 中...")\n    time.sleep(sec)\n    print(f"{name} 下载完成")\n\nthreads = [threading.Thread(target=download, args=(n, s)) for n, s in jobs]\nstart = time.time()\nfor t in threads: t.start()\nfor t in threads: t.join()\nprint(f"总耗时：{time.time()-start:.2f} 秒")' },
-      ],
-    },
-    {
-      id: "python-33",
-      title: "多进程与异步入门",
-      summary: "multiprocessing 和 asyncio，两套并行方案怎么选。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "如果任务是 CPU 密集（大量计算），多线程受 GIL 限制提升不大，此时用多进程 <code.inline>multiprocessing</code.inline>。如果是大量 I/O 等待，用异步 <code.inline>asyncio</code.inline> 更高效。理解它们的区别很重要。" },
-        { type: "code", lang: "python", title: "多进程 Process", code: 'from multiprocessing import Process\nimport time\n\ndef heavy(n):\n    total = sum(range(n))\n    print(f"进程计算结果：{total}")\n\nif __name__ == "__main__":\n    processes = [Process(target=heavy, args=(1000000,)) for _ in range(4)]\n    for p in processes:\n        p.start()\n    for p in processes:\n        p.join()\n    print("所有进程完成")' },
-        { type: "code", lang: "python", title: "asyncio 异步编程", code: 'import asyncio\n\nasync def task(name, seconds):\n    print(f"{name} 开始")\n    await asyncio.sleep(seconds)   # 模拟 I/O 等待\n    print(f"{name} 完成")\n\nasync def main():\n    # 同时运行多个协程\n    await asyncio.gather(\n        task("A", 1),\n        task("B", 2),\n        task("C", 1)\n    )\n\nasyncio.run(main())\nprint("全部完成")' },
-        { type: "code", lang: "python", title: "async def 与 await 概念", code: 'async def fetch():\n    # await 会『挂起』当前任务，去执行别的任务\n    # 模拟耗时操作\n    return "数据"\n\nasync def main():\n    data = await fetch()\n    print(data)\n\nasyncio.run(main())' },
-        { type: "info", title: "怎么选", text: "I/O 密集（网络、文件、数据库）：asyncio 最优，其次多线程；CPU 密集（计算、数据处理）：多进程最优。别上来就用高级方案，简单任务单线程就够。" },
-        { type: "keypoints", items: ["CPU 密集用 multiprocessing 多进程", "I/O 密集用 asyncio 异步，await 挂起不阻塞", "asyncio.run(main()) 启动，gather 并发", "GIL 限制多线程对 CPU 密集的收益"] },
-      ],
-      templates: [
-        { name: "异步并发请求演示", code: 'import asyncio\n\nasync def worker(name, delay):\n    await asyncio.sleep(delay)\n    return f"{name} 完成"\n\nasync def main():\n    results = await asyncio.gather(\n        worker("任务1", 1),\n        worker("任务2", 0.5),\n        worker("任务3", 0.8)\n    )\n    for r in results:\n        print(r)\n\nasyncio.run(main())' },
-      ],
-    },
-    {
-      id: "python-34",
-      title: "虚拟环境 venv",
-      summary: "每个项目独立的包环境，告别依赖冲突。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "不同项目可能需要不同版本的第三方包，直接全局安装会互相冲突。虚拟环境（virtual environment）为每个项目创建独立的 Python 环境，这是专业开发的标配。" },
-        { type: "code", lang: "bash", title: "创建和使用虚拟环境", code: '# 在项目目录的命令行里：\n# 创建虚拟环境（目录名 venv）\npython -m venv venv\n\n# 激活（Windows）\nvenv\\Scripts\\activate\n# 激活（macOS/Linux）\nsource venv/bin/activate\n\n# 激活后提示符前面会出现 (venv)，然后安装包只影响本项目\npip install requests\n\n# 退出虚拟环境\ndeactivate' },
-        { type: "p", text: "另一个选择是 Anaconda 的 conda 环境，适合数据科学场景，能管理 Python 版本。但对大多数项目，内置的 venv 就够用了。" },
-        { type: "keypoints", items: ["python -m venv venv 创建虚拟环境", "Windows: venv\\Scripts\\activate 激活", "macOS/Linux: source venv/bin/activate", "激活后 pip install 只影响当前项目", "deactivate 退出环境"] },
-      ],
-      templates: [
-        { name: "检查当前 Python", code: 'import sys\nprint(sys.executable)   # 显示当前使用的 Python 路径\n# 在虚拟环境中运行时，路径会指向 venv 里的 python' },
-      ],
-    },
-    {
-      id: "python-35",
-      title: "常用第三方库速览",
-      summary: "requests / numpy / pandas / matplotlib，数据科学的四大金刚。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "这一章介绍几个几乎必装的第三方库（用 <code.inline>pip install 库名</code.inline> 安装）。它们是数据科学、爬虫、Web 开发的地基。" },
-        { type: "code", lang: "python", title: "requests：发 HTTP 请求", code: '# pip install requests\nimport requests\n\nresp = requests.get("https://api.github.com")\nprint("状态码：", resp.status_code)\ndata = resp.json()\nprint("返回的数据：", data)' },
-        { type: "code", lang: "python", title: "numpy：数值计算", code: '# pip install numpy\nimport numpy as np\n\na = np.array([1, 2, 3, 4])\nprint(a * 2)               # 数组运算 [2 4 6 8]\nprint(np.mean(a))          # 均值 2.5\nprint(np.arange(0, 10, 2)) # 等差数组\n\nm = np.array([[1, 2], [3, 4]])\nprint(m.sum())   # 10' },
-        { type: "code", lang: "python", title: "pandas：表格数据处理", code: '# pip install pandas\nimport pandas as pd\n\ndf = pd.DataFrame({\n    "姓名": ["小明", "小红"],\n    "成绩": [92, 85]\n})\nprint(df)\nprint("平均成绩：", df["成绩"].mean())' },
-        { type: "code", lang: "python", title: "matplotlib：画图", code: '# pip install matplotlib\nimport matplotlib.pyplot as plt\n\nx = [1, 2, 3, 4, 5]\ny = [1, 4, 9, 16, 25]\nplt.plot(x, y)\nplt.title("我的第一张图")\nplt.show()\n# 在脚本里如果不想阻塞，可用 plt.savefig("plot.png")' },
-        { type: "keypoints", items: ["requests 发 HTTP 请求、解析 JSON", "numpy 高效数值计算、数组运算", "pandas 处理表格数据（DataFrame）", "matplotlib 数据可视化"] },
-      ],
-      templates: [
-        { name: "统计成绩表", code: 'import numpy as np\n\nscores = np.array([88, 92, 76, 85, 90, 65])\nprint("平均：", np.mean(scores))\nprint("最高：", np.max(scores))\nprint("最低：", np.min(scores))\nprint("标准差：", round(np.std(scores), 2))\nprint("排序：", np.sort(scores))' },
-      ],
-    },
-    {
-      id: "python-36",
-      title: "SQLite：零配置数据库",
-      summary: "用 sqlite3 模块把数据持久化，无需安装数据库服务。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "SQLite 是一个零配置、单文件的数据库，Python 内置 <code.inline>sqlite3</code.inline> 模块，非常适合学习和小型项目。数据存到一个 .db 文件里。" },
-        { type: "code", lang: "python", title: "创建表并插入数据", code: 'import sqlite3\n\n# 连接（文件不存在会自动创建）\nconn = sqlite3.connect("school.db")\ncur = conn.cursor()\n\n# 建表\ncur.execute("""\nCREATE TABLE IF NOT EXISTS students (\n    id INTEGER PRIMARY KEY,\n    name TEXT,\n    score REAL\n)\n""")\n\n# 插入\ncur.execute("INSERT INTO students (name, score) VALUES (?, ?)", ("小明", 92))\ncur.execute("INSERT INTO students (name, score) VALUES (?, ?)", ("小红", 85))\nconn.commit()\nprint("数据已插入")' },
-        { type: "code", lang: "python", title: "查询数据", code: 'import sqlite3\nconn = sqlite3.connect("school.db")\ncur = conn.cursor()\n\ncur.execute("SELECT * FROM students")\nrows = cur.fetchall()\nfor row in rows:\n    print(row)\n\n# 条件查询\ncur.execute("SELECT name FROM students WHERE score >= 90")\nprint("90分以上的：", cur.fetchall())' },
-        { type: "warn", title: "SQL 注入防护", text: "用 <code.inline>?</code.inline> 占位符传参（如 WHERE name = ?），绝不要用字符串拼接 SQL。这是防 SQL 注入的标准做法。" },
-        { type: "keypoints", items: ["sqlite3.connect 连库，文件不存在自动创建", "cur.execute 执行 SQL，? 占位符防注入", "INSERT 后要 conn.commit() 提交", "fetchall 取所有行、fetchone 取一行"] },
-      ],
-      templates: [
-        { name: "待办事项数据库", code: 'import sqlite3\nconn = sqlite3.connect("todo.db")\ncur = conn.cursor()\ncur.execute("CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, task TEXT, done INTEGER)")\ncur.execute("INSERT INTO todos (task, done) VALUES (?, 0)", ("学 Python",))\ncur.execute("INSERT INTO todos (task, done) VALUES (?, 1)", ("写代码",))\nconn.commit()\ncur.execute("SELECT * FROM todos")\nfor row in cur.fetchall():\n    status = "已完成" if row[2] else "未完成"\n    print(f"{row[0]}. {row[1]} [{status}]")\nconn.close()' },
-      ],
-    },
-    {
-      id: "python-37",
-      title: "常用算法：排序与查找实现",
-      summary: "冒泡、选择、快速排序与二分查找，用 Python 亲手实现。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "排序和查找是最经典的算法。虽然 Python 有内置的 sort 和 in，但理解算法原理对逻辑思维训练至关重要。这一章用 Python 实现几种基础算法。" },
-        { type: "code", lang: "python", title: "冒泡排序", code: 'def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n - 1):\n        for j in range(n - 1 - i):\n            if arr[j] > arr[j + 1]:\n                arr[j], arr[j + 1] = arr[j + 1], arr[j]\n    return arr\n\nprint(bubble_sort([5, 2, 8, 1, 9]))' },
-        { type: "code", lang: "python", title: "快速排序（递归）", code: 'def quick_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    mid = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quick_sort(left) + mid + quick_sort(right)\n\nprint(quick_sort([5, 2, 8, 1, 9, 3]))' },
-        { type: "code", lang: "python", title: "二分查找", code: 'def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1   # 找不到\n\nnums = [1, 3, 5, 7, 9, 11]\nprint("5 在索引：", binary_search(nums, 5))\nprint("8 在索引：", binary_search(nums, 8))' },
-        { type: "info", title: "复杂度", text: "冒泡排序 O(n²)、快速排序平均 O(n log n)、二分查找 O(log n)。二分查找要求数组必须有序。" },
-        { type: "keypoints", items: ["冒泡排序相邻比较交换，O(n²)", "快排选基准分治递归，O(n log n)", "二分查找要求有序，O(log n)", "内建 sort/sorted 通常更快，理解原理用于面试与特殊场景"] },
-      ],
-      templates: [
-        { name: "插入排序", code: 'def insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > key:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr\n\nprint(insertion_sort([4, 2, 9, 1, 5]))' },
-      ],
-    },
-    {
-      id: "python-38",
-      title: "递归：函数调用自己",
-      summary: "递归就是函数自己调用自己，拆解大问题为小问题。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "递归（recursion）指函数在自己内部调用自己。它把一个复杂问题拆成更小的同类问题。递归一定要有『终止条件』，否则会无限递归直到栈溢出。" },
-        { type: "code", lang: "python", title: "阶乘（递归经典）", code: 'def factorial(n):\n    if n <= 1:\n        return 1       # 终止条件\n    return n * factorial(n - 1)   # 递归调用\n\nprint(factorial(5))   # 120\n# 推理：5*4*3*2*1' },
-        { type: "code", lang: "python", title: "斐波那契数列（递归）", code: 'def fib(n):\n    if n <= 1:\n        return n\n    return fib(n - 1) + fib(n - 2)\n\nfor i in range(10):\n    print(fib(i), end=" ")\nprint()\n# 0 1 1 2 3 5 8 13 21 34' },
-        { type: "warn", title: "递归注意栈溢出", text: "递归层数太深会报 <code.inline>RecursionError: maximum recursion depth exceeded</code.inline>。能用循环就用循环，或改用尾递归优化（Python 不支持）与记忆化。" },
-        { type: "code", lang: "python", title: "递归遍历嵌套结构", code: 'def sum_nested(lst):\n    total = 0\n    for item in lst:\n        if isinstance(item, list):\n            total += sum_nested(item)   # 遇到子列表递归\n        else:\n            total += item\n    return total\n\nprint(sum_nested([1, [2, 3], [4, [5, 6]]]))   # 21' },
-        { type: "keypoints", items: ["递归 = 函数自己调用自己", "必须写终止条件，否则栈溢出", "阶乘、斐波那契、树遍历是经典递归场景", "递归拆大问题为子问题，逻辑简洁但注意深度"] },
-      ],
-      templates: [
-        { name: "递归求列表元素个数", code: 'def count_items(lst):\n    count = 0\n    for item in lst:\n        if isinstance(item, list):\n            count += count_items(item)\n        else:\n            count += 1\n    return count\n\nprint(count_items([1, [2, 3], [4, [5, 6]]]))   # 6' },
-      ],
-    },
-    {
-      id: "python-39",
-      title: "Python 常见坑大全（一）",
-      summary: "可变默认参数、浅拷贝、0.1+0.2、字符串不可变等经典坑。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "写 Python 有些经典坑，几乎每个人都会踩。提前了解它们，能帮你省下大量调试时间。" },
-        { type: "h", text: "坑 1：可变默认参数" },
-        { type: "code", lang: "python", title: "可变默认参数的坑", code: '# 错误写法：默认参数是可变对象\ndef add_item(item, items=[]):\n    items.append(item)\n    return items\n\nprint(add_item(1))   # [1]\nprint(add_item(2))   # [1, 2]   ← 居然累积了！\n\n# 正确写法\ndef add_item(item, items=None):\n    if items is None:\n        items = []\n    items.append(item)\n    return items\n\nprint(add_item(1))\nprint(add_item(2))' },
-        { type: "h", text: "坑 2：浮点数精度" },
-        { type: "code", lang: "python", title: "浮点数误差", code: 'print(0.1 + 0.2)          # 0.30000000000000004\nprint(0.1 + 0.2 == 0.3)   # False！\n\n# 解决方法：用 round 或 Decimal\nprint(round(0.1 + 0.2, 1))         # 0.3\nfrom decimal import Decimal\nprint(Decimal("0.1") + Decimal("0.2"))   # 0.3' },
-        { type: "h", text: "坑 3：浅拷贝与深拷贝" },
-        { type: "code", lang: "python", title: "拷贝的坑", code: '# 列表直接赋值是引用同一个对象\nlist1 = [1, 2, 3]\nlist2 = list1\nlist2.append(4)\nprint(list1)   # [1, 2, 3, 4]   list1 也被改了！\n\n# 用 copy() 浅拷贝（只拷贝外层）\nlist3 = list1.copy()\nlist3.append(5)\nprint(list1)   # [1, 2, 3, 4]   list1 不变\n\n# 嵌套列表要用深拷贝\nimport copy\nnested = [[1, 2], [3, 4]]\nshallow = nested.copy()\ndeep = copy.deepcopy(nested)\nshallow[0].append(99)\nprint(nested)  # [[1, 2, 99], [3, 4]]  浅拷贝内部仍共享\nprint(deep)    # [[1, 2], [3, 4]]       深拷贝独立' },
-        { type: "keypoints", items: ["可变默认参数用 None 代替 [] 等", "浮点数用 round/Decimal 处理精度", "列表赋值是引用，用 copy() 浅拷贝", "嵌套结构用 copy.deepcopy 深拷贝"] },
-      ],
-      templates: [
-        { name: "验证这些坑", code: '# 快速验证\nprint(0.1 + 0.2)\n\nitems = []\ndef add(x, lst):\n    lst.append(x)\n    return lst\n\nprint(add(1, items))\nprint(add(2, items))' },
-      ],
-    },
-    {
-      id: "python-40",
-      title: "Python 常见坑大全（二）",
-      summary: "字符串不可变、循环中修改列表、is 与 ==、闭包延迟绑定。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "继续盘点 Python 的经典坑，这些细节往往决定了代码是否正确。" },
-        { type: "h", text: "坑 4：字符串不可变" },
-        { type: "code", lang: "python", title: "字符串不可修改", code: 's = "hello"\n# s[0] = "H"   # 报错！字符串不可变\n\n# 正确做法：创建新字符串\ns = "H" + s[1:]\nprint(s)   # Hello' },
-        { type: "h", text: "坑 5：循环中修改列表" },
-        { type: "code", lang: "python", title: "遍历时删除元素的问题", code: 'nums = [1, 2, 3, 4, 5]\n# 想删除偶数，但直接删会出问题\n# for n in nums:\n#     if n % 2 == 0:\n#         nums.remove(n)\n\n# 正确做法：遍历副本，或列表推导式生成新列表\nnums = [1, 2, 3, 4, 5]\nnums = [n for n in nums if n % 2 != 0]\nprint(nums)   # [1, 3, 5]' },
-        { type: "h", text: "坑 6：is 与 == 的区别" },
-        { type: "code", lang: "python", title: "is 与 ==", code: 'a = [1, 2, 3]\nb = [1, 2, 3]\nprint(a == b)   # True  内容相同\nprint(a is b)   # False  不是同一个对象\n\nc = a\nprint(c is a)   # True  指向同一个对象\n\n# 小整数有缓存\nx = 256\ny = 256\nprint(x is y)   # True  （小整数 -5~256 被缓存）' },
-        { type: "h", text: "坑 7：闭包延迟绑定" },
-        { type: "code", lang: "python", title: "循环变量被闭包捕获", code: '# 经典陷阱：\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda: i)\n\nfor f in funcs:\n    print(f())   # 打印 2 2 2，而不是 0 1 2！\n\n# 原因：lambda 捕获的是变量 i，循环结束后 i=2\n\n# 解决：用默认参数绑定当前值\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda i=i: i)\n\nfor f in funcs:\n    print(f())   # 0 1 2' },
-        { type: "keypoints", items: ["字符串不可变，修改要创建新字符串", "遍历时改列表用副本或推导式", "== 比内容，is 比身份（是否同一对象）", "闭包捕获循环变量用默认参数绑定"] },
-      ],
-      templates: [
-        { name: "判断引用", code: 'a = [1, 2]\nb = a\nc = [1, 2]\nprint("a is b:", a is b)\nprint("a == c:", a == c)\nprint("a is c:", a is c)' },
-      ],
-    },
-    {
-      id: "python-41",
-      title: "pip 进阶与依赖管理",
-      summary: "requirements.txt、pip 常用命令、虚拟环境配合使用。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "上一章介绍了虚拟环境，这一章深入 pip 的常用操作和依赖管理。学会正确管理依赖，是协作开发的基本功。" },
-        { type: "code", lang: "python", title: "pip 常用命令", code: '# 在命令行中运行（不是 Python 代码）：\n# 查看已安装包\npip list\n\n# 查看某个包\npip show requests\n\n# 安装指定版本\npip install requests==2.31.0\n\n# 升级\npip install --upgrade pip\n\n# 卸载\npip uninstall requests' },
-        { type: "code", lang: "python", title: "requirements.txt 依赖清单", code: '# 导出当前环境所有依赖（记录版本）\n# pip freeze > requirements.txt\n\n# 内容示例：\n# requests==2.31.0\n# numpy==1.26.0\n\n# 在新环境一键安装：\n# pip install -r requirements.txt\n\nprint("requirements.txt 让你的项目可复现")' },
-        { type: "code", lang: "python", title: "只读已安装包信息（Python 内）", code: 'import importlib.metadata as md\n\n# 列出所有已安装包\nfor dist in md.distributions():\n    print(dist.metadata["Name"])' },
-        { type: "warn", title: "pip 装在哪", text: "pip 默认装在当前 Python 环境里。如果你在虚拟环境中激活了 venv，pip 就装到虚拟环境，互不干扰。这也是为什么强烈建议每个项目用独立虚拟环境。" },
-        { type: "keypoints", items: ["pip list / show / install / uninstall 是核心命令", "pip freeze > requirements.txt 导出依赖", "pip install -r requirements.txt 复现环境", "依赖管理与虚拟环境配合才是专业做法"] },
-      ],
-      templates: [
-        { name: "打印已装包", code: 'import importlib.metadata as md\nnames = sorted(d.metadata["Name"] for d in md.distributions())\nprint("已安装", len(names), "个包")\nprint(names)' },
-      ],
-    },
-    {
-      id: "python-42",
-      title: "魔术方法：让对象更好用",
-      summary: "__str__、__repr__、__eq__、__len__ 等特殊方法定制行为。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "Python 里以双下划线开头结尾的方法叫『魔术方法』（dunder method），它们被 Python 自动调用，用于定制对象的行为。掌握几个最常用的，能让你的类非常顺手。" },
-        { type: "code", lang: "python", title: "__str__ 与 __repr__", code: 'class Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n\n    def __str__(self):\n        # 给用户看：print() 时调用\n        return f"《{self.title}》作者：{self.author}"\n\n    def __repr__(self):\n        # 给开发者看：交互式环境显示时调用\n        return f"Book({self.title!r}, {self.author!r})"\n\nb = Book("小王子", "圣埃克苏佩里")\nprint(b)            # 《小王子》作者：圣埃克苏佩里\nprint(repr(b))      # Book(\'小王子\', \'圣埃克苏佩里\')' },
-        { type: "code", lang: "python", title: "__eq__ 定制相等比较", code: 'class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __eq__(self, other):\n        # 定制两个对象何时相等\n        return self.x == other.x and self.y == other.y\n\n    def __repr__(self):\n        return f"Point({self.x}, {self.y})"\n\np1 = Point(1, 2)\np2 = Point(1, 2)\nprint(p1 == p2)   # True  内容相等\nprint(p1 is p2)   # False 不是同一个对象' },
-        { type: "code", lang: "python", title: "__len__ 与 __getitem__", code: 'class Team:\n    def __init__(self, members):\n        self.members = members\n\n    def __len__(self):\n        return len(self.members)\n\n    def __getitem__(self, index):\n        return self.members[index]\n\n    def __iter__(self):\n        return iter(self.members)\n\nteam = Team(["小明", "小红", "小刚"])\nprint(len(team))      # 3  可以用 len()\nprint(team[0])        # 小明 可以用下标\nfor m in team:\n    print(m)          # 可以遍历' },
-        { type: "keypoints", items: ["__str__ 给用户看、__repr__ 给开发者看", "__eq__ 定制 == 比较", "__len__ 支持 len()、__getitem__ 支持下标", "__iter__ 支持 for 遍历"] },
-      ],
-      templates: [
-        { name: "可比较的坐标", code: 'class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __eq__(self, o):\n        return (self.x, self.y) == (o.x, o.y)\n\n    def __lt__(self, o):\n        return (self.x, self.y) < (o.x, o.y)\n\n    def __repr__(self):\n        return f"({self.x},{self.y})"\n\npts = [Point(3, 1), Point(1, 5), Point(2, 2)]\npts.sort()\nprint(pts)' },
-      ],
-    },
-    {
-      id: "python-43",
-      title: "类方法 @classmethod 与静态方法 @staticmethod",
-      summary: "三种方法类型：实例方法、类方法、静态方法，何时用哪个。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "类里可以定义三种方法：普通实例方法（self 开头）、类方法（@classmethod，cls 开头，操作类本身）、静态方法（@staticmethod，和类无关但逻辑上属于该类）。理解它们的区别很重要。" },
-        { type: "code", lang: "python", title: "三种方法对比", code: 'class Tool:\n    count = 0   # 类属性\n\n    def __init__(self, name):\n        self.name = name\n        Tool.count += 1\n\n    def instance_method(self):\n        # 需要对象，能访问实例属性\n        return f"实例方法：{self.name}"\n\n    @classmethod\n    def class_method(cls):\n        # 不需要对象，能访问类属性\n        return f"类方法：共有 {cls.count} 个实例"\n\n    @staticmethod\n    def static_method(x):\n        # 既不需要 self 也不需要 cls\n        return f"静态方法：{x * 2}"\n\nt = Tool("锤子")\nt2 = Tool("螺丝刀")\nprint(t.instance_method())\nprint(Tool.class_method())\nprint(Tool.static_method(5))' },
-        { type: "code", lang: "python", title: "classmethod 常用场景：工厂方法", code: 'class Date:\n    def __init__(self, year, month, day):\n        self.year, self.month, self.day = year, month, day\n\n    @classmethod\n    def from_string(cls, s):\n        """用字符串创建对象，比直接调用构造更清晰"""\n        y, m, d = s.split("-")\n        return cls(int(y), int(m), int(d))\n\n    def __repr__(self):\n        return f"Date({self.year},{self.month},{self.day})"\n\nd = Date.from_string("2024-06-01")\nprint(d)' },
-        { type: "keypoints", items: ["实例方法需要 self，访问实例数据", "@classmethod 用 cls，访问/修改类属性", "@staticmethod 与类无关，仅逻辑归属", "classmethod 常用于工厂方法"] },
-      ],
-      templates: [
-        { name: "计数器类", code: 'class Counter:\n    total = 0\n\n    def __init__(self):\n        Counter.total += 1\n        self.id = Counter.total\n\n    @classmethod\n    def summary(cls):\n        return f"共创建了 {cls.total} 个对象"\n\n    def __repr__(self):\n        return f"对象#{self.id}"\n\nc1 = Counter()\nc2 = Counter()\nc3 = Counter()\nprint(c1, c2, c3)\nprint(Counter.summary())' },
-      ],
-    },
-    {
-      id: "python-44",
-      title: "装饰器进阶：带参数与堆叠",
-      summary: "给装饰器传参、多个装饰器叠加，写出强大的复用逻辑。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "前面讲了基础装饰器。这一章深入：装饰器本身也可以接受参数（比如指定重试次数、指定权限），还可以多个装饰器叠加在同一个函数上。" },
-        { type: "code", lang: "python", title: "带参数的装饰器", code: 'import time\n\ndef retry(max_tries):\n    """失败重试装饰器，可指定次数"""\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for attempt in range(1, max_tries + 1):\n                print(f"第 {attempt} 次尝试")\n                try:\n                    return func(*args, **kwargs)\n                except Exception as e:\n                    print(f"失败：{e}")\n            return None\n        return wrapper\n    return decorator\n\n@retry(max_tries=3)\ndef unstable():\n    import random\n    if random.random() < 0.7:\n        raise ValueError("随机失败")\n    return "成功！"\n\nprint(unstable())' },
-        { type: "code", lang: "python", title: "多个装饰器叠加", code: 'def a(func):\n    def w():\n        print("A 外层")\n        func()\n        print("A 内层")\n    return w\n\ndef b(func):\n    def w():\n        print("B 外层")\n        func()\n        print("B 内层")\n    return w\n\n@a\n@b\ndef hello():\n    print("Hello")\n\nhello()\n# 输出顺序：A 外层 → B 外层 → Hello → B 内层 → A 内层\n# 装饰器自下而上应用，自外向内执行' },
-        { type: "code", lang: "python", title: "保留函数信息 functools.wraps", code: 'from functools import wraps\n\ndef my_deco(func):\n    @wraps(func)   # 保留原函数的 __name__ 和文档\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper\n\n@my_deco\ndef example():\n    """这是文档"""\n    pass\n\nprint(example.__name__)   # example（没 wraps 会变成 wrapper）\nprint(example.__doc__)    # 这是文档' },
-        { type: "keypoints", items: ["装饰器工厂：外层函数返回 decorator", "多个装饰器自下而上应用，自外向内执行", "functools.wraps 保留原函数元信息", "带参数装饰器用于重试、权限、限流等场景"] },
-      ],
-      templates: [
-        { name: "日志+计时双装饰器", code: 'import time\nfrom functools import wraps\n\ndef log(func):\n    @wraps(func)\n    def w(*a, **k):\n        print(f"[LOG] 调用 {func.__name__}")\n        return func(*a, **k)\n    return w\n\ndef timed(func):\n    @wraps(func)\n    def w(*a, **k):\n        t = time.time()\n        r = func(*a, **k)\n        print(f"[TIME] {func.__name__}: {time.time()-t:.4f}s")\n        return r\n    return w\n\n@log\n@timed\ndef work():\n    time.sleep(0.1)\n    return "done"\n\nprint(work())' },
-      ],
-    },
-    {
-      id: "python-45",
-      title: "数据类 dataclass",
-      summary: "用 @dataclass 几行代码定义数据容器，自动生成常用方法。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "写一个只装数据的类时，要手写 __init__、__repr__、__eq__ 很啰嗦。Python 3.7+ 的 <code.inline>dataclasses.dataclass</code.inline> 装饰器能自动生成这些，让代码极其简洁。" },
-        { type: "code", lang: "python", title: "dataclass 基本用法", code: 'from dataclasses import dataclass\n\n@dataclass\nclass Student:\n    name: str\n    score: int = 0   # 带默认值\n\ns1 = Student("小明", 92)\ns2 = Student("小明", 92)\nprint(s1)              # 自动有漂亮的 __repr__\nprint(s1 == s2)        # True  自动有 __eq__\nprint(s1.name, s1.score)' },
-        { type: "code", lang: "python", title: "不可变数据类与排序", code: 'from dataclasses import dataclass\n\n@dataclass(frozen=True)   # frozen=True 让实例不可变\nclass Point:\n    x: int\n    y: int\n\np = Point(1, 2)\n# p.x = 5   # frozen 会报错\n\n@dataclass(order=True)    # order=True 自动支持排序\nclass Product:\n    price: float\n    name: str\n\nitems = [Product(9.9, "A"), Product(3.5, "B"), Product(7.0, "C")]\nitems.sort()\nfor it in items:\n    print(it)' },
-        { type: "code", lang: "python", title: "手动实现对比", code: '# 不用 dataclass 的话要写这么多：\nclass StudentOld:\n    def __init__(self, name, score=0):\n        self.name = name\n        self.score = score\n    def __repr__(self):\n        return f"StudentOld(name={self.name!r}, score={self.score!r})"\n    def __eq__(self, o):\n        return (self.name, self.score) == (o.name, o.score)\n\n# 用 dataclass 只需 3 行\nfrom dataclasses import dataclass\n@dataclass\nclass StudentNew:\n    name: str\n    score: int = 0\n\nprint("dataclass 帮你省了很多样板代码")' },
-        { type: "keypoints", items: ["@dataclass 自动生成 __init__/__repr__/__eq__", "frozen=True 创建不可变对象", "order=True 支持排序比较", "适合纯数据容器，让代码简洁清晰"] },
-      ],
-      templates: [
-        { name: "图书数据类", code: 'from dataclasses import dataclass\n\n@dataclass\nclass Book:\n    title: str\n    author: str\n    year: int\n    price: float = 0.0\n\nbooks = [\n    Book("小王子", "圣埃克苏佩里", 1943, 28),\n    Book("三体", "刘慈欣", 2008, 49),\n]\nfor b in books:\n    print(f"{b.title} · {b.author} · {b.year}年 · ¥{b.price}")' },
-      ],
-    },
-    {
-      id: "python-46",
-      title: "枚举 Enum",
-      summary: "用 Enum 定义常量集合，比魔法数字清晰、安全。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "当程序里有一组固定的常量（如状态、颜色、方向）时，用枚举（Enum）比散落的『魔法数字』清晰得多，还能防止拼写错误。" },
-        { type: "code", lang: "python", title: "定义与使用枚举", code: 'from enum import Enum\n\nclass Color(Enum):\n    RED = 1\n    GREEN = 2\n    BLUE = 3\n\nprint(Color.RED)           # Color.RED\nprint(Color.RED.name)      # RED\nprint(Color.RED.value)     # 1\n\n# 遍历\nfor c in Color:\n    print(c.name, c.value)\n\n# 通过值反查\nprint(Color(2))            # Color.GREEN' },
-        { type: "code", lang: "python", title: "枚举做状态机", code: 'from enum import Enum, auto\n\nclass Status(Enum):\n    PENDING = auto()    # 自动分配值 1,2,3...\n    RUNNING = auto()\n    DONE = auto()\n\ndef process(status):\n    if status is Status.PENDING:\n        return "等待中..."\n    elif status is Status.RUNNING:\n        return "处理中..."\n    elif status is Status.DONE:\n        return "已完成!"\n\nprint(process(Status.PENDING))\nprint(process(Status.DONE))' },
-        { type: "keypoints", items: ["Enum 定义固定常量集合", ".name 和 .value 访问成员", "用 auto() 自动编号，用 is 比较成员", "比魔法数字更可读、更安全"] },
-      ],
-      templates: [
-        { name: "星期枚举", code: 'from enum import Enum\n\nclass Weekday(Enum):\n    MON = 1\n    TUE = 2\n    WED = 3\n    THU = 4\n    FRI = 5\n    SAT = 6\n    SUN = 7\n\ndef is_weekend(day):\n    return day in (Weekday.SAT, Weekday.SUN)\n\nprint(Weekday.MON.name, "是周末吗?", is_weekend(Weekday.MON))\nprint(Weekday.SAT.name, "是周末吗?", is_weekend(Weekday.SAT))' },
-      ],
-    },
-    {
-      id: "python-47",
-      title: "函数式编程：map / filter / reduce",
-      summary: "三大高阶函数，配合 lambda 让数据处理更函数式。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "函数式编程强调『把函数作为参数传递』。map、filter、reduce 是三个最典型的高阶函数。不过现代 Python 中，列表推导式通常更推荐，但理解它们有助于阅读老代码。" },
-        { type: "code", lang: "python", title: "map：映射转换", code: 'from functools import reduce\n\nnums = [1, 2, 3, 4]\n# map 对每个元素执行函数\ndoubled = list(map(lambda x: x * 2, nums))\nprint(doubled)   # [2, 4, 6, 8]\n\n# 多个列表对应运算\na = [1, 2, 3]\nb = [10, 20, 30]\nprint(list(map(lambda x, y: x + y, a, b)))   # [11, 22, 33]' },
-        { type: "code", lang: "python", title: "filter：过滤筛选", code: 'nums = [1, 2, 3, 4, 5, 6]\nevens = list(filter(lambda x: x % 2 == 0, nums))\nprint(evens)   # [2, 4, 6]\n\n# 配合字符串\nwords = ["hi", "", "hello", " ", "world"]\nnon_empty = list(filter(lambda w: w.strip(), words))\nprint(non_empty)   # [\'hi\', \'hello\', \'world\']' },
-        { type: "code", lang: "python", title: "reduce：累积归约", code: 'from functools import reduce\n\nnums = [1, 2, 3, 4]\n# 累加：(((1+2)+3)+4)\ntotal = reduce(lambda a, b: a + b, nums)\nprint(total)   # 10\n\n# 求最大值\nmx = reduce(lambda a, b: a if a > b else b, nums)\nprint(mx)   # 4\n\n# 也可以指定初始值\nprint(reduce(lambda a, b: a + b, nums, 100))   # 110' },
-        { type: "info", title: "与推导式对比", text: "列表推导式 <code.inline>[x*2 for x in nums]</code.inline> 通常比 map+lambda 更易读。新手用推导式，看懂了再接触函数式。" },
-        { type: "keypoints", items: ["map(函数, 序列) 逐元素映射", "filter(函数, 序列) 过滤满足条件", "reduce(函数, 序列, 初始值) 累积归约", "需要 import functools 才能用 reduce"] },
-      ],
-      templates: [
-        { name: "一行统计", code: 'from functools import reduce\n\nscores = [85, 92, 76, 88, 95]\ntotal = reduce(lambda a, b: a + b, scores)\navg = total / len(scores)\nhigh = list(filter(lambda s: s >= 90, scores))\nprint(f"总分 {total}，平均 {avg:.1f}，90+ 共 {len(high)} 人")' },
-      ],
-    },
-    {
-      id: "python-48",
-      title: "itertools：迭代器工具箱",
-      summary: "排列组合、无限迭代、分组等强大的迭代工具。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "itertools 是 Python 隐藏的宝藏模块，提供大量高效的迭代器工具。最常用的是排列组合（permutations/combinations）和无限迭代（count/cycle）。" },
-        { type: "code", lang: "python", title: "排列与组合", code: 'from itertools import permutations, combinations, product\n\nitems = ["A", "B", "C"]\n# 排列：顺序有关，2 个一组\nprint(list(permutations(items, 2)))\n# 组合：顺序无关\nprint(list(combinations(items, 2)))\n# 笛卡尔积\nprint(list(product([1, 2], ["a", "b"])))' },
-        { type: "code", lang: "python", title: "无限迭代与分组", code: 'from itertools import count, cycle, groupby\n\n# 无限递增（配合 break 用）\nfor i in count(1, 2):   # 1,3,5,...\n    if i > 7:\n        break\n    print(i)\n\n# 无限循环\nc = cycle(["A", "B"])\nfor _ in range(5):\n    print(next(c), end=" ")   # A B A B A\nprint()\n\n# groupby 分组（需先排序）\ndata = [("apple", 3), ("apple", 1), ("banana", 5), ("banana", 2)]\nfor key, group in groupby(data, key=lambda x: x[0]):\n    print(key, "->", list(group))' },
-        { type: "keypoints", items: ["permutations 排列、combinations 组合、product 笛卡尔积", "count/cycle 无限迭代器，注意配 break", "groupby 需先排序才能正确分组", "itertools 提供高效迭代工具，节省内存"] },
-      ],
-      templates: [
-        { name: "密码字典生成", code: 'from itertools import product\n\nchars = "012"\n# 生成所有 2 位组合\nfor combo in product(chars, repeat=2):\n    print("".join(combo))\nprint("---")\n# 排列 3 个字母取 2\nfrom itertools import permutations\nprint(list(permutations("ABC", 2)))' },
-      ],
-    },
-    {
-      id: "python-49",
-      title: "functools：lru_cache 与 partial",
-      summary: "缓存加速、部分应用参数，两个实用技巧。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "functools 模块除了 wraps，还有两个超实用工具：<code inline>lru_cache</code> 缓存函数结果加速重复计算，<code inline>partial</code> 固定部分参数生成新函数。" },
-        { type: "code", lang: "python", title: "lru_cache 缓存加速", code: 'from functools import lru_cache\n\n# 递归斐波那契很慢，加缓存后飞快\n@lru_cache(maxsize=None)\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n - 1) + fib(n - 2)\n\nprint(fib(40))   # 102334155，瞬间完成\nprint(fib.cache_info())  # 查看缓存命中' },
-        { type: "code", lang: "python", title: "partial 固定参数", code: 'from functools import partial\n\n# 固定 print 的分隔符，生成专用函数\ndef print_join(*args, sep=", "):\n    return sep.join(str(a) for a in args)\n\n# partial 固定某个参数\nimport math\nround2 = partial(round, ndigits=2)   # 固定保留2位\nprint(round2(3.14159))   # 3.14\n\npow10 = partial(pow, 10)   # 固定底数为10\nprint(pow10(3))   # 1000' },
-        { type: "code", lang: "python", title: "partial 做事件处理", code: 'from functools import partial\n\ndef send_message(user, msg):\n    print(f"发送给 {user}：{msg}")\n\n# 给不同用户预定义发送函数\nsend_to_bob = partial(send_message, "Bob")\nsend_to_alice = partial(send_message, "Alice")\n\nsend_to_bob("你好")\nsend_to_alice("在吗")' },
-        { type: "keypoints", items: ["@lru_cache 自动缓存函数结果，加速递归", "partial 固定部分参数生成新函数", "cache_info() 查看缓存命中情况", "两个都是 functools 提供的实用工具"] },
-      ],
-      templates: [
-        { name: "带缓存的阶乘", code: 'from functools import lru_cache\n\n@lru_cache(maxsize=128)\ndef fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\n\nfor i in range(20):\n    print(i, "! =", fact(i))\nprint(fact.cache_info())' },
-      ],
-    },
-    {
-      id: "python-50",
-      title: "单元测试 unittest",
-      summary: "用测试保证代码正确，回归无忧，专业开发的标配。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "单元测试（unit test）是为函数/类写的小测试，确保它们按预期工作。改动代码后跑一遍测试，能立刻发现是否破坏了原有功能。unittest 是 Python 内置的测试框架。" },
-        { type: "code", lang: "python", title: "测试函数", code: 'import unittest\n\n# 被测函数\ndef add(a, b):\n    return a + b\n\ndef is_even(n):\n    return n % 2 == 0\n\n# 测试类\nclass TestMath(unittest.TestCase):\n    def test_add(self):\n        self.assertEqual(add(2, 3), 5)\n        self.assertEqual(add(-1, 1), 0)\n\n    def test_is_even(self):\n        self.assertTrue(is_even(4))\n        self.assertFalse(is_even(7))\n\n# 运行测试\nif __name__ == "__main__":\n    unittest.main()' },
-        { type: "code", lang: "python", title: "测试异常与初始化", code: 'import unittest\n\ndef divide(a, b):\n    if b == 0:\n        raise ValueError("除数不能为0")\n    return a / b\n\nclass TestDivide(unittest.TestCase):\n    def setUp(self):\n        # 每个测试前执行，做准备工作\n        self.x = 10\n\n    def test_normal(self):\n        self.assertEqual(divide(self.x, 2), 5)\n\n    def test_error(self):\n        with self.assertRaises(ValueError):\n            divide(10, 0)\n\nif __name__ == "__main__":\n    unittest.main()' },
-        { type: "keypoints", items: ["unittest.TestCase 定义测试类", "assertEqual/assertTrue/assertRaises 断言", "setUp 每个测试前执行", "运行：python -m unittest 文件名"] },
-      ],
-      templates: [
-        { name: "字符串工具测试", code: 'import unittest\n\ndef reverse(s):\n    return s[::-1]\n\nclass TestStr(unittest.TestCase):\n    def test_reverse(self):\n        self.assertEqual(reverse("abc"), "cba")\n        self.assertEqual(reverse(""), "")\n\nif __name__ == "__main__":\n    unittest.main()' },
-      ],
-    },
-    {
-      id: "python-51",
-      title: "pytest：更简洁的测试框架",
-      summary: "第三方 pytest 让测试更简单，断言直接用 assert。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "pytest 是更流行的第三方测试框架（<code inline>pip install pytest</code>）。它的核心优势：测试函数不需要类，断言直接用 Python 的 assert，报错信息更友好。" },
-        { type: "code", lang: "python", title: "pytest 基本用法", code: '# 安装：pip install pytest\n# 文件名 test_xxx.py 或 xxx_test.py\n\ndef add(a, b):\n    return a + b\n\ndef test_add():\n    assert add(2, 3) == 5\n    assert add(-1, 1) == 0\n\ndef test_string():\n    s = "hello"\n    assert s.upper() == "HELLO"\n\n# 运行：pytest 或 python -m pytest\n# 输出简洁，失败会给出详细 diff' },
-        { type: "code", lang: "python", title: "参数化测试", code: '# pytest 支持参数化，一组数据跑多遍\nimport pytest\n\n@pytest.mark.parametrize("a,b,expected", [\n    (1, 2, 3),\n    (0, 0, 0),\n    (-5, 5, 0),\n])\ndef test_add_param(a, b, expected):\n    assert a + b == expected' },
-        { type: "code", lang: "python", title: "fixture 共享数据", code: 'import pytest\n\n@pytest.fixture\ndef data():\n    # 每个测试前提供数据\n    return [1, 2, 3, 4]\n\ndef test_sum(data):\n    assert sum(data) == 10\n\ndef test_max(data):\n    assert max(data) == 4\n\n# 运行：pytest 会自动发现并执行 test_ 开头函数' },
-        { type: "keypoints", items: ["pytest 断言用 assert，代码更简洁", "test_ 开头函数自动被识别", "@pytest.mark.parametrize 参数化测试", "@pytest.fixture 提供共享数据"] },
-      ],
-      templates: [
-        { name: "pytest 风格测试", code: 'def grade(score):\n    if score >= 90:\n        return "A"\n    elif score >= 60:\n        return "B"\n    return "C"\n\ndef test_grade():\n    assert grade(95) == "A"\n    assert grade(70) == "B"\n    assert grade(30) == "C"\n\n# 在命令行运行：python -m pytest 本文件' },
-      ],
-    },
-    {
-      id: "python-52",
-      title: "日志 logging",
-      summary: "用日志代替 print 调试，分级输出、写入文件。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "大型程序里用 print 调试不专业。logging 模块提供分级的日志输出（DEBUG/INFO/WARNING/ERROR），可以输出到控制台或文件，还能配置格式。" },
-        { type: "code", lang: "python", title: "logging 基本用法", code: 'import logging\n\n# 基本配置：设置级别和格式\nlogging.basicConfig(level=logging.DEBUG,\n                    format="%(asctime)s %(levelname)s %(message)s")\n\nlogging.debug("调试信息")\nlogging.info("普通信息")\nlogging.warning("警告")\nlogging.error("错误")' },
-        { type: "code", lang: "python", title: "写入文件", code: 'import logging\n\nlogging.basicConfig(\n    level=logging.INFO,\n    filename="app.log",        # 输出到文件\n    filemode="a",              # 追加模式\n    format="%(asctime)s - %(levelname)s - %(message)s",\n    encoding="utf-8"\n)\n\nlogging.info("程序启动")\nlogging.error("发生了错误")\nprint("日志已写入 app.log，请看当前目录")' },
-        { type: "code", lang: "python", title: "记录异常信息", code: 'import logging\n\nlogging.basicConfig(level=logging.ERROR)\n\ntry:\n    x = 1 / 0\nexcept ZeroDivisionError:\n    # exc_info=True 会记录完整异常堆栈\n    logging.error("计算出错", exc_info=True)\nprint("程序继续运行")' },
-        { type: "keypoints", items: ["logging 分级：DEBUG < INFO < WARNING < ERROR", "basicConfig 配置级别、格式、输出文件", "logging.error(msg, exc_info=True) 记录堆栈", "生产环境用日志，别用 print 调试"] },
-      ],
-      templates: [
-        { name: "模拟运行日志", code: 'import logging\nlogging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")\n\nlogging.info("初始化完成")\nfor i in range(3):\n    logging.info(f"处理第 {i+1} 项")\nlogging.warning("接近上限")\nlogging.info("完成")' },
-      ],
-    },
-    {
-      id: "python-53",
-      title: "性能优化与 timeit",
-      summary: "用 timeit 基准测试找瓶颈，学几条提速技巧。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "程序『能用』和『好用』之间有距离。当数据量大时，性能很重要。先用 <code inline>timeit</code> 测出真实耗时，再针对瓶颈优化。" },
-        { type: "code", lang: "python", title: "timeit 测量耗时", code: 'import timeit\n\n# 测量单条语句\nt = timeit.timeit("sum(range(1000))", number=1000)\nprint(f"sum(range(1000)) 执行1000次：{t:.4f}s")\n\n# 测量函数\ncode = """\ndef f():\n    return [i*i for i in range(100)]\n"""\nt2 = timeit.timeit(code, number=1000)\nprint(f"列表推导式 1000次：{t2:.4f}s")' },
-        { type: "code", lang: "python", title: "对比不同写法性能", code: 'import timeit\n\n# 拼接字符串 vs join\na = timeit.timeit("s = \'\'.join(str(i) for i in range(100))", number=10000)\nb = timeit.timeit("s = sum(str(i) for i in range(100))", number=10000)\nprint(f"join 拼接: {a:.4f}s")\nprint(f"sum 拼接: {b:.4f}s")' },
-        { type: "code", lang: "python", title: "常用提速技巧", code: '# 1. 用局部变量：频繁访问的全局变量可先赋值给局部\n# 2. 用推导式替代 for+append\n# 3. 用集合/字典做成员判断（O(1)）\n# 4. 字符串拼接用 join 而不是 +（在循环里）\n\nimport time\n# 成员判断：集合比列表快\nbig_list = list(range(10000))\nbig_set = set(big_list)\n\nt0 = time.time()\nfor i in range(1000):\n    _ = 9999 in big_list\nt1 = time.time()\nfor i in range(1000):\n    _ = 9999 in big_set\nt2 = time.time()\nprint(f"列表 in: {t1-t0:.4f}s")\nprint(f"集合 in: {t2-t1:.4f}s  (集合更快)")' },
-        { type: "warn", title: "先测后优化", text: "不要凭感觉优化。先 timeit 测出真实热点，再动手。大多数情况，清晰正确的代码优先。" },
-        { type: "keypoints", items: ["timeit.timeit(代码, number=次数) 测耗时", "推导式、join、集合成员判断都是提速点", "先测量再优化，不要过早优化", "局部变量访问比全局快"] },
-      ],
-      templates: [
-        { name: "对比 append 与推导式", code: 'import timeit\n\n# 方法1：for + append\nc1 = """\nres = []\nfor i in range(1000):\n    res.append(i*i)\n"""\n# 方法2：列表推导式\nc2 = """\nres = [i*i for i in range(1000)]\n"""\n\nt1 = timeit.timeit(c1, number=1000)\nt2 = timeit.timeit(c2, number=1000)\nprint(f"for+append: {t1:.4f}s")\nprint(f"推导式:     {t2:.4f}s")' },
-      ],
-    },
-    {
-      id: "python-54",
-      title: "命令行参数 argparse",
-      summary: "让程序支持命令行参数，做成真正可用的工具。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "写好的程序如果只能写死在代码里，实用性有限。用 <code inline>argparse</code> 可以让程序接收命令行参数，比如 <code inline>python app.py --name 小明 --verbose</code>，还能自动生成帮助信息。" },
-        { type: "code", lang: "python", title: "argparse 基本用法", code: 'import argparse\n\nparser = argparse.ArgumentParser(description="一个示例工具")\nparser.add_argument("name", help="你的名字")   # 位置参数\nparser.add_argument("--age", type=int, default=0, help="年龄")  # 可选参数\nparser.add_argument("--verbose", action="store_true", help="显示详细信息")\n\nargs = parser.parse_args()\nprint(f"你好，{args.name}")\nif args.verbose:\n    print(f"你的年龄是 {args.age}")\n\n# 使用：python app.py 小明 --age 10 --verbose' },
-        { type: "code", lang: "python", title: "支持多个值的参数", code: 'import argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument("nums", nargs="+", type=int, help="多个数字")\nparser.add_argument("--sum", action="store_true", help="求和而不是列表")\n\nargs = parser.parse_args()\nif args.sum:\n    print(sum(args.nums))\nelse:\n    print(args.nums)\n\n# 使用：python app.py 1 2 3 --sum  →  6' },
-        { type: "keypoints", items: ["add_argument 添加参数，位置参数与可选参数", "type=int 自动转类型，default 默认值", "store_true 做开关标志，nargs=\"+\" 接收多个值", "运行时会自动生成 --help 帮助"] },
-      ],
-      templates: [
-        { name: "计算器工具", code: 'import argparse\n\nparser = argparse.ArgumentParser(description="简单计算器")\nparser.add_argument("a", type=float)\nparser.add_argument("b", type=float)\nparser.add_argument("--op", default="add", choices=["add", "sub", "mul", "div"])\nargs = parser.parse_args()\n\nif args.op == "add":\n    print(args.a + args.b)\nelif args.op == "sub":\n    print(args.a - args.b)\nelif args.op == "mul":\n    print(args.a * args.b)\nelse:\n    print(args.a / args.b)' },
-      ],
-    },
-    {
-      id: "python-55",
-      title: "网络编程 socket 入门",
-      summary: "用 socket 写一个 TCP 客户端与服务端，理解网络通信本质。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "网络通信的本质是两台电脑互相收发数据。socket 是操作系统提供的网络通信接口。这一章写一个最简单的 TCP 服务端和客户端，理解『连接-发送-接收-关闭』的流程。" },
-        { type: "code", lang: "python", title: "TCP 服务端", code: 'import socket\n\n# 创建 socket\nserver = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\nserver.bind(("127.0.0.1", 9999))   # 绑定本地端口\nserver.listen(5)                   # 开始监听\nprint("服务端启动，等待连接...")\n\n# 接受连接（阻塞等待）\nconn, addr = server.accept()\nprint(f"客户端 {addr} 已连接")\n\ndata = conn.recv(1024)     # 接收最多1024字节\nprint("收到：", data.decode())\nconn.send("收到消息！".encode())   # 回发\nconn.close()\nserver.close()' },
-        { type: "code", lang: "python", title: "TCP 客户端", code: 'import socket\n\nclient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\nclient.connect(("127.0.0.1", 9999))   # 连接服务端\n\nclient.send("你好，服务端".encode())   # 发送\nresp = client.recv(1024)              # 接收回复\nprint("服务端回复：", resp.decode())\nclient.close()\n\n# 注意：要先启动服务端再启动客户端' },
-        { type: "keypoints", items: ["socket 是网络通信的底层接口", "服务端：bind → listen → accept → recv/send", "客户端：connect → send → recv", "文本要 encode/decode 才能收发"] },
-      ],
-      templates: [
-        { name: "获取本机主机名", code: 'import socket\nprint("主机名：", socket.gethostname())\nprint("本机IP：", socket.gethostbyname(socket.gethostname()))' },
-      ],
-    },
-    {
-      id: "python-56",
-      title: "HTTP 请求：requests 库深入",
-      summary: "GET/POST、请求头、参数、会话，全面掌握 requests。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "requests 是 Python 最流行的 HTTP 库。前面简单用过，这一章深入：GET/POST、参数、请求头、超时、会话。它是爬虫和 API 对接的基础。" },
-        { type: "code", lang: "python", title: "GET 与参数", code: '# pip install requests\nimport requests\n\n# 简单 GET\nr = requests.get("https://httpbin.org/get")\nprint(r.status_code)          # 200\n\n# 带查询参数\nparams = {"name": "小明", "page": 2}\nr = requests.get("https://httpbin.org/get", params=params)\nprint(r.url)                  # 自动拼上 ?name=...&page=2\nprint(r.json()["args"])       # 服务端收到的参数' },
-        { type: "code", lang: "python", title: "POST 与请求头", code: 'import requests\n\n# POST JSON 数据\nheaders = {"User-Agent": "Mozilla/5.0", "Content-Type": "application/json"}\npayload = {"name": "小明", "age": 10}\nr = requests.post("https://httpbin.org/post", json=payload, headers=headers, timeout=5)\nprint(r.status_code)\nprint(r.json()["json"])   # 服务端收到的数据' },
-        { type: "code", lang: "python", title: "会话与异常处理", code: 'import requests\n\n# Session 复用连接与 cookie\ns = requests.Session()\ns.headers.update({"User-Agent": "MyApp/1.0"})\n\n# 异常处理\nfrom requests.exceptions import Timeout, ConnectionError\n\ntry:\n    r = s.get("https://httpbin.org/headers", timeout=3)\n    print(r.json())\nexcept Timeout:\n    print("请求超时")\nexcept ConnectionError:\n    print("连接失败")' },
-        { type: "keypoints", items: ["requests.get/post 发送请求", "params 拼查询参数，json= 发送 JSON 数据", "headers 自定义请求头，timeout 设置超时", "Session 复用连接，异常用 requests.exceptions 捕获"] },
-      ],
-      templates: [
-        { name: "查 IP 归属", code: 'import requests\n\ntry:\n    r = requests.get("https://httpbin.org/ip", timeout=5)\n    print("我的公网IP：", r.json()["origin"])\nexcept Exception as e:\n    print("请求失败（可能无网络）：", e)' },
-      ],
-    },
-    {
-      id: "python-57",
-      title: "Web 开发：Flask 入门",
-      summary: "用 Flask 写第一个网站，理解路由与响应。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "Flask 是 Python 最流行的微型 Web 框架（<code inline>pip install flask</code>）。它能让你几十行代码就做出一个网站。这一章从最基础的『路由』讲起。" },
-        { type: "code", lang: "python", title: "第一个 Flask 应用", code: '# 安装：pip install flask\nfrom flask import Flask\n\napp = Flask(__name__)\n\n@app.route("/")\ndef home():\n    return "你好，这是我的第一个网站！"\n\n@app.route("/about")\ndef about():\n    return "关于页面"\n\n# 运行：python app.py\n# 然后浏览器访问 http://127.0.0.1:5000\nif __name__ == "__main__":\n    app.run(debug=True)' },
-        { type: "code", lang: "python", title: "动态路由与参数", code: 'from flask import Flask\n\napp = Flask(__name__)\n\n@app.route("/user/<name>")\ndef user(name):\n    return f"欢迎，{name}！"\n\n@app.route("/add/<int:a>/<int:b>")\ndef add(a, b):\n    return f"{a} + {b} = {a + b}"\n\nif __name__ == "__main__":\n    app.run(debug=True)' },
-        { type: "keypoints", items: ["@app.route(\"/路径\") 定义路由", "函数 return 的内容就是页面", "<name> 是动态参数，<int:a> 限定类型", "app.run(debug=True) 启动，访问 127.0.0.1:5000"] },
-      ],
-      templates: [
-        { name: "Flask 路由示例", code: 'from flask import Flask\n\napp = Flask(__name__)\n\n@app.route("/")\ndef index():\n    return "<h1>主页</h1><a href=\'/hello\'>去打招呼</a>"\n\n@app.route("/hello")\ndef hello():\n    return "<h1>你好呀！</h1>"\n\nif __name__ == "__main__":\n    app.run(debug=True)' },
-      ],
-    },
-    {
-      id: "python-58",
-      title: "Flask 进阶：模板与表单",
-      summary: "render_template 渲染模板、接收表单数据，做出真实交互。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "真实网站不是简单返回字符串，而是渲染 HTML 模板并处理用户提交的表单。Flask 用 Jinja2 模板引擎，配合 request 获取表单数据。" },
-        { type: "code", lang: "python", title: "渲染模板", code: '# 需要 templates/index.html 文件\nfrom flask import Flask, render_template\n\napp = Flask(__name__)\n\n@app.route("/")\ndef index():\n    name = "小明"\n    scores = [88, 92, 76]\n    return render_template("index.html", name=name, scores=scores)\n\nif __name__ == "__main__":\n    app.run(debug=True)\n\n# templates/index.html:\n# <h1>你好，{{ name }}</h1>\n# <ul>{% for s in scores %}<li>{{ s }}</li>{% endfor %}</ul>' },
-        { type: "code", lang: "python", title: "处理表单 POST", code: '# pip install flask\nfrom flask import Flask, request\n\napp = Flask(__name__)\n\n@app.route("/login", methods=["GET", "POST"])\ndef login():\n    if request.method == "POST":\n        name = request.form.get("username")\n        return f"欢迎登录，{name}！"\n    return """\n    <form method="post">\n        <input name="username" placeholder="用户名">\n        <button type="submit">登录</button>\n    </form>\n    """\n\nif __name__ == "__main__":\n    app.run(debug=True)' },
-        { type: "keypoints", items: ["render_template 渲染 HTML 模板（Jinja2）", "{{ 变量 }} 输出，{% for %} 循环", "request.form 获取 POST 表单数据", "methods=[\"GET\",\"POST\"] 指定允许的方法"] },
-      ],
-      templates: [
-        { name: "GET 查询参数接收", code: 'from flask import Flask, request\n\napp = Flask(__name__)\n\n@app.route("/search")\ndef search():\n    q = request.args.get("q", "")\n    return f"你搜索的是：{q}"\n\n# 访问 /search?q=python\nif __name__ == "__main__":\n    app.run(debug=True)' },
-      ],
-    },
-    {
-      id: "python-59",
-      title: "数据分析：pandas 进阶",
-      summary: "读取 CSV、筛选、分组、聚合，数据分析三板斧。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "pandas 是数据分析的核心库（<code inline>pip install pandas</code>）。核心概念是 DataFrame（二维表格）。这一章覆盖读取数据、筛选、分组聚合等常用操作。" },
-        { type: "code", lang: "python", title: "创建与读取数据", code: 'import pandas as pd\n\n# 从字典创建\nsales = pd.DataFrame({\n    "商品": ["苹果", "香蕉", "苹果", "橙子", "香蕉"],\n    "销量": [10, 5, 8, 3, 6],\n    "价格": [3, 2, 3, 4, 2]\n})\nprint(sales)\n\n# 从 CSV 读取\n# df = pd.read_csv("data.csv")' },
-        { type: "code", lang: "python", title: "筛选与计算", code: 'import pandas as pd\n\ndf = pd.DataFrame({\n    "商品": ["苹果", "香蕉", "苹果", "橙子", "香蕉"],\n    "销量": [10, 5, 8, 3, 6],\n    "价格": [3, 2, 3, 4, 2]\n})\n\n# 计算销售额列\ndf["销售额"] = df["销量"] * df["价格"]\nprint(df)\n\n# 条件筛选\nhot = df[df["销量"] > 5]\nprint("销量>5的商品：")\nprint(hot)\n\n# 描述统计\nprint(df["销量"].describe())' },
-        { type: "code", lang: "python", title: "分组聚合", code: 'import pandas as pd\n\ndf = pd.DataFrame({\n    "商品": ["苹果", "香蕉", "苹果", "橙子", "香蕉"],\n    "销量": [10, 5, 8, 3, 6],\n    "价格": [3, 2, 3, 4, 2]\n})\n\n# 按商品分组求和\nprint(df.groupby("商品")["销量"].sum())\n\n# 多列聚合\nprint(df.groupby("商品").agg({\n    "销量": ["sum", "mean"],\n    "价格": "max"\n}))' },
-        { type: "keypoints", items: ["DataFrame 是二维表格数据", "df[条件] 筛选行，新建列直接赋值", "groupby(\"列\").sum() 分组聚合", "read_csv 读取文件，describe 统计描述"] },
-      ],
-      templates: [
-        { name: "成绩分析", code: 'import pandas as pd\n\ndf = pd.DataFrame({\n    "学生": ["小明", "小红", "小刚", "小丽", "小强"],\n    "班级": ["A", "A", "B", "B", "A"],\n    "成绩": [92, 85, 78, 95, 68]\n})\n\nprint("全班平均：", df["成绩"].mean())\nprint("最高分：", df[df["成绩"] == df["成绩"].max()])\nprint("各班平均：")\nprint(df.groupby("班级")["成绩"].mean())\nprint("及格率：", (df["成绩"] >= 60).mean() * 100, "%")' },
-      ],
-    },
-    {
-      id: "python-60",
-      title: "数据可视化 matplotlib",
-      summary: "折线图、柱状图、饼图、散点图，让数据说话。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "matplotlib 是最基础的数据可视化库（<code inline>pip install matplotlib</code>）。掌握几种基本图表，就能把数据变成直观的图。" },
-        { type: "code", lang: "python", title: "折线图", code: 'import matplotlib.pyplot as plt\n\nx = [1, 2, 3, 4, 5]\ny = [2, 4, 6, 8, 10]\n\nplt.plot(x, y, marker="o", label="y=2x")\nplt.xlabel("x")\nplt.ylabel("y")\nplt.title("折线图示例")\nplt.legend()\nplt.show()\n# 脚本环境用 plt.savefig("plot.png") 保存' },
-        { type: "code", lang: "python", title: "柱状图与饼图", code: 'import matplotlib.pyplot as plt\n\n# 柱状图\ncategories = ["苹果", "香蕉", "橙子"]\nvalues = [30, 45, 25]\nplt.bar(categories, values, color=["red", "yellow", "orange"])\nplt.title("水果销量")\nplt.show()\n\n# 饼图\nplt.pie(values, labels=categories, autopct="%1.1f%%")\nplt.title("销量占比")\nplt.show()' },
-        { type: "code", lang: "python", title: "子图与多图", code: 'import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, axes = plt.subplots(1, 2, figsize=(10, 4))\n\nx = np.linspace(0, 10, 100)\naxes[0].plot(x, np.sin(x))\naxes[0].set_title("正弦曲线")\n\naxes[1].scatter(x, np.cos(x), s=10)\naxes[1].set_title("散点图")\n\nplt.tight_layout()\nplt.show()' },
-        { type: "keypoints", items: ["plt.plot 折线图、bar 柱状图、pie 饼图、scatter 散点图", "xlabel/ylabel/title/legend 加标注", "subplots 创建多个子图", "脚本里用 savefig 保存图片"] },
-      ],
-      templates: [
-        { name: "成绩柱状图", code: 'import matplotlib.pyplot as plt\n\nnames = ["小明", "小红", "小刚", "小丽"]\nscores = [92, 85, 78, 95]\n\nplt.bar(names, scores, color="skyblue")\nplt.title("学生成绩")\nplt.ylabel("分数")\nfor i, v in enumerate(scores):\n    plt.text(i, v + 1, str(v), ha="center")\nplt.show()\n# 保存：plt.savefig("scores.png")' },
-      ],
-    },
-    {
-      id: "python-61",
-      title: "机器学习入门：scikit-learn",
-      summary: "用 sklearn 跑第一个机器学习模型，理解训练与预测。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "机器学习是让程序从数据中『学习规律』。scikit-learn（sklearn）是 Python 最流行的机器学习库。这一章用最简单的分类模型走一遍完整流程：准备数据 → 训练 → 预测。" },
-        { type: "code", lang: "python", title: "完整机器学习流程", code: '# 安装：pip install scikit-learn\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.metrics import accuracy_score\n\n# 1. 准备数据（鸢尾花数据集）\ndata = load_iris()\nX = data.data       # 特征\nY = data.target     # 标签\n\n# 2. 划分训练集和测试集\nX_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)\n\n# 3. 创建并训练模型\nmodel = DecisionTreeClassifier()\nmodel.fit(X_train, Y_train)\n\n# 4. 预测与评估\npredictions = model.predict(X_test)\nprint("准确率：", accuracy_score(Y_test, predictions))' },
-        { type: "code", lang: "python", title: "预测新样本", code: 'from sklearn.tree import DecisionTreeClassifier\nfrom sklearn.datasets import load_iris\n\ndata = load_iris()\nmodel = DecisionTreeClassifier()\nmodel.fit(data.data, data.target)\n\n# 预测一朵新花（4个特征）\nnew_flower = [[5.1, 3.5, 1.4, 0.2]]\nresult = model.predict(new_flower)\nprint("预测类别：", data.target_names[result[0]])' },
-        { type: "keypoints", items: ["机器学习=从数据学规律，然后预测", "train_test_split 划分训练/测试集", "model.fit 训练、model.predict 预测", "accuracy_score 评估准确率"] },
-      ],
-      templates: [
-        { name: "KNN 分类", code: 'from sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import accuracy_score\n\ndata = load_iris()\nX_train, X_test, Y_train, Y_test = train_test_split(data.data, data.target, test_size=0.3)\n\nmodel = KNeighborsClassifier(n_neighbors=3)\nmodel.fit(X_train, Y_train)\nprint("准确率：", accuracy_score(Y_test, model.predict(X_test)))' },
-      ],
-    },
-    {
-      id: "python-62",
-      title: "自动化办公：Excel 处理 openpyxl",
-      summary: "读取、写入、修改 Excel，办公自动化的起点。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "很多重复的办公工作（整理表格、汇总数据）都能用 Python 自动化。openpyxl 是处理 Excel（.xlsx）的常用库（<code inline>pip install openpyxl</code>）。" },
-        { type: "code", lang: "python", title: "创建与写入 Excel", code: '# 安装：pip install openpyxl\nfrom openpyxl import Workbook\n\nwb = Workbook()\nws = wb.active\nws.title = "成绩表"\n\n# 写表头\nws.append(["姓名", "语文", "数学"])\n# 写数据\nws.append(["小明", 92, 88])\nws.append(["小红", 85, 95])\n\nwb.save("scores.xlsx")\nprint("已保存 scores.xlsx")' },
-        { type: "code", lang: "python", title: "读取 Excel", code: 'from openpyxl import load_workbook\n\nwb = load_workbook("scores.xlsx")\nws = wb.active\n\n# 遍历所有行\nfor row in ws.iter_rows(values_only=True):\n    print(row)\n\n# 读取指定单元格\nprint("B2：", ws["B2"].value)' },
-        { type: "code", lang: "python", title: "批量生成成绩单", code: 'from openpyxl import Workbook\nimport random\n\nwb = Workbook()\nws = wb.active\nws.append(["姓名", "成绩", "等级"])\n\nnames = ["小明", "小红", "小刚", "小丽", "小强"]\nfor name in names:\n    score = random.randint(60, 100)\n    grade = "A" if score >= 90 else "B" if score >= 80 else "C"\n    ws.append([name, score, grade])\n\nwb.save("report.xlsx")\nprint("批量成绩单已生成")' },
-        { type: "keypoints", items: ["openpyxl 读写 .xlsx 文件", "Workbook() 新建，load_workbook 读取", "ws.append 加行，ws[\"B2\"] 访问单元格", "办公自动化：重复表格工作交给 Python"] },
-      ],
-      templates: [
-        { name: "生成统计表", code: 'from openpyxl import Workbook\n\nwb = Workbook()\nws = wb.active\nws.append(["月份", "销量", "销售额"])\n\ndata = [("1月", 120, 2400), ("2月", 150, 3000), ("3月", 100, 2000)]\nfor row in data:\n    ws.append(row)\n\nws.append(["合计", sum(r[1] for r in data), sum(r[2] for r in data)])\nwb.save("sales.xlsx")\nprint("销售统计表已生成")' },
-      ],
-    },
-    {
-      id: "python-63",
-      title: "自动化办公：发送邮件",
-      summary: "用 smtplib 自动发送邮件，处理通知类工作。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "用 Python 自动发邮件，可以做『数据日报』『告警通知』。核心库是 smtplib（发信）和 email（构造邮件）。注意需要邮箱的授权码。" },
-        { type: "code", lang: "python", title: "发送纯文本邮件", code: 'import smtplib\nfrom email.mime.text import MIMEText\n\n# 配置（用你的真实邮箱和授权码）\nsmtp_server = "smtp.qq.com"     # QQ邮箱示例\nsmtp_port = 465\nsender = "你的邮箱@qq.com"\nauth_code = "你的授权码"          # 不是登录密码！\nreceiver = "收件人@example.com"\n\nmsg = MIMEText("这是测试邮件内容", "plain", "utf-8")\nmsg["Subject"] = "Python 自动邮件"\nmsg["From"] = sender\nmsg["To"] = receiver\n\n# 发送\nwith smtplib.SMTP_SSL(smtp_server, smtp_port) as server:\n    server.login(sender, auth_code)\n    server.sendmail(sender, [receiver], msg.as_string())\nprint("邮件已发送")' },
-        { type: "code", lang: "python", title: "发送 HTML 邮件", code: 'import smtplib\nfrom email.mime.text import MIMEText\n\n# HTML 邮件更漂亮\nhtml = "<h1>数据日报</h1><p>今天访问量 <b>1200</b>，比昨天 +5%</p>"\nmsg = MIMEText(html, "html", "utf-8")\nmsg["Subject"] = "每日报表"\nmsg["From"] = "sender@example.com"\nmsg["To"] = "boss@example.com"\n\n# 发送部分同上一例：smtplib.SMTP_SSL + login + sendmail\nprint("HTML 邮件已构造，发送部分见上例")' },
-        { type: "keypoints", items: ["smtplib 发信、email.mime 构造邮件", "邮箱需要开启 SMTP 并用授权码登录", "MIMEText(内容, \"html\"/\"plain\", \"utf-8\")", "主题/发件人/收件人通过 msg[\"Subject\"] 等设置"] },
-      ],
-      templates: [
-        { name: "邮件结构演示", code: 'from email.mime.text import MIMEText\nfrom email.utils import formataddr\n\nmsg = MIMEText("你好，这是自动发送的邮件。", "plain", "utf-8")\nmsg["Subject"] = "Python 邮件测试"\nmsg["From"] = formataddr(("发送者", "sender@example.com"))\nmsg["To"] = "receiver@example.com"\nprint("邮件对象构造完成，发送见上一章")' },
-      ],
-    },
-    {
-      id: "python-64",
-      title: "设计模式：单例与工厂",
-      summary: "用 Python 实现单例、工厂两种最常用的设计模式。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "设计模式是前人总结的解决特定问题的套路。掌握最常用的几个，能提升代码质量。这一章看『单例』（全局唯一实例）和『工厂』（根据参数创建不同对象）。" },
-        { type: "code", lang: "python", title: "单例模式", code: 'class Database:\n    _instance = None\n\n    def __new__(cls):\n        # __new__ 控制实例创建\n        if cls._instance is None:\n            cls._instance = super().__new__(cls)\n            print("创建唯一实例")\n        return cls._instance\n\nd1 = Database()\nd2 = Database()\nprint(d1 is d2)   # True  始终是同一个实例\n\n# 适用场景：数据库连接、日志器、配置管理器' },
-        { type: "code", lang: "python", title: "工厂模式", code: 'class Dog:\n    def speak(self):\n        return "汪汪"\n\nclass Cat:\n    def speak(self):\n        return "喵喵"\n\nclass AnimalFactory:\n    @staticmethod\n    def create(animal_type):\n        if animal_type == "dog":\n            return Dog()\n        elif animal_type == "cat":\n            return Cat()\n        else:\n            raise ValueError("未知动物")\n\n# 客户端只需要告诉工厂要什么\nanimal = AnimalFactory.create("dog")\nprint(animal.speak())   # 汪汪\nanimal = AnimalFactory.create("cat")\nprint(animal.speak())   # 喵喵' },
-        { type: "keypoints", items: ["单例：全局只有一个实例，用 __new__ 控制", "工厂：用统一入口按参数创建不同对象", "单例适合连接池/日志/配置", "工厂解耦创建逻辑，客户端不关心细节"] },
-      ],
-      templates: [
-        { name: "观察者模式", code: 'class Subject:\n    def __init__(self):\n        self.observers = []\n\n    def attach(self, obs):\n        self.observers.append(obs)\n\n    def notify(self, msg):\n        for obs in self.observers:\n            obs.update(msg)\n\nclass Observer:\n    def __init__(self, name):\n        self.name = name\n    def update(self, msg):\n        print(f"{self.name} 收到通知：{msg}")\n\ns = Subject()\na = Observer("A")\nb = Observer("B")\ns.attach(a)\ns.attach(b)\ns.notify("有更新了！")' },
-      ],
-    },
-    {
-      id: "python-65",
-      title: "项目实战（一）：命令行待办清单",
-      summary: "完整小项目：增删改查待办事项，持久化到文件。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "把学过的知识综合起来，做一个真正的命令行待办清单（Todo App）。功能：添加、显示、完成、删除待办，数据保存到 JSON 文件。" },
-        { type: "code", lang: "python", title: "待办清单完整代码", code: 'import json\nimport os\n\nFILE = "todos.json"\n\ndef load_todos():\n    if not os.path.exists(FILE):\n        return []\n    with open(FILE, "r", encoding="utf-8") as f:\n        return json.load(f)\n\ndef save_todos(todos):\n    with open(FILE, "w", encoding="utf-8") as f:\n        json.dump(todos, f, ensure_ascii=False, indent=2)\n\ndef show(todos):\n    if not todos:\n        print("暂无待办")\n        return\n    for i, t in enumerate(todos, 1):\n        mark = "[x]" if t["done"] else "[ ]"\n        print(f"{i}. {mark} {t[\"text\"]}")\n\ndef add(todos, text):\n    todos.append({"text": text, "done": False})\n    print("已添加")\n\ndef done(todos, index):\n    if 1 <= index <= len(todos):\n        todos[index - 1]["done"] = True\n        print("已完成")\n    else:\n        print("序号无效")\n\n# 简单交互\ntodos = load_todos()\nwhile True:\n    print("\\n1.查看 2.添加 3.完成 4.退出")\n    choice = input("请选择：").strip()\n    if choice == "1":\n        show(todos)\n    elif choice == "2":\n        text = input("待办内容：").strip()\n        if text:\n            add(todos, text)\n    elif choice == "3":\n        n = int(input("序号："))\n        done(todos, n)\n    elif choice == "4":\n        save_todos(todos)\n        print("已保存，再见")\n        break' },
-        { type: "keypoints", items: ["综合运用：函数/列表/字典/JSON/文件/循环", "load_todos 读取、save_todos 保存", "数据持久化到 JSON 文件", "菜单循环驱动交互"] },
-      ],
-      templates: [
-        { name: "核心函数演练", code: 'import json\n\n# 演示核心逻辑：加载与保存\ntodos = [{"text": "学 Python", "done": False}]\ns = json.dumps(todos, ensure_ascii=False, indent=2)\nprint(s)\nprint("还原：", json.loads(s))' },
-      ],
-    },
-    {
-      id: "python-66",
-      title: "项目实战（二）：学生成绩管理系统",
-      summary: "面向对象综合项目：学生类、班级类、增删改查。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "用面向对象思想做一个学生成绩管理系统。核心：Student 类封装数据，ClassRoom 类管理学生列表，提供增删改查和统计。" },
-        { type: "code", lang: "python", title: "学生成绩管理系统", code: 'class Student:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\n    def __repr__(self):\n        return f"{self.name}({self.score}分)"\n\nclass ClassRoom:\n    def __init__(self):\n        self.students = []\n\n    def add(self, name, score):\n        self.students.append(Student(name, score))\n        print(f"添加成功：{name}")\n\n    def remove(self, name):\n        for s in self.students:\n            if s.name == name:\n                self.students.remove(s)\n                print(f"删除成功：{name}")\n                return\n        print("未找到该学生")\n\n    def show_all(self):\n        if not self.students:\n            print("暂无学生")\n        for s in self.students:\n            print(s)\n\n    def stats(self):\n        if not self.students:\n            print("暂无数据")\n            return\n        scores = [s.score for s in self.students]\n        print(f"平均分：{sum(scores)/len(scores):.1f}")\n        print(f"最高分：{max(scores)}，最低分：{min(scores)}")\n        print(f"及格率：{(sum(1 for s in scores if s>=60)/len(scores))*100:.0f}%")\n\n# 使用\nroom = ClassRoom()\nroom.add("小明", 92)\nroom.add("小红", 85)\nroom.add("小刚", 45)\nroom.show_all()\nroom.stats()\nroom.remove("小红")\nroom.show_all()' },
-        { type: "keypoints", items: ["Student 类封装学生数据，ClassRoom 管理集合", "add/remove/show_all/stats 四个核心方法", "列表推导式求平均/最高/及格率", "面向对象让代码结构清晰"] },
-      ],
-      templates: [
-        { name: "统计函数版", code: 'def stats(scores):\n    avg = sum(scores) / len(scores)\n    best = max(scores)\n    pass_rate = sum(1 for s in scores if s >= 60) / len(scores) * 100\n    return f"平均{avg:.1f} 最高{best} 及格率{pass_rate:.0f}%"\n\nprint(stats([92, 85, 45, 78, 95]))' },
-      ],
-    },
-    {
-      id: "python-67",
-      title: "项目实战（三）：天气查询程序",
-      summary: "调用免费天气 API，实战 requests 与 JSON 解析。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "很多免费 API 无需密钥就能调用。这一章做一个天气查询程序：用户输入城市，程序调用接口返回天气。实际运行需要联网。" },
-        { type: "code", lang: "python", title: "天气查询（联网）", code: '# 使用 Open-Meteo 免费天气 API（无需密钥）\nimport requests\n\ndef get_weather(lat, lon):\n    url = "https://api.open-meteo.com/v1/forecast"\n    params = {\n        "latitude": lat,\n        "longitude": lon,\n        "current_weather": True\n    }\n    r = requests.get(url, params=params, timeout=10)\n    data = r.json()\n    current = data["current_weather"]\n    return f"温度 {current[\"temperature\"]}°C，风速 {current[\"windspeed\"]} km/h"\n\n# 北京坐标\ntry:\n    print(get_weather(39.9, 116.4))\nexcept Exception as e:\n    print("获取失败（需要联网）：", e)' },
-        { type: "code", lang: "python", title: "城市坐标查询", code: '# 用另一个免费 API 把城市名转成坐标\nimport requests\n\ndef get_coords(city):\n    url = "https://geocoding-api.open-meteo.com/v1/search"\n    r = requests.get(url, params={"name": city}, timeout=10)\n    data = r.json()\n    if data.get("results"):\n        top = data["results"][0]\n        return top["latitude"], top["longitude"], top["name"]\n    return None\n\nfor city in ["北京", "上海", "广州"]:\n    res = get_coords(city)\n    print(res)' },
-        { type: "keypoints", items: ["免费 API 让实战项目零成本", "requests + params 传参、r.json() 解析", "异常处理保证无网络时不崩溃", "实战 = 请求 + 解析 + 展示的完整链路"] },
-      ],
-      templates: [
-        { name: "演示 JSON 解析", code: '# 模拟 API 返回的 JSON 解析\nimport json\n\nresp = {\n    "current_weather": {\n        "temperature": 26.5,\n        "windspeed": 12.3,\n        "weathercode": 2\n    }\n}\nt = resp["current_weather"]["temperature"]\nprint(f"当前温度 {t}°C")\n\n# 天气代码含义\ncodes = {0: "晴", 1: "少云", 2: "多云", 3: "阴", 45: "雾", 61: "小雨", 80: "阵雨"}\nprint("天气：", codes.get(resp["current_weather"]["weathercode"], "未知"))' },
-      ],
-    },
-    {
-      id: "python-68",
-      title: "项目实战（四）：文本词频统计器",
-      summary: "统计一篇文章的高频词，运用字符串与 Counter。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "一个实用的小工具：输入一段文本，统计每个词出现的次数，按频率从高到低展示。综合运用字符串处理、列表、Counter。" },
-        { type: "code", lang: "python", title: "词频统计器", code: 'from collections import Counter\nimport re\n\n# 停用词（忽略常见虚词）\nSTOP = {"的", "了", "和", "是", "在", "我", "有", "就", "不", "也", "这", "他", "她", "它"}\n\ndef top_words(text, n=10):\n    # 提取中文词语（简单按空白和标点分割）\n    words = re.findall(r"[\\u4e00-\\u9fff]+", text)\n    words = [w for w in words if w not in STOP]\n    count = Counter(words)\n    return count.most_common(n)\n\narticle = "我爱学习 Python 学习使我快乐 Python 是最好学的语言 我也爱数据 数据科学很酷"\nresult = top_words(article, 5)\nfor word, n in result:\n    print(f"{word}: {n}次")' },
-        { type: "keypoints", items: ["re.findall 提取词语，Counter 统计", "停用词过滤常见虚词", "most_common 按频率排序", "小工具也讲究：可复用、可配置"] },
-      ],
-      templates: [
-        { name: "字母频率统计", code: 'from collections import Counter\n\ntext = "hello world hello python"\nletters = [c.lower() for c in text if c.isalpha()]\ncount = Counter(letters)\nprint(count)\nprint("最多的：", count.most_common(3))' },
-      ],
-    },
-    {
-      id: "python-69",
-      title: "Python 类型检查与 Pydantic",
-      summary: "用 Pydantic 做数据校验，让输入数据安全可靠。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "当程序要接收外部数据（表单、API）时，需要校验数据是否合法。Pydantic（<code inline>pip install pydantic</code>）是数据校验的事实标准，自动做类型检查与转换。" },
-        { type: "code", lang: "python", title: "Pydantic 基础", code: 'from pydantic import BaseModel\n\nclass User(BaseModel):\n    name: str\n    age: int\n    email: str\n\n# 自动校验\nuser = User(name="小明", age=20, email="ming@example.com")\nprint(user)\nprint(user.name, user.age)\n\n# 类型不匹配会报错\n# User(name=123, age="abc", email="x")   # 抛 ValidationError' },
-        { type: "code", lang: "python", title: "字段约束与可选", code: 'from pydantic import BaseModel, Field, EmailStr\n\nclass Student(BaseModel):\n    name: str = Field(min_length=1, max_length=20)\n    score: int = Field(ge=0, le=100)      # 0-100之间\n    email: EmailStr | None = None         # 可选\n\ns = Student(name="小明", score=95, email="ming@test.com")\nprint(s)\n# 非法数据会被拦截\n# Student(name="", score=150)   # 报错' },
-        { type: "keypoints", items: ["Pydantic 自动校验与类型转换", "Field 加约束：min_length/ge/le", "类型注解即校验规则", "适合 API 入参校验、配置管理"] },
-      ],
-      templates: [
-        { name: "配置模型", code: 'from pydantic import BaseModel\n\nclass Config(BaseModel):\n    debug: bool = False\n    host: str = "127.0.0.1"\n    port: int = 8000\n\ncfg = Config(debug=True)\nprint(cfg)\nprint("配置加载成功")' },
-      ],
-    },
-    {
-      id: "python-70",
-      title: "面向对象综合：图书管理系统",
-      summary: "对象、继承、文件持久化综合应用的大型示例。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "把 OOP 与文件操作结合，做一个图书管理系统。用继承表达图书类型差异，用 JSON 持久化，用列表管理集合。这是面向对象综合练习。" },
-        { type: "code", lang: "python", title: "图书管理系统", code: 'import json\n\nclass Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n\n    def describe(self):\n        return f"《{self.title}》作者：{self.author}"\n\nclass EBook(Book):\n    def __init__(self, title, author, size_mb):\n        super().__init__(title, author)\n        self.size_mb = size_mb\n\n    def describe(self):\n        return super().describe() + f"（电子书 {self.size_mb}MB）"\n\nclass Library:\n    def __init__(self):\n        self.books = []\n\n    def add(self, book):\n        self.books.append(book)\n\n    def search(self, keyword):\n        return [b for b in self.books if keyword in b.title]\n\n    def save(self, path="library.json"):\n        data = [{"title": b.title, "author": b.author, "size_mb": getattr(b, "size_mb", None)} for b in self.books]\n        with open(path, "w", encoding="utf-8") as f:\n            json.dump(data, f, ensure_ascii=False)\n        print("已保存")\n\n# 使用\nlib = Library()\nlib.add(EBook("Python入门", "张三", 5))\nlib.add(Book("三体", "刘慈欣"))\nfor b in lib.books:\n    print(b.describe())\nprint("搜索结果：", [b.title for b in lib.search("Python")])\nlib.save()' },
-        { type: "keypoints", items: ["继承表达不同类型（Book→EBook）", "getattr 安全访问子类特有属性", "JSON 持久化保存数据", "多态：统一 describe 接口不同实现"] },
-      ],
-      templates: [
-        { name: "多态演示", code: 'class Animal:\n    def sound(self):\n        return "..."\n\nclass Dog(Animal):\n    def sound(self):\n        return "汪汪"\n\nclass Cat(Animal):\n    def sound(self):\n        return "喵喵"\n\nfor a in [Dog(), Cat()]:\n    print(a.sound())' },
-      ],
-    },
-    {
-      id: "python-71",
-      title: "Python 代码规范与 PEP8",
-      summary: "命名、缩进、行宽、导入顺序，写出规范的代码。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "PEP8 是 Python 的官方代码风格指南。写规范代码不仅美观，还能减少错误、方便协作。这一章总结最重要的规范要点。" },
-        { type: "list", items: ["缩进统一用 4 个空格，不用 Tab", "每行不超过 79 字符（PEP8 建议）", "变量/函数用 snake_case（小写+下划线）", "类名用 PascalCase（每个单词首字母大写）", "常量用全大写 UPPER_CASE", "导入语句放在文件顶部，标准库在前、第三方次之、本地最后", "函数与函数之间空两行", "变量名要有意义：total_score 而不是 ts"] },
-        { type: "code", lang: "python", title: "规范示例", code: '# 规范命名\ndef calculate_average(scores):\n    """计算平均分"""\n    if not scores:\n        return 0\n    return sum(scores) / len(scores)\n\nclass StudentRecord:\n    def __init__(self, student_id, name):\n        self.student_id = student_id\n        self.name = name\n\n# 导入规范\nimport os\nimport sys\n\nimport requests\n\nfrom my_module import helper\n\n# 上面是推荐的分组导入顺序' },
-        { type: "code", lang: "python", title: "用工具检查规范", code: '# 安装与使用 flake8（代码检查工具）\n# pip install flake8\n# flake8 my_file.py\n# 会提示风格问题\n\n# 自动格式化：black\n# pip install black\n# black my_file.py\n# 一键把代码格式化为规范风格\n\nprint("用 flake8 检查，用 black 格式化")' },
-        { type: "keypoints", items: ["缩进4空格、snake_case 命名、PascalCase 类名", "导入分组：标准库→第三方→本地", "flake8 检查代码规范", "black 一键格式化"] },
-      ],
-      templates: [
-        { name: "规范化示例", code: '# 不好的命名：def f(x): ...\n# 好：def calculate_total_price(items):\n\ndef count_words(text):\n    """统计单词数量"""\n    words = text.split()\n    return len(words)\n\nprint(count_words("hello world python"))' },
-      ],
-    },
-    {
-      id: "python-72",
-      title: "环境变量与配置管理",
-      summary: "用 os.environ 和 .env 文件管理敏感配置。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "程序的配置（数据库密码、API 密钥）不该硬编码在代码里。规范做法是用环境变量或 .env 文件，方便不同环境切换且不泄露密钥。" },
-        { type: "code", lang: "python", title: "读取环境变量", code: 'import os\n\n# 读取环境变量\napi_key = os.environ.get("API_KEY")\nif api_key:\n    print("API_KEY 已设置")\nelse:\n    print("API_KEY 未设置")\n\n# 带默认值\ndebug = os.environ.get("DEBUG", "false")\nprint("DEBUG =", debug)\n\n# 命令行设置（Windows）：\n# set API_KEY=abc123\n# 或 PowerShell：$env:API_KEY="abc123"' },
-        { type: "code", lang: "python", title: "使用 .env 文件（python-dotenv）", code: '# 安装：pip install python-dotenv\n# 项目根目录建 .env 文件：\n# API_KEY=secret123\n# DATABASE_URL=sqlite:///app.db\n\nfrom dotenv import load_dotenv\nimport os\n\nload_dotenv()   # 读取 .env\n\napi_key = os.getenv("API_KEY")\ndb_url = os.getenv("DATABASE_URL")\nprint("API_KEY:", api_key)\nprint("DATABASE_URL:", db_url)\n\n# .env 文件要加入 .gitignore，绝不提交到仓库' },
-        { type: "warn", title: "密钥安全", text: "API 密钥、密码永远不要写死在代码或提交到 Git。用环境变量或 .env（并加入 .gitignore）。泄露密钥可能导致账号被盗或巨额账单。" },
-        { type: "keypoints", items: ["os.environ.get(\"KEY\") 读取环境变量", "python-dotenv 读取 .env 文件", ".env 必须加入 .gitignore", "密钥绝不硬编码、绝不提交仓库"] },
-      ],
-      templates: [
-        { name: "配置读取演示", code: 'import os\n\n# 模拟环境变量（本地运行无真实密钥时）\nconfig = {\n    "api_key": os.environ.get("API_KEY", "dev-key"),\n    "debug": os.environ.get("DEBUG", "true").lower() == "true",\n}\nprint("配置：", config)\nprint("建议把密钥放进环境变量，而不是代码里")' },
-      ],
-    },
-    {
-      id: "python-73",
-      title: "生成器与管道：处理大数据",
-      summary: "用生成器串联成管道，流式处理超大数据不爆内存。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "当数据量大到内存装不下（比如处理 10GB 日志），就不能一次性读入。生成器 + 管道（pipeline）让你逐条处理，内存占用恒定。" },
-        { type: "code", lang: "python", title: "逐行处理大文件", code: 'def read_lines(path):\n    """逐行读取，不一次性载入内存"""\n    with open(path, "r", encoding="utf-8") as f:\n        for line in f:\n            yield line.strip()\n\ndef filter_error(lines):\n    """只保留 ERROR 行"""\n    for line in lines:\n        if "ERROR" in line:\n            yield line\n\ndef count_words(lines):\n    """统计每行单词数并汇总"""\n    total = 0\n    for line in lines:\n        total += len(line.split())\n    return total\n\n# 管道：生成器串联\n# 假设 data.txt 存在\n# lines = read_lines("data.txt")\n# errors = filter_error(lines)\n# result = count_words(errors)\n# print(result)\nprint("生成器管道可流式处理超大文件")' },
-        { type: "code", lang: "python", title: "无限数据流", code: 'def generate_numbers():\n    n = 0\n    while True:\n        yield n\n        n += 1\n\ndef even_numbers(numbers):\n    for n in numbers:\n        if n % 2 == 0:\n            yield n\n\n# 只取需要的部分\ncount = 0\nfor n in even_numbers(generate_numbers()):\n    if n > 100:\n        break\n    count += 1\n    if count <= 5:\n        print(n)' },
-        { type: "keypoints", items: ["生成器逐条产出，内存占用恒定", "生成器可串联成管道：read→filter→count", "yield 惰性求值，按需生产", "适合大文件、无限数据流场景"] },
-      ],
-      templates: [
-        { name: "惰性平方", code: 'def squares():\n    n = 1\n    while True:\n        yield n * n\n        n += 1\n\n# 取前5个平方数\ng = squares()\nfor _ in range(5):\n    print(next(g))' },
-      ],
-    },
-    {
-      id: "python-74",
-      title: "并行处理：concurrent.futures",
-      summary: "ThreadPoolExecutor 与 ProcessPoolExecutor，简单并行。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "concurrent.futures 提供了更简单的并行接口：ThreadPoolExecutor（线程池）适合 I/O，ProcessPoolExecutor（进程池）适合计算。比手动创建线程/进程更省心。" },
-        { type: "code", lang: "python", title: "线程池并行下载", code: 'from concurrent.futures import ThreadPoolExecutor\nimport time\n\ndef download(url):\n    time.sleep(0.5)   # 模拟下载\n    return f"{url} 下载完成"\n\nurls = [f"file{i}.zip" for i in range(6)]\n\nstart = time.time()\n# 线程池并行执行\nwith ThreadPoolExecutor(max_workers=3) as pool:\n    results = list(pool.map(download, urls))\n\nfor r in results:\n    print(r)\nprint(f"总耗时 {time.time()-start:.2f}s（串行需约3s）")' },
-        { type: "code", lang: "python", title: "进程池并行计算", code: 'from concurrent.futures import ProcessPoolExecutor\nimport time\n\ndef heavy_calc(n):\n    return sum(i * i for i in range(n))\n\nnums = [1000000] * 4\nstart = time.time()\nwith ProcessPoolExecutor(max_workers=4) as pool:\n    results = list(pool.map(heavy_calc, nums))\nprint("结果：", results)\nprint(f"总耗时 {time.time()-start:.2f}s")' },
-        { type: "keypoints", items: ["ThreadPoolExecutor 适合 I/O 密集", "ProcessPoolExecutor 适合 CPU 密集", "pool.map(函数, 列表) 批量并行", "with 自动等待并清理"] },
-      ],
-      templates: [
-        { name: "提交与获取结果", code: 'from concurrent.futures import ThreadPoolExecutor\nimport time\n\ndef task(name):\n    time.sleep(0.3)\n    return f"{name} 完成"\n\nwith ThreadPoolExecutor(max_workers=2) as pool:\n    futures = [pool.submit(task, f"任务{i}") for i in range(4)]\n    for f in futures:\n        print(f.result())' },
-      ],
-    },
-    {
-      id: "python-75",
-      title: "内存管理与引用计数",
-      summary: "理解垃圾回收、引用计数、循环引用与弱引用。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "Python 自动管理内存（垃圾回收 GC），主要靠引用计数：一个对象被引用次数归零就被回收。了解它有助于写出不泄漏内存的程序。" },
-        { type: "code", lang: "python", title: "引用计数概念", code: 'import sys\n\nx = []            # 引用计数 1\nprint(sys.getrefcount(x))   # 至少 2（getrefcount 自己也算一次）\n\ny = x             # 又引用一次\ndel y             # 减少一次引用\n# del x\n# 当引用归零，对象被回收' },
-        { type: "code", lang: "python", title: "循环引用问题", code: 'import gc\n\nclass Node:\n    def __init__(self):\n        self.ref = None\n\n# 循环引用：a 引用 b，b 引用 a，彼此都删不掉\na = Node()\nb = Node()\na.ref = b\nb.ref = a\ndel a, b\n\n# Python 用分代回收处理循环引用\ngc.collect()\nprint("垃圾回收完成，循环引用被处理")' },
-        { type: "code", lang: "python", title: "弱引用 weakref", code: 'import weakref\n\nclass Cache:\n    pass\n\nc = Cache()\nweak_c = weakref.ref(c)     # 弱引用：不影响计数\nprint("弱引用有效：", weak_c() is not None)\n\ndel c                        # 删除强引用\nprint("弱引用失效：", weak_c() is None)   # 对象已被回收' },
-        { type: "keypoints", items: ["引用计数归零即回收", "循环引用靠 gc 分代回收", "weakref 弱引用不阻止回收", "了解 GC 有助于排查内存泄漏"] },
-      ],
-      templates: [
-        { name: "查看引用数", code: 'import sys\n\na = [1, 2, 3]\nb = a\nprint("引用数（含临时）：", sys.getrefcount(a))\ndel b\nprint("删一个引用后：", sys.getrefcount(a))' },
-      ],
-    },
-    {
-      id: "python-76",
-      title: "Python 全局解释器锁 GIL",
-      summary: "GIL 是什么、为什么存在、多线程为何受限。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "GIL（Global Interpreter Lock，全局解释器锁）是 CPython 的机制：同一时刻只有一个线程能执行 Python 字节码。这让多线程对 CPU 密集任务没有加速，是很多新手疑惑的点。" },
-        { type: "list", items: ["GIL 保证解释器内部数据一致，简化内存管理", "多线程交替执行（时间片轮转），不是真并行", "I/O 密集任务会释放 GIL，多线程仍然有效", "CPU 密集任务要多线程提速 → 用多进程 multiprocessing", "想绕开 GIL：用 C 扩展、numpy（底层释放）、或直接上多进程"] },
-        { type: "code", lang: "python", title: "演示 GIL 影响", code: 'import time\nimport threading\n\ndef busy(n):\n    total = 0\n    for i in range(n):\n        total += i\n    return total\n\n# 串行\nstart = time.time()\n[busy(2000000) for _ in range(4)]\nserial = time.time() - start\n\n# 多线程（受 GIL 限制，不会更快）\nstart = time.time()\nthreads = [threading.Thread(target=busy, args=(2000000,)) for _ in range(4)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nthreaded = time.time() - start\n\nprint(f"串行: {serial:.2f}s, 多线程: {threaded:.2f}s")\nprint("CPU 密集任务多线程受 GIL 限制，几乎无加速")' },
-        { type: "keypoints", items: ["GIL 让同一时刻只有一个线程执行字节码", "I/O 密集多线程有效，CPU 密集无效", "CPU 密集用多进程 multiprocessing", "numpy 等 C 库底层会释放 GIL"] },
-      ],
-      templates: [
-        { name: "I/O 密集演示（多线程有效）", code: 'import time\nimport threading\n\ndef io_task():\n    time.sleep(0.5)   # 模拟网络/磁盘等待\n\nstart = time.time()\nthreads = [threading.Thread(target=io_task) for _ in range(4)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nprint(f"4个I/O任务并行耗时 {time.time()-start:.2f}s（约0.5s而非2s）")\nprint("I/O 等待时释放 GIL，多线程有效！")' },
-      ],
-    },
-    {
-      id: "python-77",
-      title: "异步 asyncio 实战：并发请求",
-      summary: "用 aiohttp 并发抓取多个网页，异步的效率优势。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "异步（asyncio）适合大量并发 I/O。用 aiohttp（<code inline>pip install aiohttp</code>）可以同时发几十个请求，比串行快几十倍。理解 async/await 的关键：await 让出控制权去执行别的任务。" },
-        { type: "code", lang: "python", title: "异步并发请求", code: '# 安装：pip install aiohttp\nimport asyncio\nimport aiohttp\n\nasync def fetch(session, url):\n    async with session.get(url) as resp:\n        return url, resp.status\n\nasync def main():\n    urls = ["https://httpbin.org/get"] * 5\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        results = await asyncio.gather(*tasks)\n    for url, status in results:\n        print(f"{url} -> {status}")\n\n# asyncio.run(main())   # 联网执行\nprint("异步并发请求，await 让出控制权")' },
-        { type: "code", lang: "python", title: "异步 vs 同步对比", code: 'import asyncio\nimport time\n\nasync def task(name, delay):\n    await asyncio.sleep(delay)   # 模拟I/O\n    return name\n\n# 同步串行\ndef sync_do():\n    start = time.time()\n    for i in range(3):\n        time.sleep(0.5)\n    return time.time() - start\n\n# 异步并发\nasync def async_do():\n    start = time.time()\n    await asyncio.gather(*(task(i, 0.5) for i in range(3)))\n    return time.time() - start\n\nprint(f"同步耗时约 {sync_do():.2f}s")\nprint(f"异步耗时约 {asyncio.run(async_do()):.2f}s")\nprint("异步并发明显更快")' },
-        { type: "keypoints", items: ["asyncio.gather 并发执行多个协程", "await 挂起当前任务，不阻塞其他任务", "aiohttp 是异步 HTTP 客户端", "异步适合大量 I/O 并发，效率极高"] },
-      ],
-      templates: [
-        { name: "异步顺序执行演示", code: 'import asyncio\n\nasync def say(msg, delay):\n    await asyncio.sleep(delay)\n    print(msg)\n\nasync def main():\n    # 并发执行（总耗时约1秒）\n    await asyncio.gather(\n        say("先完成", 1),\n        say("后完成", 2)\n    )\n\nasyncio.run(main())' },
-      ],
-    },
-    {
-      id: "python-78",
-      title: "Docker 与 Python 应用部署",
-      summary: "容器化打包 Python 应用，跨平台部署不再痛苦。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "Docker 可以把应用和它的环境一起打包成『容器』，在任何机器上一致运行，是现代部署的标准。这一章介绍给 Python 应用写 Dockerfile 的基础。" },
-        { type: "code", lang: "python", title: "Dockerfile 示例", code: '# 文件名：Dockerfile\n# FROM python:3.12-slim          # 基础镜像\n# WORKDIR /app                  # 工作目录\n# COPY requirements.txt .\n# RUN pip install -r requirements.txt\n# COPY . .                     # 复制代码\n# CMD ["python", "app.py"]     # 启动命令\n\nprint("""\n常用 Docker 命令：\ndocker build -t myapp .          # 构建镜像\ndocker run -p 5000:5000 myapp    # 运行容器\n""")' },
-        { type: "code", lang: "python", title: "多阶段构建概念", code: '# 小提示：requirements 先复制，利用缓存加速\n# COPY requirements.txt .\n# RUN pip install -r requirements.txt\n# COPY . .\n# 这样代码改动不会触发重新下载依赖\n\nprint("依赖层缓存：先复制 requirements 再复制代码")' },
-        { type: "keypoints", items: ["Dockerfile 定义构建步骤", "docker build 构建镜像、docker run 运行", "先复制依赖清单再复制代码，利用缓存", "容器保证环境一致，解决『在我电脑上能跑』"] },
-      ],
-      templates: [
-        { name: "容器化理念", code: 'print("""\n应用 + 环境 = 镜像\n镜像 + 运行 = 容器\n任何机器跑起来都一样\n""")' },
-      ],
-    },
-    {
-      id: "python-79",
-      title: "Python 面试高频问题",
-      summary: "汇总 Python 面试常考：GIL、装饰器、深浅拷贝、闭包等。",
-      difficulty: "高级",
-      blocks: [
-        { type: "p", text: "如果你是准备面试，这一章把 Python 面试最高频的问题和答案要点总结出来。每个都能展开，这里给核心答案。" },
-        { type: "h", text: "高频问题与要点" },
-        { type: "list", items: ["解释 GIL：全局解释器锁，同一时刻单线程执行字节码；I/O 释放，CPU 密集受限，用多进程", "装饰器是什么：不修改函数给函数加功能；@ 语法糖；functools.wraps 保留元信息", "浅拷贝 vs 深拷贝：浅拷贝只复制外层，深拷贝递归复制；copy.copy 和 copy.deepcopy", "可变默认参数陷阱：def f(x, lst=[]) 会累积；改为 lst=None", "列表推导式和生成器区别：推导式一次性生成列表占内存；生成器惰性求值", "is 和 ==：is 比较身份（内存地址），== 比较内容", "闭包：内层函数引用外层变量；注意循环变量延迟绑定", "*args 和 **kwargs：收集位置参数与关键字参数", "异常处理：try/except/else/finally 各自作用", "Python 内存管理：引用计数 + 分代回收；循环引用用 gc 处理"] },
-        { type: "code", lang: "python", title: "手写题：去重保持顺序", code: 'def dedupe(items):\n    """去重并保持原顺序"""\n    seen = set()\n    result = []\n    for item in items:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n\nprint(dedupe([1, 2, 2, 3, 1, 4]))   # [1, 2, 3, 4]' },
-        { type: "code", lang: "python", title: "手写题：两数之和", code: 'def two_sum(nums, target):\n    """找两个数相加等于 target，返回索引"""\n    seen = {}\n    for i, n in enumerate(nums):\n        need = target - n\n        if need in seen:\n            return [seen[need], i]\n        seen[n] = i\n    return []\n\nprint(two_sum([2, 7, 11, 15], 9))   # [0, 1]' },
-        { type: "keypoints", items: ["GIL/装饰器/深浅拷贝/闭包是最高频", "手写题常考去重、两数之和、反转字符串", "面试要能说出『为什么』而不只是『是什么』", "多用小代码演示理解"] },
-      ],
-      templates: [
-        { name: "手写反转字符串", code: '# 方法1：切片\ndef reverse1(s):\n    return s[::-1]\n\n# 方法2：join + reversed\ndef reverse2(s):\n    return "".join(reversed(s))\n\nprint(reverse1("hello"))\nprint(reverse2("hello"))' },
-      ],
-    },
-    {
-      id: "python-80",
-      title: "Python 学习路线与总结",
-      summary: "80 章总结：知识地图、下一步方向、学习建议。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "恭喜你学完了 80 章 Python 课程！这一章回顾整条学习路径，并给你接下来的方向建议。学完不代表结束，编程是终身学习的旅程。" },
-        { type: "h", text: "你已掌握的知识地图" },
-        { type: "list", items: ["基础：语法、类型、条件、循环、函数", "数据结构：列表、元组、字典、集合", "进阶：文件、异常、模块、OOP、继承、封装", "深入：生成器、装饰器、上下文、并发、异步", "工程：虚拟环境、测试、日志、性能、规范", "实战：Web(Flask)、数据分析(pandas)、爬虫、自动化", "项目：待办清单、成绩管理、图书管理、天气查询"] },
-        { type: "h", text: "接下来往哪个方向走" },
-        { type: "list", items: ["想搞后端：深入 Flask/Django、数据库、API 设计", "想搞数据/AI：深入 pandas、NumPy、matplotlib、机器学习 sklearn", "想搞自动化：openpyxl、smtplib、爬虫、脚本", "想搞全栈：学 HTML/CSS/JavaScript 前端", "想搞系统：学 Go 或 Rust，理解底层"] },
-        { type: "info", title: "学习建议", text: "① 每天动手写代码，光看不练等于没学；② 用『项目驱动』学习，先做小项目再学新知识；③ 遇到错误别慌，读报错信息、搜索、debug；④ 多看官方文档 docs.python.org；⑤ 加入社区（如 Python 中文社区）互相交流。" },
-        { type: "keypoints", items: ["80 章覆盖从语法到项目实战的完整路径", "后续按兴趣选方向：后端/数据/自动化/全栈", "每天动手、项目驱动、善用官方文档", "编程路上，坚持比天赋更重要"] },
-      ],
-      templates: [
-        { name: "学习打卡", code: 'print("今天我学完了 Python 的：")\nskills = ["语法", "数据结构", "OOP", "文件与异常", "并发", "Web", "数据分析"]\nfor s in skills:\n    print("√", s)\nprint("明天继续加油！")' },
-      ],
-    },
-  ],
+  'id': "python",
+  'name': "Python",
+  'icon': "Py",
+  'tagline': "最友好的入门语言，从下载安装到进阶实战的 80 章完整课程。",
+  'intro': "这是一套从零开始的 Python 完整课程。第 1 章教你下载安装，之后每一章都从大白话讲起，配可运行的示例代码和编辑器模板。学完这套课程，你将掌握 Python 的语法、数据结构、面向对象、文件处理、异常、模块、网络、数据库、并发与 Web 开发，足以应对数据分析和后端开发的日常需求。",
+  'meta': {
+    "难度": "从零到进阶",
+    "章节": "80 章",
+    "场景": "数据/AI/后端/自动化"
+  },
+  'lessons': [
+    {
+      'id': "python-1",
+      'title': "下载与安装 Python（零基础第一步）",
+      'summary': "到官方下载、勾选 PATH、验证版本，三步装好 Python。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "学习 Python 的第一步，是把它装到你的电脑上。别担心，这一步非常简单，跟着做就能完成。Python 官方提供完全免费的安装包，支持 Windows、macOS、Linux 三大系统。"
+        },
+        {
+          'type': "h",
+          'text': "第一步：下载"
+        },
+        {
+          'type': "list",
+          'items': [
+            "打开官网下载页：<a href='https://www.python.org/downloads/' target='_blank' rel='noopener'>https://www.python.org/downloads/</a>",
+            "点击黄色大按钮『Download Python 3.x.x』（3.x.x 是版本号，选最新的稳定版即可）",
+            "Windows 用户下载 64-bit installer（64 位安装包）"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "第二步：安装（最关键的一步）"
+        },
+        {
+          'type': "p",
+          'text': "双击下载好的安装包，**第一屏一定要勾选最底部的『Add python.exe to PATH』**，这一步非常重要！如果不勾，之后在命令行输入 python 会提示找不到命令。勾选后再点『Install Now』，然后等待安装完成即可。"
+        },
+        {
+          'type': "warn",
+          'title': "新手第一大坑",
+          'text': "很多新手装完发现命令行输入 python 没反应，原因就是忘了勾『Add python.exe to PATH』。如果遇到这种情况，卸载重装一遍，记住勾选即可。"
+        },
+        {
+          'type': "h",
+          'text': "第三步：验证安装"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "验证是否装好",
+          'code': "print(\"Hello, Python!\")\nprint(\"安装成功，我开始学编程了！\")"
+        },
+        {
+          'type': "p",
+          'text': "在电脑上按 <code.inline>Win+R</code.inline>，输入 <code.inline>cmd</code.inline> 回车打开命令行，输入 <code.inline>python --version</code>，如果显示类似 <code.inline>Python 3.12.x</code> 的版本号，就说明安装成功了！"
+        },
+        {
+          'type': "tip",
+          'title': "顺手装个好编辑器",
+          'text': "推荐安装 VS Code（完全免费）：<a href='https://code.visualstudio.com' target='_blank' rel='noopener'>code.visualstudio.com</a>。装好后在扩展商店搜『Python』并安装官方插件，写代码就有自动补全了。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"下载与安装 Python（零基础第一步）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"下载与安装 Python（零基础第一步）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"下载与安装 Python（零基础第一步）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "官方下载地址是 python.org/downloads，完全免费",
+            "安装时务必勾选 Add python.exe to PATH",
+            "cmd 里运行 python --version 验证是否装好",
+            "推荐配合 VS Code + Python 插件使用"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "我的第一个程序",
+          'code': "print(\"Hello, Python!\")\nprint(\"我要学会编程！\")"
+        }
+      ]
+    },
+    {
+      'id': "python-2",
+      'title': "第一个程序与 print 输出",
+      'summary': "用 print 把文字输出到屏幕，理解程序运行的本质。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "装好 Python 后，我们写的第一个程序通常是打印一句话。Python 里用 <code.inline>print()</code.inline> 函数把内容输出到屏幕上，括号里放你想显示的内容。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "第一个程序",
+          'code': "print(\"你好，世界！\")\nprint(\"我的第一个 Python 程序\")"
+        },
+        {
+          'type': "p",
+          'text': "字符串（一串文字）必须用引号包起来，可以是双引号 <code.inline>\"...\"</code.inline> 也可以是单引号 <code.inline>'...'</code.inline>，效果一样。print 默认会在末尾自动换行，所以每个 print 会输出一行。"
+        },
+        {
+          'type': "h",
+          'text': "print 的进阶用法"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "同时输出多个内容",
+          'code': "# 用逗号分隔，会在中间自动加空格\nprint(\"我的名字是\", \"小明\", \"今年\", 10, \"岁\")\n\n# sep 参数自定义分隔符\nprint(\"a\", \"b\", \"c\", sep=\"-\")   # 输出 a-b-c\n\n# end 参数自定义结尾（默认是换行）\nprint(\"第一行\", end=\" \")\nprint(\"第二行\")   # 和第一行在同一行输出"
+        },
+        {
+          'type': "info",
+          'title': "引号里想用引号怎么办",
+          'text': "如果字符串本身包含双引号，可以用单引号包裹，或使用转义字符 <code.inline>\\\"</code.inline>。例如 <code.inline>print('他说：\"你好\"')</code.inline>。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"第一个程序与 print 输出\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"第一个程序与 print 输出\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"第一个程序与 print 输出\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "print() 用于向屏幕输出内容，字符串要加引号",
+            "多个内容用逗号分隔，自动加空格",
+            "sep 自定义分隔符，end 自定义结尾",
+            "单引号和双引号都可以包字符串"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "多行自我介绍",
+          'code': "print(\"大家好！\")\nprint(\"我叫小明\")\nprint(\"我今年 10 岁\")\nprint(\"我正在学 Python\")"
+        },
+        {
+          'name': "画一条小鱼",
+          'code': "print(\"  /\\\\_/\\\\\")\nprint(\" ( o.o )  <-- 小鱼的嘴巴\")\nprint(\"  > ^ <\")"
+        }
+      ]
+    },
+    {
+      'id': "python-3",
+      'title': "注释：给自己和别人的说明",
+      'summary': "用 # 写注释，让代码更易读，Python 会忽略注释。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "注释是写在代码里的说明文字，Python 运行时会完全忽略它们。它的作用是帮助你自己和别人理解这段代码在干什么。写注释是优秀程序员的习惯。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "单行注释与多行注释",
+          'code': "# 这是单行注释，以 # 开头\na = 10  # 注释也可以写在代码后面\n\n# 多行注释通常用三个引号（实际上是多行字符串）\n\"\"\"\n这是多行注释\n可以写很多行说明\n\"\"\"\nprint(\"代码在运行，注释被忽略了\")"
+        },
+        {
+          'type': "p",
+          'text': "Python 里没有专门的『多行注释』语法，但可以用三个引号包起来的字符串来达到类似效果，因为不被赋值的字符串会被忽略。日常开发中，用 <code.inline>#</code.inline> 单行注释就足够了。"
+        },
+        {
+          'type': "tip",
+          'title': "注释写什么",
+          'text': "好的注释解释『为什么』这么做，而不是重复代码在做什么。比如『# 用二分查找提高速度』比『# 查找』更有价值。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"注释：给自己和别人的说明\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"注释：给自己和别人的说明\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"注释：给自己和别人的说明\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "注释以 # 开头，Python 运行时忽略",
+            "注释帮助理解代码，是良好习惯",
+            "三引号字符串可当多行注释用",
+            "注释应解释『为什么』而非重复代码"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "带注释的示例",
+          'code': "# 计算两个数的和\na = 5\nb = 3\nresult = a + b  # 求和\nprint(\"结果是：\", result)"
+        }
+      ]
+    },
+    {
+      'id': "python-4",
+      'title': "变量：给数据起个名字",
+      'summary': "变量是给数据贴的标签，Python 无需声明类型。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "变量就像一个贴了标签的盒子，你可以把数据放进去，然后通过标签（变量名）随时取用。Python 里给变量赋值用 <code.inline>=</code.inline>，不需要提前声明类型，Python 会自动判断。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "变量赋值与使用",
+          'code': "name = \"小明\"      # 字符串\nage = 10           # 整数\nheight = 1.45      # 小数（浮点数）\nis_student = True  # 布尔值（真/假）\n\nprint(name)\nprint(\"年龄：\", age)\nprint(\"身高：\", height)\nprint(\"是学生吗：\", is_student)"
+        },
+        {
+          'type': "h",
+          'text': "变量命名规则"
+        },
+        {
+          'type': "list",
+          'items': [
+            "只能由字母、数字、下划线组成，且不能以数字开头（如 1name 是错的）",
+            "不能使用 Python 关键字（如 if、for、while、class 等）",
+            "区分大小写：Name 和 name 是两个不同变量",
+            "推荐使用小写字母 + 下划线，如 my_name、user_age（这叫 snake_case）"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "变量的重新赋值",
+          'code': "count = 1\nprint(count)   # 1\ncount = 2      # 重新赋值\nprint(count)   # 2\ncount = count + 1  # 先取旧值加 1 再存回去\nprint(count)   # 3"
+        },
+        {
+          'type': "info",
+          'title': "等号是赋值不是相等",
+          'text': "在 Python 中，<code.inline>=</code.inline> 表示『把右边的值赋给左边的变量』，而『相等比较』用 <code.inline>==</code.inline>（两个等号）。很多新手会混淆，后面讲条件判断时会详细说明。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"变量：给数据起个名字\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"变量：给数据起个名字\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"变量：给数据起个名字\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "变量 = 给数据贴的标签，用 = 赋值",
+            "Python 变量无需声明类型，自动推断",
+            "命名用字母/数字/下划线，不能数字开头",
+            "区分大小写，推荐 snake_case 命名",
+            "= 是赋值，== 才是相等比较"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "个人信息变量",
+          'code': "name = \"小红\"\nage = 9\ncity = \"上海\"\nprint(name, \"住在\", city)\nprint(\"今年\", age, \"岁\")"
+        },
+        {
+          'name': "变量计算",
+          'code': "price = 5\ncount = 3\ncost = price * count\nprint(\"总价：\", cost, \"元\")"
+        }
+      ]
+    },
+    {
+      'id': "python-5",
+      'title': "基本数据类型详解",
+      'summary': "整数、浮点数、字符串、布尔值、None，逐个吃透。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Python 中常用的基本数据类型有五种：整数（int）、浮点数（float）、字符串（str）、布尔值（bool）和 NoneType。理解它们各自的含义和用法，是编程的基础。"
+        },
+        {
+          'type': "h",
+          'text': "整数 int"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "整数运算",
+          'code': "a = 10\nb = 3\nprint(a + b)    # 13  加法\nprint(a - b)    # 7   减法\nprint(a * b)    # 30  乘法\nprint(a / b)    # 3.333... 除法（结果是浮点数）\nprint(a // b)   # 3   整除（取商的整数部分）\nprint(a % b)    # 1   取余\nprint(a ** b)   # 1000 幂运算"
+        },
+        {
+          'type': "h",
+          'text': "浮点数 float"
+        },
+        {
+          'type': "p",
+          'text': "浮点数就是带小数点的数。需要注意浮点数在计算机中可能产生精度误差，例如 0.1 + 0.2 不等于 0.3（后面会专门讲这个坑）。"
+        },
+        {
+          'type': "h",
+          'text': "字符串 str"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "字符串操作",
+          'code': "s = \"Hello\"\nprint(len(s))       # 5  字符串长度\nprint(s.upper())    # HELLO 转大写\nprint(s.lower())    # hello 转小写\nprint(s + \" World\") # Hello World 字符串拼接\nprint(s * 3)        # HelloHelloHello 字符串重复"
+        },
+        {
+          'type': "h",
+          'text': "布尔值 bool 与 None"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "布尔值",
+          'code': "is_ok = True\nis_no = False\nprint(is_ok)\nprint(not is_ok)   # False 取反\n\n# None 表示『什么都没有/空值』\nnothing = None\nprint(nothing)"
+        },
+        {
+          'type': "h",
+          'text': "查看类型 type()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "查看变量的类型",
+          'code': "print(type(10))        # <class 'int'>\nprint(type(1.5))       # <class 'float'>\nprint(type(\"abc\"))     # <class 'str'>\nprint(type(True))      # <class 'bool'>\nprint(type(None))      # <class 'NoneType'>"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"基本数据类型详解\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"基本数据类型详解\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"基本数据类型详解\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "int 整数、float 浮点数、str 字符串、bool 布尔、None 空值",
+            "// 整除、% 取余、** 幂运算",
+            "浮点数有精度误差（0.1+0.2≠0.3）",
+            "type() 可查看变量类型"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "类型侦探",
+          'code': "a = 42\nb = 3.14\nc = \"hi\"\nd = True\ne = None\nprint(type(a))\nprint(type(b))\nprint(type(c))\nprint(type(d))\nprint(type(e))"
+        }
+      ]
+    },
+    {
+      'id': "python-6",
+      'title': "字符串进阶：切片、方法、f-string",
+      'summary': "索引、切片、常用方法与格式化字符串，字符串操作一网打尽。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "字符串是编程中最常用的数据类型。这一章我们深入字符串的索引、切片和常用方法，以及非常好用的 f-string 格式化。"
+        },
+        {
+          'type': "h",
+          'text': "索引：拿到某个字符"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "字符串索引",
+          'code': "s = \"Python\"\n# 索引从 0 开始\nprint(s[0])    # P\nprint(s[1])    # y\nprint(s[-1])   # n  负数表示从末尾开始\nprint(s[-2])   # o"
+        },
+        {
+          'type': "h",
+          'text': "切片：取一段子串"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "切片语法 起点:终点:步长",
+          'code': "s = \"Python is fun\"\nprint(s[0:6])    # Python  从0到6（不含6）\nprint(s[7:9])    # is\nprint(s[:6])     # Python  开头到6\nprint(s[7:])     # is fun  7到结尾\nprint(s[::2])    # Pto sfn  每2个取1个\nprint(s[::-1])   # nuf si nohtyP 反转字符串"
+        },
+        {
+          'type': "h",
+          'text': "常用字符串方法"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "常用方法",
+          'code': "s = \"  Hello World  \"\nprint(s.strip())        # \"Hello World\" 去掉两端空格\nprint(s.replace(\"World\", \"Python\"))  # 替换\nprint(\"hello,world\".split(\",\"))  # ['hello', 'world'] 按逗号分割\nprint(\"-\".join([\"a\", \"b\", \"c\"]))  # a-b-c 用-连接列表\nprint(\"abc123\".isalpha())  # False 全是字母吗\nprint(\"abc\".isalpha())     # True\nprint(\"123\".isdigit())     # True 全是数字吗"
+        },
+        {
+          'type': "h",
+          'text': "f-string：最推荐的格式化方式"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "f-string 格式化",
+          'code': "name = \"小明\"\nage = 10\n# f 开头，用 {变量名} 插入值\nprint(f\"我叫{name}，今年{age}岁\")\n\n# 还可以加格式控制：{变量:宽度} 或 :.2f 保留两位小数\npi = 3.1415926\nprint(f\"圆周率保留两位：{pi:.2f}\")\nprint(f\"右对齐占10位：{age:>10}\")"
+        },
+        {
+          'type': "tip",
+          'title': "f-string 支持表达式",
+          'text': "花括号里甚至可以写表达式：<code.inline>f\"3+5={3+5}\"</code.inline> 会输出 <code.inline>3+5=8</code.inline>。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"字符串进阶：切片、方法、f-string\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"字符串进阶：切片、方法、f-string\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"字符串进阶：切片、方法、f-string\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "索引从0开始，负数从末尾数",
+            "切片 s[起点:终点:步长]，终点不含",
+            "split 分割、join 连接、strip 去空格、replace 替换",
+            "f-string 用 {变量} 插入值，最推荐使用"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "名字反转",
+          'code': "name = \"小明\"\nprint(\"反转：\", name[::-1])\n\nmsg = \"hello\"\nprint(\"大写：\", msg.upper())\nprint(\"长度：\", len(msg))"
+        },
+        {
+          'name': "成绩单格式化",
+          'code': "name = \"小红\"\nscore = 92.5\nprint(f\"{name}的数学成绩是 {score:.1f} 分\")"
+        }
+      ]
+    },
+    {
+      'id': "python-7",
+      'title': "输入 input：让程序和人对话",
+      'summary': "用 input() 接收用户输入，程序从此会『听』人说话。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "之前的程序都是固定输出。用 <code.inline>input()</code.inline> 可以让程序停下来等待用户输入，输入的**永远是字符串**。这是程序交互的基础。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "获取用户输入",
+          'code': "name = input(\"请输入你的名字：\")\nprint(\"你好，\" + name + \"！\")\n\nage = input(\"请输入你的年龄：\")\nprint(\"你输入的类型是：\", type(age))  # 注意：是 str 字符串"
+        },
+        {
+          'type': "warn",
+          'title': "input 返回的是字符串",
+          'text': "即使你输入的是数字，input() 返回的也是字符串。如果要当数字用，必须用 int() 或 float() 转换，否则参与数学运算会报错。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "把输入转成数字",
+          'code': "age = input(\"请输入年龄：\")\nage = int(age)   # 转成整数\nprint(\"十年后你\", age + 10, \"岁\")\n\nheight = float(input(\"请输入身高(米)：\"))\nprint(\"身高：\", height, \"米\")"
+        },
+        {
+          'type': "info",
+          'title': "转换函数",
+          'text': "int() 转整数，float() 转浮点数，str() 转字符串。转换失败会报 ValueError，后面异常处理章节会教你怎么友好处理。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"输入 input：让程序和人对话\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"输入 input：让程序和人对话\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"输入 input：让程序和人对话\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "input() 等待用户输入，返回字符串",
+            "数字输入需要 int() 或 float() 转换",
+            "input 括号里的文字会显示在屏幕上",
+            "转换失败会报 ValueError"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "打招呼程序",
+          'code': "name = input(\"你好，请问怎么称呼？\")\nprint(f\"欢迎你，{name}！开始学习 Python 吧\")"
+        },
+        {
+          'name': "年龄计算器",
+          'code': "age = int(input(\"你今年几岁？\"))\nprint(f\"10年后你 {age+10} 岁\")\nprint(f\"10年前你 {age-10} 岁\")"
+        }
+      ]
+    },
+    {
+      'id': "python-8",
+      'title': "条件判断 if / elif / else",
+      'summary': "让程序根据条件走不同的路，逻辑从此活起来。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "if 语句让程序能够『判断』：满足条件就执行一段代码，不满足就执行另一段。这是编程最核心的逻辑之一。注意 Python 用**缩进**表示代码块，条件下面的代码要缩进 4 个空格。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "if / else 基本用法",
+          'code': "score = 85\nif score >= 60:\n    print(\"及格了！\")\nelse:\n    print(\"不及格，继续加油\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "if / elif / else 多分支",
+          'code': "score = 88\nif score >= 90:\n    print(\"优秀\")\nelif score >= 80:\n    print(\"良好\")\nelif score >= 60:\n    print(\"及格\")\nelse:\n    print(\"不及格\")"
+        },
+        {
+          'type': "h",
+          'text': "比较运算符"
+        },
+        {
+          'type': "list",
+          'items': [
+            "== 等于；!= 不等于",
+            "> 大于；< 小于；>= 大于等于；<= 小于等于",
+            "in 判断是否在容器里；not 取反"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "逻辑运算符 and / or / not",
+          'code': "age = 18\nhas_id = True\n\n# and：两个都满足才为真\nif age >= 18 and has_id:\n    print(\"可以进入网吧\")\n\n# or：满足一个就为真\nif age < 18 or has_id:\n    print(\"至少满足一个条件\")\n\n# not：取反\nif not False:\n    print(\"not False 是 True\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "判断字符是否在字符串中",
+          'code': "name = \"小明\"\nif \"明\" in name:\n    print(\"名字里有『明』字\")\n\nfruits = [\"苹果\", \"香蕉\"]\nif \"香蕉\" in fruits:\n    print(\"列表里有香蕉\")"
+        },
+        {
+          'type': "warn",
+          'title': "缩进就是语法",
+          'text': "Python 用缩进来区分代码块。条件判断下面的代码如果没有缩进，会直接报 <code.inline>IndentationError</code.inline>。这是新手最先遇到的错误之一。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"条件判断 if / elif / else\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"条件判断 if / elif / else\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"条件判断 if / elif / else\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "if/elif/else 实现多分支判断",
+            "比较用 ==、!=、>、< 等",
+            "and/or/not 做逻辑组合",
+            "缩进 4 个空格是 Python 语法要求",
+            "in 判断是否在容器中"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "成绩等级判断",
+          'code': "score = int(input(\"输入成绩：\"))\nif score >= 90:\n    print(\"优秀\")\nelif score >= 80:\n    print(\"良好\")\nelif score >= 60:\n    print(\"及格\")\nelse:\n    print(\"不及格\")"
+        },
+        {
+          'name': "奇偶判断",
+          'code': "num = int(input(\"输入一个整数：\"))\nif num % 2 == 0:\n    print(f\"{num} 是偶数\")\nelse:\n    print(f\"{num} 是奇数\")"
+        }
+      ]
+    },
+    {
+      'id': "python-9",
+      'title': "while 循环：重复做一件事",
+      'summary': "while 让代码在条件满足时反复执行，注意别死循环。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "当我们需要反复执行某段代码时，就用循环。while 循环的逻辑是：只要条件为真，就一直执行循环体（缩进的代码块）。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "while 基本用法",
+          'code': "count = 1\nwhile count <= 5:\n    print(\"第\", count, \"次\")\n    count = count + 1   # 别忘了更新计数器，否则死循环\nprint(\"循环结束\")"
+        },
+        {
+          'type': "h",
+          'text': "break：提前跳出循环"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "break 终止循环",
+          'code': "count = 1\nwhile True:      # 死循环\n    print(\"计数：\", count)\n    if count >= 3:\n        break    # 达到条件立即跳出\n    count += 1\nprint(\"跳出循环了\")"
+        },
+        {
+          'type': "h",
+          'text': "continue：跳过本次"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "continue 跳过本次循环",
+          'code': "n = 0\nwhile n < 6:\n    n += 1\n    if n == 3:\n        continue   # 跳过 n==3 这次，不打印3\n    print(n)"
+        },
+        {
+          'type': "warn",
+          'title': "小心死循环",
+          'text': "如果 while 的条件永远为真，且循环体里没有 break，程序就会一直运行下去。比如 <code.inline>while True:</code.inline> 且没有 break。我们的在线编辑器有超时保护（5秒自动终止），但本地运行时要注意。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"while 循环：重复做一件事\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"while 循环：重复做一件事\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"while 循环：重复做一件事\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "while 条件为真就反复执行循环体",
+            "循环体要缩进，用 break 跳出",
+            "continue 跳过本次剩余代码",
+            "记得更新计数器或用 break，避免死循环"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "从1数到10",
+          'code': "n = 1\nwhile n <= 10:\n    print(n)\n    n += 1"
+        },
+        {
+          'name': "只打印偶数",
+          'code': "n = 1\nwhile n <= 10:\n    if n % 2 == 0:\n        print(n, \"是偶数\")\n    n += 1"
+        }
+      ]
+    },
+    {
+      'id': "python-10",
+      'title': "for 循环：遍历序列",
+      'summary': "for 逐个取出序列中的元素，最常用的循环方式。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "for 循环用于遍历（逐个取出）序列中的元素，比如遍历一个列表、字符串或 range 生成的一系列数字。它是 Python 中最常用的循环。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "遍历列表",
+          'code': "fruits = [\"苹果\", \"香蕉\", \"橙子\"]\nfor fruit in fruits:\n    print(fruit)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "range 生成数字序列",
+          'code': "# range(开始, 结束, 步长)，结束不含\nfor i in range(5):\n    print(i)        # 0 1 2 3 4\n\nfor i in range(1, 6):\n    print(i)        # 1 2 3 4 5\n\nfor i in range(0, 10, 2):\n    print(i)        # 0 2 4 6 8  偶数"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "遍历字符串",
+          'code': "for ch in \"Python\":\n    print(ch)"
+        },
+        {
+          'type': "h",
+          'text': "enumerate：同时拿到序号和值"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "enumerate 用法",
+          'code': "names = [\"小明\", \"小红\", \"小刚\"]\nfor index, name in enumerate(names):\n    print(index, name)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "循环里用 break 和 continue",
+          'code': "for i in range(1, 11):\n    if i == 5:\n        continue    # 跳过5\n    if i == 9:\n        break       # 到9就停\n    print(i)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"for 循环：遍历序列\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"for 循环：遍历序列\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"for 循环：遍历序列\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "for 遍历列表/字符串/range 等序列",
+            "range(开始,结束,步长) 生成数字，结束不含",
+            "enumerate 同时拿序号和值",
+            "break 跳出、continue 跳过"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "求和 1 到 100",
+          'code': "total = 0\nfor i in range(1, 101):\n    total += i\nprint(\"1到100的和：\", total)"
+        },
+        {
+          'name': "打印乘法口诀",
+          'code': "for i in range(1, 10):\n    for j in range(1, i + 1):\n        print(f\"{j}x{i}={i*j}\", end=\" \")\n    print()"
+        }
+      ]
+    },
+    {
+      'id': "python-11",
+      'title': "列表 List：可变的元素集合",
+      'summary': "增删改查列表元素，Python 最常用的容器之一。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "列表用方括号 <code.inline>[]</code.inline> 表示，可以放任意多个、任意类型的数据，并且可以修改（增删改）。它就像能装很多东西的盒子串。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "创建列表",
+          'code': "nums = [1, 2, 3, 4, 5]\nmixed = [1, \"hello\", 3.14, True]\nempty = []\nprint(nums)\nprint(mixed)\nprint(len(nums))   # 5 元素个数"
+        },
+        {
+          'type': "h",
+          'text': "访问与修改"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "索引与切片",
+          'code': "nums = [10, 20, 30, 40, 50]\nprint(nums[0])     # 10\nprint(nums[-1])    # 50\nprint(nums[1:3])   # [20, 30]  切片\n\nnums[0] = 99       # 修改元素\nprint(nums)        # [99, 20, 30, 40, 50]"
+        },
+        {
+          'type': "h",
+          'text': "添加与删除"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "增删元素",
+          'code': "nums = [1, 2, 3]\nnums.append(4)       # 末尾添加\nprint(nums)          # [1, 2, 3, 4]\nnums.insert(0, 0)    # 指定位置插入\nprint(nums)          # [0, 1, 2, 3, 4]\nnums.remove(2)       # 删除值为2的元素\nprint(nums)          # [0, 1, 3, 4]\npopped = nums.pop()  # 弹出末尾元素\nprint(popped, nums)  # 4 [0, 1, 3]"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "其他常用操作",
+          'code': "nums = [3, 1, 4, 1, 5, 9]\nnums.sort()          # 排序\nprint(nums)          # [1, 1, 3, 4, 5, 9]\nnums.reverse()       # 反转\nprint(nums)\nprint(3 in nums)     # True 判断是否存在\nprint(len(nums))     # 长度\nprint(max([1,5,2]))  # 5 最大值\nprint(sum([1,2,3]))  # 6 求和"
+        },
+        {
+          'type': "info",
+          'title': "列表 vs 字符串",
+          'text': "字符串是不可变的（不能修改某个字符），而列表是可变的（可以增删改）。要把字符串拆成字符列表，用 <code.inline>list(\"abc\")</code.inline>。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"列表 List：可变的元素集合\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"列表 List：可变的元素集合\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"列表 List：可变的元素集合\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "列表用 [] 表示，可增删改",
+            "append 末尾加、insert 指定位置加",
+            "remove 删指定值、pop 弹末尾",
+            "sort 排序、reverse 反转、len 长度",
+            "in 判断是否存在"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "成绩列表统计",
+          'code': "scores = [88, 92, 76, 85, 90]\nprint(\"总分：\", sum(scores))\nprint(\"平均分：\", sum(scores) / len(scores))\nprint(\"最高分：\", max(scores))\nprint(\"最低分：\", min(scores))\nscores.append(95)\nprint(\"加分后：\", scores)"
+        },
+        {
+          'name': "去重（用集合）",
+          'code': "nums = [1, 2, 2, 3, 3, 3]\nunique = list(set(nums))\nprint(unique)"
+        }
+      ]
+    },
+    {
+      'id': "python-12",
+      'title': "元组 Tuple：不可变的列表",
+      'summary': "元组用圆括号，内容不可修改，适合放固定数据。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "元组和列表很像，用圆括号 <code.inline>()</code.inline> 表示，区别是元组**创建后不能修改**（不可变）。这保证了数据不会被意外改动，更安全。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "创建元组",
+          'code': "t = (1, 2, 3)\nprint(t)\nprint(t[0])     # 1  可以访问\nprint(t[1:])    # (2, 3) 可以切片\n\n# 单元素元组要加逗号\nsingle = (5,)\nprint(single)\n\n# 不加括号也是元组\nt2 = 1, 2, 3\nprint(t2)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "元组不可修改",
+          'code': "t = (1, 2, 3)\n# t[0] = 99  这行会报错 TypeError: tuple object does not support item assignment\nprint(\"元组内容不可修改，这就是保护\")\n\n# 但元组里的列表可以改\nmixed = (1, [2, 3])\nmixed[1].append(4)\nprint(mixed)   # (1, [2, 3, 4])"
+        },
+        {
+          'type': "h",
+          'text': "解包：把元组拆开"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "元组解包",
+          'code': "point = (3, 5)\nx, y = point   # 解包\nprint(\"x =\", x, \"y =\", y)\n\n# 交换两个变量（利用解包）\na, b = 1, 2\na, b = b, a\nprint(a, b)   # 2 1"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"元组 Tuple：不可变的列表\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"元组 Tuple：不可变的列表\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"元组 Tuple：不可变的列表\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "元组用 ()，创建后不可修改",
+            "单元素元组要加逗号 (5,)",
+            "元组比列表更安全，适合固定数据",
+            "解包可一次取出多个值，还能交换变量"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "坐标计算",
+          'code': "p1 = (1, 2)\np2 = (4, 6)\ndx = p2[0] - p1[0]\ndy = p2[1] - p1[1]\nprint(f\"水平距离 {dx}，垂直距离 {dy}\")\n\n# 解包\nx1, y1 = p1\nx2, y2 = p2\nprint(f\"两点：({x1},{y1}) 和 ({x2},{y2})\")"
+        }
+      ]
+    },
+    {
+      'id': "python-13",
+      'title': "字典 Dict：键值对映射",
+      'summary': "用 key 找 value，字典是 Python 的『查字典』数据结构。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "字典用花括号 <code.inline>{}</code.inline> 表示，里面是一对对『键:值』（key: value）。通过键可以快速找到对应的值，就像查字典一样按字找解释。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "创建字典",
+          'code': "person = {\n    \"name\": \"小明\",\n    \"age\": 10,\n    \"city\": \"北京\"\n}\nprint(person)\nprint(person[\"name\"])   # 通过键取值"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "增删改查",
+          'code': "person = {\"name\": \"小明\", \"age\": 10}\nperson[\"city\"] = \"北京\"   # 新增\nperson[\"age\"] = 11       # 修改\nprint(person)\n\ndel person[\"city\"]       # 删除\nprint(person)\n\nprint(\"name\" in person)  # True 判断键是否存在\n\n# get：找不到返回默认值，不报错\nprint(person.get(\"city\", \"未知\"))"
+        },
+        {
+          'type': "h",
+          'text': "遍历字典"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "遍历键值",
+          'code': "person = {\"name\": \"小明\", \"age\": 10, \"city\": \"北京\"}\n# 遍历所有键\nfor key in person:\n    print(\"键：\", key)\n\n# 遍历键和值\nfor key, value in person.items():\n    print(key, \"=>\", value)\n\n# 只遍历值\nfor v in person.values():\n    print(\"值：\", v)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "字典的典型用途：计数",
+          'code': "text = \"banana\"\ncount = {}\nfor ch in text:\n    count[ch] = count.get(ch, 0) + 1\nprint(count)   # {'b': 1, 'a': 3, 'n': 2}"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"字典 Dict：键值对映射\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"字典 Dict：键值对映射\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"字典 Dict：键值对映射\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "字典 {} 存键值对，用键快速取值",
+            "person[\"key\"] 取值，del 删除",
+            "get 找不到返回默认值不报错",
+            "items() 遍历键值、keys() 键、values() 值",
+            "字典适合做计数、映射、配置表"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "学生成绩表",
+          'code': "scores = {\n    \"小明\": 92,\n    \"小红\": 85,\n    \"小刚\": 78\n}\nfor name, score in scores.items():\n    print(f\"{name}：{score} 分\")\n\n# 加一个学生\nscores[\"小丽\"] = 99\nprint(\"总分：\", sum(scores.values()))"
+        }
+      ]
+    },
+    {
+      'id': "python-14",
+      'title': "集合 Set：去重与集合运算",
+      'summary': "集合自动去重，支持交集并集差集运算。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "集合用花括号或 <code.inline>set()</code.inline> 表示，特点：**元素不重复**、**无序**。它最常用的两个场景：去重、集合运算（交集/并集/差集）。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "创建集合与去重",
+          'code': "s = {1, 2, 2, 3, 3, 3}\nprint(s)   # {1, 2, 3}  自动去重\n\n# 列表转集合去重\nnums = [1, 2, 2, 3, 3, 4]\nunique = set(nums)\nprint(unique)              # {1, 2, 3, 4}\nprint(list(unique))        # 再转回列表"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "集合运算",
+          'code': "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nprint(a | b)   # 并集 {1,2,3,4,5,6}\nprint(a & b)   # 交集 {3,4}\nprint(a - b)   # 差集 {1,2} 在a不在b\nprint(a ^ b)   # 对称差 {1,2,5,6} 只在一边的\nprint(1 in a)  # True 判断存在"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "增删集合",
+          'code': "s = {1, 2, 3}\ns.add(4)\nprint(s)          # {1,2,3,4}\ns.remove(2)\nprint(s)          # {1,3,4}\ns.discard(99)     # 删除不存在的也不报错\nprint(s)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"集合 Set：去重与集合运算\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"集合 Set：去重与集合运算\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"集合 Set：去重与集合运算\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "集合 {} 或 set()，元素不重复无序",
+            "用 set() 对列表去重最方便",
+            "| 并集、& 交集、- 差集、^ 对称差",
+            "add 添加、remove 删除（不存在报错）、discard（不报错）"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "两个班的学生",
+          'code': "class_a = {\"小明\", \"小红\", \"小刚\"}\nclass_b = {\"小红\", \"小丽\", \"小强\"}\nprint(\"共同学生：\", class_a & class_b)\nprint(\"所有学生：\", class_a | class_b)\nprint(\"只在A班：\", class_a - class_b)"
+        }
+      ]
+    },
+    {
+      'id': "python-15",
+      'title': "函数基础：把代码打包成工具",
+      'summary': "def 定义函数、参数、返回值，学会复用代码。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "函数是一段可以重复调用的代码块。用 <code.inline>def</code.inline> 定义，函数名后跟括号，括号里可以放参数。定义函数就像造一个工具，调用函数就是用这个工具。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "定义并调用函数",
+          'code': "def say_hello():\n    print(\"你好！\")\n\n# 调用函数\nsay_hello()\nsay_hello()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "带参数的函数",
+          'code': "def greet(name):\n    print(f\"你好，{name}！\")\n\ngreet(\"小明\")\ngreet(\"小红\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "返回值 return",
+          'code': "def add(a, b):\n    return a + b\n\nresult = add(3, 5)\nprint(\"结果：\", result)\n\n# return 会立即结束函数\n\ndef check(n):\n    if n > 0:\n        return \"正数\"\n    elif n < 0:\n        return \"负数\"\n    return \"零\"\n\nprint(check(5))\nprint(check(-3))\nprint(check(0))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "多返回值（本质是返回元组）",
+          'code': "def get_point():\n    return 3, 5\n\nx, y = get_point()   # 解包接收\nprint(x, y)"
+        },
+        {
+          'type': "info",
+          'title': "函数要先定义再调用",
+          'text': "Python 是逐行执行的，函数必须在使用前定义。如果你在定义之前就调用它，会报 <code.inline>NameError</code.inline>。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"函数基础：把代码打包成工具\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"函数基础：把代码打包成工具\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"函数基础：把代码打包成工具\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "def 定义函数，() 里放参数",
+            "return 返回结果并结束函数",
+            "函数可以没有参数、没有返回值",
+            "多返回值本质是返回元组，用解包接收"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "面积计算器",
+          'code': "def area_of_rect(w, h):\n    return w * h\n\nprint(\"长方形面积：\", area_of_rect(4, 5))\nprint(\"正方形面积：\", area_of_rect(3, 3))"
+        },
+        {
+          'name': "判断奇偶函数",
+          'code': "def is_even(n):\n    return n % 2 == 0\n\nfor i in range(1, 7):\n    print(i, \"是偶数\" if is_even(i) else \"是奇数\")"
+        }
+      ]
+    },
+    {
+      'id': "python-16",
+      'title': "函数进阶：默认参数与关键字参数",
+      'summary': "默认值、关键字调用、可变参数，让函数更灵活。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "这一章让函数更好用：给参数设默认值、用关键字指定参数、支持任意数量的参数。"
+        },
+        {
+          'type': "h",
+          'text': "默认参数"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "默认参数",
+          'code': "def greet(name, greeting=\"你好\"):\n    print(f\"{greeting}，{name}！\")\n\ngreet(\"小明\")              # 用默认问候\n greet(\"小红\", \"早上好\")    # 自定义问候"
+        },
+        {
+          'type': "warn",
+          'title': "默认参数的大坑",
+          'text': "默认参数如果是可变对象（如列表、字典），会被多次调用共享！正确写法是默认设为 None，函数内再判断。这个坑非常经典，后面常见错误章节还会细讲。"
+        },
+        {
+          'type': "h",
+          'text': "关键字参数"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "关键字参数调用",
+          'code': "def info(name, age, city):\n    print(f\"{name}住在{city}，{age}岁\")\n\n# 位置参数\ninfo(\"小明\", 10, \"北京\")\n# 关键字参数，可以不按顺序\ninfo(age=10, city=\"上海\", name=\"小红\")\n# 混用：位置参数在前，关键字在后\ninfo(\"小刚\", 9, city=\"广州\")"
+        },
+        {
+          'type': "h",
+          'text': "可变参数 *args 和 **kwargs"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "*args 接收任意数量位置参数",
+          'code': "def total(*nums):\n    return sum(nums)\n\nprint(total(1, 2, 3))\nprint(total(1, 2, 3, 4, 5))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "**kwargs 接收任意关键字参数",
+          'code': "def show(**kwargs):\n    for key, value in kwargs.items():\n        print(f\"{key} = {value}\")\n\nshow(name=\"小明\", age=10)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"函数进阶：默认参数与关键字参数\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"函数进阶：默认参数与关键字参数\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"函数进阶：默认参数与关键字参数\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "默认参数让调用更简洁",
+            "关键字参数调用可以不按顺序",
+            "*args 收位置参数、**kwargs 收关键字参数",
+            "默认参数避免用可变对象（列表/字典）"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "灵活的多功能函数",
+          'code': "def make_sentence(subject, verb=\"喜欢\", *objects):\n    parts = [subject, verb] + list(objects)\n    return \" \".join(parts)\n\nprint(make_sentence(\"我\", \"喜欢\", \"Python\"))\nprint(make_sentence(\"小明\", \"吃\", \"苹果\", \"香蕉\"))"
+        }
+      ]
+    },
+    {
+      'id': "python-17",
+      'title': "lambda 匿名函数",
+      'summary': "一行定义小函数，配合 map/filter/sort 非常好用。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "lambda 用来创建没有名字的『一次性』小函数，语法是 <code.inline>lambda 参数: 表达式</code.inline>。它经常配合排序、过滤等操作使用。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "lambda 基本用法",
+          'code': "# 定义普通函数\n# def square(x): return x * x\n\n# 等价 lambda\nsquare = lambda x: x * x\nprint(square(5))   # 25\n\n# 两个参数\ntotal = lambda a, b: a + b\nprint(total(3, 4))  # 7"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "配合 sort 按指定规则排序",
+          'code': "students = [\n    {\"name\": \"小明\", \"score\": 88},\n    {\"name\": \"小红\", \"score\": 95},\n    {\"name\": \"小刚\", \"score\": 72}\n]\n# 按成绩排序\nstudents.sort(key=lambda s: s[\"score\"])\nfor s in students:\n    print(s[\"name\"], s[\"score\"])"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "配合 map / filter",
+          'code': "nums = [1, 2, 3, 4, 5]\n# map：对每个元素做操作\nsquares = list(map(lambda x: x * x, nums))\nprint(squares)   # [1, 4, 9, 16, 25]\n\n# filter：过滤出满足条件的\nevens = list(filter(lambda x: x % 2 == 0, nums))\nprint(evens)     # [2, 4]"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"lambda 匿名函数\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"lambda 匿名函数\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"lambda 匿名函数\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "lambda 参数: 表达式 创建匿名函数",
+            "常用于 sort 的 key、map、filter",
+            "lambda 只能写单行表达式",
+            "列表推导式通常是更 Pythonic 的选择"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "按长度排序",
+          'code': "words = [\"apple\", \"kiwi\", \"banana\", \"pear\"]\nwords.sort(key=lambda w: len(w))\nprint(words)"
+        }
+      ]
+    },
+    {
+      'id': "python-18",
+      'title': "列表推导式：一行生成列表",
+      'summary': "用一行代码生成新列表，Python 的标志性写法。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "列表推导式（list comprehension）是 Python 非常优雅的特性：用一行代码从可迭代对象生成新列表，比 for 循环更简洁易读。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "基本语法",
+          'code': "# 普通写法\nsquares = []\nfor i in range(1, 6):\n    squares.append(i * i)\n\n# 列表推导式\nsquares = [i * i for i in range(1, 6)]\nprint(squares)   # [1, 4, 9, 16, 25]"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "带条件的推导式",
+          'code': "# 只保留偶数\nnums = list(range(1, 11))\nevens = [n for n in nums if n % 2 == 0]\nprint(evens)   # [2, 4, 6, 8, 10]\n\n# 三目表达式\nlabels = [\"大\" if n >= 5 else \"小\" for n in nums]\nprint(labels)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "嵌套推导式与字符串处理",
+          'code': "# 字符串处理\nwords = [\"hello\", \"world\"]\nupper_words = [w.upper() for w in words]\nprint(upper_words)\n\n# 嵌套循环\nmatrix = [[1, 2], [3, 4]]\nflatten = [num for row in matrix for num in row]\nprint(flatten)   # [1, 2, 3, 4]\n\n# 字典推导式\nsquare_dict = {n: n * n for n in range(1, 5)}\nprint(square_dict)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"列表推导式：一行生成列表\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"列表推导式：一行生成列表\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"列表推导式：一行生成列表\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "[表达式 for 变量 in 序列] 生成列表",
+            "可用 if 过滤、用三目变换值",
+            "可嵌套循环展平二维结构",
+            "字典推导式 {} 类似"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "生成 1-20 的偶数平方",
+          'code': "result = [n * n for n in range(1, 21) if n % 2 == 0]\nprint(result)"
+        }
+      ]
+    },
+    {
+      'id': "python-19",
+      'title': "文件读写：与磁盘打交道",
+      'summary': "open 打开文件、读内容、写内容，最后一定记得关闭。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "程序除了和屏幕、键盘交互，还经常要读写文件（保存数据、读取配置）。Python 用 <code.inline>open()</code.inline> 打开文件，模式 <code.inline>r</code.inline> 读、<code.inline>w</code.inline> 写（覆盖）、<code.inline>a</code.inline> 追加。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "写入文件",
+          'code': "# 写文件（w 模式，会覆盖旧内容）\nwith open(\"notes.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"第一行内容\\n\")\n    f.write(\"第二行内容\\n\")\nprint(\"写入完成\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "读取文件",
+          'code': "# 读文件\nwith open(\"notes.txt\", \"r\", encoding=\"utf-8\") as f:\n    content = f.read()      # 读全部\n    print(content)\n\n# 逐行读\nwith open(\"notes.txt\", \"r\", encoding=\"utf-8\") as f:\n    for line in f:\n        print(\"行：\", line.strip())"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "追加模式",
+          'code': "with open(\"notes.txt\", \"a\", encoding=\"utf-8\") as f:\n    f.write(\"追加的第三行\\n\")\n\nwith open(\"notes.txt\", \"r\", encoding=\"utf-8\") as f:\n    print(f.read())"
+        },
+        {
+          'type': "warn",
+          'title': "为什么用 with 而不是手动 close",
+          'text': "with 语句会在代码块结束后**自动关闭文件**，即使中途出错也会关闭，避免文件句柄泄漏。手动 <code.inline>f.close()</code.inline> 容易忘，新手务必养成用 with 的习惯。"
+        },
+        {
+          'type': "tip",
+          'title': "编码参数",
+          'text': "读写中文建议都加 <code.inline>encoding=\"utf-8\"</code.inline>，否则 Windows 默认编码可能乱码或报错。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"文件读写：与磁盘打交道\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"文件读写：与磁盘打交道\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"文件读写：与磁盘打交道\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "open(路径, 模式, encoding) 打开文件",
+            "r 读、w 写覆盖、a 追加",
+            "with open(...) as f 自动关闭文件",
+            "f.read() 读全部、for line in f 逐行读",
+            "中文加 encoding='utf-8'"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "保存用户信息",
+          'code': "name = \"小明\"\nage = 10\nwith open(\"user.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(f\"姓名：{name}\\n年龄：{age}\\n\")\nprint(\"已保存\")\n\nwith open(\"user.txt\", \"r\", encoding=\"utf-8\") as f:\n    print(f.read())"
+        }
+      ]
+    },
+    {
+      'id': "python-20",
+      'title': "异常处理 try / except",
+      'summary': "捕获错误不让程序崩溃，写出健壮的程序。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "程序运行中可能会出错（比如把 'abc' 转成数字、除数为 0、文件不存在）。用 try/except 可以把这些错误『接住』，让程序不崩溃，给出友好提示。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "捕获异常",
+          'code': "try:\n    num = int(input(\"请输入一个数字：\"))\n    result = 10 / num\n    print(\"结果是：\", result)\nexcept ZeroDivisionError:\n    print(\"除数不能为 0！\")\nexcept ValueError:\n    print(\"你输入的不是有效数字！\")\nprint(\"程序继续运行\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "捕获所有异常与 finally",
+          'code': "try:\n    with open(\"不存在.txt\", \"r\") as f:\n        content = f.read()\nexcept FileNotFoundError:\n    print(\"文件不存在！\")\nexcept Exception as e:\n    print(\"发生错误：\", e)\nfinally:\n    print(\"无论成功失败都会执行这里\")\n\n# except Exception as e 捕获所有异常并拿到错误信息"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "else 分支：没出错才执行",
+          'code': "try:\n    num = int(\"42\")\nexcept ValueError:\n    print(\"转换失败\")\nelse:\n    print(\"转换成功：\", num)   # 只有没异常才执行"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "手动抛出异常 raise",
+          'code': "def set_age(age):\n    if age < 0:\n        raise ValueError(\"年龄不能为负数！\")\n    print(f\"年龄设为 {age}\")\n\nset_age(20)\n# set_age(-5)   # 会触发 raise，抛异常"
+        },
+        {
+          'type': "info",
+          'title': "常见的异常类型",
+          'text': "ValueError 值错误、TypeError 类型错误、ZeroDivisionError 除零、FileNotFoundError 文件不存在、IndexError 索引越界、KeyError 键不存在、NameError 变量未定义。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"异常处理 try / except\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"异常处理 try / except\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"异常处理 try / except\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "try/except 捕获异常不让程序崩溃",
+            "可针对不同异常写多个 except",
+            "finally 无论成败都执行，else 无异常才执行",
+            "raise 手动抛出自定义异常"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "安全的除法",
+          'code': "def safe_div(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return \"不能除以0\"\n\nprint(safe_div(10, 2))\nprint(safe_div(10, 0))"
+        }
+      ]
+    },
+    {
+      'id': "python-21",
+      'title': "模块与 import：站在巨人肩膀上",
+      'summary': "import 导入模块，用别人写好的功能，别重复造轮子。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Python 强大的一大原因是有海量现成的『模块』（module）和『包』（package）。用 <code.inline>import</code.inline> 导入后，就能用里面的函数，不用自己从头写。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "导入模块的几种方式",
+          'code': "import math\nprint(math.sqrt(16))      # 4.0  平方根\nprint(math.pi)            # 圆周率\n\nfrom random import randint\nprint(randint(1, 10))     # 1-10 随机整数\n\nfrom datetime import datetime\nnow = datetime.now()\nprint(now)\nprint(now.year, now.month, now.day)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "标准库常用模块",
+          'code': "import os\nimport sys\n\nprint(\"当前目录：\", os.getcwd())\nprint(\"Python 版本：\", sys.version)\n\nimport time\nprint(\"等待前\")\ntime.sleep(1)   # 暂停1秒\nprint(\"等待后\")"
+        },
+        {
+          'type': "h",
+          'text': "安装第三方包 pip"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "pip 安装包",
+          'code': "# 在命令行运行（不是Python里）：\n# pip install requests\n# 然后就能用了：\nimport requests\nresp = requests.get(\"https://api.github.com\")\nprint(resp.status_code)"
+        },
+        {
+          'type': "info",
+          'title': "怎么找想要的库",
+          'text': "在命令行输入 <code.inline>pip list</code.inline> 查看已装的包；用 <code.inline>pip install 包名</code.inline> 安装；搜索库可以去 PyPI（pypi.org）官网。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"模块与 import：站在巨人肩膀上\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"模块与 import：站在巨人肩膀上\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"模块与 import：站在巨人肩膀上\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "import 模块名 导入，用 模块.函数 调用",
+            "from 模块 import 函数 直接导入函数",
+            "标准库自带：math/random/datetime/os/sys/time",
+            "pip install 包名 安装第三方包"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "随机数游戏",
+          'code': "import random\nsecret = random.randint(1, 100)\nprint(\"我想到一个 1-100 的数，猜猜看\")\nguess = int(input(\"你的猜测：\"))\nif guess == secret:\n    print(\"猜对了！\")\nelse:\n    print(f\"不对哦，答案是 {secret}\")"
+        }
+      ]
+    },
+    {
+      'id': "python-22",
+      'title': "面向对象：类与对象",
+      'summary': "class 定义模板，实例化出对象，理解 OOP 的起点。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "面向对象编程（OOP）把数据和操作数据的方法打包成一个『对象』。类（class）是模板，对象（instance）是根据模板造出来的具体实例。比如『狗』是类，你家那只叫旺财的狗是对象。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "定义类与创建对象",
+          'code': "class Dog:\n    # __init__ 是构造方法，创建对象时自动调用\n    def __init__(self, name, age):\n        self.name = name   # 实例属性\n        self.age = age\n\n    # 方法：属于这个类的函数\n    def bark(self):\n        print(f\"{self.name}：汪汪！\")\n\n# 创建对象\nwangcai = Dog(\"旺财\", 2)\nprint(wangcai.name)\nprint(wangcai.age)\nwangcai.bark()"
+        },
+        {
+          'type': "p",
+          'text': "关键点：<code.inline>self</code.inline> 代表对象自己，在方法里通过 <code.inline>self.属性</code.inline> 访问这个对象的属性。__init__ 方法（两个下划线）在创建对象时自动执行，用来初始化属性。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "类属性 vs 实例属性",
+          'code': "class Dog:\n    species = \"犬科\"   # 类属性：所有实例共享\n\n    def __init__(self, name):\n        self.name = name  # 实例属性：每个对象独立\n\na = Dog(\"旺财\")\nb = Dog(\"大黄\")\nprint(a.species, b.species)   # 共享类属性\nprint(a.name, b.name)         # 各自独立"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "更完整的类示例",
+          'code': "class Student:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\n    def grade(self):\n        if self.score >= 90:\n            return \"优秀\"\n        elif self.score >= 60:\n            return \"及格\"\n        return \"不及格\"\n\ns1 = Student(\"小明\", 92)\ns2 = Student(\"小红\", 55)\nprint(f\"{s1.name}：{s1.grade()}\")\nprint(f\"{s2.name}：{s2.grade()}\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"面向对象：类与对象\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"面向对象：类与对象\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"面向对象：类与对象\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "class 定义类，__init__ 初始化属性",
+            "self 代表对象自己",
+            "实例属性每个对象独立，类属性共享",
+            "对象调用方法：对象.方法()"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "银行卡类",
+          'code': "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n        print(f\"{self.owner} 存入 {amount}，余额 {self.balance}\")\n\n    def withdraw(self, amount):\n        if amount > self.balance:\n            print(\"余额不足！\")\n        else:\n            self.balance -= amount\n            print(f\"取出 {amount}，余额 {self.balance}\")\n\nacc = BankAccount(\"小明\", 100)\nacc.deposit(50)\nacc.withdraw(30)\nacc.withdraw(200)"
+        }
+      ]
+    },
+    {
+      'id': "python-23",
+      'title': "继承：子类复用父类",
+      'summary': "继承父类的属性和方法，再扩展自己的，代码复用神器。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "继承允许一个类（子类）从另一个类（父类）继承属性和方法，避免重复写相同的代码。子类可以覆盖（override）父类的方法，也可以新增自己的方法。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "基本的继承",
+          'code': "class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def eat(self):\n        print(f\"{self.name} 在吃东西\")\n\nclass Dog(Animal):      # 继承 Animal\n    def bark(self):\n        print(f\"{self.name}：汪汪！\")\n\nclass Cat(Animal):\n    def meow(self):\n        print(f\"{self.name}：喵喵！\")\n\nd = Dog(\"旺财\")\nc = Cat(\"咪咪\")\nd.eat()    # 用父类的方法\nd.bark()\nc.eat()\nc.meow()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "方法重写 override",
+          'code': "class Animal:\n    def speak(self):\n        print(\"动物在叫\")\n\nclass Dog(Animal):\n    def speak(self):   # 重写父类方法\n        print(\"汪汪！\")\n\nclass Cat(Animal):\n    def speak(self):\n        print(\"喵喵！\")\n\n# 多态：同一方法，不同表现\nanimals = [Dog(), Cat(), Animal()]\nfor a in animals:\n    a.speak()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "super() 调用父类方法",
+          'code': "class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Dog(Animal):\n    def __init__(self, name, breed):\n        super().__init__(name)   # 调用父类的 __init__\n        self.breed = breed\n\n    def describe(self):\n        print(f\"{self.name} 是一只 {self.breed}\")\n\nd = Dog(\"旺财\", \"金毛\")\nd.describe()"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"继承：子类复用父类\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"继承：子类复用父类\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"继承：子类复用父类\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "子类(父类) 实现继承，复用父类属性和方法",
+            "重写父类方法实现多态",
+            "super() 调用父类方法",
+            "继承减少重复代码，is-a 关系"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "形状继承体系",
+          'code': "class Shape:\n    def area(self):\n        return 0\n\nclass Square(Shape):\n    def __init__(self, side):\n        self.side = side\n    def area(self):\n        return self.side ** 2\n\nclass Circle(Shape):\n    def __init__(self, r):\n        self.r = r\n    def area(self):\n        return 3.14 * self.r ** 2\n\nshapes = [Square(4), Circle(3)]\nfor s in shapes:\n    print(s.area())"
+        }
+      ]
+    },
+    {
+      'id': "python-24",
+      'title': "封装与私有属性",
+      'summary': "用下划线约定和 property 保护数据，OOP 三大特性之一。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "封装（Encapsulation）就是隐藏对象的内部细节，只暴露必要的接口。Python 没有严格的 private，但用约定：单下划线 <code.inline>_name</code.inline> 表示『内部使用』，双下划线 <code.inline>__name</code.inline> 触发名称改写。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "私有属性约定",
+          'code': "class BankAccount:\n    def __init__(self, owner, balance):\n        self.owner = owner\n        self._balance = balance   # 约定：内部属性\n\n    def get_balance(self):\n        return self._balance\n\n    def set_balance(self, amount):\n        if amount < 0:\n            print(\"余额不能为负！\")\n        else:\n            self._balance = amount\n\nacc = BankAccount(\"小明\", 100)\nprint(acc.get_balance())\nacc.set_balance(-50)   # 被拦截\nacc.set_balance(200)\nprint(acc.get_balance())"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "用 property 做属性控制",
+          'code': "class BankAccount:\n    def __init__(self, balance):\n        self._balance = balance\n\n    @property\n    def balance(self):\n        \"\"\"读取余额\"\"\"\n        return self._balance\n\n    @balance.setter\n    def balance(self, amount):\n        if amount < 0:\n            raise ValueError(\"余额不能为负！\")\n        self._balance = amount\n\nacc = BankAccount(100)\nprint(acc.balance)     # 像访问属性一样\nacc.balance = 300      # 走 setter 检查\nprint(acc.balance)\n# acc.balance = -5     # 会抛异常"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"封装与私有属性\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"封装与私有属性\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"封装与私有属性\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "封装：隐藏内部细节，暴露接口",
+            "_单下划线表示内部约定，__双下划线名称改写",
+            "property 把方法伪装成属性，可在赋值时校验",
+            "getter/setter 控制对属性的访问"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "温度类",
+          'code': "class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n\n    @property\n    def fahrenheit(self):\n        return self._celsius * 9 / 5 + 32\n\n    @fahrenheit.setter\n    def fahrenheit(self, value):\n        self._celsius = (value - 32) * 5 / 9\n\nt = Temperature(25)\nprint(\"摄氏\", t._celsius, \"华氏\", t.fahrenheit)\nt.fahrenheit = 100\nprint(\"现在摄氏\", round(t._celsius, 1))"
+        }
+      ]
+    },
+    {
+      'id': "python-25",
+      'title': "常用标准库巡礼（一）：math / random / datetime",
+      'summary': "数学计算、随机数、日期时间，三个最常用的标准库。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Python 标准库自带很多功能，无需安装。这一章看看最常用的三个：math（数学）、random（随机）、datetime（日期时间）。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "math 数学库",
+          'code': "import math\nprint(math.sqrt(16))        # 4.0 平方根\nprint(math.floor(3.7))      # 3 向下取整\nprint(math.ceil(3.2))       # 4 向上取整\nprint(round(3.14159, 2))    # 3.14 四舍五入保留2位\nprint(math.fabs(-5))        # 5.0 绝对值\nprint(math.pow(2, 10))      # 1024.0 幂"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "random 随机库",
+          'code': "import random\nprint(random.randint(1, 6))      # 1-6 整数（骰子）\nprint(random.random())           # 0-1 之间的浮点数\nprint(random.choice([\"石头\", \"剪刀\", \"布\"]))  # 随机选一个\ncards = [1, 2, 3, 4, 5]\nrandom.shuffle(cards)            # 洗牌\nprint(cards)\nprint(random.sample(range(1, 50), 5))  # 不重复抽5个"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "datetime 日期时间库",
+          'code': "from datetime import datetime, timedelta, date\n\nnow = datetime.now()\nprint(\"现在：\", now)\nprint(\"年：\", now.year, \"月：\", now.month, \"日：\", now.day)\nprint(\"时：\", now.hour, \"分：\", now.minute)\n\n# 格式化\nprint(now.strftime(\"%Y-%m-%d %H:%M:%S\"))\nprint(now.strftime(\"%A\"))   # 星期几\n\n# 日期运算\ntomorrow = date.today() + timedelta(days=1)\nprint(\"明天：\", tomorrow)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"常用标准库巡礼（一）：math / random / datetime\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"常用标准库巡礼（一）：math / random / datetime\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"常用标准库巡礼（一）：math / random / datetime\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "math：sqrt/floor/ceil/round/pow",
+            "random：randint/random/choice/shuffle/sample",
+            "datetime：now/strftime/strptime/timedelta",
+            "strftime 格式：%Y年 %m月 %d日 %H时 %M分 %S秒"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "随机密码生成器",
+          'code': "import random\nimport string\n\nlength = 12\nchars = string.ascii_letters + string.digits\npassword = \"\".join(random.choice(chars) for _ in range(length))\nprint(\"随机密码：\", password)"
+        }
+      ]
+    },
+    {
+      'id': "python-26",
+      'title': "常用标准库巡礼（二）：json / os / sys / collections",
+      'summary': "JSON 数据交换、路径操作、命令行参数、Counter 统计。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "这一章继续看标准库：json（JSON 数据交换）、os/pathlib（路径与文件）、sys（系统参数）、collections（高级容器）。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "json 序列化与反序列化",
+          'code': "import json\n\n# 字典 -> JSON 字符串\ndata = {\"name\": \"小明\", \"age\": 10, \"tags\": [\"python\", \"student\"]}\njson_str = json.dumps(data, ensure_ascii=False, indent=2)\nprint(json_str)\n\n# JSON 字符串 -> 字典\nback = json.loads(json_str)\nprint(back[\"name\"])\nprint(back[\"tags\"][0])"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "os 与 pathlib 操作路径",
+          'code': "import os\nfrom pathlib import Path\n\nprint(\"当前目录：\", os.getcwd())\n\n# 用 pathlib 更现代\np = Path(\"my_folder/notes.txt\")\nprint(\"文件名：\", p.name)\nprint(\"父目录：\", p.parent)\nprint(\"后缀：\", p.suffix)\n\n# 创建目录\nPath(\"test_dir\").mkdir(exist_ok=True)\nprint(\"目录创建成功\")\n\n# 列出当前目录\nfor item in os.listdir(\".\"):\n    print(item)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "collections.Counter 统计",
+          'code': "from collections import Counter\n\nwords = [\"apple\", \"banana\", \"apple\", \"orange\", \"apple\", \"banana\"]\ncount = Counter(words)\nprint(count)\nprint(count.most_common(2))   # 出现最多的前2个\n\n# Counter 也用于字符统计\ntext = \"hello world\"\nprint(Counter(text))"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"常用标准库巡礼（二）：json / os / sys / collections\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"常用标准库巡礼（二）：json / os / sys / collections\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"常用标准库巡礼（二）：json / os / sys / collections\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "json.dumps 转字符串，json.loads 解析",
+            "pathlib.Path 更现代地处理路径",
+            "Counter 一键做频次统计，most_common 排序",
+            "os.getcwd 当前目录，os.listdir 列目录"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "词频统计器",
+          'code': "from collections import Counter\n\ntext = \"python is great python is powerful python is easy\"\nwords = text.split()\ncount = Counter(words)\nfor word, n in count.most_common():\n    print(f\"{word}: {n}次\")"
+        }
+      ]
+    },
+    {
+      'id': "python-27",
+      'title': "正则表达式基础",
+      'summary': "用 re 模块做字符串匹配、查找、替换，文本处理利器。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "正则表达式（regex）是一套描述字符串模式的语法，用来匹配、查找、提取、替换文本。Python 用 <code.inline>re</code.inline> 模块。虽然一开始有点绕，但掌握基础模式非常有用。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "re 基本函数",
+          'code': "import re\n\n# search：查找第一个匹配\nmatch = re.search(r\"\\d+\", \"订单号 12345 已发货\")\nprint(match.group())   # 12345\n\n# findall：找到所有匹配，返回列表\nnums = re.findall(r\"\\d+\", \"苹果2个 香蕉3个 橙子5个\")\nprint(nums)   # ['2', '3', '5']\n\n# match：从开头匹配\nprint(re.match(r\"\\d+\", \"123abc\"))   # 有匹配\nprint(re.match(r\"\\d+\", \"abc123\"))   # None 不匹配"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "常用元字符",
+          'code': "import re\n\n# \\d 数字  \\w 字母数字下划线  \\s 空白\n# . 任意字符  * 前一个重复0次以上  + 1次以上  ? 0或1次\nprint(re.findall(r\"\\w+\", \"hello, world!\"))   # ['hello', 'world']\nprint(re.findall(r\"\\d{3}\", \"电话 123-456-7890\"))  # 3位数字\n\n# [ ] 字符集  | 或  ^ 取反\nprint(re.findall(r\"[aeiou]\", \"hello\"))   # ['e', 'o'] 元音\nprint(re.findall(r\"cat|dog\", \"I have a cat and a dog\"))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "sub 替换与 split 分割",
+          'code': "import re\n\n# 替换\nphone = \"138-1234-5678\"\nmasked = re.sub(r\"\\d\", \"*\", phone)\nprint(masked)   # ***-****-****\n\n# 用正则分割\ntext = \"apple,banana;orange grape\"\nparts = re.split(r\"[,; ]\", text)\nprint(parts)"
+        },
+        {
+          'type': "info",
+          'title': "r 前缀是什么",
+          'text': "字符串前的 <code.inline>r</code.inline> 表示原始字符串（raw string），让反斜杠不被转义。写正则强烈建议加 r，例如 <code.inline>r\"\\d+\"</code.inline>。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"正则表达式基础\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"正则表达式基础\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"正则表达式基础\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "re.search 找第一个、findall 找所有、match 从头匹配",
+            "\\d 数字、\\w 单词字符、. 任意、* + ? 数量",
+            "[字符集]、| 或、sub 替换、split 分割",
+            "写正则用原始字符串 r\"...\""
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "提取邮箱",
+          'code': "import re\n\ntext = \"联系我：alice@example.com 或 bob@test.org\"\npattern = r\"[\\w.]+@[\\w.]+\\.[a-z]+\"\nemails = re.findall(pattern, text)\nprint(emails)"
+        }
+      ]
+    },
+    {
+      'id': "python-28",
+      'title': "生成器与迭代器",
+      'summary': "yield 关键字、惰性求值，处理大数据不占内存。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "生成器（generator）是一种特殊的迭代器：用 <code.inline>yield</code.inline> 代替 return，每次调用产出**一个**值并暂停，下次从暂停处继续。它的好处是惰性求值——需要时才生成，不一次性占满内存。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "生成器基本用法",
+          'code': "def count_up(n):\n    i = 1\n    while i <= n:\n        yield i     # 产出 i 并暂停\n        i += 1\n\n# 逐个取（惰性）\ng = count_up(3)\nprint(next(g))   # 1\nprint(next(g))   # 2\nprint(next(g))   # 3\n# print(next(g))  # 取完会报 StopIteration\n\n# 或直接遍历\nfor num in count_up(5):\n    print(num)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "生成器表达式",
+          'code': "# 生成器表达式：(表达式 for 变量 in 序列)\n# 对比列表推导式 []\ng = (x * x for x in range(5))\nprint(sum(g))   # 0+1+4+9+16 = 30\n\n# 好处：不一次性占用大内存\nbig = (x for x in range(1000000))\nprint(next(big))\nprint(next(big))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "斐波那契数列生成器",
+          'code': "def fibonacci(n):\n    a, b = 0, 1\n    count = 0\n    while count < n:\n        yield a\n        a, b = b, a + b\n        count += 1\n\nfor num in fibonacci(10):\n    print(num, end=\" \")\nprint()"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"生成器与迭代器\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"生成器与迭代器\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"生成器与迭代器\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "yield 产出值并暂停，next() 逐个取",
+            "生成器惰性求值，省内存",
+            "生成器表达式 (x for x in ...)",
+            "适合处理大数据流"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "无限自然数（配合 break 用）",
+          'code': "def natural_numbers():\n    n = 1\n    while True:\n        yield n\n        n += 1\n\n# 取前5个\nfor n in natural_numbers():\n    if n > 5:\n        break\n    print(n)"
+        }
+      ]
+    },
+    {
+      'id': "python-29",
+      'title': "装饰器：给函数加‘外挂’",
+      'summary': "不修改原函数，给它附加功能，AOP 思想的体现。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "装饰器（decorator）是一种『给函数包装功能』的语法糖：在不修改原函数代码的情况下，给函数增加额外行为（比如计时、日志、权限检查）。用 <code.inline>@装饰器名</code.inline> 加在函数上面。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "最简单的装饰器",
+          'code': "def my_decorator(func):\n    def wrapper():\n        print(\"=== 函数开始前 ===\")\n        func()\n        print(\"=== 函数结束后 ===\")\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print(\"你好！\")\n\nsay_hello()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "计时装饰器（实用）",
+          'code': "import time\n\ndef timer(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f\"{func.__name__} 耗时 {end - start:.4f} 秒\")\n        return result\n    return wrapper\n\n@timer\ndef slow_task():\n    time.sleep(0.2)\n    print(\"任务完成\")\n\nslow_task()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "带参数的装饰器",
+          'code': "def repeat(times):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                func(*args, **kwargs)\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef hi():\n    print(\"嗨！\")\n\nhi()   # 打印3次"
+        },
+        {
+          'type': "info",
+          'title': "为什么用装饰器",
+          'text': "比如很多函数都要『先检查登录』『记录日志』『计算耗时』，把这些重复逻辑抽成装饰器，函数上 @ 一行就能复用。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"装饰器：给函数加‘外挂’\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"装饰器：给函数加‘外挂’\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"装饰器：给函数加‘外挂’\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "装饰器包装函数，不修改原代码",
+            "@语法糖 + 内部 wrapper 函数",
+            "*args/**kwargs 让包装器支持任意参数",
+            "常用于计时、日志、权限检查"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "日志装饰器",
+          'code': "def log(func):\n    def wrapper(*args, **kwargs):\n        print(f\"调用 {func.__name__}，参数 {args}\")\n        result = func(*args, **kwargs)\n        print(f\"返回 {result}\")\n        return result\n    return wrapper\n\n@log\ndef add(a, b):\n    return a + b\n\nadd(3, 5)"
+        }
+      ]
+    },
+    {
+      'id': "python-30",
+      'title': "上下文管理器 with",
+      'summary': "自动管理资源，with 打开文件/锁/连接的正确姿势。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "with 语句是上下文管理器（context manager）的入口，它保证在代码块结束后自动做『清理』工作（关闭文件、释放锁、关闭连接），即使中途出错也会执行清理。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "with 的基本用法",
+          'code': "# 标准写法\nwith open(\"data.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"内容\")\n# 离开 with 块后文件自动关闭，无需手动 close\n\n# 同时管理多个资源\nwith open(\"a.txt\", \"w\") as fa, open(\"b.txt\", \"w\") as fb:\n    fa.write(\"A\")\n    fb.write(\"B\")\nprint(\"两个文件都写好了\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "自定义上下文管理器",
+          'code': "class MyContext:\n    def __enter__(self):\n        print(\"进入：做准备工作\")\n        return \"资源对象\"\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print(\"退出：做清理工作\")\n        return False   # False 表示不吞掉异常\n\nwith MyContext() as res:\n    print(\"使用中：\", res)"
+        },
+        {
+          'type': "p",
+          'text': "还有一个更简单的写法：用 <code.inline>contextlib.contextmanager</code.inline> 装饰器，配合 yield 把函数变成上下文管理器。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "contextmanager 装饰器写法",
+          'code': "from contextlib import contextmanager\n\n@contextmanager\ndef managed():\n    print(\"进入\")\n    try:\n        yield \"资源\"\n    finally:\n        print(\"退出\")\n\nwith managed() as r:\n    print(\"使用：\", r)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"上下文管理器 with\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"上下文管理器 with\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"上下文管理器 with\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "with 自动管理资源，保证清理执行",
+            "__enter__ 进入时执行、__exit__ 退出时执行",
+            "contextmanager 装饰器 + yield 更简洁",
+            "打开文件、锁、数据库连接都用 with"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "上下文计时器",
+          'code': "import time\nfrom contextlib import contextmanager\n\n@contextmanager\ndef timed():\n    start = time.time()\n    yield\n    print(f\"耗时 {time.time() - start:.4f} 秒\")\n\nwith timed():\n    total = sum(range(1000000))\n    print(\"求和完成\")"
+        }
+      ]
+    },
+    {
+      'id': "python-31",
+      'title': "类型注解与 typing",
+      'summary': "给参数和返回值标注类型，让代码更清晰、IDE 更好用。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "类型注解（type hints）给参数和返回值标注期望的类型，它不影响运行，但让代码可读性大增，IDE 能给出更准确的补全和提示。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "基本类型注解",
+          'code': "def greet(name: str, times: int = 1) -> str:\n    return name * times\n\nprint(greet(\"Hi \", 3))   # Hi Hi Hi\n\n# 注解不会强制类型，传错也能跑，但 IDE 会提示"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "集合与 Optional 注解",
+          'code': "from typing import List, Dict, Optional, Tuple\n\ndef total(nums: List[int]) -> int:\n    return sum(nums)\n\ndef find_user(users: Dict[str, int], name: str) -> Optional[int]:\n    return users.get(name)\n\ndef pair() -> Tuple[int, str]:\n    return 1, \"one\"\n\nprint(total([1, 2, 3]))\nprint(find_user({\"a\": 1}, \"a\"))\nprint(pair())"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "Union 与类型别名",
+          'code': "from typing import Union\n\ndef parse(value: Union[int, str]) -> int:\n    if isinstance(value, str):\n        return int(value)\n    return value\n\nprint(parse(\"42\"))\nprint(parse(10))"
+        },
+        {
+          'type': "info",
+          'title': "运行时检查",
+          'text': "注解默认只在静态层面起作用（供人读、IDE 用）。若要运行时强制校验，可以用 <code.inline>pydantic</code.inline> 这类库或手动 isinstance 检查。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"类型注解与 typing\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"类型注解与 typing\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"类型注解与 typing\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "参数: 类型 和 -> 返回值类型 标注",
+            "typing 提供 List/Dict/Optional/Union/Tuple",
+            "注解提升可读性和 IDE 体验，不影响运行",
+            "Optional[X] = X 或 None"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "带注解的班级类",
+          'code': "from typing import List\n\nclass Student:\n    def __init__(self, name: str, score: float) -> None:\n        self.name = name\n        self.score = score\n\nclass ClassRoom:\n    def __init__(self, students: List[Student]) -> None:\n        self.students = students\n\n    def average(self) -> float:\n        return sum(s.score for s in self.students) / len(self.students)\n\nroom = ClassRoom([Student(\"小明\", 92), Student(\"小红\", 85)])\nprint(f\"平均分：{room.average():.1f}\")"
+        }
+      ]
+    },
+    {
+      'id': "python-32",
+      'title': "多线程：同时做多件事",
+      'summary': "threading 让程序并行处理，适合 I/O 密集型任务。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "多线程让程序可以『同时』执行多个任务。Python 的 <code.inline>threading</code.inline> 模块提供线程支持。注意：由于 GIL（全局解释器锁），Python 多线程对 CPU 密集任务提升有限，但非常适合 I/O 密集任务（下载、请求、读文件）。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "创建线程",
+          'code': "import threading\nimport time\n\ndef work(name, seconds):\n    print(f\"{name} 开始\")\n    time.sleep(seconds)\n    print(f\"{name} 完成\")\n\n# 创建并启动线程\nthreads = []\nfor i in range(3):\n    t = threading.Thread(target=work, args=(f\"任务{i}\", 1))\n    threads.append(t)\n    t.start()\n\n# 等待所有线程结束\nfor t in threads:\n    t.join()\nprint(\"所有任务完成\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "线程安全：用锁",
+          'code': "import threading\n\ncounter = 0\nlock = threading.Lock()\n\ndef increment():\n    global counter\n    for _ in range(100000):\n        with lock:      # 加锁保护共享变量\n            counter += 1\n\nthreads = [threading.Thread(target=increment) for _ in range(4)]\nfor t in threads:\n    t.start()\nfor t in threads:\n    t.join()\nprint(\"计数器：\", counter)   # 应该是 400000"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"多线程：同时做多件事\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"多线程：同时做多件事\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"多线程：同时做多件事\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "threading.Thread(target=函数, args=参数) 创建线程",
+            "start() 启动、join() 等待结束",
+            "共享变量要用 Lock 保护，防止数据错乱",
+            "适合 I/O 密集，CPU 密集用多进程"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "并发下载演示",
+          'code': "import threading\nimport time\n\njobs = [(\"A\", 0.5), (\"B\", 0.3), (\"C\", 0.8)]\n\ndef download(name, sec):\n    print(f\"下载 {name} 中...\")\n    time.sleep(sec)\n    print(f\"{name} 下载完成\")\n\nthreads = [threading.Thread(target=download, args=(n, s)) for n, s in jobs]\nstart = time.time()\nfor t in threads: t.start()\nfor t in threads: t.join()\nprint(f\"总耗时：{time.time()-start:.2f} 秒\")"
+        }
+      ]
+    },
+    {
+      'id': "python-33",
+      'title': "多进程与异步入门",
+      'summary': "multiprocessing 和 asyncio，两套并行方案怎么选。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "如果任务是 CPU 密集（大量计算），多线程受 GIL 限制提升不大，此时用多进程 <code.inline>multiprocessing</code.inline>。如果是大量 I/O 等待，用异步 <code.inline>asyncio</code.inline> 更高效。理解它们的区别很重要。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "多进程 Process",
+          'code': "from multiprocessing import Process\nimport time\n\ndef heavy(n):\n    total = sum(range(n))\n    print(f\"进程计算结果：{total}\")\n\nif __name__ == \"__main__\":\n    processes = [Process(target=heavy, args=(1000000,)) for _ in range(4)]\n    for p in processes:\n        p.start()\n    for p in processes:\n        p.join()\n    print(\"所有进程完成\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "asyncio 异步编程",
+          'code': "import asyncio\n\nasync def task(name, seconds):\n    print(f\"{name} 开始\")\n    await asyncio.sleep(seconds)   # 模拟 I/O 等待\n    print(f\"{name} 完成\")\n\nasync def main():\n    # 同时运行多个协程\n    await asyncio.gather(\n        task(\"A\", 1),\n        task(\"B\", 2),\n        task(\"C\", 1)\n    )\n\nasyncio.run(main())\nprint(\"全部完成\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "async def 与 await 概念",
+          'code': "async def fetch():\n    # await 会『挂起』当前任务，去执行别的任务\n    # 模拟耗时操作\n    return \"数据\"\n\nasync def main():\n    data = await fetch()\n    print(data)\n\nasyncio.run(main())"
+        },
+        {
+          'type': "info",
+          'title': "怎么选",
+          'text': "I/O 密集（网络、文件、数据库）：asyncio 最优，其次多线程；CPU 密集（计算、数据处理）：多进程最优。别上来就用高级方案，简单任务单线程就够。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"多进程与异步入门\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"多进程与异步入门\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"多进程与异步入门\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "CPU 密集用 multiprocessing 多进程",
+            "I/O 密集用 asyncio 异步，await 挂起不阻塞",
+            "asyncio.run(main()) 启动，gather 并发",
+            "GIL 限制多线程对 CPU 密集的收益"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "异步并发请求演示",
+          'code': "import asyncio\n\nasync def worker(name, delay):\n    await asyncio.sleep(delay)\n    return f\"{name} 完成\"\n\nasync def main():\n    results = await asyncio.gather(\n        worker(\"任务1\", 1),\n        worker(\"任务2\", 0.5),\n        worker(\"任务3\", 0.8)\n    )\n    for r in results:\n        print(r)\n\nasyncio.run(main())"
+        }
+      ]
+    },
+    {
+      'id': "python-34",
+      'title': "虚拟环境 venv",
+      'summary': "每个项目独立的包环境，告别依赖冲突。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "不同项目可能需要不同版本的第三方包，直接全局安装会互相冲突。虚拟环境（virtual environment）为每个项目创建独立的 Python 环境，这是专业开发的标配。"
+        },
+        {
+          'type': "code",
+          'lang': "bash",
+          'title': "创建和使用虚拟环境",
+          'code': "# 在项目目录的命令行里：\n# 创建虚拟环境（目录名 venv）\npython -m venv venv\n\n# 激活（Windows）\nvenv\\Scripts\\activate\n# 激活（macOS/Linux）\nsource venv/bin/activate\n\n# 激活后提示符前面会出现 (venv)，然后安装包只影响本项目\npip install requests\n\n# 退出虚拟环境\ndeactivate"
+        },
+        {
+          'type': "p",
+          'text': "另一个选择是 Anaconda 的 conda 环境，适合数据科学场景，能管理 Python 版本。但对大多数项目，内置的 venv 就够用了。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"虚拟环境 venv\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"虚拟环境 venv\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"虚拟环境 venv\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "python -m venv venv 创建虚拟环境",
+            "Windows: venv\\Scripts\\activate 激活",
+            "macOS/Linux: source venv/bin/activate",
+            "激活后 pip install 只影响当前项目",
+            "deactivate 退出环境"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "检查当前 Python",
+          'code': "import sys\nprint(sys.executable)   # 显示当前使用的 Python 路径\n# 在虚拟环境中运行时，路径会指向 venv 里的 python"
+        }
+      ]
+    },
+    {
+      'id': "python-35",
+      'title': "常用第三方库速览",
+      'summary': "requests / numpy / pandas / matplotlib，数据科学的四大金刚。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "这一章介绍几个几乎必装的第三方库（用 <code.inline>pip install 库名</code.inline> 安装）。它们是数据科学、爬虫、Web 开发的地基。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "requests：发 HTTP 请求",
+          'code': "# pip install requests\nimport requests\n\nresp = requests.get(\"https://api.github.com\")\nprint(\"状态码：\", resp.status_code)\ndata = resp.json()\nprint(\"返回的数据：\", data)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "numpy：数值计算",
+          'code': "# pip install numpy\nimport numpy as np\n\na = np.array([1, 2, 3, 4])\nprint(a * 2)               # 数组运算 [2 4 6 8]\nprint(np.mean(a))          # 均值 2.5\nprint(np.arange(0, 10, 2)) # 等差数组\n\nm = np.array([[1, 2], [3, 4]])\nprint(m.sum())   # 10"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "pandas：表格数据处理",
+          'code': "# pip install pandas\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"姓名\": [\"小明\", \"小红\"],\n    \"成绩\": [92, 85]\n})\nprint(df)\nprint(\"平均成绩：\", df[\"成绩\"].mean())"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "matplotlib：画图",
+          'code': "# pip install matplotlib\nimport matplotlib.pyplot as plt\n\nx = [1, 2, 3, 4, 5]\ny = [1, 4, 9, 16, 25]\nplt.plot(x, y)\nplt.title(\"我的第一张图\")\nplt.show()\n# 在脚本里如果不想阻塞，可用 plt.savefig(\"plot.png\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"常用第三方库速览\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"常用第三方库速览\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"常用第三方库速览\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "requests 发 HTTP 请求、解析 JSON",
+            "numpy 高效数值计算、数组运算",
+            "pandas 处理表格数据（DataFrame）",
+            "matplotlib 数据可视化"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "统计成绩表",
+          'code': "import numpy as np\n\nscores = np.array([88, 92, 76, 85, 90, 65])\nprint(\"平均：\", np.mean(scores))\nprint(\"最高：\", np.max(scores))\nprint(\"最低：\", np.min(scores))\nprint(\"标准差：\", round(np.std(scores), 2))\nprint(\"排序：\", np.sort(scores))"
+        }
+      ]
+    },
+    {
+      'id': "python-36",
+      'title': "SQLite：零配置数据库",
+      'summary': "用 sqlite3 模块把数据持久化，无需安装数据库服务。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "SQLite 是一个零配置、单文件的数据库，Python 内置 <code.inline>sqlite3</code.inline> 模块，非常适合学习和小型项目。数据存到一个 .db 文件里。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "创建表并插入数据",
+          'code': "import sqlite3\n\n# 连接（文件不存在会自动创建）\nconn = sqlite3.connect(\"school.db\")\ncur = conn.cursor()\n\n# 建表\ncur.execute(\"\"\"\nCREATE TABLE IF NOT EXISTS students (\n    id INTEGER PRIMARY KEY,\n    name TEXT,\n    score REAL\n)\n\"\"\")\n\n# 插入\ncur.execute(\"INSERT INTO students (name, score) VALUES (?, ?)\", (\"小明\", 92))\ncur.execute(\"INSERT INTO students (name, score) VALUES (?, ?)\", (\"小红\", 85))\nconn.commit()\nprint(\"数据已插入\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "查询数据",
+          'code': "import sqlite3\nconn = sqlite3.connect(\"school.db\")\ncur = conn.cursor()\n\ncur.execute(\"SELECT * FROM students\")\nrows = cur.fetchall()\nfor row in rows:\n    print(row)\n\n# 条件查询\ncur.execute(\"SELECT name FROM students WHERE score >= 90\")\nprint(\"90分以上的：\", cur.fetchall())"
+        },
+        {
+          'type': "warn",
+          'title': "SQL 注入防护",
+          'text': "用 <code.inline>?</code.inline> 占位符传参（如 WHERE name = ?），绝不要用字符串拼接 SQL。这是防 SQL 注入的标准做法。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"SQLite：零配置数据库\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"SQLite：零配置数据库\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"SQLite：零配置数据库\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "sqlite3.connect 连库，文件不存在自动创建",
+            "cur.execute 执行 SQL，? 占位符防注入",
+            "INSERT 后要 conn.commit() 提交",
+            "fetchall 取所有行、fetchone 取一行"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "待办事项数据库",
+          'code': "import sqlite3\nconn = sqlite3.connect(\"todo.db\")\ncur = conn.cursor()\ncur.execute(\"CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, task TEXT, done INTEGER)\")\ncur.execute(\"INSERT INTO todos (task, done) VALUES (?, 0)\", (\"学 Python\",))\ncur.execute(\"INSERT INTO todos (task, done) VALUES (?, 1)\", (\"写代码\",))\nconn.commit()\ncur.execute(\"SELECT * FROM todos\")\nfor row in cur.fetchall():\n    status = \"已完成\" if row[2] else \"未完成\"\n    print(f\"{row[0]}. {row[1]} [{status}]\")\nconn.close()"
+        }
+      ]
+    },
+    {
+      'id': "python-37",
+      'title': "常用算法：排序与查找实现",
+      'summary': "冒泡、选择、快速排序与二分查找，用 Python 亲手实现。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "排序和查找是最经典的算法。虽然 Python 有内置的 sort 和 in，但理解算法原理对逻辑思维训练至关重要。这一章用 Python 实现几种基础算法。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "冒泡排序",
+          'code': "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n - 1):\n        for j in range(n - 1 - i):\n            if arr[j] > arr[j + 1]:\n                arr[j], arr[j + 1] = arr[j + 1], arr[j]\n    return arr\n\nprint(bubble_sort([5, 2, 8, 1, 9]))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "快速排序（递归）",
+          'code': "def quick_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    mid = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quick_sort(left) + mid + quick_sort(right)\n\nprint(quick_sort([5, 2, 8, 1, 9, 3]))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "二分查找",
+          'code': "def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1   # 找不到\n\nnums = [1, 3, 5, 7, 9, 11]\nprint(\"5 在索引：\", binary_search(nums, 5))\nprint(\"8 在索引：\", binary_search(nums, 8))"
+        },
+        {
+          'type': "info",
+          'title': "复杂度",
+          'text': "冒泡排序 O(n²)、快速排序平均 O(n log n)、二分查找 O(log n)。二分查找要求数组必须有序。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"常用算法：排序与查找实现\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"常用算法：排序与查找实现\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"常用算法：排序与查找实现\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "冒泡排序相邻比较交换，O(n²)",
+            "快排选基准分治递归，O(n log n)",
+            "二分查找要求有序，O(log n)",
+            "内建 sort/sorted 通常更快，理解原理用于面试与特殊场景"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "插入排序",
+          'code': "def insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > key:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr\n\nprint(insertion_sort([4, 2, 9, 1, 5]))"
+        }
+      ]
+    },
+    {
+      'id': "python-38",
+      'title': "递归：函数调用自己",
+      'summary': "递归就是函数自己调用自己，拆解大问题为小问题。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "递归（recursion）指函数在自己内部调用自己。它把一个复杂问题拆成更小的同类问题。递归一定要有『终止条件』，否则会无限递归直到栈溢出。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "阶乘（递归经典）",
+          'code': "def factorial(n):\n    if n <= 1:\n        return 1       # 终止条件\n    return n * factorial(n - 1)   # 递归调用\n\nprint(factorial(5))   # 120\n# 推理：5*4*3*2*1"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "斐波那契数列（递归）",
+          'code': "def fib(n):\n    if n <= 1:\n        return n\n    return fib(n - 1) + fib(n - 2)\n\nfor i in range(10):\n    print(fib(i), end=\" \")\nprint()\n# 0 1 1 2 3 5 8 13 21 34"
+        },
+        {
+          'type': "warn",
+          'title': "递归注意栈溢出",
+          'text': "递归层数太深会报 <code.inline>RecursionError: maximum recursion depth exceeded</code.inline>。能用循环就用循环，或改用尾递归优化（Python 不支持）与记忆化。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "递归遍历嵌套结构",
+          'code': "def sum_nested(lst):\n    total = 0\n    for item in lst:\n        if isinstance(item, list):\n            total += sum_nested(item)   # 遇到子列表递归\n        else:\n            total += item\n    return total\n\nprint(sum_nested([1, [2, 3], [4, [5, 6]]]))   # 21"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"递归：函数调用自己\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"递归：函数调用自己\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"递归：函数调用自己\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "递归 = 函数自己调用自己",
+            "必须写终止条件，否则栈溢出",
+            "阶乘、斐波那契、树遍历是经典递归场景",
+            "递归拆大问题为子问题，逻辑简洁但注意深度"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "递归求列表元素个数",
+          'code': "def count_items(lst):\n    count = 0\n    for item in lst:\n        if isinstance(item, list):\n            count += count_items(item)\n        else:\n            count += 1\n    return count\n\nprint(count_items([1, [2, 3], [4, [5, 6]]]))   # 6"
+        }
+      ]
+    },
+    {
+      'id': "python-39",
+      'title': "Python 常见坑大全（一）",
+      'summary': "可变默认参数、浅拷贝、0.1+0.2、字符串不可变等经典坑。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "写 Python 有些经典坑，几乎每个人都会踩。提前了解它们，能帮你省下大量调试时间。"
+        },
+        {
+          'type': "h",
+          'text': "坑 1：可变默认参数"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "可变默认参数的坑",
+          'code': "# 错误写法：默认参数是可变对象\ndef add_item(item, items=[]):\n    items.append(item)\n    return items\n\nprint(add_item(1))   # [1]\nprint(add_item(2))   # [1, 2]   ← 居然累积了！\n\n# 正确写法\ndef add_item(item, items=None):\n    if items is None:\n        items = []\n    items.append(item)\n    return items\n\nprint(add_item(1))\nprint(add_item(2))"
+        },
+        {
+          'type': "h",
+          'text': "坑 2：浮点数精度"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "浮点数误差",
+          'code': "print(0.1 + 0.2)          # 0.30000000000000004\nprint(0.1 + 0.2 == 0.3)   # False！\n\n# 解决方法：用 round 或 Decimal\nprint(round(0.1 + 0.2, 1))         # 0.3\nfrom decimal import Decimal\nprint(Decimal(\"0.1\") + Decimal(\"0.2\"))   # 0.3"
+        },
+        {
+          'type': "h",
+          'text': "坑 3：浅拷贝与深拷贝"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "拷贝的坑",
+          'code': "# 列表直接赋值是引用同一个对象\nlist1 = [1, 2, 3]\nlist2 = list1\nlist2.append(4)\nprint(list1)   # [1, 2, 3, 4]   list1 也被改了！\n\n# 用 copy() 浅拷贝（只拷贝外层）\nlist3 = list1.copy()\nlist3.append(5)\nprint(list1)   # [1, 2, 3, 4]   list1 不变\n\n# 嵌套列表要用深拷贝\nimport copy\nnested = [[1, 2], [3, 4]]\nshallow = nested.copy()\ndeep = copy.deepcopy(nested)\nshallow[0].append(99)\nprint(nested)  # [[1, 2, 99], [3, 4]]  浅拷贝内部仍共享\nprint(deep)    # [[1, 2], [3, 4]]       深拷贝独立"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Python 常见坑大全（一）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Python 常见坑大全（一）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Python 常见坑大全（一）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "可变默认参数用 None 代替 [] 等",
+            "浮点数用 round/Decimal 处理精度",
+            "列表赋值是引用，用 copy() 浅拷贝",
+            "嵌套结构用 copy.deepcopy 深拷贝"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "验证这些坑",
+          'code': "# 快速验证\nprint(0.1 + 0.2)\n\nitems = []\ndef add(x, lst):\n    lst.append(x)\n    return lst\n\nprint(add(1, items))\nprint(add(2, items))"
+        }
+      ]
+    },
+    {
+      'id': "python-40",
+      'title': "Python 常见坑大全（二）",
+      'summary': "字符串不可变、循环中修改列表、is 与 ==、闭包延迟绑定。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "继续盘点 Python 的经典坑，这些细节往往决定了代码是否正确。"
+        },
+        {
+          'type': "h",
+          'text': "坑 4：字符串不可变"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "字符串不可修改",
+          'code': "s = \"hello\"\n# s[0] = \"H\"   # 报错！字符串不可变\n\n# 正确做法：创建新字符串\ns = \"H\" + s[1:]\nprint(s)   # Hello"
+        },
+        {
+          'type': "h",
+          'text': "坑 5：循环中修改列表"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "遍历时删除元素的问题",
+          'code': "nums = [1, 2, 3, 4, 5]\n# 想删除偶数，但直接删会出问题\n# for n in nums:\n#     if n % 2 == 0:\n#         nums.remove(n)\n\n# 正确做法：遍历副本，或列表推导式生成新列表\nnums = [1, 2, 3, 4, 5]\nnums = [n for n in nums if n % 2 != 0]\nprint(nums)   # [1, 3, 5]"
+        },
+        {
+          'type': "h",
+          'text': "坑 6：is 与 == 的区别"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "is 与 ==",
+          'code': "a = [1, 2, 3]\nb = [1, 2, 3]\nprint(a == b)   # True  内容相同\nprint(a is b)   # False  不是同一个对象\n\nc = a\nprint(c is a)   # True  指向同一个对象\n\n# 小整数有缓存\nx = 256\ny = 256\nprint(x is y)   # True  （小整数 -5~256 被缓存）"
+        },
+        {
+          'type': "h",
+          'text': "坑 7：闭包延迟绑定"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "循环变量被闭包捕获",
+          'code': "# 经典陷阱：\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda: i)\n\nfor f in funcs:\n    print(f())   # 打印 2 2 2，而不是 0 1 2！\n\n# 原因：lambda 捕获的是变量 i，循环结束后 i=2\n\n# 解决：用默认参数绑定当前值\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda i=i: i)\n\nfor f in funcs:\n    print(f())   # 0 1 2"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Python 常见坑大全（二）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Python 常见坑大全（二）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Python 常见坑大全（二）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "字符串不可变，修改要创建新字符串",
+            "遍历时改列表用副本或推导式",
+            "== 比内容，is 比身份（是否同一对象）",
+            "闭包捕获循环变量用默认参数绑定"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "判断引用",
+          'code': "a = [1, 2]\nb = a\nc = [1, 2]\nprint(\"a is b:\", a is b)\nprint(\"a == c:\", a == c)\nprint(\"a is c:\", a is c)"
+        }
+      ]
+    },
+    {
+      'id': "python-41",
+      'title': "pip 进阶与依赖管理",
+      'summary': "requirements.txt、pip 常用命令、虚拟环境配合使用。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "上一章介绍了虚拟环境，这一章深入 pip 的常用操作和依赖管理。学会正确管理依赖，是协作开发的基本功。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "pip 常用命令",
+          'code': "# 在命令行中运行（不是 Python 代码）：\n# 查看已安装包\npip list\n\n# 查看某个包\npip show requests\n\n# 安装指定版本\npip install requests==2.31.0\n\n# 升级\npip install --upgrade pip\n\n# 卸载\npip uninstall requests"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "requirements.txt 依赖清单",
+          'code': "# 导出当前环境所有依赖（记录版本）\n# pip freeze > requirements.txt\n\n# 内容示例：\n# requests==2.31.0\n# numpy==1.26.0\n\n# 在新环境一键安装：\n# pip install -r requirements.txt\n\nprint(\"requirements.txt 让你的项目可复现\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "只读已安装包信息（Python 内）",
+          'code': "import importlib.metadata as md\n\n# 列出所有已安装包\nfor dist in md.distributions():\n    print(dist.metadata[\"Name\"])"
+        },
+        {
+          'type': "warn",
+          'title': "pip 装在哪",
+          'text': "pip 默认装在当前 Python 环境里。如果你在虚拟环境中激活了 venv，pip 就装到虚拟环境，互不干扰。这也是为什么强烈建议每个项目用独立虚拟环境。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"pip 进阶与依赖管理\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"pip 进阶与依赖管理\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"pip 进阶与依赖管理\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "pip list / show / install / uninstall 是核心命令",
+            "pip freeze > requirements.txt 导出依赖",
+            "pip install -r requirements.txt 复现环境",
+            "依赖管理与虚拟环境配合才是专业做法"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "打印已装包",
+          'code': "import importlib.metadata as md\nnames = sorted(d.metadata[\"Name\"] for d in md.distributions())\nprint(\"已安装\", len(names), \"个包\")\nprint(names)"
+        }
+      ]
+    },
+    {
+      'id': "python-42",
+      'title': "魔术方法：让对象更好用",
+      'summary': "__str__、__repr__、__eq__、__len__ 等特殊方法定制行为。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Python 里以双下划线开头结尾的方法叫『魔术方法』（dunder method），它们被 Python 自动调用，用于定制对象的行为。掌握几个最常用的，能让你的类非常顺手。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "__str__ 与 __repr__",
+          'code': "class Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n\n    def __str__(self):\n        # 给用户看：print() 时调用\n        return f\"《{self.title}》作者：{self.author}\"\n\n    def __repr__(self):\n        # 给开发者看：交互式环境显示时调用\n        return f\"Book({self.title!r}, {self.author!r})\"\n\nb = Book(\"小王子\", \"圣埃克苏佩里\")\nprint(b)            # 《小王子》作者：圣埃克苏佩里\nprint(repr(b))      # Book('小王子', '圣埃克苏佩里')"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "__eq__ 定制相等比较",
+          'code': "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __eq__(self, other):\n        # 定制两个对象何时相等\n        return self.x == other.x and self.y == other.y\n\n    def __repr__(self):\n        return f\"Point({self.x}, {self.y})\"\n\np1 = Point(1, 2)\np2 = Point(1, 2)\nprint(p1 == p2)   # True  内容相等\nprint(p1 is p2)   # False 不是同一个对象"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "__len__ 与 __getitem__",
+          'code': "class Team:\n    def __init__(self, members):\n        self.members = members\n\n    def __len__(self):\n        return len(self.members)\n\n    def __getitem__(self, index):\n        return self.members[index]\n\n    def __iter__(self):\n        return iter(self.members)\n\nteam = Team([\"小明\", \"小红\", \"小刚\"])\nprint(len(team))      # 3  可以用 len()\nprint(team[0])        # 小明 可以用下标\nfor m in team:\n    print(m)          # 可以遍历"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"魔术方法：让对象更好用\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"魔术方法：让对象更好用\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"魔术方法：让对象更好用\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "__str__ 给用户看、__repr__ 给开发者看",
+            "__eq__ 定制 == 比较",
+            "__len__ 支持 len()、__getitem__ 支持下标",
+            "__iter__ 支持 for 遍历"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "可比较的坐标",
+          'code': "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __eq__(self, o):\n        return (self.x, self.y) == (o.x, o.y)\n\n    def __lt__(self, o):\n        return (self.x, self.y) < (o.x, o.y)\n\n    def __repr__(self):\n        return f\"({self.x},{self.y})\"\n\npts = [Point(3, 1), Point(1, 5), Point(2, 2)]\npts.sort()\nprint(pts)"
+        }
+      ]
+    },
+    {
+      'id': "python-43",
+      'title': "类方法 @classmethod 与静态方法 @staticmethod",
+      'summary': "三种方法类型：实例方法、类方法、静态方法，何时用哪个。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "类里可以定义三种方法：普通实例方法（self 开头）、类方法（@classmethod，cls 开头，操作类本身）、静态方法（@staticmethod，和类无关但逻辑上属于该类）。理解它们的区别很重要。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "三种方法对比",
+          'code': "class Tool:\n    count = 0   # 类属性\n\n    def __init__(self, name):\n        self.name = name\n        Tool.count += 1\n\n    def instance_method(self):\n        # 需要对象，能访问实例属性\n        return f\"实例方法：{self.name}\"\n\n    @classmethod\n    def class_method(cls):\n        # 不需要对象，能访问类属性\n        return f\"类方法：共有 {cls.count} 个实例\"\n\n    @staticmethod\n    def static_method(x):\n        # 既不需要 self 也不需要 cls\n        return f\"静态方法：{x * 2}\"\n\nt = Tool(\"锤子\")\nt2 = Tool(\"螺丝刀\")\nprint(t.instance_method())\nprint(Tool.class_method())\nprint(Tool.static_method(5))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "classmethod 常用场景：工厂方法",
+          'code': "class Date:\n    def __init__(self, year, month, day):\n        self.year, self.month, self.day = year, month, day\n\n    @classmethod\n    def from_string(cls, s):\n        \"\"\"用字符串创建对象，比直接调用构造更清晰\"\"\"\n        y, m, d = s.split(\"-\")\n        return cls(int(y), int(m), int(d))\n\n    def __repr__(self):\n        return f\"Date({self.year},{self.month},{self.day})\"\n\nd = Date.from_string(\"2024-06-01\")\nprint(d)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"类方法 @classmethod 与静态方法 @staticmethod\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"类方法 @classmethod 与静态方法 @staticmethod\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"类方法 @classmethod 与静态方法 @staticmethod\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "实例方法需要 self，访问实例数据",
+            "@classmethod 用 cls，访问/修改类属性",
+            "@staticmethod 与类无关，仅逻辑归属",
+            "classmethod 常用于工厂方法"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "计数器类",
+          'code': "class Counter:\n    total = 0\n\n    def __init__(self):\n        Counter.total += 1\n        self.id = Counter.total\n\n    @classmethod\n    def summary(cls):\n        return f\"共创建了 {cls.total} 个对象\"\n\n    def __repr__(self):\n        return f\"对象#{self.id}\"\n\nc1 = Counter()\nc2 = Counter()\nc3 = Counter()\nprint(c1, c2, c3)\nprint(Counter.summary())"
+        }
+      ]
+    },
+    {
+      'id': "python-44",
+      'title': "装饰器进阶：带参数与堆叠",
+      'summary': "给装饰器传参、多个装饰器叠加，写出强大的复用逻辑。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "前面讲了基础装饰器。这一章深入：装饰器本身也可以接受参数（比如指定重试次数、指定权限），还可以多个装饰器叠加在同一个函数上。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "带参数的装饰器",
+          'code': "import time\n\ndef retry(max_tries):\n    \"\"\"失败重试装饰器，可指定次数\"\"\"\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for attempt in range(1, max_tries + 1):\n                print(f\"第 {attempt} 次尝试\")\n                try:\n                    return func(*args, **kwargs)\n                except Exception as e:\n                    print(f\"失败：{e}\")\n            return None\n        return wrapper\n    return decorator\n\n@retry(max_tries=3)\ndef unstable():\n    import random\n    if random.random() < 0.7:\n        raise ValueError(\"随机失败\")\n    return \"成功！\"\n\nprint(unstable())"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "多个装饰器叠加",
+          'code': "def a(func):\n    def w():\n        print(\"A 外层\")\n        func()\n        print(\"A 内层\")\n    return w\n\ndef b(func):\n    def w():\n        print(\"B 外层\")\n        func()\n        print(\"B 内层\")\n    return w\n\n@a\n@b\ndef hello():\n    print(\"Hello\")\n\nhello()\n# 输出顺序：A 外层 → B 外层 → Hello → B 内层 → A 内层\n# 装饰器自下而上应用，自外向内执行"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "保留函数信息 functools.wraps",
+          'code': "from functools import wraps\n\ndef my_deco(func):\n    @wraps(func)   # 保留原函数的 __name__ 和文档\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper\n\n@my_deco\ndef example():\n    \"\"\"这是文档\"\"\"\n    pass\n\nprint(example.__name__)   # example（没 wraps 会变成 wrapper）\nprint(example.__doc__)    # 这是文档"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"装饰器进阶：带参数与堆叠\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"装饰器进阶：带参数与堆叠\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"装饰器进阶：带参数与堆叠\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "装饰器工厂：外层函数返回 decorator",
+            "多个装饰器自下而上应用，自外向内执行",
+            "functools.wraps 保留原函数元信息",
+            "带参数装饰器用于重试、权限、限流等场景"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "日志+计时双装饰器",
+          'code': "import time\nfrom functools import wraps\n\ndef log(func):\n    @wraps(func)\n    def w(*a, **k):\n        print(f\"[LOG] 调用 {func.__name__}\")\n        return func(*a, **k)\n    return w\n\ndef timed(func):\n    @wraps(func)\n    def w(*a, **k):\n        t = time.time()\n        r = func(*a, **k)\n        print(f\"[TIME] {func.__name__}: {time.time()-t:.4f}s\")\n        return r\n    return w\n\n@log\n@timed\ndef work():\n    time.sleep(0.1)\n    return \"done\"\n\nprint(work())"
+        }
+      ]
+    },
+    {
+      'id': "python-45",
+      'title': "数据类 dataclass",
+      'summary': "用 @dataclass 几行代码定义数据容器，自动生成常用方法。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "写一个只装数据的类时，要手写 __init__、__repr__、__eq__ 很啰嗦。Python 3.7+ 的 <code.inline>dataclasses.dataclass</code.inline> 装饰器能自动生成这些，让代码极其简洁。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "dataclass 基本用法",
+          'code': "from dataclasses import dataclass\n\n@dataclass\nclass Student:\n    name: str\n    score: int = 0   # 带默认值\n\ns1 = Student(\"小明\", 92)\ns2 = Student(\"小明\", 92)\nprint(s1)              # 自动有漂亮的 __repr__\nprint(s1 == s2)        # True  自动有 __eq__\nprint(s1.name, s1.score)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "不可变数据类与排序",
+          'code': "from dataclasses import dataclass\n\n@dataclass(frozen=True)   # frozen=True 让实例不可变\nclass Point:\n    x: int\n    y: int\n\np = Point(1, 2)\n# p.x = 5   # frozen 会报错\n\n@dataclass(order=True)    # order=True 自动支持排序\nclass Product:\n    price: float\n    name: str\n\nitems = [Product(9.9, \"A\"), Product(3.5, \"B\"), Product(7.0, \"C\")]\nitems.sort()\nfor it in items:\n    print(it)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "手动实现对比",
+          'code': "# 不用 dataclass 的话要写这么多：\nclass StudentOld:\n    def __init__(self, name, score=0):\n        self.name = name\n        self.score = score\n    def __repr__(self):\n        return f\"StudentOld(name={self.name!r}, score={self.score!r})\"\n    def __eq__(self, o):\n        return (self.name, self.score) == (o.name, o.score)\n\n# 用 dataclass 只需 3 行\nfrom dataclasses import dataclass\n@dataclass\nclass StudentNew:\n    name: str\n    score: int = 0\n\nprint(\"dataclass 帮你省了很多样板代码\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据类 dataclass\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据类 dataclass\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据类 dataclass\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "@dataclass 自动生成 __init__/__repr__/__eq__",
+            "frozen=True 创建不可变对象",
+            "order=True 支持排序比较",
+            "适合纯数据容器，让代码简洁清晰"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "图书数据类",
+          'code': "from dataclasses import dataclass\n\n@dataclass\nclass Book:\n    title: str\n    author: str\n    year: int\n    price: float = 0.0\n\nbooks = [\n    Book(\"小王子\", \"圣埃克苏佩里\", 1943, 28),\n    Book(\"三体\", \"刘慈欣\", 2008, 49),\n]\nfor b in books:\n    print(f\"{b.title} · {b.author} · {b.year}年 · ¥{b.price}\")"
+        }
+      ]
+    },
+    {
+      'id': "python-46",
+      'title': "枚举 Enum",
+      'summary': "用 Enum 定义常量集合，比魔法数字清晰、安全。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "当程序里有一组固定的常量（如状态、颜色、方向）时，用枚举（Enum）比散落的『魔法数字』清晰得多，还能防止拼写错误。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "定义与使用枚举",
+          'code': "from enum import Enum\n\nclass Color(Enum):\n    RED = 1\n    GREEN = 2\n    BLUE = 3\n\nprint(Color.RED)           # Color.RED\nprint(Color.RED.name)      # RED\nprint(Color.RED.value)     # 1\n\n# 遍历\nfor c in Color:\n    print(c.name, c.value)\n\n# 通过值反查\nprint(Color(2))            # Color.GREEN"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "枚举做状态机",
+          'code': "from enum import Enum, auto\n\nclass Status(Enum):\n    PENDING = auto()    # 自动分配值 1,2,3...\n    RUNNING = auto()\n    DONE = auto()\n\ndef process(status):\n    if status is Status.PENDING:\n        return \"等待中...\"\n    elif status is Status.RUNNING:\n        return \"处理中...\"\n    elif status is Status.DONE:\n        return \"已完成!\"\n\nprint(process(Status.PENDING))\nprint(process(Status.DONE))"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"枚举 Enum\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"枚举 Enum\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"枚举 Enum\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Enum 定义固定常量集合",
+            ".name 和 .value 访问成员",
+            "用 auto() 自动编号，用 is 比较成员",
+            "比魔法数字更可读、更安全"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "星期枚举",
+          'code': "from enum import Enum\n\nclass Weekday(Enum):\n    MON = 1\n    TUE = 2\n    WED = 3\n    THU = 4\n    FRI = 5\n    SAT = 6\n    SUN = 7\n\ndef is_weekend(day):\n    return day in (Weekday.SAT, Weekday.SUN)\n\nprint(Weekday.MON.name, \"是周末吗?\", is_weekend(Weekday.MON))\nprint(Weekday.SAT.name, \"是周末吗?\", is_weekend(Weekday.SAT))"
+        }
+      ]
+    },
+    {
+      'id': "python-47",
+      'title': "函数式编程：map / filter / reduce",
+      'summary': "三大高阶函数，配合 lambda 让数据处理更函数式。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "函数式编程强调『把函数作为参数传递』。map、filter、reduce 是三个最典型的高阶函数。不过现代 Python 中，列表推导式通常更推荐，但理解它们有助于阅读老代码。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "map：映射转换",
+          'code': "from functools import reduce\n\nnums = [1, 2, 3, 4]\n# map 对每个元素执行函数\ndoubled = list(map(lambda x: x * 2, nums))\nprint(doubled)   # [2, 4, 6, 8]\n\n# 多个列表对应运算\na = [1, 2, 3]\nb = [10, 20, 30]\nprint(list(map(lambda x, y: x + y, a, b)))   # [11, 22, 33]"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "filter：过滤筛选",
+          'code': "nums = [1, 2, 3, 4, 5, 6]\nevens = list(filter(lambda x: x % 2 == 0, nums))\nprint(evens)   # [2, 4, 6]\n\n# 配合字符串\nwords = [\"hi\", \"\", \"hello\", \" \", \"world\"]\nnon_empty = list(filter(lambda w: w.strip(), words))\nprint(non_empty)   # ['hi', 'hello', 'world']"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "reduce：累积归约",
+          'code': "from functools import reduce\n\nnums = [1, 2, 3, 4]\n# 累加：(((1+2)+3)+4)\ntotal = reduce(lambda a, b: a + b, nums)\nprint(total)   # 10\n\n# 求最大值\nmx = reduce(lambda a, b: a if a > b else b, nums)\nprint(mx)   # 4\n\n# 也可以指定初始值\nprint(reduce(lambda a, b: a + b, nums, 100))   # 110"
+        },
+        {
+          'type': "info",
+          'title': "与推导式对比",
+          'text': "列表推导式 <code.inline>[x*2 for x in nums]</code.inline> 通常比 map+lambda 更易读。新手用推导式，看懂了再接触函数式。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"函数式编程：map / filter / reduce\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"函数式编程：map / filter / reduce\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"函数式编程：map / filter / reduce\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "map(函数, 序列) 逐元素映射",
+            "filter(函数, 序列) 过滤满足条件",
+            "reduce(函数, 序列, 初始值) 累积归约",
+            "需要 import functools 才能用 reduce"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "一行统计",
+          'code': "from functools import reduce\n\nscores = [85, 92, 76, 88, 95]\ntotal = reduce(lambda a, b: a + b, scores)\navg = total / len(scores)\nhigh = list(filter(lambda s: s >= 90, scores))\nprint(f\"总分 {total}，平均 {avg:.1f}，90+ 共 {len(high)} 人\")"
+        }
+      ]
+    },
+    {
+      'id': "python-48",
+      'title': "itertools：迭代器工具箱",
+      'summary': "排列组合、无限迭代、分组等强大的迭代工具。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "itertools 是 Python 隐藏的宝藏模块，提供大量高效的迭代器工具。最常用的是排列组合（permutations/combinations）和无限迭代（count/cycle）。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "排列与组合",
+          'code': "from itertools import permutations, combinations, product\n\nitems = [\"A\", \"B\", \"C\"]\n# 排列：顺序有关，2 个一组\nprint(list(permutations(items, 2)))\n# 组合：顺序无关\nprint(list(combinations(items, 2)))\n# 笛卡尔积\nprint(list(product([1, 2], [\"a\", \"b\"])))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "无限迭代与分组",
+          'code': "from itertools import count, cycle, groupby\n\n# 无限递增（配合 break 用）\nfor i in count(1, 2):   # 1,3,5,...\n    if i > 7:\n        break\n    print(i)\n\n# 无限循环\nc = cycle([\"A\", \"B\"])\nfor _ in range(5):\n    print(next(c), end=\" \")   # A B A B A\nprint()\n\n# groupby 分组（需先排序）\ndata = [(\"apple\", 3), (\"apple\", 1), (\"banana\", 5), (\"banana\", 2)]\nfor key, group in groupby(data, key=lambda x: x[0]):\n    print(key, \"->\", list(group))"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"itertools：迭代器工具箱\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"itertools：迭代器工具箱\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"itertools：迭代器工具箱\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "permutations 排列、combinations 组合、product 笛卡尔积",
+            "count/cycle 无限迭代器，注意配 break",
+            "groupby 需先排序才能正确分组",
+            "itertools 提供高效迭代工具，节省内存"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "密码字典生成",
+          'code': "from itertools import product\n\nchars = \"012\"\n# 生成所有 2 位组合\nfor combo in product(chars, repeat=2):\n    print(\"\".join(combo))\nprint(\"---\")\n# 排列 3 个字母取 2\nfrom itertools import permutations\nprint(list(permutations(\"ABC\", 2)))"
+        }
+      ]
+    },
+    {
+      'id': "python-49",
+      'title': "functools：lru_cache 与 partial",
+      'summary': "缓存加速、部分应用参数，两个实用技巧。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "functools 模块除了 wraps，还有两个超实用工具：<code inline>lru_cache</code> 缓存函数结果加速重复计算，<code inline>partial</code> 固定部分参数生成新函数。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "lru_cache 缓存加速",
+          'code': "from functools import lru_cache\n\n# 递归斐波那契很慢，加缓存后飞快\n@lru_cache(maxsize=None)\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n - 1) + fib(n - 2)\n\nprint(fib(40))   # 102334155，瞬间完成\nprint(fib.cache_info())  # 查看缓存命中"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "partial 固定参数",
+          'code': "from functools import partial\n\n# 固定 print 的分隔符，生成专用函数\ndef print_join(*args, sep=\", \"):\n    return sep.join(str(a) for a in args)\n\n# partial 固定某个参数\nimport math\nround2 = partial(round, ndigits=2)   # 固定保留2位\nprint(round2(3.14159))   # 3.14\n\npow10 = partial(pow, 10)   # 固定底数为10\nprint(pow10(3))   # 1000"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "partial 做事件处理",
+          'code': "from functools import partial\n\ndef send_message(user, msg):\n    print(f\"发送给 {user}：{msg}\")\n\n# 给不同用户预定义发送函数\nsend_to_bob = partial(send_message, \"Bob\")\nsend_to_alice = partial(send_message, \"Alice\")\n\nsend_to_bob(\"你好\")\nsend_to_alice(\"在吗\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"functools：lru_cache 与 partial\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"functools：lru_cache 与 partial\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"functools：lru_cache 与 partial\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "@lru_cache 自动缓存函数结果，加速递归",
+            "partial 固定部分参数生成新函数",
+            "cache_info() 查看缓存命中情况",
+            "两个都是 functools 提供的实用工具"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "带缓存的阶乘",
+          'code': "from functools import lru_cache\n\n@lru_cache(maxsize=128)\ndef fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\n\nfor i in range(20):\n    print(i, \"! =\", fact(i))\nprint(fact.cache_info())"
+        }
+      ]
+    },
+    {
+      'id': "python-50",
+      'title': "单元测试 unittest",
+      'summary': "用测试保证代码正确，回归无忧，专业开发的标配。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "单元测试（unit test）是为函数/类写的小测试，确保它们按预期工作。改动代码后跑一遍测试，能立刻发现是否破坏了原有功能。unittest 是 Python 内置的测试框架。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "测试函数",
+          'code': "import unittest\n\n# 被测函数\ndef add(a, b):\n    return a + b\n\ndef is_even(n):\n    return n % 2 == 0\n\n# 测试类\nclass TestMath(unittest.TestCase):\n    def test_add(self):\n        self.assertEqual(add(2, 3), 5)\n        self.assertEqual(add(-1, 1), 0)\n\n    def test_is_even(self):\n        self.assertTrue(is_even(4))\n        self.assertFalse(is_even(7))\n\n# 运行测试\nif __name__ == \"__main__\":\n    unittest.main()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "测试异常与初始化",
+          'code': "import unittest\n\ndef divide(a, b):\n    if b == 0:\n        raise ValueError(\"除数不能为0\")\n    return a / b\n\nclass TestDivide(unittest.TestCase):\n    def setUp(self):\n        # 每个测试前执行，做准备工作\n        self.x = 10\n\n    def test_normal(self):\n        self.assertEqual(divide(self.x, 2), 5)\n\n    def test_error(self):\n        with self.assertRaises(ValueError):\n            divide(10, 0)\n\nif __name__ == \"__main__\":\n    unittest.main()"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"单元测试 unittest\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"单元测试 unittest\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"单元测试 unittest\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "unittest.TestCase 定义测试类",
+            "assertEqual/assertTrue/assertRaises 断言",
+            "setUp 每个测试前执行",
+            "运行：python -m unittest 文件名"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "字符串工具测试",
+          'code': "import unittest\n\ndef reverse(s):\n    return s[::-1]\n\nclass TestStr(unittest.TestCase):\n    def test_reverse(self):\n        self.assertEqual(reverse(\"abc\"), \"cba\")\n        self.assertEqual(reverse(\"\"), \"\")\n\nif __name__ == \"__main__\":\n    unittest.main()"
+        }
+      ]
+    },
+    {
+      'id': "python-51",
+      'title': "pytest：更简洁的测试框架",
+      'summary': "第三方 pytest 让测试更简单，断言直接用 assert。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "pytest 是更流行的第三方测试框架（<code inline>pip install pytest</code>）。它的核心优势：测试函数不需要类，断言直接用 Python 的 assert，报错信息更友好。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "pytest 基本用法",
+          'code': "# 安装：pip install pytest\n# 文件名 test_xxx.py 或 xxx_test.py\n\ndef add(a, b):\n    return a + b\n\ndef test_add():\n    assert add(2, 3) == 5\n    assert add(-1, 1) == 0\n\ndef test_string():\n    s = \"hello\"\n    assert s.upper() == \"HELLO\"\n\n# 运行：pytest 或 python -m pytest\n# 输出简洁，失败会给出详细 diff"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "参数化测试",
+          'code': "# pytest 支持参数化，一组数据跑多遍\nimport pytest\n\n@pytest.mark.parametrize(\"a,b,expected\", [\n    (1, 2, 3),\n    (0, 0, 0),\n    (-5, 5, 0),\n])\ndef test_add_param(a, b, expected):\n    assert a + b == expected"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "fixture 共享数据",
+          'code': "import pytest\n\n@pytest.fixture\ndef data():\n    # 每个测试前提供数据\n    return [1, 2, 3, 4]\n\ndef test_sum(data):\n    assert sum(data) == 10\n\ndef test_max(data):\n    assert max(data) == 4\n\n# 运行：pytest 会自动发现并执行 test_ 开头函数"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"pytest：更简洁的测试框架\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"pytest：更简洁的测试框架\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"pytest：更简洁的测试框架\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "pytest 断言用 assert，代码更简洁",
+            "test_ 开头函数自动被识别",
+            "@pytest.mark.parametrize 参数化测试",
+            "@pytest.fixture 提供共享数据"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "pytest 风格测试",
+          'code': "def grade(score):\n    if score >= 90:\n        return \"A\"\n    elif score >= 60:\n        return \"B\"\n    return \"C\"\n\ndef test_grade():\n    assert grade(95) == \"A\"\n    assert grade(70) == \"B\"\n    assert grade(30) == \"C\"\n\n# 在命令行运行：python -m pytest 本文件"
+        }
+      ]
+    },
+    {
+      'id': "python-52",
+      'title': "日志 logging",
+      'summary': "用日志代替 print 调试，分级输出、写入文件。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "大型程序里用 print 调试不专业。logging 模块提供分级的日志输出（DEBUG/INFO/WARNING/ERROR），可以输出到控制台或文件，还能配置格式。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "logging 基本用法",
+          'code': "import logging\n\n# 基本配置：设置级别和格式\nlogging.basicConfig(level=logging.DEBUG,\n                    format=\"%(asctime)s %(levelname)s %(message)s\")\n\nlogging.debug(\"调试信息\")\nlogging.info(\"普通信息\")\nlogging.warning(\"警告\")\nlogging.error(\"错误\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "写入文件",
+          'code': "import logging\n\nlogging.basicConfig(\n    level=logging.INFO,\n    filename=\"app.log\",        # 输出到文件\n    filemode=\"a\",              # 追加模式\n    format=\"%(asctime)s - %(levelname)s - %(message)s\",\n    encoding=\"utf-8\"\n)\n\nlogging.info(\"程序启动\")\nlogging.error(\"发生了错误\")\nprint(\"日志已写入 app.log，请看当前目录\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "记录异常信息",
+          'code': "import logging\n\nlogging.basicConfig(level=logging.ERROR)\n\ntry:\n    x = 1 / 0\nexcept ZeroDivisionError:\n    # exc_info=True 会记录完整异常堆栈\n    logging.error(\"计算出错\", exc_info=True)\nprint(\"程序继续运行\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"日志 logging\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"日志 logging\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"日志 logging\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "logging 分级：DEBUG < INFO < WARNING < ERROR",
+            "basicConfig 配置级别、格式、输出文件",
+            "logging.error(msg, exc_info=True) 记录堆栈",
+            "生产环境用日志，别用 print 调试"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "模拟运行日志",
+          'code': "import logging\nlogging.basicConfig(level=logging.INFO, format=\"%(levelname)s: %(message)s\")\n\nlogging.info(\"初始化完成\")\nfor i in range(3):\n    logging.info(f\"处理第 {i+1} 项\")\nlogging.warning(\"接近上限\")\nlogging.info(\"完成\")"
+        }
+      ]
+    },
+    {
+      'id': "python-53",
+      'title': "性能优化与 timeit",
+      'summary': "用 timeit 基准测试找瓶颈，学几条提速技巧。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "程序『能用』和『好用』之间有距离。当数据量大时，性能很重要。先用 <code inline>timeit</code> 测出真实耗时，再针对瓶颈优化。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "timeit 测量耗时",
+          'code': "import timeit\n\n# 测量单条语句\nt = timeit.timeit(\"sum(range(1000))\", number=1000)\nprint(f\"sum(range(1000)) 执行1000次：{t:.4f}s\")\n\n# 测量函数\ncode = \"\"\"\ndef f():\n    return [i*i for i in range(100)]\n\"\"\"\nt2 = timeit.timeit(code, number=1000)\nprint(f\"列表推导式 1000次：{t2:.4f}s\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "对比不同写法性能",
+          'code': "import timeit\n\n# 拼接字符串 vs join\na = timeit.timeit(\"s = ''.join(str(i) for i in range(100))\", number=10000)\nb = timeit.timeit(\"s = sum(str(i) for i in range(100))\", number=10000)\nprint(f\"join 拼接: {a:.4f}s\")\nprint(f\"sum 拼接: {b:.4f}s\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "常用提速技巧",
+          'code': "# 1. 用局部变量：频繁访问的全局变量可先赋值给局部\n# 2. 用推导式替代 for+append\n# 3. 用集合/字典做成员判断（O(1)）\n# 4. 字符串拼接用 join 而不是 +（在循环里）\n\nimport time\n# 成员判断：集合比列表快\nbig_list = list(range(10000))\nbig_set = set(big_list)\n\nt0 = time.time()\nfor i in range(1000):\n    _ = 9999 in big_list\nt1 = time.time()\nfor i in range(1000):\n    _ = 9999 in big_set\nt2 = time.time()\nprint(f\"列表 in: {t1-t0:.4f}s\")\nprint(f\"集合 in: {t2-t1:.4f}s  (集合更快)\")"
+        },
+        {
+          'type': "warn",
+          'title': "先测后优化",
+          'text': "不要凭感觉优化。先 timeit 测出真实热点，再动手。大多数情况，清晰正确的代码优先。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"性能优化与 timeit\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"性能优化与 timeit\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"性能优化与 timeit\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "timeit.timeit(代码, number=次数) 测耗时",
+            "推导式、join、集合成员判断都是提速点",
+            "先测量再优化，不要过早优化",
+            "局部变量访问比全局快"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "对比 append 与推导式",
+          'code': "import timeit\n\n# 方法1：for + append\nc1 = \"\"\"\nres = []\nfor i in range(1000):\n    res.append(i*i)\n\"\"\"\n# 方法2：列表推导式\nc2 = \"\"\"\nres = [i*i for i in range(1000)]\n\"\"\"\n\nt1 = timeit.timeit(c1, number=1000)\nt2 = timeit.timeit(c2, number=1000)\nprint(f\"for+append: {t1:.4f}s\")\nprint(f\"推导式:     {t2:.4f}s\")"
+        }
+      ]
+    },
+    {
+      'id': "python-54",
+      'title': "命令行参数 argparse",
+      'summary': "让程序支持命令行参数，做成真正可用的工具。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "写好的程序如果只能写死在代码里，实用性有限。用 <code inline>argparse</code> 可以让程序接收命令行参数，比如 <code inline>python app.py --name 小明 --verbose</code>，还能自动生成帮助信息。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "argparse 基本用法",
+          'code': "import argparse\n\nparser = argparse.ArgumentParser(description=\"一个示例工具\")\nparser.add_argument(\"name\", help=\"你的名字\")   # 位置参数\nparser.add_argument(\"--age\", type=int, default=0, help=\"年龄\")  # 可选参数\nparser.add_argument(\"--verbose\", action=\"store_true\", help=\"显示详细信息\")\n\nargs = parser.parse_args()\nprint(f\"你好，{args.name}\")\nif args.verbose:\n    print(f\"你的年龄是 {args.age}\")\n\n# 使用：python app.py 小明 --age 10 --verbose"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "支持多个值的参数",
+          'code': "import argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"nums\", nargs=\"+\", type=int, help=\"多个数字\")\nparser.add_argument(\"--sum\", action=\"store_true\", help=\"求和而不是列表\")\n\nargs = parser.parse_args()\nif args.sum:\n    print(sum(args.nums))\nelse:\n    print(args.nums)\n\n# 使用：python app.py 1 2 3 --sum  →  6"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"命令行参数 argparse\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"命令行参数 argparse\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"命令行参数 argparse\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "add_argument 添加参数，位置参数与可选参数",
+            "type=int 自动转类型，default 默认值",
+            "store_true 做开关标志，nargs=\"+\" 接收多个值",
+            "运行时会自动生成 --help 帮助"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "计算器工具",
+          'code': "import argparse\n\nparser = argparse.ArgumentParser(description=\"简单计算器\")\nparser.add_argument(\"a\", type=float)\nparser.add_argument(\"b\", type=float)\nparser.add_argument(\"--op\", default=\"add\", choices=[\"add\", \"sub\", \"mul\", \"div\"])\nargs = parser.parse_args()\n\nif args.op == \"add\":\n    print(args.a + args.b)\nelif args.op == \"sub\":\n    print(args.a - args.b)\nelif args.op == \"mul\":\n    print(args.a * args.b)\nelse:\n    print(args.a / args.b)"
+        }
+      ]
+    },
+    {
+      'id': "python-55",
+      'title': "网络编程 socket 入门",
+      'summary': "用 socket 写一个 TCP 客户端与服务端，理解网络通信本质。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "网络通信的本质是两台电脑互相收发数据。socket 是操作系统提供的网络通信接口。这一章写一个最简单的 TCP 服务端和客户端，理解『连接-发送-接收-关闭』的流程。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "TCP 服务端",
+          'code': "import socket\n\n# 创建 socket\nserver = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\nserver.bind((\"127.0.0.1\", 9999))   # 绑定本地端口\nserver.listen(5)                   # 开始监听\nprint(\"服务端启动，等待连接...\")\n\n# 接受连接（阻塞等待）\nconn, addr = server.accept()\nprint(f\"客户端 {addr} 已连接\")\n\ndata = conn.recv(1024)     # 接收最多1024字节\nprint(\"收到：\", data.decode())\nconn.send(\"收到消息！\".encode())   # 回发\nconn.close()\nserver.close()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "TCP 客户端",
+          'code': "import socket\n\nclient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\nclient.connect((\"127.0.0.1\", 9999))   # 连接服务端\n\nclient.send(\"你好，服务端\".encode())   # 发送\nresp = client.recv(1024)              # 接收回复\nprint(\"服务端回复：\", resp.decode())\nclient.close()\n\n# 注意：要先启动服务端再启动客户端"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"网络编程 socket 入门\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"网络编程 socket 入门\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"网络编程 socket 入门\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "socket 是网络通信的底层接口",
+            "服务端：bind → listen → accept → recv/send",
+            "客户端：connect → send → recv",
+            "文本要 encode/decode 才能收发"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "获取本机主机名",
+          'code': "import socket\nprint(\"主机名：\", socket.gethostname())\nprint(\"本机IP：\", socket.gethostbyname(socket.gethostname()))"
+        }
+      ]
+    },
+    {
+      'id': "python-56",
+      'title': "HTTP 请求：requests 库深入",
+      'summary': "GET/POST、请求头、参数、会话，全面掌握 requests。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "requests 是 Python 最流行的 HTTP 库。前面简单用过，这一章深入：GET/POST、参数、请求头、超时、会话。它是爬虫和 API 对接的基础。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "GET 与参数",
+          'code': "# pip install requests\nimport requests\n\n# 简单 GET\nr = requests.get(\"https://httpbin.org/get\")\nprint(r.status_code)          # 200\n\n# 带查询参数\nparams = {\"name\": \"小明\", \"page\": 2}\nr = requests.get(\"https://httpbin.org/get\", params=params)\nprint(r.url)                  # 自动拼上 ?name=...&page=2\nprint(r.json()[\"args\"])       # 服务端收到的参数"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "POST 与请求头",
+          'code': "import requests\n\n# POST JSON 数据\nheaders = {\"User-Agent\": \"Mozilla/5.0\", \"Content-Type\": \"application/json\"}\npayload = {\"name\": \"小明\", \"age\": 10}\nr = requests.post(\"https://httpbin.org/post\", json=payload, headers=headers, timeout=5)\nprint(r.status_code)\nprint(r.json()[\"json\"])   # 服务端收到的数据"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "会话与异常处理",
+          'code': "import requests\n\n# Session 复用连接与 cookie\ns = requests.Session()\ns.headers.update({\"User-Agent\": \"MyApp/1.0\"})\n\n# 异常处理\nfrom requests.exceptions import Timeout, ConnectionError\n\ntry:\n    r = s.get(\"https://httpbin.org/headers\", timeout=3)\n    print(r.json())\nexcept Timeout:\n    print(\"请求超时\")\nexcept ConnectionError:\n    print(\"连接失败\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"HTTP 请求：requests 库深入\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"HTTP 请求：requests 库深入\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"HTTP 请求：requests 库深入\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "requests.get/post 发送请求",
+            "params 拼查询参数，json= 发送 JSON 数据",
+            "headers 自定义请求头，timeout 设置超时",
+            "Session 复用连接，异常用 requests.exceptions 捕获"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "查 IP 归属",
+          'code': "import requests\n\ntry:\n    r = requests.get(\"https://httpbin.org/ip\", timeout=5)\n    print(\"我的公网IP：\", r.json()[\"origin\"])\nexcept Exception as e:\n    print(\"请求失败（可能无网络）：\", e)"
+        }
+      ]
+    },
+    {
+      'id': "python-57",
+      'title': "Web 开发：Flask 入门",
+      'summary': "用 Flask 写第一个网站，理解路由与响应。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Flask 是 Python 最流行的微型 Web 框架（<code inline>pip install flask</code>）。它能让你几十行代码就做出一个网站。这一章从最基础的『路由』讲起。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "第一个 Flask 应用",
+          'code': "# 安装：pip install flask\nfrom flask import Flask\n\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef home():\n    return \"你好，这是我的第一个网站！\"\n\n@app.route(\"/about\")\ndef about():\n    return \"关于页面\"\n\n# 运行：python app.py\n# 然后浏览器访问 http://127.0.0.1:5000\nif __name__ == \"__main__\":\n    app.run(debug=True)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "动态路由与参数",
+          'code': "from flask import Flask\n\napp = Flask(__name__)\n\n@app.route(\"/user/<name>\")\ndef user(name):\n    return f\"欢迎，{name}！\"\n\n@app.route(\"/add/<int:a>/<int:b>\")\ndef add(a, b):\n    return f\"{a} + {b} = {a + b}\"\n\nif __name__ == \"__main__\":\n    app.run(debug=True)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Web 开发：Flask 入门\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Web 开发：Flask 入门\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Web 开发：Flask 入门\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "@app.route(\"/路径\") 定义路由",
+            "函数 return 的内容就是页面",
+            "<name> 是动态参数，<int:a> 限定类型",
+            "app.run(debug=True) 启动，访问 127.0.0.1:5000"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "Flask 路由示例",
+          'code': "from flask import Flask\n\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef index():\n    return \"<h1>主页</h1><a href='/hello'>去打招呼</a>\"\n\n@app.route(\"/hello\")\ndef hello():\n    return \"<h1>你好呀！</h1>\"\n\nif __name__ == \"__main__\":\n    app.run(debug=True)"
+        }
+      ]
+    },
+    {
+      'id': "python-58",
+      'title': "Flask 进阶：模板与表单",
+      'summary': "render_template 渲染模板、接收表单数据，做出真实交互。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "真实网站不是简单返回字符串，而是渲染 HTML 模板并处理用户提交的表单。Flask 用 Jinja2 模板引擎，配合 request 获取表单数据。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "渲染模板",
+          'code': "# 需要 templates/index.html 文件\nfrom flask import Flask, render_template\n\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef index():\n    name = \"小明\"\n    scores = [88, 92, 76]\n    return render_template(\"index.html\", name=name, scores=scores)\n\nif __name__ == \"__main__\":\n    app.run(debug=True)\n\n# templates/index.html:\n# <h1>你好，{{ name }}</h1>\n# <ul>{% for s in scores %}<li>{{ s }}</li>{% endfor %}</ul>"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "处理表单 POST",
+          'code': "# pip install flask\nfrom flask import Flask, request\n\napp = Flask(__name__)\n\n@app.route(\"/login\", methods=[\"GET\", \"POST\"])\ndef login():\n    if request.method == \"POST\":\n        name = request.form.get(\"username\")\n        return f\"欢迎登录，{name}！\"\n    return \"\"\"\n    <form method=\"post\">\n        <input name=\"username\" placeholder=\"用户名\">\n        <button type=\"submit\">登录</button>\n    </form>\n    \"\"\"\n\nif __name__ == \"__main__\":\n    app.run(debug=True)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Flask 进阶：模板与表单\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Flask 进阶：模板与表单\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Flask 进阶：模板与表单\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "render_template 渲染 HTML 模板（Jinja2）",
+            "{{ 变量 }} 输出，{% for %} 循环",
+            "request.form 获取 POST 表单数据",
+            "methods=[\"GET\",\"POST\"] 指定允许的方法"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "GET 查询参数接收",
+          'code': "from flask import Flask, request\n\napp = Flask(__name__)\n\n@app.route(\"/search\")\ndef search():\n    q = request.args.get(\"q\", \"\")\n    return f\"你搜索的是：{q}\"\n\n# 访问 /search?q=python\nif __name__ == \"__main__\":\n    app.run(debug=True)"
+        }
+      ]
+    },
+    {
+      'id': "python-59",
+      'title': "数据分析：pandas 进阶",
+      'summary': "读取 CSV、筛选、分组、聚合，数据分析三板斧。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "pandas 是数据分析的核心库（<code inline>pip install pandas</code>）。核心概念是 DataFrame（二维表格）。这一章覆盖读取数据、筛选、分组聚合等常用操作。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "创建与读取数据",
+          'code': "import pandas as pd\n\n# 从字典创建\nsales = pd.DataFrame({\n    \"商品\": [\"苹果\", \"香蕉\", \"苹果\", \"橙子\", \"香蕉\"],\n    \"销量\": [10, 5, 8, 3, 6],\n    \"价格\": [3, 2, 3, 4, 2]\n})\nprint(sales)\n\n# 从 CSV 读取\n# df = pd.read_csv(\"data.csv\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "筛选与计算",
+          'code': "import pandas as pd\n\ndf = pd.DataFrame({\n    \"商品\": [\"苹果\", \"香蕉\", \"苹果\", \"橙子\", \"香蕉\"],\n    \"销量\": [10, 5, 8, 3, 6],\n    \"价格\": [3, 2, 3, 4, 2]\n})\n\n# 计算销售额列\ndf[\"销售额\"] = df[\"销量\"] * df[\"价格\"]\nprint(df)\n\n# 条件筛选\nhot = df[df[\"销量\"] > 5]\nprint(\"销量>5的商品：\")\nprint(hot)\n\n# 描述统计\nprint(df[\"销量\"].describe())"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "分组聚合",
+          'code': "import pandas as pd\n\ndf = pd.DataFrame({\n    \"商品\": [\"苹果\", \"香蕉\", \"苹果\", \"橙子\", \"香蕉\"],\n    \"销量\": [10, 5, 8, 3, 6],\n    \"价格\": [3, 2, 3, 4, 2]\n})\n\n# 按商品分组求和\nprint(df.groupby(\"商品\")[\"销量\"].sum())\n\n# 多列聚合\nprint(df.groupby(\"商品\").agg({\n    \"销量\": [\"sum\", \"mean\"],\n    \"价格\": \"max\"\n}))"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据分析：pandas 进阶\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据分析：pandas 进阶\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据分析：pandas 进阶\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "DataFrame 是二维表格数据",
+            "df[条件] 筛选行，新建列直接赋值",
+            "groupby(\"列\").sum() 分组聚合",
+            "read_csv 读取文件，describe 统计描述"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "成绩分析",
+          'code': "import pandas as pd\n\ndf = pd.DataFrame({\n    \"学生\": [\"小明\", \"小红\", \"小刚\", \"小丽\", \"小强\"],\n    \"班级\": [\"A\", \"A\", \"B\", \"B\", \"A\"],\n    \"成绩\": [92, 85, 78, 95, 68]\n})\n\nprint(\"全班平均：\", df[\"成绩\"].mean())\nprint(\"最高分：\", df[df[\"成绩\"] == df[\"成绩\"].max()])\nprint(\"各班平均：\")\nprint(df.groupby(\"班级\")[\"成绩\"].mean())\nprint(\"及格率：\", (df[\"成绩\"] >= 60).mean() * 100, \"%\")"
+        }
+      ]
+    },
+    {
+      'id': "python-60",
+      'title': "数据可视化 matplotlib",
+      'summary': "折线图、柱状图、饼图、散点图，让数据说话。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "matplotlib 是最基础的数据可视化库（<code inline>pip install matplotlib</code>）。掌握几种基本图表，就能把数据变成直观的图。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "折线图",
+          'code': "import matplotlib.pyplot as plt\n\nx = [1, 2, 3, 4, 5]\ny = [2, 4, 6, 8, 10]\n\nplt.plot(x, y, marker=\"o\", label=\"y=2x\")\nplt.xlabel(\"x\")\nplt.ylabel(\"y\")\nplt.title(\"折线图示例\")\nplt.legend()\nplt.show()\n# 脚本环境用 plt.savefig(\"plot.png\") 保存"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "柱状图与饼图",
+          'code': "import matplotlib.pyplot as plt\n\n# 柱状图\ncategories = [\"苹果\", \"香蕉\", \"橙子\"]\nvalues = [30, 45, 25]\nplt.bar(categories, values, color=[\"red\", \"yellow\", \"orange\"])\nplt.title(\"水果销量\")\nplt.show()\n\n# 饼图\nplt.pie(values, labels=categories, autopct=\"%1.1f%%\")\nplt.title(\"销量占比\")\nplt.show()"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "子图与多图",
+          'code': "import matplotlib.pyplot as plt\nimport numpy as np\n\nfig, axes = plt.subplots(1, 2, figsize=(10, 4))\n\nx = np.linspace(0, 10, 100)\naxes[0].plot(x, np.sin(x))\naxes[0].set_title(\"正弦曲线\")\n\naxes[1].scatter(x, np.cos(x), s=10)\naxes[1].set_title(\"散点图\")\n\nplt.tight_layout()\nplt.show()"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"数据可视化 matplotlib\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"数据可视化 matplotlib\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"数据可视化 matplotlib\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "plt.plot 折线图、bar 柱状图、pie 饼图、scatter 散点图",
+            "xlabel/ylabel/title/legend 加标注",
+            "subplots 创建多个子图",
+            "脚本里用 savefig 保存图片"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "成绩柱状图",
+          'code': "import matplotlib.pyplot as plt\n\nnames = [\"小明\", \"小红\", \"小刚\", \"小丽\"]\nscores = [92, 85, 78, 95]\n\nplt.bar(names, scores, color=\"skyblue\")\nplt.title(\"学生成绩\")\nplt.ylabel(\"分数\")\nfor i, v in enumerate(scores):\n    plt.text(i, v + 1, str(v), ha=\"center\")\nplt.show()\n# 保存：plt.savefig(\"scores.png\")"
+        }
+      ]
+    },
+    {
+      'id': "python-61",
+      'title': "机器学习入门：scikit-learn",
+      'summary': "用 sklearn 跑第一个机器学习模型，理解训练与预测。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "机器学习是让程序从数据中『学习规律』。scikit-learn（sklearn）是 Python 最流行的机器学习库。这一章用最简单的分类模型走一遍完整流程：准备数据 → 训练 → 预测。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "完整机器学习流程",
+          'code': "# 安装：pip install scikit-learn\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.metrics import accuracy_score\n\n# 1. 准备数据（鸢尾花数据集）\ndata = load_iris()\nX = data.data       # 特征\nY = data.target     # 标签\n\n# 2. 划分训练集和测试集\nX_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)\n\n# 3. 创建并训练模型\nmodel = DecisionTreeClassifier()\nmodel.fit(X_train, Y_train)\n\n# 4. 预测与评估\npredictions = model.predict(X_test)\nprint(\"准确率：\", accuracy_score(Y_test, predictions))"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "预测新样本",
+          'code': "from sklearn.tree import DecisionTreeClassifier\nfrom sklearn.datasets import load_iris\n\ndata = load_iris()\nmodel = DecisionTreeClassifier()\nmodel.fit(data.data, data.target)\n\n# 预测一朵新花（4个特征）\nnew_flower = [[5.1, 3.5, 1.4, 0.2]]\nresult = model.predict(new_flower)\nprint(\"预测类别：\", data.target_names[result[0]])"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"机器学习入门：scikit-learn\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"机器学习入门：scikit-learn\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"机器学习入门：scikit-learn\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "机器学习=从数据学规律，然后预测",
+            "train_test_split 划分训练/测试集",
+            "model.fit 训练、model.predict 预测",
+            "accuracy_score 评估准确率"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "KNN 分类",
+          'code': "from sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import accuracy_score\n\ndata = load_iris()\nX_train, X_test, Y_train, Y_test = train_test_split(data.data, data.target, test_size=0.3)\n\nmodel = KNeighborsClassifier(n_neighbors=3)\nmodel.fit(X_train, Y_train)\nprint(\"准确率：\", accuracy_score(Y_test, model.predict(X_test)))"
+        }
+      ]
+    },
+    {
+      'id': "python-62",
+      'title': "自动化办公：Excel 处理 openpyxl",
+      'summary': "读取、写入、修改 Excel，办公自动化的起点。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "很多重复的办公工作（整理表格、汇总数据）都能用 Python 自动化。openpyxl 是处理 Excel（.xlsx）的常用库（<code inline>pip install openpyxl</code>）。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "创建与写入 Excel",
+          'code': "# 安装：pip install openpyxl\nfrom openpyxl import Workbook\n\nwb = Workbook()\nws = wb.active\nws.title = \"成绩表\"\n\n# 写表头\nws.append([\"姓名\", \"语文\", \"数学\"])\n# 写数据\nws.append([\"小明\", 92, 88])\nws.append([\"小红\", 85, 95])\n\nwb.save(\"scores.xlsx\")\nprint(\"已保存 scores.xlsx\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "读取 Excel",
+          'code': "from openpyxl import load_workbook\n\nwb = load_workbook(\"scores.xlsx\")\nws = wb.active\n\n# 遍历所有行\nfor row in ws.iter_rows(values_only=True):\n    print(row)\n\n# 读取指定单元格\nprint(\"B2：\", ws[\"B2\"].value)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "批量生成成绩单",
+          'code': "from openpyxl import Workbook\nimport random\n\nwb = Workbook()\nws = wb.active\nws.append([\"姓名\", \"成绩\", \"等级\"])\n\nnames = [\"小明\", \"小红\", \"小刚\", \"小丽\", \"小强\"]\nfor name in names:\n    score = random.randint(60, 100)\n    grade = \"A\" if score >= 90 else \"B\" if score >= 80 else \"C\"\n    ws.append([name, score, grade])\n\nwb.save(\"report.xlsx\")\nprint(\"批量成绩单已生成\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"自动化办公：Excel 处理 openpyxl\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"自动化办公：Excel 处理 openpyxl\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"自动化办公：Excel 处理 openpyxl\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "openpyxl 读写 .xlsx 文件",
+            "Workbook() 新建，load_workbook 读取",
+            "ws.append 加行，ws[\"B2\"] 访问单元格",
+            "办公自动化：重复表格工作交给 Python"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "生成统计表",
+          'code': "from openpyxl import Workbook\n\nwb = Workbook()\nws = wb.active\nws.append([\"月份\", \"销量\", \"销售额\"])\n\ndata = [(\"1月\", 120, 2400), (\"2月\", 150, 3000), (\"3月\", 100, 2000)]\nfor row in data:\n    ws.append(row)\n\nws.append([\"合计\", sum(r[1] for r in data), sum(r[2] for r in data)])\nwb.save(\"sales.xlsx\")\nprint(\"销售统计表已生成\")"
+        }
+      ]
+    },
+    {
+      'id': "python-63",
+      'title': "自动化办公：发送邮件",
+      'summary': "用 smtplib 自动发送邮件，处理通知类工作。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "用 Python 自动发邮件，可以做『数据日报』『告警通知』。核心库是 smtplib（发信）和 email（构造邮件）。注意需要邮箱的授权码。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "发送纯文本邮件",
+          'code': "import smtplib\nfrom email.mime.text import MIMEText\n\n# 配置（用你的真实邮箱和授权码）\nsmtp_server = \"smtp.qq.com\"     # QQ邮箱示例\nsmtp_port = 465\nsender = \"你的邮箱@qq.com\"\nauth_code = \"你的授权码\"          # 不是登录密码！\nreceiver = \"收件人@example.com\"\n\nmsg = MIMEText(\"这是测试邮件内容\", \"plain\", \"utf-8\")\nmsg[\"Subject\"] = \"Python 自动邮件\"\nmsg[\"From\"] = sender\nmsg[\"To\"] = receiver\n\n# 发送\nwith smtplib.SMTP_SSL(smtp_server, smtp_port) as server:\n    server.login(sender, auth_code)\n    server.sendmail(sender, [receiver], msg.as_string())\nprint(\"邮件已发送\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "发送 HTML 邮件",
+          'code': "import smtplib\nfrom email.mime.text import MIMEText\n\n# HTML 邮件更漂亮\nhtml = \"<h1>数据日报</h1><p>今天访问量 <b>1200</b>，比昨天 +5%</p>\"\nmsg = MIMEText(html, \"html\", \"utf-8\")\nmsg[\"Subject\"] = \"每日报表\"\nmsg[\"From\"] = \"sender@example.com\"\nmsg[\"To\"] = \"boss@example.com\"\n\n# 发送部分同上一例：smtplib.SMTP_SSL + login + sendmail\nprint(\"HTML 邮件已构造，发送部分见上例\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"自动化办公：发送邮件\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"自动化办公：发送邮件\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"自动化办公：发送邮件\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "smtplib 发信、email.mime 构造邮件",
+            "邮箱需要开启 SMTP 并用授权码登录",
+            "MIMEText(内容, \"html\"/\"plain\", \"utf-8\")",
+            "主题/发件人/收件人通过 msg[\"Subject\"] 等设置"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "邮件结构演示",
+          'code': "from email.mime.text import MIMEText\nfrom email.utils import formataddr\n\nmsg = MIMEText(\"你好，这是自动发送的邮件。\", \"plain\", \"utf-8\")\nmsg[\"Subject\"] = \"Python 邮件测试\"\nmsg[\"From\"] = formataddr((\"发送者\", \"sender@example.com\"))\nmsg[\"To\"] = \"receiver@example.com\"\nprint(\"邮件对象构造完成，发送见上一章\")"
+        }
+      ]
+    },
+    {
+      'id': "python-64",
+      'title': "设计模式：单例与工厂",
+      'summary': "用 Python 实现单例、工厂两种最常用的设计模式。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "设计模式是前人总结的解决特定问题的套路。掌握最常用的几个，能提升代码质量。这一章看『单例』（全局唯一实例）和『工厂』（根据参数创建不同对象）。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "单例模式",
+          'code': "class Database:\n    _instance = None\n\n    def __new__(cls):\n        # __new__ 控制实例创建\n        if cls._instance is None:\n            cls._instance = super().__new__(cls)\n            print(\"创建唯一实例\")\n        return cls._instance\n\nd1 = Database()\nd2 = Database()\nprint(d1 is d2)   # True  始终是同一个实例\n\n# 适用场景：数据库连接、日志器、配置管理器"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "工厂模式",
+          'code': "class Dog:\n    def speak(self):\n        return \"汪汪\"\n\nclass Cat:\n    def speak(self):\n        return \"喵喵\"\n\nclass AnimalFactory:\n    @staticmethod\n    def create(animal_type):\n        if animal_type == \"dog\":\n            return Dog()\n        elif animal_type == \"cat\":\n            return Cat()\n        else:\n            raise ValueError(\"未知动物\")\n\n# 客户端只需要告诉工厂要什么\nanimal = AnimalFactory.create(\"dog\")\nprint(animal.speak())   # 汪汪\nanimal = AnimalFactory.create(\"cat\")\nprint(animal.speak())   # 喵喵"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"设计模式：单例与工厂\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"设计模式：单例与工厂\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"设计模式：单例与工厂\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "单例：全局只有一个实例，用 __new__ 控制",
+            "工厂：用统一入口按参数创建不同对象",
+            "单例适合连接池/日志/配置",
+            "工厂解耦创建逻辑，客户端不关心细节"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "观察者模式",
+          'code': "class Subject:\n    def __init__(self):\n        self.observers = []\n\n    def attach(self, obs):\n        self.observers.append(obs)\n\n    def notify(self, msg):\n        for obs in self.observers:\n            obs.update(msg)\n\nclass Observer:\n    def __init__(self, name):\n        self.name = name\n    def update(self, msg):\n        print(f\"{self.name} 收到通知：{msg}\")\n\ns = Subject()\na = Observer(\"A\")\nb = Observer(\"B\")\ns.attach(a)\ns.attach(b)\ns.notify(\"有更新了！\")"
+        }
+      ]
+    },
+    {
+      'id': "python-65",
+      'title': "项目实战（一）：命令行待办清单",
+      'summary': "完整小项目：增删改查待办事项，持久化到文件。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "把学过的知识综合起来，做一个真正的命令行待办清单（Todo App）。功能：添加、显示、完成、删除待办，数据保存到 JSON 文件。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "待办清单完整代码",
+          'code': "import json\nimport os\n\nFILE = \"todos.json\"\n\ndef load_todos():\n    if not os.path.exists(FILE):\n        return []\n    with open(FILE, \"r\", encoding=\"utf-8\") as f:\n        return json.load(f)\n\ndef save_todos(todos):\n    with open(FILE, \"w\", encoding=\"utf-8\") as f:\n        json.dump(todos, f, ensure_ascii=False, indent=2)\n\ndef show(todos):\n    if not todos:\n        print(\"暂无待办\")\n        return\n    for i, t in enumerate(todos, 1):\n        mark = \"[x]\" if t[\"done\"] else \"[ ]\"\n        print(f\"{i}. {mark} {t[\"text\"]}\")\n\ndef add(todos, text):\n    todos.append({\"text\": text, \"done\": False})\n    print(\"已添加\")\n\ndef done(todos, index):\n    if 1 <= index <= len(todos):\n        todos[index - 1][\"done\"] = True\n        print(\"已完成\")\n    else:\n        print(\"序号无效\")\n\n# 简单交互\ntodos = load_todos()\nwhile True:\n    print(\"\\n1.查看 2.添加 3.完成 4.退出\")\n    choice = input(\"请选择：\").strip()\n    if choice == \"1\":\n        show(todos)\n    elif choice == \"2\":\n        text = input(\"待办内容：\").strip()\n        if text:\n            add(todos, text)\n    elif choice == \"3\":\n        n = int(input(\"序号：\"))\n        done(todos, n)\n    elif choice == \"4\":\n        save_todos(todos)\n        print(\"已保存，再见\")\n        break"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"项目实战（一）：命令行待办清单\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"项目实战（一）：命令行待办清单\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"项目实战（一）：命令行待办清单\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "综合运用：函数/列表/字典/JSON/文件/循环",
+            "load_todos 读取、save_todos 保存",
+            "数据持久化到 JSON 文件",
+            "菜单循环驱动交互"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "核心函数演练",
+          'code': "import json\n\n# 演示核心逻辑：加载与保存\ntodos = [{\"text\": \"学 Python\", \"done\": False}]\ns = json.dumps(todos, ensure_ascii=False, indent=2)\nprint(s)\nprint(\"还原：\", json.loads(s))"
+        }
+      ]
+    },
+    {
+      'id': "python-66",
+      'title': "项目实战（二）：学生成绩管理系统",
+      'summary': "面向对象综合项目：学生类、班级类、增删改查。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "用面向对象思想做一个学生成绩管理系统。核心：Student 类封装数据，ClassRoom 类管理学生列表，提供增删改查和统计。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "学生成绩管理系统",
+          'code': "class Student:\n    def __init__(self, name, score):\n        self.name = name\n        self.score = score\n\n    def __repr__(self):\n        return f\"{self.name}({self.score}分)\"\n\nclass ClassRoom:\n    def __init__(self):\n        self.students = []\n\n    def add(self, name, score):\n        self.students.append(Student(name, score))\n        print(f\"添加成功：{name}\")\n\n    def remove(self, name):\n        for s in self.students:\n            if s.name == name:\n                self.students.remove(s)\n                print(f\"删除成功：{name}\")\n                return\n        print(\"未找到该学生\")\n\n    def show_all(self):\n        if not self.students:\n            print(\"暂无学生\")\n        for s in self.students:\n            print(s)\n\n    def stats(self):\n        if not self.students:\n            print(\"暂无数据\")\n            return\n        scores = [s.score for s in self.students]\n        print(f\"平均分：{sum(scores)/len(scores):.1f}\")\n        print(f\"最高分：{max(scores)}，最低分：{min(scores)}\")\n        print(f\"及格率：{(sum(1 for s in scores if s>=60)/len(scores))*100:.0f}%\")\n\n# 使用\nroom = ClassRoom()\nroom.add(\"小明\", 92)\nroom.add(\"小红\", 85)\nroom.add(\"小刚\", 45)\nroom.show_all()\nroom.stats()\nroom.remove(\"小红\")\nroom.show_all()"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"项目实战（二）：学生成绩管理系统\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"项目实战（二）：学生成绩管理系统\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"项目实战（二）：学生成绩管理系统\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Student 类封装学生数据，ClassRoom 管理集合",
+            "add/remove/show_all/stats 四个核心方法",
+            "列表推导式求平均/最高/及格率",
+            "面向对象让代码结构清晰"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "统计函数版",
+          'code': "def stats(scores):\n    avg = sum(scores) / len(scores)\n    best = max(scores)\n    pass_rate = sum(1 for s in scores if s >= 60) / len(scores) * 100\n    return f\"平均{avg:.1f} 最高{best} 及格率{pass_rate:.0f}%\"\n\nprint(stats([92, 85, 45, 78, 95]))"
+        }
+      ]
+    },
+    {
+      'id': "python-67",
+      'title': "项目实战（三）：天气查询程序",
+      'summary': "调用免费天气 API，实战 requests 与 JSON 解析。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "很多免费 API 无需密钥就能调用。这一章做一个天气查询程序：用户输入城市，程序调用接口返回天气。实际运行需要联网。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "天气查询（联网）",
+          'code': "# 使用 Open-Meteo 免费天气 API（无需密钥）\nimport requests\n\ndef get_weather(lat, lon):\n    url = \"https://api.open-meteo.com/v1/forecast\"\n    params = {\n        \"latitude\": lat,\n        \"longitude\": lon,\n        \"current_weather\": True\n    }\n    r = requests.get(url, params=params, timeout=10)\n    data = r.json()\n    current = data[\"current_weather\"]\n    return f\"温度 {current[\"temperature\"]}°C，风速 {current[\"windspeed\"]} km/h\"\n\n# 北京坐标\ntry:\n    print(get_weather(39.9, 116.4))\nexcept Exception as e:\n    print(\"获取失败（需要联网）：\", e)"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "城市坐标查询",
+          'code': "# 用另一个免费 API 把城市名转成坐标\nimport requests\n\ndef get_coords(city):\n    url = \"https://geocoding-api.open-meteo.com/v1/search\"\n    r = requests.get(url, params={\"name\": city}, timeout=10)\n    data = r.json()\n    if data.get(\"results\"):\n        top = data[\"results\"][0]\n        return top[\"latitude\"], top[\"longitude\"], top[\"name\"]\n    return None\n\nfor city in [\"北京\", \"上海\", \"广州\"]:\n    res = get_coords(city)\n    print(res)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"项目实战（三）：天气查询程序\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"项目实战（三）：天气查询程序\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"项目实战（三）：天气查询程序\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "免费 API 让实战项目零成本",
+            "requests + params 传参、r.json() 解析",
+            "异常处理保证无网络时不崩溃",
+            "实战 = 请求 + 解析 + 展示的完整链路"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "演示 JSON 解析",
+          'code': "# 模拟 API 返回的 JSON 解析\nimport json\n\nresp = {\n    \"current_weather\": {\n        \"temperature\": 26.5,\n        \"windspeed\": 12.3,\n        \"weathercode\": 2\n    }\n}\nt = resp[\"current_weather\"][\"temperature\"]\nprint(f\"当前温度 {t}°C\")\n\n# 天气代码含义\ncodes = {0: \"晴\", 1: \"少云\", 2: \"多云\", 3: \"阴\", 45: \"雾\", 61: \"小雨\", 80: \"阵雨\"}\nprint(\"天气：\", codes.get(resp[\"current_weather\"][\"weathercode\"], \"未知\"))"
+        }
+      ]
+    },
+    {
+      'id': "python-68",
+      'title': "项目实战（四）：文本词频统计器",
+      'summary': "统计一篇文章的高频词，运用字符串与 Counter。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "一个实用的小工具：输入一段文本，统计每个词出现的次数，按频率从高到低展示。综合运用字符串处理、列表、Counter。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "词频统计器",
+          'code': "from collections import Counter\nimport re\n\n# 停用词（忽略常见虚词）\nSTOP = {\"的\", \"了\", \"和\", \"是\", \"在\", \"我\", \"有\", \"就\", \"不\", \"也\", \"这\", \"他\", \"她\", \"它\"}\n\ndef top_words(text, n=10):\n    # 提取中文词语（简单按空白和标点分割）\n    words = re.findall(r\"[\\u4e00-\\u9fff]+\", text)\n    words = [w for w in words if w not in STOP]\n    count = Counter(words)\n    return count.most_common(n)\n\narticle = \"我爱学习 Python 学习使我快乐 Python 是最好学的语言 我也爱数据 数据科学很酷\"\nresult = top_words(article, 5)\nfor word, n in result:\n    print(f\"{word}: {n}次\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"项目实战（四）：文本词频统计器\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"项目实战（四）：文本词频统计器\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"项目实战（四）：文本词频统计器\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "re.findall 提取词语，Counter 统计",
+            "停用词过滤常见虚词",
+            "most_common 按频率排序",
+            "小工具也讲究：可复用、可配置"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "字母频率统计",
+          'code': "from collections import Counter\n\ntext = \"hello world hello python\"\nletters = [c.lower() for c in text if c.isalpha()]\ncount = Counter(letters)\nprint(count)\nprint(\"最多的：\", count.most_common(3))"
+        }
+      ]
+    },
+    {
+      'id': "python-69",
+      'title': "Python 类型检查与 Pydantic",
+      'summary': "用 Pydantic 做数据校验，让输入数据安全可靠。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "当程序要接收外部数据（表单、API）时，需要校验数据是否合法。Pydantic（<code inline>pip install pydantic</code>）是数据校验的事实标准，自动做类型检查与转换。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "Pydantic 基础",
+          'code': "from pydantic import BaseModel\n\nclass User(BaseModel):\n    name: str\n    age: int\n    email: str\n\n# 自动校验\nuser = User(name=\"小明\", age=20, email=\"ming@example.com\")\nprint(user)\nprint(user.name, user.age)\n\n# 类型不匹配会报错\n# User(name=123, age=\"abc\", email=\"x\")   # 抛 ValidationError"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "字段约束与可选",
+          'code': "from pydantic import BaseModel, Field, EmailStr\n\nclass Student(BaseModel):\n    name: str = Field(min_length=1, max_length=20)\n    score: int = Field(ge=0, le=100)      # 0-100之间\n    email: EmailStr | None = None         # 可选\n\ns = Student(name=\"小明\", score=95, email=\"ming@test.com\")\nprint(s)\n# 非法数据会被拦截\n# Student(name=\"\", score=150)   # 报错"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Python 类型检查与 Pydantic\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Python 类型检查与 Pydantic\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Python 类型检查与 Pydantic\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Pydantic 自动校验与类型转换",
+            "Field 加约束：min_length/ge/le",
+            "类型注解即校验规则",
+            "适合 API 入参校验、配置管理"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "配置模型",
+          'code': "from pydantic import BaseModel\n\nclass Config(BaseModel):\n    debug: bool = False\n    host: str = \"127.0.0.1\"\n    port: int = 8000\n\ncfg = Config(debug=True)\nprint(cfg)\nprint(\"配置加载成功\")"
+        }
+      ]
+    },
+    {
+      'id': "python-70",
+      'title': "面向对象综合：图书管理系统",
+      'summary': "对象、继承、文件持久化综合应用的大型示例。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "把 OOP 与文件操作结合，做一个图书管理系统。用继承表达图书类型差异，用 JSON 持久化，用列表管理集合。这是面向对象综合练习。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "图书管理系统",
+          'code': "import json\n\nclass Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n\n    def describe(self):\n        return f\"《{self.title}》作者：{self.author}\"\n\nclass EBook(Book):\n    def __init__(self, title, author, size_mb):\n        super().__init__(title, author)\n        self.size_mb = size_mb\n\n    def describe(self):\n        return super().describe() + f\"（电子书 {self.size_mb}MB）\"\n\nclass Library:\n    def __init__(self):\n        self.books = []\n\n    def add(self, book):\n        self.books.append(book)\n\n    def search(self, keyword):\n        return [b for b in self.books if keyword in b.title]\n\n    def save(self, path=\"library.json\"):\n        data = [{\"title\": b.title, \"author\": b.author, \"size_mb\": getattr(b, \"size_mb\", None)} for b in self.books]\n        with open(path, \"w\", encoding=\"utf-8\") as f:\n            json.dump(data, f, ensure_ascii=False)\n        print(\"已保存\")\n\n# 使用\nlib = Library()\nlib.add(EBook(\"Python入门\", \"张三\", 5))\nlib.add(Book(\"三体\", \"刘慈欣\"))\nfor b in lib.books:\n    print(b.describe())\nprint(\"搜索结果：\", [b.title for b in lib.search(\"Python\")])\nlib.save()"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"面向对象综合：图书管理系统\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"面向对象综合：图书管理系统\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"面向对象综合：图书管理系统\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "继承表达不同类型（Book→EBook）",
+            "getattr 安全访问子类特有属性",
+            "JSON 持久化保存数据",
+            "多态：统一 describe 接口不同实现"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "多态演示",
+          'code': "class Animal:\n    def sound(self):\n        return \"...\"\n\nclass Dog(Animal):\n    def sound(self):\n        return \"汪汪\"\n\nclass Cat(Animal):\n    def sound(self):\n        return \"喵喵\"\n\nfor a in [Dog(), Cat()]:\n    print(a.sound())"
+        }
+      ]
+    },
+    {
+      'id': "python-71",
+      'title': "Python 代码规范与 PEP8",
+      'summary': "命名、缩进、行宽、导入顺序，写出规范的代码。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "PEP8 是 Python 的官方代码风格指南。写规范代码不仅美观，还能减少错误、方便协作。这一章总结最重要的规范要点。"
+        },
+        {
+          'type': "list",
+          'items': [
+            "缩进统一用 4 个空格，不用 Tab",
+            "每行不超过 79 字符（PEP8 建议）",
+            "变量/函数用 snake_case（小写+下划线）",
+            "类名用 PascalCase（每个单词首字母大写）",
+            "常量用全大写 UPPER_CASE",
+            "导入语句放在文件顶部，标准库在前、第三方次之、本地最后",
+            "函数与函数之间空两行",
+            "变量名要有意义：total_score 而不是 ts"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "规范示例",
+          'code': "# 规范命名\ndef calculate_average(scores):\n    \"\"\"计算平均分\"\"\"\n    if not scores:\n        return 0\n    return sum(scores) / len(scores)\n\nclass StudentRecord:\n    def __init__(self, student_id, name):\n        self.student_id = student_id\n        self.name = name\n\n# 导入规范\nimport os\nimport sys\n\nimport requests\n\nfrom my_module import helper\n\n# 上面是推荐的分组导入顺序"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "用工具检查规范",
+          'code': "# 安装与使用 flake8（代码检查工具）\n# pip install flake8\n# flake8 my_file.py\n# 会提示风格问题\n\n# 自动格式化：black\n# pip install black\n# black my_file.py\n# 一键把代码格式化为规范风格\n\nprint(\"用 flake8 检查，用 black 格式化\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Python 代码规范与 PEP8\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Python 代码规范与 PEP8\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Python 代码规范与 PEP8\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "缩进4空格、snake_case 命名、PascalCase 类名",
+            "导入分组：标准库→第三方→本地",
+            "flake8 检查代码规范",
+            "black 一键格式化"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "规范化示例",
+          'code': "# 不好的命名：def f(x): ...\n# 好：def calculate_total_price(items):\n\ndef count_words(text):\n    \"\"\"统计单词数量\"\"\"\n    words = text.split()\n    return len(words)\n\nprint(count_words(\"hello world python\"))"
+        }
+      ]
+    },
+    {
+      'id': "python-72",
+      'title': "环境变量与配置管理",
+      'summary': "用 os.environ 和 .env 文件管理敏感配置。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "程序的配置（数据库密码、API 密钥）不该硬编码在代码里。规范做法是用环境变量或 .env 文件，方便不同环境切换且不泄露密钥。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "读取环境变量",
+          'code': "import os\n\n# 读取环境变量\napi_key = os.environ.get(\"API_KEY\")\nif api_key:\n    print(\"API_KEY 已设置\")\nelse:\n    print(\"API_KEY 未设置\")\n\n# 带默认值\ndebug = os.environ.get(\"DEBUG\", \"false\")\nprint(\"DEBUG =\", debug)\n\n# 命令行设置（Windows）：\n# set API_KEY=abc123\n# 或 PowerShell：$env:API_KEY=\"abc123\""
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "使用 .env 文件（python-dotenv）",
+          'code': "# 安装：pip install python-dotenv\n# 项目根目录建 .env 文件：\n# API_KEY=secret123\n# DATABASE_URL=sqlite:///app.db\n\nfrom dotenv import load_dotenv\nimport os\n\nload_dotenv()   # 读取 .env\n\napi_key = os.getenv(\"API_KEY\")\ndb_url = os.getenv(\"DATABASE_URL\")\nprint(\"API_KEY:\", api_key)\nprint(\"DATABASE_URL:\", db_url)\n\n# .env 文件要加入 .gitignore，绝不提交到仓库"
+        },
+        {
+          'type': "warn",
+          'title': "密钥安全",
+          'text': "API 密钥、密码永远不要写死在代码或提交到 Git。用环境变量或 .env（并加入 .gitignore）。泄露密钥可能导致账号被盗或巨额账单。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"环境变量与配置管理\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"环境变量与配置管理\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"环境变量与配置管理\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "os.environ.get(\"KEY\") 读取环境变量",
+            "python-dotenv 读取 .env 文件",
+            ".env 必须加入 .gitignore",
+            "密钥绝不硬编码、绝不提交仓库"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "配置读取演示",
+          'code': "import os\n\n# 模拟环境变量（本地运行无真实密钥时）\nconfig = {\n    \"api_key\": os.environ.get(\"API_KEY\", \"dev-key\"),\n    \"debug\": os.environ.get(\"DEBUG\", \"true\").lower() == \"true\",\n}\nprint(\"配置：\", config)\nprint(\"建议把密钥放进环境变量，而不是代码里\")"
+        }
+      ]
+    },
+    {
+      'id': "python-73",
+      'title': "生成器与管道：处理大数据",
+      'summary': "用生成器串联成管道，流式处理超大数据不爆内存。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "当数据量大到内存装不下（比如处理 10GB 日志），就不能一次性读入。生成器 + 管道（pipeline）让你逐条处理，内存占用恒定。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "逐行处理大文件",
+          'code': "def read_lines(path):\n    \"\"\"逐行读取，不一次性载入内存\"\"\"\n    with open(path, \"r\", encoding=\"utf-8\") as f:\n        for line in f:\n            yield line.strip()\n\ndef filter_error(lines):\n    \"\"\"只保留 ERROR 行\"\"\"\n    for line in lines:\n        if \"ERROR\" in line:\n            yield line\n\ndef count_words(lines):\n    \"\"\"统计每行单词数并汇总\"\"\"\n    total = 0\n    for line in lines:\n        total += len(line.split())\n    return total\n\n# 管道：生成器串联\n# 假设 data.txt 存在\n# lines = read_lines(\"data.txt\")\n# errors = filter_error(lines)\n# result = count_words(errors)\n# print(result)\nprint(\"生成器管道可流式处理超大文件\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "无限数据流",
+          'code': "def generate_numbers():\n    n = 0\n    while True:\n        yield n\n        n += 1\n\ndef even_numbers(numbers):\n    for n in numbers:\n        if n % 2 == 0:\n            yield n\n\n# 只取需要的部分\ncount = 0\nfor n in even_numbers(generate_numbers()):\n    if n > 100:\n        break\n    count += 1\n    if count <= 5:\n        print(n)"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"生成器与管道：处理大数据\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"生成器与管道：处理大数据\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"生成器与管道：处理大数据\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "生成器逐条产出，内存占用恒定",
+            "生成器可串联成管道：read→filter→count",
+            "yield 惰性求值，按需生产",
+            "适合大文件、无限数据流场景"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "惰性平方",
+          'code': "def squares():\n    n = 1\n    while True:\n        yield n * n\n        n += 1\n\n# 取前5个平方数\ng = squares()\nfor _ in range(5):\n    print(next(g))"
+        }
+      ]
+    },
+    {
+      'id': "python-74",
+      'title': "并行处理：concurrent.futures",
+      'summary': "ThreadPoolExecutor 与 ProcessPoolExecutor，简单并行。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "concurrent.futures 提供了更简单的并行接口：ThreadPoolExecutor（线程池）适合 I/O，ProcessPoolExecutor（进程池）适合计算。比手动创建线程/进程更省心。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "线程池并行下载",
+          'code': "from concurrent.futures import ThreadPoolExecutor\nimport time\n\ndef download(url):\n    time.sleep(0.5)   # 模拟下载\n    return f\"{url} 下载完成\"\n\nurls = [f\"file{i}.zip\" for i in range(6)]\n\nstart = time.time()\n# 线程池并行执行\nwith ThreadPoolExecutor(max_workers=3) as pool:\n    results = list(pool.map(download, urls))\n\nfor r in results:\n    print(r)\nprint(f\"总耗时 {time.time()-start:.2f}s（串行需约3s）\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "进程池并行计算",
+          'code': "from concurrent.futures import ProcessPoolExecutor\nimport time\n\ndef heavy_calc(n):\n    return sum(i * i for i in range(n))\n\nnums = [1000000] * 4\nstart = time.time()\nwith ProcessPoolExecutor(max_workers=4) as pool:\n    results = list(pool.map(heavy_calc, nums))\nprint(\"结果：\", results)\nprint(f\"总耗时 {time.time()-start:.2f}s\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"并行处理：concurrent.futures\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"并行处理：concurrent.futures\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"并行处理：concurrent.futures\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "ThreadPoolExecutor 适合 I/O 密集",
+            "ProcessPoolExecutor 适合 CPU 密集",
+            "pool.map(函数, 列表) 批量并行",
+            "with 自动等待并清理"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "提交与获取结果",
+          'code': "from concurrent.futures import ThreadPoolExecutor\nimport time\n\ndef task(name):\n    time.sleep(0.3)\n    return f\"{name} 完成\"\n\nwith ThreadPoolExecutor(max_workers=2) as pool:\n    futures = [pool.submit(task, f\"任务{i}\") for i in range(4)]\n    for f in futures:\n        print(f.result())"
+        }
+      ]
+    },
+    {
+      'id': "python-75",
+      'title': "内存管理与引用计数",
+      'summary': "理解垃圾回收、引用计数、循环引用与弱引用。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Python 自动管理内存（垃圾回收 GC），主要靠引用计数：一个对象被引用次数归零就被回收。了解它有助于写出不泄漏内存的程序。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "引用计数概念",
+          'code': "import sys\n\nx = []            # 引用计数 1\nprint(sys.getrefcount(x))   # 至少 2（getrefcount 自己也算一次）\n\ny = x             # 又引用一次\ndel y             # 减少一次引用\n# del x\n# 当引用归零，对象被回收"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "循环引用问题",
+          'code': "import gc\n\nclass Node:\n    def __init__(self):\n        self.ref = None\n\n# 循环引用：a 引用 b，b 引用 a，彼此都删不掉\na = Node()\nb = Node()\na.ref = b\nb.ref = a\ndel a, b\n\n# Python 用分代回收处理循环引用\ngc.collect()\nprint(\"垃圾回收完成，循环引用被处理\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "弱引用 weakref",
+          'code': "import weakref\n\nclass Cache:\n    pass\n\nc = Cache()\nweak_c = weakref.ref(c)     # 弱引用：不影响计数\nprint(\"弱引用有效：\", weak_c() is not None)\n\ndel c                        # 删除强引用\nprint(\"弱引用失效：\", weak_c() is None)   # 对象已被回收"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"内存管理与引用计数\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"内存管理与引用计数\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"内存管理与引用计数\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "引用计数归零即回收",
+            "循环引用靠 gc 分代回收",
+            "weakref 弱引用不阻止回收",
+            "了解 GC 有助于排查内存泄漏"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "查看引用数",
+          'code': "import sys\n\na = [1, 2, 3]\nb = a\nprint(\"引用数（含临时）：\", sys.getrefcount(a))\ndel b\nprint(\"删一个引用后：\", sys.getrefcount(a))"
+        }
+      ]
+    },
+    {
+      'id': "python-76",
+      'title': "Python 全局解释器锁 GIL",
+      'summary': "GIL 是什么、为什么存在、多线程为何受限。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "GIL（Global Interpreter Lock，全局解释器锁）是 CPython 的机制：同一时刻只有一个线程能执行 Python 字节码。这让多线程对 CPU 密集任务没有加速，是很多新手疑惑的点。"
+        },
+        {
+          'type': "list",
+          'items': [
+            "GIL 保证解释器内部数据一致，简化内存管理",
+            "多线程交替执行（时间片轮转），不是真并行",
+            "I/O 密集任务会释放 GIL，多线程仍然有效",
+            "CPU 密集任务要多线程提速 → 用多进程 multiprocessing",
+            "想绕开 GIL：用 C 扩展、numpy（底层释放）、或直接上多进程"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "演示 GIL 影响",
+          'code': "import time\nimport threading\n\ndef busy(n):\n    total = 0\n    for i in range(n):\n        total += i\n    return total\n\n# 串行\nstart = time.time()\n[busy(2000000) for _ in range(4)]\nserial = time.time() - start\n\n# 多线程（受 GIL 限制，不会更快）\nstart = time.time()\nthreads = [threading.Thread(target=busy, args=(2000000,)) for _ in range(4)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nthreaded = time.time() - start\n\nprint(f\"串行: {serial:.2f}s, 多线程: {threaded:.2f}s\")\nprint(\"CPU 密集任务多线程受 GIL 限制，几乎无加速\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Python 全局解释器锁 GIL\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Python 全局解释器锁 GIL\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Python 全局解释器锁 GIL\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "GIL 让同一时刻只有一个线程执行字节码",
+            "I/O 密集多线程有效，CPU 密集无效",
+            "CPU 密集用多进程 multiprocessing",
+            "numpy 等 C 库底层会释放 GIL"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "I/O 密集演示（多线程有效）",
+          'code': "import time\nimport threading\n\ndef io_task():\n    time.sleep(0.5)   # 模拟网络/磁盘等待\n\nstart = time.time()\nthreads = [threading.Thread(target=io_task) for _ in range(4)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nprint(f\"4个I/O任务并行耗时 {time.time()-start:.2f}s（约0.5s而非2s）\")\nprint(\"I/O 等待时释放 GIL，多线程有效！\")"
+        }
+      ]
+    },
+    {
+      'id': "python-77",
+      'title': "异步 asyncio 实战：并发请求",
+      'summary': "用 aiohttp 并发抓取多个网页，异步的效率优势。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "异步（asyncio）适合大量并发 I/O。用 aiohttp（<code inline>pip install aiohttp</code>）可以同时发几十个请求，比串行快几十倍。理解 async/await 的关键：await 让出控制权去执行别的任务。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "异步并发请求",
+          'code': "# 安装：pip install aiohttp\nimport asyncio\nimport aiohttp\n\nasync def fetch(session, url):\n    async with session.get(url) as resp:\n        return url, resp.status\n\nasync def main():\n    urls = [\"https://httpbin.org/get\"] * 5\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        results = await asyncio.gather(*tasks)\n    for url, status in results:\n        print(f\"{url} -> {status}\")\n\n# asyncio.run(main())   # 联网执行\nprint(\"异步并发请求，await 让出控制权\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "异步 vs 同步对比",
+          'code': "import asyncio\nimport time\n\nasync def task(name, delay):\n    await asyncio.sleep(delay)   # 模拟I/O\n    return name\n\n# 同步串行\ndef sync_do():\n    start = time.time()\n    for i in range(3):\n        time.sleep(0.5)\n    return time.time() - start\n\n# 异步并发\nasync def async_do():\n    start = time.time()\n    await asyncio.gather(*(task(i, 0.5) for i in range(3)))\n    return time.time() - start\n\nprint(f\"同步耗时约 {sync_do():.2f}s\")\nprint(f\"异步耗时约 {asyncio.run(async_do()):.2f}s\")\nprint(\"异步并发明显更快\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"异步 asyncio 实战：并发请求\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"异步 asyncio 实战：并发请求\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"异步 asyncio 实战：并发请求\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "asyncio.gather 并发执行多个协程",
+            "await 挂起当前任务，不阻塞其他任务",
+            "aiohttp 是异步 HTTP 客户端",
+            "异步适合大量 I/O 并发，效率极高"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "异步顺序执行演示",
+          'code': "import asyncio\n\nasync def say(msg, delay):\n    await asyncio.sleep(delay)\n    print(msg)\n\nasync def main():\n    # 并发执行（总耗时约1秒）\n    await asyncio.gather(\n        say(\"先完成\", 1),\n        say(\"后完成\", 2)\n    )\n\nasyncio.run(main())"
+        }
+      ]
+    },
+    {
+      'id': "python-78",
+      'title': "Docker 与 Python 应用部署",
+      'summary': "容器化打包 Python 应用，跨平台部署不再痛苦。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Docker 可以把应用和它的环境一起打包成『容器』，在任何机器上一致运行，是现代部署的标准。这一章介绍给 Python 应用写 Dockerfile 的基础。"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "Dockerfile 示例",
+          'code': "# 文件名：Dockerfile\n# FROM python:3.12-slim          # 基础镜像\n# WORKDIR /app                  # 工作目录\n# COPY requirements.txt .\n# RUN pip install -r requirements.txt\n# COPY . .                     # 复制代码\n# CMD [\"python\", \"app.py\"]     # 启动命令\n\nprint(\"\"\"\n常用 Docker 命令：\ndocker build -t myapp .          # 构建镜像\ndocker run -p 5000:5000 myapp    # 运行容器\n\"\"\")"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "多阶段构建概念",
+          'code': "# 小提示：requirements 先复制，利用缓存加速\n# COPY requirements.txt .\n# RUN pip install -r requirements.txt\n# COPY . .\n# 这样代码改动不会触发重新下载依赖\n\nprint(\"依赖层缓存：先复制 requirements 再复制代码\")"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Docker 与 Python 应用部署\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Docker 与 Python 应用部署\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Docker 与 Python 应用部署\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Dockerfile 定义构建步骤",
+            "docker build 构建镜像、docker run 运行",
+            "先复制依赖清单再复制代码，利用缓存",
+            "容器保证环境一致，解决『在我电脑上能跑』"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "容器化理念",
+          'code': "print(\"\"\"\n应用 + 环境 = 镜像\n镜像 + 运行 = 容器\n任何机器跑起来都一样\n\"\"\")"
+        }
+      ]
+    },
+    {
+      'id': "python-79",
+      'title': "Python 面试高频问题",
+      'summary': "汇总 Python 面试常考：GIL、装饰器、深浅拷贝、闭包等。",
+      'difficulty': "高级",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "如果你是准备面试，这一章把 Python 面试最高频的问题和答案要点总结出来。每个都能展开，这里给核心答案。"
+        },
+        {
+          'type': "h",
+          'text': "高频问题与要点"
+        },
+        {
+          'type': "list",
+          'items': [
+            "解释 GIL：全局解释器锁，同一时刻单线程执行字节码；I/O 释放，CPU 密集受限，用多进程",
+            "装饰器是什么：不修改函数给函数加功能；@ 语法糖；functools.wraps 保留元信息",
+            "浅拷贝 vs 深拷贝：浅拷贝只复制外层，深拷贝递归复制；copy.copy 和 copy.deepcopy",
+            "可变默认参数陷阱：def f(x, lst=[]) 会累积；改为 lst=None",
+            "列表推导式和生成器区别：推导式一次性生成列表占内存；生成器惰性求值",
+            "is 和 ==：is 比较身份（内存地址），== 比较内容",
+            "闭包：内层函数引用外层变量；注意循环变量延迟绑定",
+            "*args 和 **kwargs：收集位置参数与关键字参数",
+            "异常处理：try/except/else/finally 各自作用",
+            "Python 内存管理：引用计数 + 分代回收；循环引用用 gc 处理"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "手写题：去重保持顺序",
+          'code': "def dedupe(items):\n    \"\"\"去重并保持原顺序\"\"\"\n    seen = set()\n    result = []\n    for item in items:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n\nprint(dedupe([1, 2, 2, 3, 1, 4]))   # [1, 2, 3, 4]"
+        },
+        {
+          'type': "code",
+          'lang': "python",
+          'title': "手写题：两数之和",
+          'code': "def two_sum(nums, target):\n    \"\"\"找两个数相加等于 target，返回索引\"\"\"\n    seen = {}\n    for i, n in enumerate(nums):\n        need = target - n\n        if need in seen:\n            return [seen[need], i]\n        seen[n] = i\n    return []\n\nprint(two_sum([2, 7, 11, 15], 9))   # [0, 1]"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Python 面试高频问题\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Python 面试高频问题\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Python 面试高频问题\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "GIL/装饰器/深浅拷贝/闭包是最高频",
+            "手写题常考去重、两数之和、反转字符串",
+            "面试要能说出『为什么』而不只是『是什么』",
+            "多用小代码演示理解"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "手写反转字符串",
+          'code': "# 方法1：切片\ndef reverse1(s):\n    return s[::-1]\n\n# 方法2：join + reversed\ndef reverse2(s):\n    return \"\".join(reversed(s))\n\nprint(reverse1(\"hello\"))\nprint(reverse2(\"hello\"))"
+        }
+      ]
+    },
+    {
+      'id': "python-80",
+      'title': "Python 学习路线与总结",
+      'summary': "80 章总结：知识地图、下一步方向、学习建议。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "恭喜你学完了 80 章 Python 课程！这一章回顾整条学习路径，并给你接下来的方向建议。学完不代表结束，编程是终身学习的旅程。"
+        },
+        {
+          'type': "h",
+          'text': "你已掌握的知识地图"
+        },
+        {
+          'type': "list",
+          'items': [
+            "基础：语法、类型、条件、循环、函数",
+            "数据结构：列表、元组、字典、集合",
+            "进阶：文件、异常、模块、OOP、继承、封装",
+            "深入：生成器、装饰器、上下文、并发、异步",
+            "工程：虚拟环境、测试、日志、性能、规范",
+            "实战：Web(Flask)、数据分析(pandas)、爬虫、自动化",
+            "项目：待办清单、成绩管理、图书管理、天气查询"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "接下来往哪个方向走"
+        },
+        {
+          'type': "list",
+          'items': [
+            "想搞后端：深入 Flask/Django、数据库、API 设计",
+            "想搞数据/AI：深入 pandas、NumPy、matplotlib、机器学习 sklearn",
+            "想搞自动化：openpyxl、smtplib、爬虫、脚本",
+            "想搞全栈：学 HTML/CSS/JavaScript 前端",
+            "想搞系统：学 Go 或 Rust，理解底层"
+          ]
+        },
+        {
+          'type': "info",
+          'title': "学习建议",
+          'text': "① 每天动手写代码，光看不练等于没学；② 用『项目驱动』学习，先做小项目再学新知识；③ 遇到错误别慌，读报错信息、搜索、debug；④ 多看官方文档 docs.python.org；⑤ 加入社区（如 Python 中文社区）互相交流。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Python 学习路线与总结\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Python 学习路线与总结\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Python 学习路线与总结\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "80 章覆盖从语法到项目实战的完整路径",
+            "后续按兴趣选方向：后端/数据/自动化/全栈",
+            "每天动手、项目驱动、善用官方文档",
+            "编程路上，坚持比天赋更重要"
+          ]
+        }
+      ],
+      'templates': [
+        {
+          'name': "学习打卡",
+          'code': "print(\"今天我学完了 Python 的：\")\nskills = [\"语法\", \"数据结构\", \"OOP\", \"文件与异常\", \"并发\", \"Web\", \"数据分析\"]\nfor s in skills:\n    print(\"√\", s)\nprint(\"明天继续加油！\")"
+        }
+      ]
+    }
+  ]
 });
+

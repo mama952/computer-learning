@@ -3,346 +3,1436 @@
    ============================================================ */
 window.LANGUAGE_EXTRA = window.LANGUAGE_EXTRA || [];
 window.LANGUAGE_EXTRA.push({
-  id: "dart",
-  name: "Dart",
-  icon: "Da",
-  tagline: "Flutter 的母语，谷歌出品的现代跨平台语言。",
-  intro:
-    "这是一套从零开始的 Dart 完整课程。Dart 由 Google 开发，是当下最火的跨平台 UI 框架 Flutter 的官方语言。第 1 章先认识 Dart 是什么，第 2 章教你下载安装，之后每一章都从大白话讲起，配可运行的示例代码和编辑器模板。学完这套课程，你将掌握 Dart 的语法、数据类型、集合、函数、面向对象、泛型、空安全、异步、异常、包管理，最后进入 Flutter 做出第一个 App。",
-  meta: { 难度: "从零到进阶", 章节: "16 章", 场景: "Flutter/跨平台 App" },
-  lessons: [
+  'id': "dart",
+  'name': "Dart",
+  'icon': "Da",
+  'tagline': "Flutter 的母语，谷歌出品的现代跨平台语言。",
+  'intro': "这是一套从零开始的 Dart 完整课程。Dart 由 Google 开发，是当下最火的跨平台 UI 框架 Flutter 的官方语言。第 1 章先认识 Dart 是什么，第 2 章教你下载安装，之后每一章都从大白话讲起，配可运行的示例代码和编辑器模板。学完这套课程，你将掌握 Dart 的语法、数据类型、集合、函数、面向对象、泛型、空安全、异步、异常、包管理，最后进入 Flutter 做出第一个 App。",
+  'meta': {
+    "难度": "从零到进阶",
+    "章节": "16 章",
+    "场景": "Flutter/跨平台 App"
+  },
+  'lessons': [
     {
-      id: "dt-1",
-      title: "Dart 是什么：Flutter 的母语",
-      summary: "认识 Dart：谷歌出品、Flutter 的官方语言，和 JS/Java 的关系。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "Dart 是 Google 于 2011 年发布的一门现代编程语言。它最出名的身份，是跨平台 UI 框架 Flutter 的『官方母语』。用 Flutter 写一个程序，可以同时跑在 Android、iOS、Windows、macOS、Linux 和 Web 上，一套代码到处运行，而写这套代码用的语言就是 Dart。" },
-        { type: "h", text: "为什么 Flutter 选了 Dart" },
-        { type: "list", items: ["编译快：Dart 支持 JIT（开发时热重载，改代码秒生效）和 AOT（发布时编译成原生机器码，性能高）", "语法现代：吸收了 Java 的强类型和 JS 的简洁，初学者上手快", "官方统一维护：语言、框架、工具链（pub、dart analyze）都是谷歌一家在做，生态一致", "渲染高效：Dart 可以直接编译成原生代码，不依赖中间解释器"] },
-        { type: "h", text: "Dart 和 JS / Java 的关系" },
-        { type: "table", head: ["对比项", "Dart", "JavaScript", "Java"], rows: [["类型", "静态类型（可选标注，可推断）", "动态类型", "静态类型（必须标注）"], ["运行环境", "Dart VM / 编译原生 / 编译 JS", "浏览器 / Node.js", "JVM 虚拟机"], ["主要场景", "Flutter 跨平台 App、Web、服务器", "网页前端、Node 后端", "企业后端、Android 传统开发"], ["学习曲线", "中等，对新手友好", "入门简单、深入难", "偏重，样板代码多"], ["出名项目", "Flutter", "React/Vue/Node", "Spring/Android"]] },
-        { type: "p", text: "简单说：Dart 长得像 Java（有 class、类型、分号），用起来像 JS（有 var、箭头函数、async/await）。如果你之前接触过其中任何一门，学 Dart 会非常快。" },
-        { type: "info", title: "Dart 能做什么", text: "不只是 Flutter！Dart 也可以写服务器端程序（用 shelf 框架）、写命令行工具、写 Web 前端（编译成 JavaScript）。不过 90% 的人学 Dart 都是为了 Flutter。" },
-        { type: "code", lang: "dart", title: "提前感受一下 Dart 的样子", code: 'void main() {\n  print("Hello, Dart!");\n  var name = "小明";\n  var age = 10;\n  print("我叫 $name，今年 $age 岁");\n}' },
-        { type: "keypoints", items: ["Dart 是 Google 出品、Flutter 的官方母语", "一套代码可运行在手机/桌面/Web 多端", "兼具 Java 的强类型和 JS 的简洁", "开发用 JIT 热重载，发布用 AOT 编译，性能好", "学 Dart 的主要目标是做 Flutter 跨平台 App"] },
+      'id': "dt-1",
+      'title': "Dart 是什么：Flutter 的母语",
+      'summary': "认识 Dart：谷歌出品、Flutter 的官方语言，和 JS/Java 的关系。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Dart 是 Google 于 2011 年发布的一门现代编程语言。它最出名的身份，是跨平台 UI 框架 Flutter 的『官方母语』。用 Flutter 写一个程序，可以同时跑在 Android、iOS、Windows、macOS、Linux 和 Web 上，一套代码到处运行，而写这套代码用的语言就是 Dart。"
+        },
+        {
+          'type': "h",
+          'text': "为什么 Flutter 选了 Dart"
+        },
+        {
+          'type': "list",
+          'items': [
+            "编译快：Dart 支持 JIT（开发时热重载，改代码秒生效）和 AOT（发布时编译成原生机器码，性能高）",
+            "语法现代：吸收了 Java 的强类型和 JS 的简洁，初学者上手快",
+            "官方统一维护：语言、框架、工具链（pub、dart analyze）都是谷歌一家在做，生态一致",
+            "渲染高效：Dart 可以直接编译成原生代码，不依赖中间解释器"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "Dart 和 JS / Java 的关系"
+        },
+        {
+          'type': "table",
+          'head': [
+            "对比项",
+            "Dart",
+            "JavaScript",
+            "Java"
+          ],
+          'rows': [
+            [
+              "类型",
+              "静态类型（可选标注，可推断）",
+              "动态类型",
+              "静态类型（必须标注）"
+            ],
+            [
+              "运行环境",
+              "Dart VM / 编译原生 / 编译 JS",
+              "浏览器 / Node.js",
+              "JVM 虚拟机"
+            ],
+            [
+              "主要场景",
+              "Flutter 跨平台 App、Web、服务器",
+              "网页前端、Node 后端",
+              "企业后端、Android 传统开发"
+            ],
+            [
+              "学习曲线",
+              "中等，对新手友好",
+              "入门简单、深入难",
+              "偏重，样板代码多"
+            ],
+            [
+              "出名项目",
+              "Flutter",
+              "React/Vue/Node",
+              "Spring/Android"
+            ]
+          ]
+        },
+        {
+          'type': "p",
+          'text': "简单说：Dart 长得像 Java（有 class、类型、分号），用起来像 JS（有 var、箭头函数、async/await）。如果你之前接触过其中任何一门，学 Dart 会非常快。"
+        },
+        {
+          'type': "info",
+          'title': "Dart 能做什么",
+          'text': "不只是 Flutter！Dart 也可以写服务器端程序（用 shelf 框架）、写命令行工具、写 Web 前端（编译成 JavaScript）。不过 90% 的人学 Dart 都是为了 Flutter。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "提前感受一下 Dart 的样子",
+          'code': "void main() {\n  print(\"Hello, Dart!\");\n  var name = \"小明\";\n  var age = 10;\n  print(\"我叫 $name，今年 $age 岁\");\n}"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Dart 是什么：Flutter 的母语\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Dart 是什么：Flutter 的母语\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Dart 是什么：Flutter 的母语\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Dart 是 Google 出品、Flutter 的官方母语",
+            "一套代码可运行在手机/桌面/Web 多端",
+            "兼具 Java 的强类型和 JS 的简洁",
+            "开发用 JIT 热重载，发布用 AOT 编译，性能好",
+            "学 Dart 的主要目标是做 Flutter 跨平台 App"
+          ]
+        }
       ],
-      templates: [
-        { name: "第一段 Dart 代码", code: 'void main() {\n  print("Hello, Dart!");\n  print("我要学会 Flutter！");\n}' },
-      ],
+      'templates': [
+        {
+          'name': "第一段 Dart 代码",
+          'code': "void main() {\n  print(\"Hello, Dart!\");\n  print(\"我要学会 Flutter！\");\n}"
+        }
+      ]
     },
     {
-      id: "dt-2",
-      title: "下载与安装 Dart（零基础第一步）",
-      summary: "到官方下载 SDK，配置环境变量，验证版本，装好编辑器。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "学习 Dart 的第一步是把它装到电脑上。Dart 的 SDK（开发工具包）完全免费，官方提供 Windows、macOS、Linux 三种系统的安装方式。下面以最常见的 Windows 为例讲解。" },
-        { type: "h", text: "方式一：用 Chocolatey 安装（Windows 推荐）" },
-        { type: "list", items: ["先安装包管理器 Chocolatey：用管理员权限打开 PowerShell，执行官网脚本（见 <a href='https://chocolatey.org/install' target='_blank' rel='noopener'>chocolatey.org/install</a>）", "然后执行 <code.inline>choco install dart-sdk</code.inline>，等待安装完成", "安装时请选择『将 Dart 加入 PATH』，这样在任何目录都能用 dart 命令"] },
-        { type: "h", text: "方式二：手动下载安装包" },
-        { type: "list", items: ["打开官方下载页：<a href='https://dart.dev/get-dart' target='_blank' rel='noopener'>https://dart.dev/get-dart</a>", "Windows 用户点击『Windows』标签，下载最新的 Dart SDK zip 压缩包", "把压缩包解压到一个固定目录，例如 C:\\dart-sdk", "把 C:\\dart-sdk\\bin 加入系统 PATH 环境变量", "macOS 可用 <code.inline>brew install dart</code.inline>，Linux 可用 apt 或 snap 安装"] },
-        { type: "warn", title: "新手第一大坑：PATH 没配好", text: "很多新手装完，在命令行输入 dart 却提示『dart 不是内部或外部命令』。原因就是 bin 目录没加入 PATH。手动安装时务必把解压目录下的 bin 文件夹加进系统环境变量，然后重新打开命令行再试。" },
-        { type: "h", text: "验证是否装好" },
-        { type: "code", lang: "dart", title: "验证命令", code: 'dart --version' },
-        { type: "p", text: "在命令行输入 <code.inline>dart --version</code.inline>，如果显示类似 <code.inline>Dart SDK version: 3.x.x</code.inline> 的版本号，就说明安装成功了！" },
-        { type: "tip", title: "在线免安装：DartPad", text: "如果暂时不想装环境，可以用 Dart 官方在线编辑器 <a href='https://dartpad.dev' target='_blank' rel='noopener'>https://dartpad.dev</a>，直接在浏览器里写 Dart 和 Flutter 代码，立刻就能运行，特别适合快速练习。" },
-        { type: "tip", title: "顺手装个好编辑器", text: "推荐 VS Code（完全免费）：<a href='https://code.visualstudio.com' target='_blank' rel='noopener'>code.visualstudio.com</a>。装好后在扩展商店搜『Dart』，安装谷歌官方插件（作者是 Dart Code），写代码就有语法高亮和自动补全了。" },
-        { type: "keypoints", items: ["官方下载地址是 dart.dev/get-dart，完全免费", "Windows 推荐 choco install dart-sdk 一条命令装好", "手动安装务必把 bin 目录加入 PATH", "dart --version 验证是否装好", "不想装环境可用 DartPad 在线练习 dartpad.dev", "VS Code + Dart 官方插件体验最好"] },
+      'id': "dt-2",
+      'title': "下载与安装 Dart（零基础第一步）",
+      'summary': "到官方下载 SDK，配置环境变量，验证版本，装好编辑器。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "学习 Dart 的第一步是把它装到电脑上。Dart 的 SDK（开发工具包）完全免费，官方提供 Windows、macOS、Linux 三种系统的安装方式。下面以最常见的 Windows 为例讲解。"
+        },
+        {
+          'type': "h",
+          'text': "方式一：用 Chocolatey 安装（Windows 推荐）"
+        },
+        {
+          'type': "list",
+          'items': [
+            "先安装包管理器 Chocolatey：用管理员权限打开 PowerShell，执行官网脚本（见 <a href='https://chocolatey.org/install' target='_blank' rel='noopener'>chocolatey.org/install</a>）",
+            "然后执行 <code.inline>choco install dart-sdk</code.inline>，等待安装完成",
+            "安装时请选择『将 Dart 加入 PATH』，这样在任何目录都能用 dart 命令"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "方式二：手动下载安装包"
+        },
+        {
+          'type': "list",
+          'items': [
+            "打开官方下载页：<a href='https://dart.dev/get-dart' target='_blank' rel='noopener'>https://dart.dev/get-dart</a>",
+            "Windows 用户点击『Windows』标签，下载最新的 Dart SDK zip 压缩包",
+            "把压缩包解压到一个固定目录，例如 C:\\dart-sdk",
+            "把 C:\\dart-sdk\\bin 加入系统 PATH 环境变量",
+            "macOS 可用 <code.inline>brew install dart</code.inline>，Linux 可用 apt 或 snap 安装"
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "新手第一大坑：PATH 没配好",
+          'text': "很多新手装完，在命令行输入 dart 却提示『dart 不是内部或外部命令』。原因就是 bin 目录没加入 PATH。手动安装时务必把解压目录下的 bin 文件夹加进系统环境变量，然后重新打开命令行再试。"
+        },
+        {
+          'type': "h",
+          'text': "验证是否装好"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "验证命令",
+          'code': "dart --version"
+        },
+        {
+          'type': "p",
+          'text': "在命令行输入 <code.inline>dart --version</code.inline>，如果显示类似 <code.inline>Dart SDK version: 3.x.x</code.inline> 的版本号，就说明安装成功了！"
+        },
+        {
+          'type': "tip",
+          'title': "在线免安装：DartPad",
+          'text': "如果暂时不想装环境，可以用 Dart 官方在线编辑器 <a href='https://dartpad.dev' target='_blank' rel='noopener'>https://dartpad.dev</a>，直接在浏览器里写 Dart 和 Flutter 代码，立刻就能运行，特别适合快速练习。"
+        },
+        {
+          'type': "tip",
+          'title': "顺手装个好编辑器",
+          'text': "推荐 VS Code（完全免费）：<a href='https://code.visualstudio.com' target='_blank' rel='noopener'>code.visualstudio.com</a>。装好后在扩展商店搜『Dart』，安装谷歌官方插件（作者是 Dart Code），写代码就有语法高亮和自动补全了。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"下载与安装 Dart（零基础第一步）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"下载与安装 Dart（零基础第一步）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"下载与安装 Dart（零基础第一步）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "官方下载地址是 dart.dev/get-dart，完全免费",
+            "Windows 推荐 choco install dart-sdk 一条命令装好",
+            "手动安装务必把 bin 目录加入 PATH",
+            "dart --version 验证是否装好",
+            "不想装环境可用 DartPad 在线练习 dartpad.dev",
+            "VS Code + Dart 官方插件体验最好"
+          ]
+        }
       ],
-      templates: [
-        { name: "版本自检", code: '// 在终端执行：dart --version\n// 输出类似：Dart SDK version: 3.3.0 (stable)\nprint("安装检查");' },
-      ],
+      'templates': [
+        {
+          'name': "版本自检",
+          'code': "// 在终端执行：dart --version\n// 输出类似：Dart SDK version: 3.3.0 (stable)\nprint(\"安装检查\");"
+        }
+      ]
     },
     {
-      id: "dt-3",
-      title: "第一个程序：main 函数与 print",
-      summary: "认识 main 函数、print 输出和注释，跑通第一个 Dart 程序。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "每个 Dart 程序都有一个入口：<code.inline>main()</code.inline> 函数。程序运行时，会从 main 的第一行开始，从上到下依次执行。我们用 <code.inline>print()</code.inline> 把文字输出到屏幕。" },
-        { type: "code", lang: "dart", title: "第一个 Dart 程序", code: '// 我的第一个 Dart 程序\nvoid main() {\n  print("你好，Dart 世界！");\n  print("我正在学习 Dart 编程");\n}' },
-        { type: "p", text: "把上面的代码保存成 <code.inline>hello.dart</code.inline>，然后在命令行进入文件所在目录，执行 <code.inline>dart run hello.dart</code.inline>（老版本用 <code.inline>dart hello.dart</code.inline>），就能看到两行输出。" },
-        { type: "h", text: "代码逐行拆解" },
-        { type: "list", items: ["<code.inline>// 我的第一个 Dart 程序</code.inline>：注释，Dart 会忽略，只给人看", "<code.inline>void main() { ... }</code.inline>：程序的入口，void 表示这个函数不返回任何值", "<code.inline>{ }</code.inline>：一对大括号包住函数体，Dart 用花括号表示代码块", "<code.inline>print(内容)</code.inline>：把括号里的内容打印到屏幕", "<code.inline>;</code.inline>：每条语句结尾的分号，漏写会报错"] },
-        { type: "h", text: "注释的三种写法" },
-        { type: "code", lang: "dart", title: "单行注释与多行注释", code: '// 这是单行注释，以双斜杠开头\nvoid main() {\n  // 双斜杠注释也可以写在代码后面\n  print("hello"); // 行尾注释\n\n  /* 这是\n     多行注释\n     可以写很多行 */\n  print("多行注释结束");\n}' },
-        { type: "warn", title: "常见报错：缺分号", text: "Dart 里每条语句必须以分号结尾。如果你看到报错 <code.inline>Expected ';' before ...</code.inline>，多半是上一行忘了写分号。用 VS Code 的 Dart 插件，保存时会自动提示这类错误。" },
-        { type: "tip", title: "print 的进阶用法", text: "print 一次可以打印多个内容，例如 <code.inline>print(1, 2, 3)</code.inline>。在 Flutter 里调试也常用 print 输出变量值。" },
-        { type: "keypoints", items: ["main() 是程序入口，从这里开始执行", "print() 把内容输出到屏幕，语句以分号结尾", "用 dart run 文件名.dart 运行程序", "注释用 // 单行、/* */ 多行，运行时被忽略", "写代码要养成加注释的好习惯"] },
+      'id': "dt-3",
+      'title': "第一个程序：main 函数与 print",
+      'summary': "认识 main 函数、print 输出和注释，跑通第一个 Dart 程序。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "每个 Dart 程序都有一个入口：<code.inline>main()</code.inline> 函数。程序运行时，会从 main 的第一行开始，从上到下依次执行。我们用 <code.inline>print()</code.inline> 把文字输出到屏幕。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "第一个 Dart 程序",
+          'code': "// 我的第一个 Dart 程序\nvoid main() {\n  print(\"你好，Dart 世界！\");\n  print(\"我正在学习 Dart 编程\");\n}"
+        },
+        {
+          'type': "p",
+          'text': "把上面的代码保存成 <code.inline>hello.dart</code.inline>，然后在命令行进入文件所在目录，执行 <code.inline>dart run hello.dart</code.inline>（老版本用 <code.inline>dart hello.dart</code.inline>），就能看到两行输出。"
+        },
+        {
+          'type': "h",
+          'text': "代码逐行拆解"
+        },
+        {
+          'type': "list",
+          'items': [
+            "<code.inline>// 我的第一个 Dart 程序</code.inline>：注释，Dart 会忽略，只给人看",
+            "<code.inline>void main() { ... }</code.inline>：程序的入口，void 表示这个函数不返回任何值",
+            "<code.inline>{ }</code.inline>：一对大括号包住函数体，Dart 用花括号表示代码块",
+            "<code.inline>print(内容)</code.inline>：把括号里的内容打印到屏幕",
+            "<code.inline>;</code.inline>：每条语句结尾的分号，漏写会报错"
+          ]
+        },
+        {
+          'type': "h",
+          'text': "注释的三种写法"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "单行注释与多行注释",
+          'code': "// 这是单行注释，以双斜杠开头\nvoid main() {\n  // 双斜杠注释也可以写在代码后面\n  print(\"hello\"); // 行尾注释\n\n  /* 这是\n     多行注释\n     可以写很多行 */\n  print(\"多行注释结束\");\n}"
+        },
+        {
+          'type': "warn",
+          'title': "常见报错：缺分号",
+          'text': "Dart 里每条语句必须以分号结尾。如果你看到报错 <code.inline>Expected ';' before ...</code.inline>，多半是上一行忘了写分号。用 VS Code 的 Dart 插件，保存时会自动提示这类错误。"
+        },
+        {
+          'type': "tip",
+          'title': "print 的进阶用法",
+          'text': "print 一次可以打印多个内容，例如 <code.inline>print(1, 2, 3)</code.inline>。在 Flutter 里调试也常用 print 输出变量值。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"第一个程序：main 函数与 print\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"第一个程序：main 函数与 print\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"第一个程序：main 函数与 print\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "main() 是程序入口，从这里开始执行",
+            "print() 把内容输出到屏幕，语句以分号结尾",
+            "用 dart run 文件名.dart 运行程序",
+            "注释用 // 单行、/* */ 多行，运行时被忽略",
+            "写代码要养成加注释的好习惯"
+          ]
+        }
       ],
-      templates: [
-        { name: "我的第一个程序", code: 'void main() {\n  print("你好，Dart！");\n  print("我要学会编程！");\n}' },
-        { name: "自我介绍", code: 'void main() {\n  print("大家好！");\n  print("我叫小明");\n  print("我今年 10 岁");\n  print("我正在学 Dart");\n}' },
-      ],
+      'templates': [
+        {
+          'name': "我的第一个程序",
+          'code': "void main() {\n  print(\"你好，Dart！\");\n  print(\"我要学会编程！\");\n}"
+        },
+        {
+          'name': "自我介绍",
+          'code': "void main() {\n  print(\"大家好！\");\n  print(\"我叫小明\");\n  print(\"我今年 10 岁\");\n  print(\"我正在学 Dart\");\n}"
+        }
+      ]
     },
     {
-      id: "dt-4",
-      title: "变量与数据类型",
-      summary: "var/final/const、int/double/String/bool、类型推断与类型转换。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "变量就像贴了标签的盒子，把数据放进去，用标签（变量名）随时取用。Dart 是一门静态类型语言，但用 <code.inline>var</code.inline> 可以让编译器自动推断类型，写起来和动态语言一样轻松。" },
-        { type: "code", lang: "dart", title: "声明各种变量", code: 'void main() {\n  var name = "小明";          // 类型推断为 String\n  int age = 10;               // 整数\n  double height = 1.45;       // 浮点数（小数）\n  String city = "上海";        // 显式声明类型\n  bool isStudent = true;      // 布尔值\n  num anyNumber = 3.14;       // num 可以存整数或小数\n\n  print("名字：$name，年龄：$age，身高：$height");\n  print("城市：$city，是学生：$isStudent");\n  print("num 类型：$anyNumber");\n}' },
-        { type: "h", text: "var / final / const 的区别" },
-        { type: "table", head: ["关键字", "含义", "能不能改"], rows: [["var", "普通变量，类型自动推断", "能改"], ["final", "运行期确定后不可变", "只能赋值一次"], ["const", "编译期常量（值写死在代码里）", "不可变"]] },
-        { type: "code", lang: "dart", title: "final 与 const", code: 'void main() {\n  final name = "小明";\n  // name = "小红";   // 报错！final 只能赋值一次\n\n  const pi = 3.14159;\n  // pi = 3.14;       // 报错！const 不可变\n\n  print("$name，圆周率约等于 $pi");\n}' },
-        { type: "h", text: "类型转换：toString 与 parse" },
-        { type: "code", lang: "dart", title: "数字和字符串互相转换", code: 'void main() {\n  // 数字转字符串\n  int a = 42;\n  String s = a.toString();\n  print(s);                    // "42"\n\n  // 字符串转数字\n  String t = "3.14";\n  double d = double.parse(t);\n  print(d);                    // 3.14\n  int n = int.parse("100");\n  print(n);                    // 100\n\n  // 字符串转整数（失败时用 ?? 给默认值）\n  int x = int.tryParse("abc") ?? 0;\n  print(x);                    // 0\n}' },
-        { type: "warn", title: "parse 失败的坑", text: "用 <code.inline>int.parse('abc')</code.inline> 解析非数字会直接抛异常导致程序崩溃。如果输入可能不合法，优先用 <code.inline>int.tryParse()</code.inline>，它解析失败返回 null，再配合 <code.inline>??</code.inline> 给默认值。" },
-        { type: "tip", title: "变量命名规范", text: "小驼峰命名：<code.inline>myName</code.inline>、<code.inline>userAge</code.inline>；只能由字母、数字、下划线组成，不能以数字开头，不能用关键字（如 class、if）。" },
-        { type: "keypoints", items: ["var 自动推断类型，也可显式写 int/double/String/bool", "final 赋值一次，const 编译期常量", "num 是 int 和 double 的父类型", "数字转字符串用 toString，字符串转数字用 parse", "parse 可能抛异常，优先用 tryParse + ?? 默认值"] },
+      'id': "dt-4",
+      'title': "变量与数据类型",
+      'summary': "var/final/const、int/double/String/bool、类型推断与类型转换。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "变量就像贴了标签的盒子，把数据放进去，用标签（变量名）随时取用。Dart 是一门静态类型语言，但用 <code.inline>var</code.inline> 可以让编译器自动推断类型，写起来和动态语言一样轻松。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "声明各种变量",
+          'code': "void main() {\n  var name = \"小明\";          // 类型推断为 String\n  int age = 10;               // 整数\n  double height = 1.45;       // 浮点数（小数）\n  String city = \"上海\";        // 显式声明类型\n  bool isStudent = true;      // 布尔值\n  num anyNumber = 3.14;       // num 可以存整数或小数\n\n  print(\"名字：$name，年龄：$age，身高：$height\");\n  print(\"城市：$city，是学生：$isStudent\");\n  print(\"num 类型：$anyNumber\");\n}"
+        },
+        {
+          'type': "h",
+          'text': "var / final / const 的区别"
+        },
+        {
+          'type': "table",
+          'head': [
+            "关键字",
+            "含义",
+            "能不能改"
+          ],
+          'rows': [
+            [
+              "var",
+              "普通变量，类型自动推断",
+              "能改"
+            ],
+            [
+              "final",
+              "运行期确定后不可变",
+              "只能赋值一次"
+            ],
+            [
+              "const",
+              "编译期常量（值写死在代码里）",
+              "不可变"
+            ]
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "final 与 const",
+          'code': "void main() {\n  final name = \"小明\";\n  // name = \"小红\";   // 报错！final 只能赋值一次\n\n  const pi = 3.14159;\n  // pi = 3.14;       // 报错！const 不可变\n\n  print(\"$name，圆周率约等于 $pi\");\n}"
+        },
+        {
+          'type': "h",
+          'text': "类型转换：toString 与 parse"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "数字和字符串互相转换",
+          'code': "void main() {\n  // 数字转字符串\n  int a = 42;\n  String s = a.toString();\n  print(s);                    // \"42\"\n\n  // 字符串转数字\n  String t = \"3.14\";\n  double d = double.parse(t);\n  print(d);                    // 3.14\n  int n = int.parse(\"100\");\n  print(n);                    // 100\n\n  // 字符串转整数（失败时用 ?? 给默认值）\n  int x = int.tryParse(\"abc\") ?? 0;\n  print(x);                    // 0\n}"
+        },
+        {
+          'type': "warn",
+          'title': "parse 失败的坑",
+          'text': "用 <code.inline>int.parse('abc')</code.inline> 解析非数字会直接抛异常导致程序崩溃。如果输入可能不合法，优先用 <code.inline>int.tryParse()</code.inline>，它解析失败返回 null，再配合 <code.inline>??</code.inline> 给默认值。"
+        },
+        {
+          'type': "tip",
+          'title': "变量命名规范",
+          'text': "小驼峰命名：<code.inline>myName</code.inline>、<code.inline>userAge</code.inline>；只能由字母、数字、下划线组成，不能以数字开头，不能用关键字（如 class、if）。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"变量与数据类型\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"变量与数据类型\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"变量与数据类型\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "var 自动推断类型，也可显式写 int/double/String/bool",
+            "final 赋值一次，const 编译期常量",
+            "num 是 int 和 double 的父类型",
+            "数字转字符串用 toString，字符串转数字用 parse",
+            "parse 可能抛异常，优先用 tryParse + ?? 默认值"
+          ]
+        }
       ],
-      templates: [
-        { name: "个人信息", code: 'void main() {\n  var name = "小红";\n  var age = 9;\n  var city = "北京";\n  print("$name 住在 $city，今年 $age 岁");\n}' },
-        { name: "类型转换练习", code: 'void main() {\n  var price = "5.5";\n  var count = 3;\n  var cost = double.parse(price) * count;\n  print("总价：" + cost.toString() + " 元");\n}' },
-      ],
+      'templates': [
+        {
+          'name': "个人信息",
+          'code': "void main() {\n  var name = \"小红\";\n  var age = 9;\n  var city = \"北京\";\n  print(\"$name 住在 $city，今年 $age 岁\");\n}"
+        },
+        {
+          'name': "类型转换练习",
+          'code': "void main() {\n  var price = \"5.5\";\n  var count = 3;\n  var cost = double.parse(price) * count;\n  print(\"总价：\" + cost.toString() + \" 元\");\n}"
+        }
+      ]
     },
     {
-      id: "dt-5",
-      title: "运算符与字符串",
-      summary: "算术/比较/逻辑运算符，字符串插值 $var 与 ${expr}，常用字符串方法。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "运算符是让数据『动起来』的符号：加、减、乘、除、比较、逻辑判断。这一章先把常用运算符过一遍，再讲 Dart 非常好用的字符串插值。" },
-        { type: "code", lang: "dart", title: "算术与比较逻辑运算符", code: 'void main() {\n  // 算术\n  print(7 + 3);   // 10\n  print(7 - 3);   // 4\n  print(7 * 3);   // 21\n  print(7 / 3);   // 2.333... 普通除法（结果可能是小数）\n  print(7 ~/ 3);  // 2  整除（取商的整数部分）\n  print(7 % 3);   // 1  取余\n\n  // 比较\n  print(5 > 3);       // true\n  print(5 == 3);      // false\n\n  // 逻辑\n  print(5 > 3 && 2 > 1);  // true  且\n  print(5 > 3 || 2 > 3);  // true  或\n  print(!(5 > 3));        // false 取反\n}' },
-        { type: "warn", title: "整除要用 ~/", text: "在 Dart 里 <code.inline>/</code.inline> 是普通除法，结果可能是小数（如 7/3 = 2.333）。如果你想要整数除法（7/3 = 2），必须用 <code.inline>~/</code.inline>（波浪号加斜杠）。这是很多从 Java/C++ 转来的人最容易踩的坑。" },
-        { type: "h", text: "字符串插值：$ 与 ${}" },
-        { type: "code", lang: "dart", title: "字符串插值", code: 'void main() {\n  String name = "小明";\n  int age = 10;\n\n  // $变量 直接插值\n  print("我叫 $name，今年 $age 岁");\n\n  // ${表达式} 插值表达式\n  print("明年我就 ${age + 1} 岁了");\n  print("名字长度是 ${name.length}");\n}' },
-        { type: "p", text: "字符串插值是 Dart 的一大亮点：用 <code.inline>$变量名</code.inline> 直接嵌入变量，用 <code.inline>${表达式}</code.inline> 嵌入计算结果，再也不用手动拼字符串，代码清晰很多。" },
-        { type: "h", text: "常用字符串方法" },
-        { type: "code", lang: "dart", title: "字符串方法", code: 'void main() {\n  String s = "Hello Dart";\n  print(s.length);           // 10\n  print(s.toUpperCase());    // HELLO DART\n  print(s.toLowerCase());    // hello dart\n  print(s.contains("Dart"));      // true\n  print(s.startsWith("He"));      // true\n  print(s.endsWith("t"));         // true\n  print(s.replaceAll("Dart", "Lua")); // Hello Lua\n  print(s.split(" "));            // [Hello, Dart]\n  print(s.trim());               // 去掉首尾空格\n  print(s.indexOf("Dart"));      // 6\n}' },
-        { type: "info", title: "多行字符串", text: "用三引号可以写多行字符串，例如 <code.inline>var poem = '''第一行\n第二行''';</code.inline>。处理长文本或模板时很实用。" },
-        { type: "keypoints", items: ["算术：+ - * /（小数） ~/（整除） %（取余）", "比较：> < == != >= <=", "逻辑：&&（且） ||（或） !（非）", "字符串插值：$变量、${表达式}", "常用方法：toUpperCase/length/split/contains/replaceAll", "整除用 ~/，普通除法是 /，别搞混"] },
+      'id': "dt-5",
+      'title': "运算符与字符串",
+      'summary': "算术/比较/逻辑运算符，字符串插值 $var 与 ${expr}，常用字符串方法。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "运算符是让数据『动起来』的符号：加、减、乘、除、比较、逻辑判断。这一章先把常用运算符过一遍，再讲 Dart 非常好用的字符串插值。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "算术与比较逻辑运算符",
+          'code': "void main() {\n  // 算术\n  print(7 + 3);   // 10\n  print(7 - 3);   // 4\n  print(7 * 3);   // 21\n  print(7 / 3);   // 2.333... 普通除法（结果可能是小数）\n  print(7 ~/ 3);  // 2  整除（取商的整数部分）\n  print(7 % 3);   // 1  取余\n\n  // 比较\n  print(5 > 3);       // true\n  print(5 == 3);      // false\n\n  // 逻辑\n  print(5 > 3 && 2 > 1);  // true  且\n  print(5 > 3 || 2 > 3);  // true  或\n  print(!(5 > 3));        // false 取反\n}"
+        },
+        {
+          'type': "warn",
+          'title': "整除要用 ~/",
+          'text': "在 Dart 里 <code.inline>/</code.inline> 是普通除法，结果可能是小数（如 7/3 = 2.333）。如果你想要整数除法（7/3 = 2），必须用 <code.inline>~/</code.inline>（波浪号加斜杠）。这是很多从 Java/C++ 转来的人最容易踩的坑。"
+        },
+        {
+          'type': "h",
+          'text': "字符串插值：$ 与 ${}"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "字符串插值",
+          'code': "void main() {\n  String name = \"小明\";\n  int age = 10;\n\n  // $变量 直接插值\n  print(\"我叫 $name，今年 $age 岁\");\n\n  // ${表达式} 插值表达式\n  print(\"明年我就 ${age + 1} 岁了\");\n  print(\"名字长度是 ${name.length}\");\n}"
+        },
+        {
+          'type': "p",
+          'text': "字符串插值是 Dart 的一大亮点：用 <code.inline>$变量名</code.inline> 直接嵌入变量，用 <code.inline>${表达式}</code.inline> 嵌入计算结果，再也不用手动拼字符串，代码清晰很多。"
+        },
+        {
+          'type': "h",
+          'text': "常用字符串方法"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "字符串方法",
+          'code': "void main() {\n  String s = \"Hello Dart\";\n  print(s.length);           // 10\n  print(s.toUpperCase());    // HELLO DART\n  print(s.toLowerCase());    // hello dart\n  print(s.contains(\"Dart\"));      // true\n  print(s.startsWith(\"He\"));      // true\n  print(s.endsWith(\"t\"));         // true\n  print(s.replaceAll(\"Dart\", \"Lua\")); // Hello Lua\n  print(s.split(\" \"));            // [Hello, Dart]\n  print(s.trim());               // 去掉首尾空格\n  print(s.indexOf(\"Dart\"));      // 6\n}"
+        },
+        {
+          'type': "info",
+          'title': "多行字符串",
+          'text': "用三引号可以写多行字符串，例如 <code.inline>var poem = '''第一行\n第二行''';</code.inline>。处理长文本或模板时很实用。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"运算符与字符串\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"运算符与字符串\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"运算符与字符串\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "算术：+ - * /（小数） ~/（整除） %（取余）",
+            "比较：> < == != >= <=",
+            "逻辑：&&（且） ||（或） !（非）",
+            "字符串插值：$变量、${表达式}",
+            "常用方法：toUpperCase/length/split/contains/replaceAll",
+            "整除用 ~/，普通除法是 /，别搞混"
+          ]
+        }
       ],
-      templates: [
-        { name: "字符串插值演示", code: 'void main() {\n  String name = "小明";\n  int age = 10;\n  print("大家好，我是 $name，今年 $age 岁");\n  print("十年后我 ${age + 10} 岁");\n}' },
-        { name: "整除练习", code: 'void main() {\n  int a = 17;\n  int b = 5;\n  print("商：" + (a ~/ b).toString());\n  print("余数：" + (a % b).toString());\n}' },
-      ],
+      'templates': [
+        {
+          'name': "字符串插值演示",
+          'code': "void main() {\n  String name = \"小明\";\n  int age = 10;\n  print(\"大家好，我是 $name，今年 $age 岁\");\n  print(\"十年后我 ${age + 10} 岁\");\n}"
+        },
+        {
+          'name': "整除练习",
+          'code': "void main() {\n  int a = 17;\n  int b = 5;\n  print(\"商：\" + (a ~/ b).toString());\n  print(\"余数：\" + (a % b).toString());\n}"
+        }
+      ]
     },
     {
-      id: "dt-6",
-      title: "条件与循环",
-      summary: "if/else、switch、for/for-in、while、break/continue 和标签。",
-      difficulty: "入门",
-      blocks: [
-        { type: "p", text: "程序不是永远直线往下走的。这一章学习让程序『分叉』和『重复』：条件判断让程序根据情况走不同的路，循环让程序反复执行同一段代码。" },
-        { type: "code", lang: "dart", title: "if / else if / else 与 switch", code: 'void main() {\n  int score = 85;\n\n  // if / else if / else\n  if (score >= 90) {\n    print("优秀");\n  } else if (score >= 60) {\n    print("及格");\n  } else {\n    print("不及格");\n  }\n\n  // switch（适合判断固定值）\n  String fruit = "apple";\n  switch (fruit) {\n    case "apple":\n      print("苹果");\n      break;\n    case "banana":\n      print("香蕉");\n      break;\n    default:\n      print("未知水果");\n  }\n}' },
-        { type: "warn", title: "switch 别忘了 break", text: "在 Dart 里，每个 case 分支执行完必须写 <code.inline>break;</code.inline>（或 return），否则会『穿透』继续执行下一个 case 的代码，结果不符合预期。" },
-        { type: "h", text: "三种循环写法" },
-        { type: "code", lang: "dart", title: "for / while / for-in", code: 'void main() {\n  // for：知道循环次数用这个\n  for (int i = 1; i <= 3; i++) {\n    print("for 第 $i 次");\n  }\n\n  // while：不知道次数，直到条件不满足\n  int n = 0;\n  while (n < 3) {\n    print("while 第 $n 次");\n    n++;\n  }\n\n  // for-in：遍历集合里的每一个元素\n  var fruits = ["苹果", "香蕉", "橙子"];\n  for (var f in fruits) {\n    print("水果：$f");\n  }\n}' },
-        { type: "h", text: "break / continue / 标签" },
-        { type: "code", lang: "dart", title: "break 与 continue", code: 'void main() {\n  for (int n = 1; n <= 5; n++) {\n    if (n == 3) continue;   // 跳过 3，继续下一次\n    if (n == 5) break;      // 到 5 直接结束整个循环\n    print(n);               // 输出 1 2 4\n  }\n\n  // 标签：跳出多层循环\n  outer:\n  for (int i = 1; i <= 3; i++) {\n    for (int j = 1; j <= 3; j++) {\n      if (i == 2 && j == 2) break outer;  // 直接跳出两层\n      print("$i-$j");\n    }\n  }\n}' },
-        { type: "tip", title: "循环里的坑", text: "注意 <code.inline>while</code.inline> 循环里要让条件变量（如 n）不断变化，否则会变成死循环把电脑卡死。真卡住了可以按 Ctrl+C 终止程序。" },
-        { type: "keypoints", items: ["if/else if/else 处理范围判断，switch 处理固定值", "for 适合知道次数，while 适合条件循环", "for-in 遍历集合里的每个元素", "continue 跳过本次，break 结束整个循环", "标签（outer:）可以跳出多层循环", "switch 每个 case 都要 break"] },
+      'id': "dt-6",
+      'title': "条件与循环",
+      'summary': "if/else、switch、for/for-in、while、break/continue 和标签。",
+      'difficulty': "入门",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "程序不是永远直线往下走的。这一章学习让程序『分叉』和『重复』：条件判断让程序根据情况走不同的路，循环让程序反复执行同一段代码。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "if / else if / else 与 switch",
+          'code': "void main() {\n  int score = 85;\n\n  // if / else if / else\n  if (score >= 90) {\n    print(\"优秀\");\n  } else if (score >= 60) {\n    print(\"及格\");\n  } else {\n    print(\"不及格\");\n  }\n\n  // switch（适合判断固定值）\n  String fruit = \"apple\";\n  switch (fruit) {\n    case \"apple\":\n      print(\"苹果\");\n      break;\n    case \"banana\":\n      print(\"香蕉\");\n      break;\n    default:\n      print(\"未知水果\");\n  }\n}"
+        },
+        {
+          'type': "warn",
+          'title': "switch 别忘了 break",
+          'text': "在 Dart 里，每个 case 分支执行完必须写 <code.inline>break;</code.inline>（或 return），否则会『穿透』继续执行下一个 case 的代码，结果不符合预期。"
+        },
+        {
+          'type': "h",
+          'text': "三种循环写法"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "for / while / for-in",
+          'code': "void main() {\n  // for：知道循环次数用这个\n  for (int i = 1; i <= 3; i++) {\n    print(\"for 第 $i 次\");\n  }\n\n  // while：不知道次数，直到条件不满足\n  int n = 0;\n  while (n < 3) {\n    print(\"while 第 $n 次\");\n    n++;\n  }\n\n  // for-in：遍历集合里的每一个元素\n  var fruits = [\"苹果\", \"香蕉\", \"橙子\"];\n  for (var f in fruits) {\n    print(\"水果：$f\");\n  }\n}"
+        },
+        {
+          'type': "h",
+          'text': "break / continue / 标签"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "break 与 continue",
+          'code': "void main() {\n  for (int n = 1; n <= 5; n++) {\n    if (n == 3) continue;   // 跳过 3，继续下一次\n    if (n == 5) break;      // 到 5 直接结束整个循环\n    print(n);               // 输出 1 2 4\n  }\n\n  // 标签：跳出多层循环\n  outer:\n  for (int i = 1; i <= 3; i++) {\n    for (int j = 1; j <= 3; j++) {\n      if (i == 2 && j == 2) break outer;  // 直接跳出两层\n      print(\"$i-$j\");\n    }\n  }\n}"
+        },
+        {
+          'type': "tip",
+          'title': "循环里的坑",
+          'text': "注意 <code.inline>while</code.inline> 循环里要让条件变量（如 n）不断变化，否则会变成死循环把电脑卡死。真卡住了可以按 Ctrl+C 终止程序。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"条件与循环\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"条件与循环\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"条件与循环\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "if/else if/else 处理范围判断，switch 处理固定值",
+            "for 适合知道次数，while 适合条件循环",
+            "for-in 遍历集合里的每个元素",
+            "continue 跳过本次，break 结束整个循环",
+            "标签（outer:）可以跳出多层循环",
+            "switch 每个 case 都要 break"
+          ]
+        }
       ],
-      templates: [
-        { name: "猜数字区间", code: 'void main() {\n  int score = 75;\n  if (score >= 90) {\n    print("优秀");\n  } else if (score >= 60) {\n    print("及格");\n  } else {\n    print("不及格");\n  }\n}' },
-        { name: "1 到 100 求和", code: 'void main() {\n  int sum = 0;\n  for (int i = 1; i <= 100; i++) {\n    sum += i;\n  }\n  print("1+2+...+100 = $sum");  // 5050\n}' },
-      ],
+      'templates': [
+        {
+          'name': "猜数字区间",
+          'code': "void main() {\n  int score = 75;\n  if (score >= 90) {\n    print(\"优秀\");\n  } else if (score >= 60) {\n    print(\"及格\");\n  } else {\n    print(\"不及格\");\n  }\n}"
+        },
+        {
+          'name': "1 到 100 求和",
+          'code': "void main() {\n  int sum = 0;\n  for (int i = 1; i <= 100; i++) {\n    sum += i;\n  }\n  print(\"1+2+...+100 = $sum\");  // 5050\n}"
+        }
+      ]
     },
     {
-      id: "dt-7",
-      title: "集合：List / Set / Map",
-      summary: "列表、集合、字典的创建与增删改查，map/where/any/every 和展开运算符。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "写程序经常要处理『一堆数据』。Dart 提供了三种最常用的集合：<code.inline>List</code.inline>（有序列表）、<code.inline>Set</code.inline>（无序不重复集合）、<code.inline>Map</code.inline>（键值对字典）。" },
-        { type: "code", lang: "dart", title: "List / Set / Map 的基本操作", code: 'void main() {\n  // List 列表（有序，可重复）\n  var nums = [1, 2, 3];\n  nums.add(4);          // 末尾追加\n  nums.remove(2);       // 删除元素\n  print(nums);          // [1, 3, 4]\n  print(nums[0]);       // 1  按下标访问（从 0 开始）\n  print(nums.length);   // 3\n\n  // Set 集合（无序，自动去重）\n  var fruits = <String>{"苹果", "香蕉", "苹果"};\n  print(fruits);        // {苹果, 香蕉}\n  fruits.add("橙子");\n  print(fruits.contains("香蕉"));  // true\n\n  // Map 字典（键值对）\n  var person = {"name": "小明", "age": 10};\n  person["city"] = "上海";      // 新增键值\n  print(person["name"]);        // 小明\n  person.remove("age");         // 删除\n  print(person);                // {name: 小明, city: 上海}\n}' },
-        { type: "warn", title: "List 下标从 0 开始", text: "和很多语言一样，Dart 的 List 下标从 0 开始：<code.inline>[0]</code.inline> 是第一个元素。访问不存在的下标（如 <code.inline>nums[99]</code.inline>）会抛 <code.inline>RangeError</code.inline> 崩溃。" },
-        { type: "h", text: "强大的函数式方法" },
-        { type: "code", lang: "dart", title: "map / where / any / every", code: 'void main() {\n  var nums = [1, 2, 3, 4, 5];\n\n  // map：每个元素变换\n  var doubled = nums.map((n) => n * 2).toList();\n  print(doubled);   // [2, 4, 6, 8, 10]\n\n  // where：过滤，保留满足条件的\n  var even = nums.where((n) => n % 2 == 0).toList();\n  print(even);      // [2, 4]\n\n  // any：至少一个满足\n  print(nums.any((n) => n > 4));    // true\n\n  // every：全部满足\n  print(nums.every((n) => n > 0));  // true\n}' },
-        { type: "h", text: "展开运算符 ... 与集合字面量" },
-        { type: "code", lang: "dart", title: "展开运算符", code: 'void main() {\n  var a = [1, 2];\n  var b = [0, ...a, 3];      // ... 把 a 展开塞进来\n  print(b);                   // [0, 1, 2, 3]\n\n  // ?... 展开前先判空\n  List<int>? maybe;\n  var c = [1, ...?maybe, 2];  // maybe 为 null 时忽略\n  print(c);                   // [1, 2]\n\n  // 集合里的集合\n  var matrix = [\n    [1, 2],\n    [3, 4],\n  ];\n  print(matrix[1][0]);        // 3\n}' },
-        { type: "info", title: "选 List 还是 Set", text: "需要有序、可重复、按下标访问，用 List；只要『有哪些东西』、要去重、要快速判断是否存在，用 Set。Set 的 contains 判断通常比 List 快得多。" },
-        { type: "keypoints", items: ["List 有序可重复，下标从 0 开始", "Set 无序自动去重，contains 判断快", "Map 是键值对，用 变量[key] 读写", "map 变换、where 过滤、any/every 判断", "... 展开运算符拼接集合，?.. 可判空", "不要访问越界下标，会抛 RangeError"] },
+      'id': "dt-7",
+      'title': "集合：List / Set / Map",
+      'summary': "列表、集合、字典的创建与增删改查，map/where/any/every 和展开运算符。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "写程序经常要处理『一堆数据』。Dart 提供了三种最常用的集合：<code.inline>List</code.inline>（有序列表）、<code.inline>Set</code.inline>（无序不重复集合）、<code.inline>Map</code.inline>（键值对字典）。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "List / Set / Map 的基本操作",
+          'code': "void main() {\n  // List 列表（有序，可重复）\n  var nums = [1, 2, 3];\n  nums.add(4);          // 末尾追加\n  nums.remove(2);       // 删除元素\n  print(nums);          // [1, 3, 4]\n  print(nums[0]);       // 1  按下标访问（从 0 开始）\n  print(nums.length);   // 3\n\n  // Set 集合（无序，自动去重）\n  var fruits = <String>{\"苹果\", \"香蕉\", \"苹果\"};\n  print(fruits);        // {苹果, 香蕉}\n  fruits.add(\"橙子\");\n  print(fruits.contains(\"香蕉\"));  // true\n\n  // Map 字典（键值对）\n  var person = {\"name\": \"小明\", \"age\": 10};\n  person[\"city\"] = \"上海\";      // 新增键值\n  print(person[\"name\"]);        // 小明\n  person.remove(\"age\");         // 删除\n  print(person);                // {name: 小明, city: 上海}\n}"
+        },
+        {
+          'type': "warn",
+          'title': "List 下标从 0 开始",
+          'text': "和很多语言一样，Dart 的 List 下标从 0 开始：<code.inline>[0]</code.inline> 是第一个元素。访问不存在的下标（如 <code.inline>nums[99]</code.inline>）会抛 <code.inline>RangeError</code.inline> 崩溃。"
+        },
+        {
+          'type': "h",
+          'text': "强大的函数式方法"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "map / where / any / every",
+          'code': "void main() {\n  var nums = [1, 2, 3, 4, 5];\n\n  // map：每个元素变换\n  var doubled = nums.map((n) => n * 2).toList();\n  print(doubled);   // [2, 4, 6, 8, 10]\n\n  // where：过滤，保留满足条件的\n  var even = nums.where((n) => n % 2 == 0).toList();\n  print(even);      // [2, 4]\n\n  // any：至少一个满足\n  print(nums.any((n) => n > 4));    // true\n\n  // every：全部满足\n  print(nums.every((n) => n > 0));  // true\n}"
+        },
+        {
+          'type': "h",
+          'text': "展开运算符 ... 与集合字面量"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "展开运算符",
+          'code': "void main() {\n  var a = [1, 2];\n  var b = [0, ...a, 3];      // ... 把 a 展开塞进来\n  print(b);                   // [0, 1, 2, 3]\n\n  // ?... 展开前先判空\n  List<int>? maybe;\n  var c = [1, ...?maybe, 2];  // maybe 为 null 时忽略\n  print(c);                   // [1, 2]\n\n  // 集合里的集合\n  var matrix = [\n    [1, 2],\n    [3, 4],\n  ];\n  print(matrix[1][0]);        // 3\n}"
+        },
+        {
+          'type': "info",
+          'title': "选 List 还是 Set",
+          'text': "需要有序、可重复、按下标访问，用 List；只要『有哪些东西』、要去重、要快速判断是否存在，用 Set。Set 的 contains 判断通常比 List 快得多。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"集合：List / Set / Map\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"集合：List / Set / Map\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"集合：List / Set / Map\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "List 有序可重复，下标从 0 开始",
+            "Set 无序自动去重，contains 判断快",
+            "Map 是键值对，用 变量[key] 读写",
+            "map 变换、where 过滤、any/every 判断",
+            "... 展开运算符拼接集合，?.. 可判空",
+            "不要访问越界下标，会抛 RangeError"
+          ]
+        }
       ],
-      templates: [
-        { name: "去重高手", code: 'void main() {\n  var nums = [1, 2, 2, 3, 3, 3, 4];\n  var unique = nums.toSet().toList();\n  print(unique);   // [1, 2, 3, 4]\n}' },
-        { name: "成绩筛选", code: 'void main() {\n  var scores = [58, 72, 88, 45, 95];\n  var pass = scores.where((s) => s >= 60).toList();\n  print("及格的有：" + pass.toString());\n}' },
-      ],
+      'templates': [
+        {
+          'name': "去重高手",
+          'code': "void main() {\n  var nums = [1, 2, 2, 3, 3, 3, 4];\n  var unique = nums.toSet().toList();\n  print(unique);   // [1, 2, 3, 4]\n}"
+        },
+        {
+          'name': "成绩筛选",
+          'code': "void main() {\n  var scores = [58, 72, 88, 45, 95];\n  var pass = scores.where((s) => s >= 60).toList();\n  print(\"及格的有：\" + pass.toString());\n}"
+        }
+      ]
     },
     {
-      id: "dt-8",
-      title: "函数：参数、箭头函数与闭包",
-      summary: "定义函数、可选命名/位置参数、默认值、箭头函数、匿名函数、闭包、高阶函数。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "函数是把一段代码打包起来、起个名字，以后随时调用。函数让代码能复用，是结构化编程的核心。Dart 里函数也是一等公民，可以像变量一样传递。" },
-        { type: "code", lang: "dart", title: "函数定义与箭头函数", code: '// 基本函数\nint add(int a, int b) {\n  return a + b;\n}\n\n// 箭头函数：只有一条表达式时的简写\nint multiply(int a, int b) => a * b;\n\nvoid main() {\n  print(add(3, 4));       // 7\n  print(multiply(3, 4));  // 12\n}\n// 无返回值用 void：\nvoid sayHello() {\n  print("你好！");\n}' },
-        { type: "h", text: "可选命名参数 {} 与可选位置参数 []" },
-        { type: "code", lang: "dart", title: "可选参数与默认值", code: '// 可选命名参数 {}：调用时用 名字: 值 传参\nvoid greet(String name, {String msg = "你好", int age = 0}) {\n  print("$msg，$name！" + (age > 0 ? " 我 $age 岁" : ""));\n}\n\n// 可选位置参数 []：按顺序可选传\nvoid show(String name, [String? extra]) {\n  print("$name ${extra ?? ""}");\n}\n\nvoid main() {\n  greet("小明");                 // 你好，小明！\n  greet("小红", msg: "早上好");    // 早上好，小红！\n  greet("小刚", msg: "嗨", age: 8); // 嗨，小刚！ 我 8 岁\n  show("小王");                  // 小王\n  show("小王", "加油");          // 小王 加油\n}' },
-        { type: "info", title: "{} 和 [] 的区别", text: "<code.inline>{}</code.inline> 是可选的『命名参数』，调用时必须写参数名（如 msg: '你好'），顺序无所谓；<code.inline>[]</code.inline> 是可选『位置参数』，按顺序传。两者都可以给默认值。" },
-        { type: "h", text: "匿名函数、闭包与高阶函数" },
-        { type: "code", lang: "dart", title: "闭包与高阶函数", code: '// 高阶函数：接收函数作为参数\nint applyTwice(int Function(int) f, int x) {\n  return f(f(x));\n}\n\nvoid main() {\n  // 匿名函数（没有名字的函数）\n  var nums = [1, 2, 3];\n  var doubled = nums.map((n) => n * 2).toList();\n  print(doubled);   // [2, 4, 6]\n\n  // 闭包：函数记住了创建它的环境里的变量\n  Function makeCounter() {\n    int count = 0;\n    return () {\n      count++;\n      return count;\n    };\n  }\n\n  var counter = makeCounter();\n  print(counter());  // 1\n  print(counter());  // 2\n  print(counter());  // 3\n\n  // 把函数当参数传入\n  print(applyTwice((x) => x + 1, 5));   // 7\n}' },
-        { type: "warn", title: "闭包的坑", text: "闭包会『记住』外部的变量，如果创建多个闭包共享同一个变量，要小心它们互相影响。上面的 makeCounter 每次调用都会创建一个全新的 count，所以互不干扰。" },
-        { type: "keypoints", items: ["函数用返回类型 + 函数名 + 参数定义", "箭头函数 => 是单表达式函数的简写", "{} 命名参数、[] 位置参数，都可设默认值", "函数是一等公民，可当参数传递（高阶函数）", "闭包能记住并修改外部变量", "匿名函数常用于 map/where 等场景"] },
+      'id': "dt-8",
+      'title': "函数：参数、箭头函数与闭包",
+      'summary': "定义函数、可选命名/位置参数、默认值、箭头函数、匿名函数、闭包、高阶函数。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "函数是把一段代码打包起来、起个名字，以后随时调用。函数让代码能复用，是结构化编程的核心。Dart 里函数也是一等公民，可以像变量一样传递。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "函数定义与箭头函数",
+          'code': "// 基本函数\nint add(int a, int b) {\n  return a + b;\n}\n\n// 箭头函数：只有一条表达式时的简写\nint multiply(int a, int b) => a * b;\n\nvoid main() {\n  print(add(3, 4));       // 7\n  print(multiply(3, 4));  // 12\n}\n// 无返回值用 void：\nvoid sayHello() {\n  print(\"你好！\");\n}"
+        },
+        {
+          'type': "h",
+          'text': "可选命名参数 {} 与可选位置参数 []"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "可选参数与默认值",
+          'code': "// 可选命名参数 {}：调用时用 名字: 值 传参\nvoid greet(String name, {String msg = \"你好\", int age = 0}) {\n  print(\"$msg，$name！\" + (age > 0 ? \" 我 $age 岁\" : \"\"));\n}\n\n// 可选位置参数 []：按顺序可选传\nvoid show(String name, [String? extra]) {\n  print(\"$name ${extra ?? \"\"}\");\n}\n\nvoid main() {\n  greet(\"小明\");                 // 你好，小明！\n  greet(\"小红\", msg: \"早上好\");    // 早上好，小红！\n  greet(\"小刚\", msg: \"嗨\", age: 8); // 嗨，小刚！ 我 8 岁\n  show(\"小王\");                  // 小王\n  show(\"小王\", \"加油\");          // 小王 加油\n}"
+        },
+        {
+          'type': "info",
+          'title': "{} 和 [] 的区别",
+          'text': "<code.inline>{}</code.inline> 是可选的『命名参数』，调用时必须写参数名（如 msg: '你好'），顺序无所谓；<code.inline>[]</code.inline> 是可选『位置参数』，按顺序传。两者都可以给默认值。"
+        },
+        {
+          'type': "h",
+          'text': "匿名函数、闭包与高阶函数"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "闭包与高阶函数",
+          'code': "// 高阶函数：接收函数作为参数\nint applyTwice(int Function(int) f, int x) {\n  return f(f(x));\n}\n\nvoid main() {\n  // 匿名函数（没有名字的函数）\n  var nums = [1, 2, 3];\n  var doubled = nums.map((n) => n * 2).toList();\n  print(doubled);   // [2, 4, 6]\n\n  // 闭包：函数记住了创建它的环境里的变量\n  Function makeCounter() {\n    int count = 0;\n    return () {\n      count++;\n      return count;\n    };\n  }\n\n  var counter = makeCounter();\n  print(counter());  // 1\n  print(counter());  // 2\n  print(counter());  // 3\n\n  // 把函数当参数传入\n  print(applyTwice((x) => x + 1, 5));   // 7\n}"
+        },
+        {
+          'type': "warn",
+          'title': "闭包的坑",
+          'text': "闭包会『记住』外部的变量，如果创建多个闭包共享同一个变量，要小心它们互相影响。上面的 makeCounter 每次调用都会创建一个全新的 count，所以互不干扰。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"函数：参数、箭头函数与闭包\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"函数：参数、箭头函数与闭包\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"函数：参数、箭头函数与闭包\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "函数用返回类型 + 函数名 + 参数定义",
+            "箭头函数 => 是单表达式函数的简写",
+            "{} 命名参数、[] 位置参数，都可设默认值",
+            "函数是一等公民，可当参数传递（高阶函数）",
+            "闭包能记住并修改外部变量",
+            "匿名函数常用于 map/where 等场景"
+          ]
+        }
       ],
-      templates: [
-        { name: "加法计算器", code: 'int add(int a, int b) => a + b;\n\nvoid main() {\n  print(add(3, 4));   // 7\n  print(add(10, 20)); // 30\n}' },
-        { name: "默认问候", code: 'void greet(String name, {String msg = "你好"}) {\n  print("$msg，$name！");\n}\n\nvoid main() {\n  greet("小明");\n  greet("小红", msg: "早上好");\n}' },
-      ],
+      'templates': [
+        {
+          'name': "加法计算器",
+          'code': "int add(int a, int b) => a + b;\n\nvoid main() {\n  print(add(3, 4));   // 7\n  print(add(10, 20)); // 30\n}"
+        },
+        {
+          'name': "默认问候",
+          'code': "void greet(String name, {String msg = \"你好\"}) {\n  print(\"$msg，$name！\");\n}\n\nvoid main() {\n  greet(\"小明\");\n  greet(\"小红\", msg: \"早上好\");\n}"
+        }
+      ]
     },
     {
-      id: "dt-9",
-      title: "类与面向对象（上）",
-      summary: "class、构造函数、this. 参数简写、命名构造、工厂构造、重定向构造。",
-      difficulty: "基础",
-      blocks: [
-        { type: "p", text: "面向对象（OOP）是把数据和操作数据的方法『打包』成一个整体，这个整体叫类（class）。类像一张图纸，用图纸造出来的具体对象叫实例。Dart 是彻底的面向对象语言，连数字、函数都是对象。" },
-        { type: "code", lang: "dart", title: "定义一个类", code: 'class Student {\n  String name;      // 字段（属性）\n  int score;\n  static int count = 0;   // 静态字段（属于类，不属于实例）\n\n  // 构造函数：this. 参数简写，自动把参数赋给同名字段\n  Student(this.name, this.score) {\n    count++;   // 每创建一个实例，计数加 1\n  }\n\n  // 方法\n  String intro() {\n    return "$name 得分 $score";\n  }\n\n  // 静态方法\n  static String tip() => "好好学习！";\n}\n\nvoid main() {\n  var s1 = Student("小明", 95);\n  var s2 = Student("小红", 88);\n  print(s1.intro());       // 小明 得分 95\n  print(s2.intro());       // 小红 得分 88\n  print("共创建 ${Student.count} 个学生");  // 共创建 2 个学生\n  print(Student.tip());    // 好好学习！\n}' },
-        { type: "p", text: "注意构造函数 <code.inline>Student(this.name, this.score)</code.inline>：<code.inline>this.name</code.inline> 是 Dart 的语法糖，意思是『把参数 name 自动赋给字段 this.name』，省去了手动写 <code.inline>this.name = name;</code.inline> 的样板代码。" },
-        { type: "h", text: "命名构造、工厂构造、重定向构造" },
-        { type: "code", lang: "dart", title: "三种特殊构造函数", code: 'class Student {\n  String name;\n  int score;\n\n  // 普通构造\n  Student(this.name, this.score);\n\n  // 命名构造：用 类名.名字 定义\n  Student.pass(this.name) : score = 60;\n\n  // 重定向构造：用 : this(...) 转给另一个构造\n  Student.fromDefault(String name) : this(name, 0);\n\n  // 工厂构造：可以返回已有对象或自定义逻辑\n  factory Student.zero(String name) {\n    return Student(name, 0);\n  }\n\n  String intro() => "$name 得分 $score";\n}\n\nvoid main() {\n  print(Student("小明", 95).intro());    // 小明 得分 95\n  print(Student.pass("小红").intro());    // 小红 得分 60\n  print(Student.fromDefault("小刚").intro()); // 小刚 得分 0\n  print(Student.zero("小李").intro());    // 小李 得分 0\n}' },
-        { type: "info", title: "工厂构造是干嘛的", text: "普通构造函数每次都会创建一个新对象；工厂构造（factory）可以自己决定返回什么——可以返回缓存里的对象、返回子类实例，甚至返回 null。常用于单例模式或对象池。" },
-        { type: "warn", title: "构造函数的坑", text: "如果类的字段没有默认值、构造函数也没赋值，编译会直接报错（Dart 强制要求字段在使用前必须初始化）。这是 Dart 严格的一面，也是防 bug 的设计。" },
-        { type: "keypoints", items: ["class 定义类，包含字段和方法", "构造时 this.xxx 参数简写自动赋值字段", "命名构造 类名.名字(...) 提供多种创建方式", "重定向构造用 : this(...) 转给别的构造", "工厂构造 factory 可自定义返回逻辑", "static 成员属于类本身，用 类名.成员 访问"] },
+      'id': "dt-9",
+      'title': "类与面向对象（上）",
+      'summary': "class、构造函数、this. 参数简写、命名构造、工厂构造、重定向构造。",
+      'difficulty': "基础",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "面向对象（OOP）是把数据和操作数据的方法『打包』成一个整体，这个整体叫类（class）。类像一张图纸，用图纸造出来的具体对象叫实例。Dart 是彻底的面向对象语言，连数字、函数都是对象。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "定义一个类",
+          'code': "class Student {\n  String name;      // 字段（属性）\n  int score;\n  static int count = 0;   // 静态字段（属于类，不属于实例）\n\n  // 构造函数：this. 参数简写，自动把参数赋给同名字段\n  Student(this.name, this.score) {\n    count++;   // 每创建一个实例，计数加 1\n  }\n\n  // 方法\n  String intro() {\n    return \"$name 得分 $score\";\n  }\n\n  // 静态方法\n  static String tip() => \"好好学习！\";\n}\n\nvoid main() {\n  var s1 = Student(\"小明\", 95);\n  var s2 = Student(\"小红\", 88);\n  print(s1.intro());       // 小明 得分 95\n  print(s2.intro());       // 小红 得分 88\n  print(\"共创建 ${Student.count} 个学生\");  // 共创建 2 个学生\n  print(Student.tip());    // 好好学习！\n}"
+        },
+        {
+          'type': "p",
+          'text': "注意构造函数 <code.inline>Student(this.name, this.score)</code.inline>：<code.inline>this.name</code.inline> 是 Dart 的语法糖，意思是『把参数 name 自动赋给字段 this.name』，省去了手动写 <code.inline>this.name = name;</code.inline> 的样板代码。"
+        },
+        {
+          'type': "h",
+          'text': "命名构造、工厂构造、重定向构造"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "三种特殊构造函数",
+          'code': "class Student {\n  String name;\n  int score;\n\n  // 普通构造\n  Student(this.name, this.score);\n\n  // 命名构造：用 类名.名字 定义\n  Student.pass(this.name) : score = 60;\n\n  // 重定向构造：用 : this(...) 转给另一个构造\n  Student.fromDefault(String name) : this(name, 0);\n\n  // 工厂构造：可以返回已有对象或自定义逻辑\n  factory Student.zero(String name) {\n    return Student(name, 0);\n  }\n\n  String intro() => \"$name 得分 $score\";\n}\n\nvoid main() {\n  print(Student(\"小明\", 95).intro());    // 小明 得分 95\n  print(Student.pass(\"小红\").intro());    // 小红 得分 60\n  print(Student.fromDefault(\"小刚\").intro()); // 小刚 得分 0\n  print(Student.zero(\"小李\").intro());    // 小李 得分 0\n}"
+        },
+        {
+          'type': "info",
+          'title': "工厂构造是干嘛的",
+          'text': "普通构造函数每次都会创建一个新对象；工厂构造（factory）可以自己决定返回什么——可以返回缓存里的对象、返回子类实例，甚至返回 null。常用于单例模式或对象池。"
+        },
+        {
+          'type': "warn",
+          'title': "构造函数的坑",
+          'text': "如果类的字段没有默认值、构造函数也没赋值，编译会直接报错（Dart 强制要求字段在使用前必须初始化）。这是 Dart 严格的一面，也是防 bug 的设计。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"类与面向对象（上）\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"类与面向对象（上）\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"类与面向对象（上）\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "class 定义类，包含字段和方法",
+            "构造时 this.xxx 参数简写自动赋值字段",
+            "命名构造 类名.名字(...) 提供多种创建方式",
+            "重定向构造用 : this(...) 转给别的构造",
+            "工厂构造 factory 可自定义返回逻辑",
+            "static 成员属于类本身，用 类名.成员 访问"
+          ]
+        }
       ],
-      templates: [
-        { name: "学生类", code: 'class Student {\n  String name;\n  int score;\n  Student(this.name, this.score);\n  String intro() => "$name 得分 $score";\n}\n\nvoid main() {\n  var s = Student("小明", 95);\n  print(s.intro());\n}' },
-      ],
+      'templates': [
+        {
+          'name': "学生类",
+          'code': "class Student {\n  String name;\n  int score;\n  Student(this.name, this.score);\n  String intro() => \"$name 得分 $score\";\n}\n\nvoid main() {\n  var s = Student(\"小明\", 95);\n  print(s.intro());\n}"
+        }
+      ]
     },
     {
-      id: "dt-10",
-      title: "继承、抽象类与接口",
-      summary: "extends、@override、abstract class、implements 接口、运算符重载、enum 枚举。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "面向对象的三大特性：封装、继承、多态。这一章学继承（extends）、抽象类（abstract）和接口（implements），以及枚举（enum）。它们让代码能复用和扩展，是大型项目的基石。" },
-        { type: "code", lang: "dart", title: "继承与覆写方法", code: '// 基类\nclass Animal {\n  String name;\n  Animal(this.name);\n\n  void speak() {\n    print("$name 在叫");\n  }\n}\n\n// 子类继承父类\nclass Dog extends Animal {\n  Dog(String name) : super(name);  // 调用父类构造\n\n  @override   // 覆写父类方法\n  void speak() {\n    print("$name 汪汪叫");\n  }\n}\n\nvoid main() {\n  var dog = Dog("旺财");\n  dog.speak();   // 旺财 汪汪叫\n}' },
-        { type: "p", text: "<code.inline>extends</code.inline> 表示继承：子类自动拥有父类的所有字段和方法。子类可以 <code.inline>@override</code.inline> 覆写父类方法，实现『多态』——同一个调用，不同对象做不同的事。" },
-        { type: "h", text: "抽象类与接口" },
-        { type: "code", lang: "dart", title: "抽象类与 implements 接口", code: '// 抽象类：可以有抽象方法（没有方法体的方法）\nabstract class Animal {\n  String name;\n  Animal(this.name);\n\n  void speak();   // 抽象方法，子类必须实现\n\n  void info() => print("我是一只 $name");  // 普通方法\n}\n\n// 继承抽象类：必须实现所有抽象方法\nclass Dog extends Animal {\n  Dog(String name) : super(name);\n  @override\n  void speak() {\n    print("$name 汪汪叫");\n  }\n}\n\n// 用 implements 当作接口：必须实现所有成员\nclass Bird implements Animal {\n  @override\n  String name = "小鸟";\n  @override\n  void speak() {\n    print("$name 叽叽叫");\n  }\n  @override\n  void info() => print("我是一只 $name");\n}\n\nvoid main() {\n  var dog = Dog("旺财");\n  var bird = Bird();\n  dog.speak();    // 旺财 汪汪叫\n  bird.speak();   // 小鸟 叽叽叫\n}' },
-        { type: "info", title: "extends 和 implements 的区别", text: "<code.inline>extends</code.inline> 是继承，能复用父类已有的实现；<code.inline>implements</code.inline> 是把类当接口用，强制重写所有成员（哪怕父类有实现也不继承）。Dart 一个类只能 extends 一个父类，但可以 implements 多个接口。" },
-        { type: "h", text: "枚举与运算符重载" },
-        { type: "code", lang: "dart", title: "enum 枚举", code: 'enum Color { red, green, blue }\n\nvoid main() {\n  Color c = Color.green;\n  print(c);             // Color.green\n  print(Color.values);  // [Color.red, Color.green, Color.blue]\n\n  // 枚举可以配合 switch\n  switch (c) {\n    case Color.red:\n      print("红色");\n      break;\n    case Color.green:\n      print("绿色");\n      break;\n    default:\n      print("蓝色");\n  }\n}\n\n// 运算符重载示例：让两个类可以直接相加\nclass Vector {\n  final double x, y;\n  Vector(this.x, this.y);\n\n  Vector operator +(Vector other) {\n    return Vector(x + other.x, y + other.y);\n  }\n\n  @override\n  String toString() => "Vector($x, $y)";\n}\n\nvoid main2() {\n  var v1 = Vector(1, 2);\n  var v2 = Vector(3, 4);\n  print(v1 + v2);   // Vector(4.0, 6.0)\n}' },
-        { type: "warn", title: "运算符重载别滥用", text: "Dart 允许重载 + - * / 等运算符，但只有语义确实匹配时才该重载，比如数学向量、金额相加。为了炫技硬给类加 + 会让代码难懂。" },
-        { type: "keypoints", items: ["extends 继承父类，@override 覆写方法", "abstract 抽象类可以有抽象方法，子类必须实现", "implements 当接口用，强制实现全部成员", "Dart 单继承多接口（implements 可多个）", "enum 定义枚举，配合 switch 使用", "运算符可以重载，但要符合语义"] },
+      'id': "dt-10",
+      'title': "继承、抽象类与接口",
+      'summary': "extends、@override、abstract class、implements 接口、运算符重载、enum 枚举。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "面向对象的三大特性：封装、继承、多态。这一章学继承（extends）、抽象类（abstract）和接口（implements），以及枚举（enum）。它们让代码能复用和扩展，是大型项目的基石。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "继承与覆写方法",
+          'code': "// 基类\nclass Animal {\n  String name;\n  Animal(this.name);\n\n  void speak() {\n    print(\"$name 在叫\");\n  }\n}\n\n// 子类继承父类\nclass Dog extends Animal {\n  Dog(String name) : super(name);  // 调用父类构造\n\n  @override   // 覆写父类方法\n  void speak() {\n    print(\"$name 汪汪叫\");\n  }\n}\n\nvoid main() {\n  var dog = Dog(\"旺财\");\n  dog.speak();   // 旺财 汪汪叫\n}"
+        },
+        {
+          'type': "p",
+          'text': "<code.inline>extends</code.inline> 表示继承：子类自动拥有父类的所有字段和方法。子类可以 <code.inline>@override</code.inline> 覆写父类方法，实现『多态』——同一个调用，不同对象做不同的事。"
+        },
+        {
+          'type': "h",
+          'text': "抽象类与接口"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "抽象类与 implements 接口",
+          'code': "// 抽象类：可以有抽象方法（没有方法体的方法）\nabstract class Animal {\n  String name;\n  Animal(this.name);\n\n  void speak();   // 抽象方法，子类必须实现\n\n  void info() => print(\"我是一只 $name\");  // 普通方法\n}\n\n// 继承抽象类：必须实现所有抽象方法\nclass Dog extends Animal {\n  Dog(String name) : super(name);\n  @override\n  void speak() {\n    print(\"$name 汪汪叫\");\n  }\n}\n\n// 用 implements 当作接口：必须实现所有成员\nclass Bird implements Animal {\n  @override\n  String name = \"小鸟\";\n  @override\n  void speak() {\n    print(\"$name 叽叽叫\");\n  }\n  @override\n  void info() => print(\"我是一只 $name\");\n}\n\nvoid main() {\n  var dog = Dog(\"旺财\");\n  var bird = Bird();\n  dog.speak();    // 旺财 汪汪叫\n  bird.speak();   // 小鸟 叽叽叫\n}"
+        },
+        {
+          'type': "info",
+          'title': "extends 和 implements 的区别",
+          'text': "<code.inline>extends</code.inline> 是继承，能复用父类已有的实现；<code.inline>implements</code.inline> 是把类当接口用，强制重写所有成员（哪怕父类有实现也不继承）。Dart 一个类只能 extends 一个父类，但可以 implements 多个接口。"
+        },
+        {
+          'type': "h",
+          'text': "枚举与运算符重载"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "enum 枚举",
+          'code': "enum Color { red, green, blue }\n\nvoid main() {\n  Color c = Color.green;\n  print(c);             // Color.green\n  print(Color.values);  // [Color.red, Color.green, Color.blue]\n\n  // 枚举可以配合 switch\n  switch (c) {\n    case Color.red:\n      print(\"红色\");\n      break;\n    case Color.green:\n      print(\"绿色\");\n      break;\n    default:\n      print(\"蓝色\");\n  }\n}\n\n// 运算符重载示例：让两个类可以直接相加\nclass Vector {\n  final double x, y;\n  Vector(this.x, this.y);\n\n  Vector operator +(Vector other) {\n    return Vector(x + other.x, y + other.y);\n  }\n\n  @override\n  String toString() => \"Vector($x, $y)\";\n}\n\nvoid main2() {\n  var v1 = Vector(1, 2);\n  var v2 = Vector(3, 4);\n  print(v1 + v2);   // Vector(4.0, 6.0)\n}"
+        },
+        {
+          'type': "warn",
+          'title': "运算符重载别滥用",
+          'text': "Dart 允许重载 + - * / 等运算符，但只有语义确实匹配时才该重载，比如数学向量、金额相加。为了炫技硬给类加 + 会让代码难懂。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"继承、抽象类与接口\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"继承、抽象类与接口\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"继承、抽象类与接口\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "extends 继承父类，@override 覆写方法",
+            "abstract 抽象类可以有抽象方法，子类必须实现",
+            "implements 当接口用，强制实现全部成员",
+            "Dart 单继承多接口（implements 可多个）",
+            "enum 定义枚举，配合 switch 使用",
+            "运算符可以重载，但要符合语义"
+          ]
+        }
       ],
-      templates: [
-        { name: "动物叫声", code: 'abstract class Animal {\n  void speak();\n}\n\nclass Dog implements Animal {\n  @override\n  void speak() => print("汪汪！");\n}\n\nclass Cat implements Animal {\n  @override\n  void speak() => print("喵喵！");\n}\n\nvoid main() {\n  var animals = [Dog(), Cat()];\n  for (var a in animals) {\n    a.speak();\n  }\n}' },
-      ],
+      'templates': [
+        {
+          'name': "动物叫声",
+          'code': "abstract class Animal {\n  void speak();\n}\n\nclass Dog implements Animal {\n  @override\n  void speak() => print(\"汪汪！\");\n}\n\nclass Cat implements Animal {\n  @override\n  void speak() => print(\"喵喵！\");\n}\n\nvoid main() {\n  var animals = [Dog(), Cat()];\n  for (var a in animals) {\n    a.speak();\n  }\n}"
+        }
+      ]
     },
     {
-      id: "dt-11",
-      title: "泛型",
-      summary: "List<int>、Map<String,dynamic>、泛型类、泛型约束 extends、泛型函数。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "泛型（Generics）让类、函数可以『先不指定具体类型』，等用的时候再定。这样一套代码能处理多种类型，同时保留类型检查，避免运行时类型错误。在 Dart 里集合泛型非常常见，如 <code.inline>List<int></code.inline>。" },
-        { type: "code", lang: "dart", title: "泛型集合", code: 'void main() {\n  // 泛型集合：明确元素类型\n  List<int> nums = [1, 2, 3];\n  // nums.add("x");   // 编译报错！类型不匹配\n\n  Map<String, dynamic> user = {\n    "name": "小明",\n    "age": 10,\n    "hobbies": ["游泳", "编程"],\n  };\n  print(user["name"]);        // 小明\n  print(user["age"]);         // 10\n\n  print(nums.runtimeType);    // List<int>\n  print(user.runtimeType);    // _Map<String, dynamic>\n}' },
-        { type: "p", text: "<code.inline>dynamic</code.inline> 表示『任意类型』，所以 <code.inline>Map<String, dynamic></code.inline> 表示键是字符串、值可以是任何类型——非常适合解析 JSON 数据。" },
-        { type: "h", text: "泛型类与泛型约束" },
-        { type: "code", lang: "dart", title: "泛型类", code: '// 泛型类：T 是类型占位符\nclass Box<T> {\n  T value;\n  Box(this.value);\n\n  T get() => value;\n}\n\n// 泛型约束：T 必须是 num 的子类型\nclass NumberBox<T extends num> {\n  T value;\n  NumberBox(this.value);\n  double twice() => value * 2;\n}\n\n// 泛型函数：函数也可以带泛型\nT first<T>(List<T> list) => list[0];\n\nvoid main() {\n  var box = Box<String>("hello");\n  print(box.get());          // hello\n\n  var nb = NumberBox<int>(5);\n  print(nb.twice());         // 10\n\n  print(first([1, 2, 3]));       // 1\n  print(first(["a", "b"]));      // a\n}' },
-        { type: "info", title: "泛型的好处", text: "① 编译期类型检查，把错误挡在运行前；② 避免大量强制类型转换；③ 代码更通用，一套类处理多种类型。Flutter 里 Widget 的 <code.inline>List<Widget></code.inline> 就是泛型的经典用法。" },
-        { type: "warn", title: "泛型与类型推断", text: "<code.inline>var list = [];</code.inline> 会被推断成 <code.inline>List<dynamic></code.inline>，等于放弃了类型检查。建议写清楚泛型：<code.inline>var list = <int>[];</code.inline> 更安全。" },
-        { type: "keypoints", items: ["泛型用尖括号指定，如 List<int>、Map<String,dynamic>", "dynamic 表示任意类型", "泛型类用 T 占位，如 Box<T>", "泛型约束 T extends num 限制类型范围", "泛型函数 first<T>(List<T>) 通用处理多种类型", "泛型把类型错误挡在编译期，代码更安全"] },
+      'id': "dt-11",
+      'title': "泛型",
+      'summary': "List<int>、Map<String,dynamic>、泛型类、泛型约束 extends、泛型函数。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "泛型（Generics）让类、函数可以『先不指定具体类型』，等用的时候再定。这样一套代码能处理多种类型，同时保留类型检查，避免运行时类型错误。在 Dart 里集合泛型非常常见，如 <code.inline>List<int></code.inline>。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "泛型集合",
+          'code': "void main() {\n  // 泛型集合：明确元素类型\n  List<int> nums = [1, 2, 3];\n  // nums.add(\"x\");   // 编译报错！类型不匹配\n\n  Map<String, dynamic> user = {\n    \"name\": \"小明\",\n    \"age\": 10,\n    \"hobbies\": [\"游泳\", \"编程\"],\n  };\n  print(user[\"name\"]);        // 小明\n  print(user[\"age\"]);         // 10\n\n  print(nums.runtimeType);    // List<int>\n  print(user.runtimeType);    // _Map<String, dynamic>\n}"
+        },
+        {
+          'type': "p",
+          'text': "<code.inline>dynamic</code.inline> 表示『任意类型』，所以 <code.inline>Map<String, dynamic></code.inline> 表示键是字符串、值可以是任何类型——非常适合解析 JSON 数据。"
+        },
+        {
+          'type': "h",
+          'text': "泛型类与泛型约束"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "泛型类",
+          'code': "// 泛型类：T 是类型占位符\nclass Box<T> {\n  T value;\n  Box(this.value);\n\n  T get() => value;\n}\n\n// 泛型约束：T 必须是 num 的子类型\nclass NumberBox<T extends num> {\n  T value;\n  NumberBox(this.value);\n  double twice() => value * 2;\n}\n\n// 泛型函数：函数也可以带泛型\nT first<T>(List<T> list) => list[0];\n\nvoid main() {\n  var box = Box<String>(\"hello\");\n  print(box.get());          // hello\n\n  var nb = NumberBox<int>(5);\n  print(nb.twice());         // 10\n\n  print(first([1, 2, 3]));       // 1\n  print(first([\"a\", \"b\"]));      // a\n}"
+        },
+        {
+          'type': "info",
+          'title': "泛型的好处",
+          'text': "① 编译期类型检查，把错误挡在运行前；② 避免大量强制类型转换；③ 代码更通用，一套类处理多种类型。Flutter 里 Widget 的 <code.inline>List<Widget></code.inline> 就是泛型的经典用法。"
+        },
+        {
+          'type': "warn",
+          'title': "泛型与类型推断",
+          'text': "<code.inline>var list = [];</code.inline> 会被推断成 <code.inline>List<dynamic></code.inline>，等于放弃了类型检查。建议写清楚泛型：<code.inline>var list = <int>[];</code.inline> 更安全。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"泛型\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"泛型\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"泛型\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "泛型用尖括号指定，如 List<int>、Map<String,dynamic>",
+            "dynamic 表示任意类型",
+            "泛型类用 T 占位，如 Box<T>",
+            "泛型约束 T extends num 限制类型范围",
+            "泛型函数 first<T>(List<T>) 通用处理多种类型",
+            "泛型把类型错误挡在编译期，代码更安全"
+          ]
+        }
       ],
-      templates: [
-        { name: "万能盒子", code: 'class Box<T> {\n  T value;\n  Box(this.value);\n  T get() => value;\n}\n\nvoid main() {\n  var intBox = Box<int>(42);\n  var strBox = Box<String>("hi");\n  print(intBox.get());   // 42\n  print(strBox.get());   // hi\n}' },
-      ],
+      'templates': [
+        {
+          'name': "万能盒子",
+          'code': "class Box<T> {\n  T value;\n  Box(this.value);\n  T get() => value;\n}\n\nvoid main() {\n  var intBox = Box<int>(42);\n  var strBox = Box<String>(\"hi\");\n  print(intBox.get());   // 42\n  print(strBox.get());   // hi\n}"
+        }
+      ]
     },
     {
-      id: "dt-12",
-      title: "空安全：告别空指针崩溃",
-      summary: "可空类型 ?、强制解包 !、late 延迟初始化、?. 安全调用、?? 默认值。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "Dart 2.12 起全面启用空安全（Null Safety）。它让编译器能判断哪些变量可能为 null，把『空指针崩溃』从运行时提前到编译期拦住。简单说：默认变量不能是 null，想允许 null 就加个 <code.inline>?</code.inline>。" },
-        { type: "code", lang: "dart", title: "可空类型与默认值", code: 'void main() {\n  // int 不能为 null\n  int a = 10;\n  // a = null;   // 编译报错！int 不可空\n\n  // int? 表示可空\n  int? age;\n  print(age);    // null\n  age = 10;\n  print(age);    // 10\n\n  // ?? 提供默认值：如果左边是 null 就用右边\n  int x = age ?? 0;\n  print(x);      // 10\n}' },
-        { type: "h", text: "?. 安全调用与 ! 强制解包" },
-        { type: "code", lang: "dart", title: "安全调用与强制解包", code: 'void main() {\n  String? name;   // 可空字符串\n\n  // ?. 安全调用：为 null 时整个表达式返回 null，不报错\n  print(name?.length);         // null\n\n  // 配合 ?? 给默认值\n  print(name?.length ?? 0);    // 0\n\n  // ! 强制解包：我确定它不是 null\n  String? greeting = "你好";\n  print(greeting!.length);     // 2\n\n  // 但如果是 null 还强制解包，运行时会崩溃！\n  // String? bad;\n  // print(bad!.length);   // 报错：null check operator used on a null value\n}' },
-        { type: "h", text: "late 延迟初始化" },
-        { type: "code", lang: "dart", title: "late 的使用", code: 'class Config {\n  // late：声明时不初始化，第一次访问时才初始化\n  late String apiKey = loadKey();\n\n  String loadKey() {\n    print("正在加载配置...");\n    return "abc123";\n  }\n}\n\nvoid main() {\n  var config = Config();\n  print("对象已创建，但配置还没加载");\n  print(config.apiKey);   // 这里才触发 loadKey\n}' },
-        { type: "warn", title: "! 强制解包的风险", text: "<code.inline>!</code.inline> 是告诉编译器『我保证它非空』。如果实际是 null，运行时会抛 <code.inline>Null check operator used on a null value</code.inline> 崩溃。能用 <code.inline>??</code.inline> 给默认值就用默认值，别滥用 <code.inline>!</code.inline>。" },
-        { type: "info", title: "空安全的哲学", text: "以前 Java 那种『变量可能是 null，运行时才炸』叫隐式可空；Dart 默认不可空、要可空必须写 ?，让所有可能为 null 的地方在代码里一目了然。配合 ?. 和 ??，基本能根除空指针崩溃。" },
-        { type: "keypoints", items: ["Dart 2.12+ 默认变量不可为 null", "想允许 null 就在类型后加 ?，如 int?", "?. 安全调用，null 时不报错返回 null", "?? 左边为 null 时用右边的默认值", "! 强制解包，确定非空才能用，滥用会崩溃", "late 延迟初始化，第一次访问才赋值"] },
+      'id': "dt-12",
+      'title': "空安全：告别空指针崩溃",
+      'summary': "可空类型 ?、强制解包 !、late 延迟初始化、?. 安全调用、?? 默认值。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "Dart 2.12 起全面启用空安全（Null Safety）。它让编译器能判断哪些变量可能为 null，把『空指针崩溃』从运行时提前到编译期拦住。简单说：默认变量不能是 null，想允许 null 就加个 <code.inline>?</code.inline>。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "可空类型与默认值",
+          'code': "void main() {\n  // int 不能为 null\n  int a = 10;\n  // a = null;   // 编译报错！int 不可空\n\n  // int? 表示可空\n  int? age;\n  print(age);    // null\n  age = 10;\n  print(age);    // 10\n\n  // ?? 提供默认值：如果左边是 null 就用右边\n  int x = age ?? 0;\n  print(x);      // 10\n}"
+        },
+        {
+          'type': "h",
+          'text': "?. 安全调用与 ! 强制解包"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "安全调用与强制解包",
+          'code': "void main() {\n  String? name;   // 可空字符串\n\n  // ?. 安全调用：为 null 时整个表达式返回 null，不报错\n  print(name?.length);         // null\n\n  // 配合 ?? 给默认值\n  print(name?.length ?? 0);    // 0\n\n  // ! 强制解包：我确定它不是 null\n  String? greeting = \"你好\";\n  print(greeting!.length);     // 2\n\n  // 但如果是 null 还强制解包，运行时会崩溃！\n  // String? bad;\n  // print(bad!.length);   // 报错：null check operator used on a null value\n}"
+        },
+        {
+          'type': "h",
+          'text': "late 延迟初始化"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "late 的使用",
+          'code': "class Config {\n  // late：声明时不初始化，第一次访问时才初始化\n  late String apiKey = loadKey();\n\n  String loadKey() {\n    print(\"正在加载配置...\");\n    return \"abc123\";\n  }\n}\n\nvoid main() {\n  var config = Config();\n  print(\"对象已创建，但配置还没加载\");\n  print(config.apiKey);   // 这里才触发 loadKey\n}"
+        },
+        {
+          'type': "warn",
+          'title': "! 强制解包的风险",
+          'text': "<code.inline>!</code.inline> 是告诉编译器『我保证它非空』。如果实际是 null，运行时会抛 <code.inline>Null check operator used on a null value</code.inline> 崩溃。能用 <code.inline>??</code.inline> 给默认值就用默认值，别滥用 <code.inline>!</code.inline>。"
+        },
+        {
+          'type': "info",
+          'title': "空安全的哲学",
+          'text': "以前 Java 那种『变量可能是 null，运行时才炸』叫隐式可空；Dart 默认不可空、要可空必须写 ?，让所有可能为 null 的地方在代码里一目了然。配合 ?. 和 ??，基本能根除空指针崩溃。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"空安全：告别空指针崩溃\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"空安全：告别空指针崩溃\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"空安全：告别空指针崩溃\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Dart 2.12+ 默认变量不可为 null",
+            "想允许 null 就在类型后加 ?，如 int?",
+            "?. 安全调用，null 时不报错返回 null",
+            "?? 左边为 null 时用右边的默认值",
+            "! 强制解包，确定非空才能用，滥用会崩溃",
+            "late 延迟初始化，第一次访问才赋值"
+          ]
+        }
       ],
-      templates: [
-        { name: "可空姓名", code: 'void main() {\n  String? name;\n  print(name ?? "无名氏");   // 无名氏\n  name = "小明";\n  print(name ?? "无名氏");   // 小明\n}' },
-      ],
+      'templates': [
+        {
+          'name': "可空姓名",
+          'code': "void main() {\n  String? name;\n  print(name ?? \"无名氏\");   // 无名氏\n  name = \"小明\";\n  print(name ?? \"无名氏\");   // 小明\n}"
+        }
+      ]
     },
     {
-      id: "dt-13",
-      title: "异步编程：Future 与 async/await",
-      summary: "Future、async/await、then、Future.wait、Stream 流、await for。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "现实中的操作很多不是立刻出结果的：请求网络、读文件、等待计时器。如果程序傻等，界面就卡死了。Dart 用 <code.inline>Future</code.inline> 表示『未来的结果』，用 <code.inline>async/await</code.inline> 让异步代码写得像同步代码一样好读。" },
-        { type: "code", lang: "dart", title: "Future 与 async/await", code: 'import "dart:async";\n\n// async 函数返回 Future\nFuture<String> fetchData(String name) async {\n  await Future.delayed(Duration(seconds: 1));  // 模拟网络等待 1 秒\n  return "拿到了 $name 的数据";\n}\n\nFuture<void> main() async {\n  print("开始请求...");\n\n  // await：等待 Future 完成并取出结果\n  var result = await fetchData("用户");\n  print(result);               // 拿到了 用户 的数据\n\n  // 或者用 then 链式处理\n  fetchData("订单").then((r) => print(r));\n\n  // Future.wait：并发等待多个\n  var results = await Future.wait([\n    fetchData("A"),\n    fetchData("B"),\n  ]);\n  print(results);   // [拿到了 A 的数据, 拿到了 B 的数据]\n\n  print("全部完成");\n}' },
-        { type: "p", text: "<code.inline>await</code.inline> 只能用在 <code.inline>async</code.inline> 函数里。遇到 await 时，程序先『让出』给其他任务，等结果好了再回来继续，期间界面不卡顿。这就是异步的意义。" },
-        { type: "h", text: "Stream 流：持续不断的数据" },
-        { type: "code", lang: "dart", title: "Stream 与 await for", code: 'import "dart:async";\n\nFuture<void> main() async {\n  // Stream：像一条数据的河流，持续产生数据\n  var stream = Stream.periodic(\n    Duration(milliseconds: 500),  // 每 0.5 秒产生一个\n    (n) => n * n,\n  ).take(5);   // 只取前 5 个\n\n  // await for：像 for 循环一样逐个接收\n  await for (var v in stream) {\n    print("收到：$v");   // 0 1 4 9 16\n  }\n  print("流结束了");\n}' },
-        { type: "info", title: "Future 和 Stream 的区别", text: "<code.inline>Future</code.inline> 是『一次性』的：最终会给一个结果或一个错误。<code.inline>Stream</code.inline> 是『多次』的：像河流一样持续吐出多个数据。Flutter 里网络请求用 Future，实时位置/事件监听用 Stream。" },
-        { type: "warn", title: "异步的坑", text: "在 async 函数里忘了写 await，得到的会是一个 Future 对象而不是结果。还有：async 函数里的异常如果没人 catch，会被吞掉变成 unhandled error。多包一层 try/catch 更稳妥（下一章讲）。" },
-        { type: "keypoints", items: ["Future 表示未来的一个结果", "async/await 让异步代码像同步一样好读", "await 只能出现在 async 函数里", "Future.wait 并发等待多个任务", "Stream 是持续产生数据的数据流", "await for 逐个接收流里的数据", "future 需要 await 才能拿到真正的值"] },
+      'id': "dt-13",
+      'title': "异步编程：Future 与 async/await",
+      'summary': "Future、async/await、then、Future.wait、Stream 流、await for。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "现实中的操作很多不是立刻出结果的：请求网络、读文件、等待计时器。如果程序傻等，界面就卡死了。Dart 用 <code.inline>Future</code.inline> 表示『未来的结果』，用 <code.inline>async/await</code.inline> 让异步代码写得像同步代码一样好读。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "Future 与 async/await",
+          'code': "import \"dart:async\";\n\n// async 函数返回 Future\nFuture<String> fetchData(String name) async {\n  await Future.delayed(Duration(seconds: 1));  // 模拟网络等待 1 秒\n  return \"拿到了 $name 的数据\";\n}\n\nFuture<void> main() async {\n  print(\"开始请求...\");\n\n  // await：等待 Future 完成并取出结果\n  var result = await fetchData(\"用户\");\n  print(result);               // 拿到了 用户 的数据\n\n  // 或者用 then 链式处理\n  fetchData(\"订单\").then((r) => print(r));\n\n  // Future.wait：并发等待多个\n  var results = await Future.wait([\n    fetchData(\"A\"),\n    fetchData(\"B\"),\n  ]);\n  print(results);   // [拿到了 A 的数据, 拿到了 B 的数据]\n\n  print(\"全部完成\");\n}"
+        },
+        {
+          'type': "p",
+          'text': "<code.inline>await</code.inline> 只能用在 <code.inline>async</code.inline> 函数里。遇到 await 时，程序先『让出』给其他任务，等结果好了再回来继续，期间界面不卡顿。这就是异步的意义。"
+        },
+        {
+          'type': "h",
+          'text': "Stream 流：持续不断的数据"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "Stream 与 await for",
+          'code': "import \"dart:async\";\n\nFuture<void> main() async {\n  // Stream：像一条数据的河流，持续产生数据\n  var stream = Stream.periodic(\n    Duration(milliseconds: 500),  // 每 0.5 秒产生一个\n    (n) => n * n,\n  ).take(5);   // 只取前 5 个\n\n  // await for：像 for 循环一样逐个接收\n  await for (var v in stream) {\n    print(\"收到：$v\");   // 0 1 4 9 16\n  }\n  print(\"流结束了\");\n}"
+        },
+        {
+          'type': "info",
+          'title': "Future 和 Stream 的区别",
+          'text': "<code.inline>Future</code.inline> 是『一次性』的：最终会给一个结果或一个错误。<code.inline>Stream</code.inline> 是『多次』的：像河流一样持续吐出多个数据。Flutter 里网络请求用 Future，实时位置/事件监听用 Stream。"
+        },
+        {
+          'type': "warn",
+          'title': "异步的坑",
+          'text': "在 async 函数里忘了写 await，得到的会是一个 Future 对象而不是结果。还有：async 函数里的异常如果没人 catch，会被吞掉变成 unhandled error。多包一层 try/catch 更稳妥（下一章讲）。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"异步编程：Future 与 async/await\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"异步编程：Future 与 async/await\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"异步编程：Future 与 async/await\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Future 表示未来的一个结果",
+            "async/await 让异步代码像同步一样好读",
+            "await 只能出现在 async 函数里",
+            "Future.wait 并发等待多个任务",
+            "Stream 是持续产生数据的数据流",
+            "await for 逐个接收流里的数据",
+            "future 需要 await 才能拿到真正的值"
+          ]
+        }
       ],
-      templates: [
-        { name: "模拟网络请求", code: 'import "dart:async";\n\nFuture<String> fetchUser() async {\n  await Future.delayed(Duration(seconds: 1));\n  return "用户数据已加载";\n}\n\nFuture<void> main() async {\n  var data = await fetchUser();\n  print(data);\n}' },
-      ],
+      'templates': [
+        {
+          'name': "模拟网络请求",
+          'code': "import \"dart:async\";\n\nFuture<String> fetchUser() async {\n  await Future.delayed(Duration(seconds: 1));\n  return \"用户数据已加载\";\n}\n\nFuture<void> main() async {\n  var data = await fetchUser();\n  print(data);\n}"
+        }
+      ]
     },
     {
-      id: "dt-14",
-      title: "异常处理：try / catch / finally",
-      summary: "throw、try/catch/finally、按类型捕获、rethrow、自定义异常。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "程序难免出错：文件不存在、网络断了、数据格式不对。如果让错误直接崩溃，体验很差。异常处理就是『捕捉错误，优雅地处理』：出错时不崩溃，而是走你安排的补救逻辑。" },
-        { type: "code", lang: "dart", title: "try / catch / finally", code: 'void main() {\n  try {\n    // 可能出错的代码\n    int result = 10 ~/ 0;   // 除数为 0 会抛异常\n    print(result);\n  } catch (e) {\n    print("出错了：$e");\n  } finally {\n    print("无论是否出错，这里都会执行");\n  }\n}' },
-        { type: "h", text: "按类型捕获与主动抛出" },
-        { type: "code", lang: "dart", title: "抛出异常与按类型捕获", code: 'void checkAge(int age) {\n  if (age < 0) {\n    throw "年龄不能是负数";   // 抛字符串异常（不推荐）\n  }\n  if (age > 150) {\n    throw ArgumentError("年龄太大了");  // 抛标准异常\n  }\n  print("年龄 $age 合法");\n}\n\nvoid main() {\n  try {\n    checkAge(-5);\n  } on ArgumentError catch (e) {\n    // on 类型 catch：只捕获这种异常\n    print("参数错误：$e");\n  } catch (e) {\n    print("其他异常：$e");\n  } finally {\n    print("检查完毕");\n  }\n}' },
-        { type: "h", text: "自定义异常与 rethrow" },
-        { type: "code", lang: "dart", title: "自定义异常与 rethrow", code: '// 自定义异常类\nclass AgeError implements Exception {\n  String msg;\n  AgeError(this.msg);\n  @override\n  String toString() => "AgeError: $msg";\n}\n\nvoid riskyOperation() {\n  try {\n    throw AgeError("业务出错");\n  } catch (e) {\n    print("先在这里处理一下日志...");\n    rethrow;   // 重新抛出，让上层继续处理\n  }\n}\n\nvoid main() {\n  try {\n    riskyOperation();\n  } on AgeError catch (e) {\n    print("上层捕获：$e");\n  }\n}' },
-        { type: "warn", title: "别空 catch", text: "写 <code.inline>catch (e) {}</code.inline> 空着什么都不做是最糟糕的：错误被吞掉，程序继续运行，但状态已经不对，后期极难排查。至少打印日志（print 或 log）。" },
-        { type: "info", title: "异常 vs 错误", text: "在 Dart 里 Exception 是『可预期的业务错误』（如参数非法），Error 是『程序本身的严重问题』（如内存溢出）。日常代码处理 Exception 就够了，Error 一般无法也不应捕获。" },
-        { type: "keypoints", items: ["throw 主动抛出异常", "try/catch 捕获异常，finally 无论如何都执行", "on 类型 catch 按异常类型捕获", "rethrow 把异常重新抛给上层", "可以自定义异常类 implements Exception", "别写空 catch，至少要记录日志"] },
+      'id': "dt-14",
+      'title': "异常处理：try / catch / finally",
+      'summary': "throw、try/catch/finally、按类型捕获、rethrow、自定义异常。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "程序难免出错：文件不存在、网络断了、数据格式不对。如果让错误直接崩溃，体验很差。异常处理就是『捕捉错误，优雅地处理』：出错时不崩溃，而是走你安排的补救逻辑。"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "try / catch / finally",
+          'code': "void main() {\n  try {\n    // 可能出错的代码\n    int result = 10 ~/ 0;   // 除数为 0 会抛异常\n    print(result);\n  } catch (e) {\n    print(\"出错了：$e\");\n  } finally {\n    print(\"无论是否出错，这里都会执行\");\n  }\n}"
+        },
+        {
+          'type': "h",
+          'text': "按类型捕获与主动抛出"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "抛出异常与按类型捕获",
+          'code': "void checkAge(int age) {\n  if (age < 0) {\n    throw \"年龄不能是负数\";   // 抛字符串异常（不推荐）\n  }\n  if (age > 150) {\n    throw ArgumentError(\"年龄太大了\");  // 抛标准异常\n  }\n  print(\"年龄 $age 合法\");\n}\n\nvoid main() {\n  try {\n    checkAge(-5);\n  } on ArgumentError catch (e) {\n    // on 类型 catch：只捕获这种异常\n    print(\"参数错误：$e\");\n  } catch (e) {\n    print(\"其他异常：$e\");\n  } finally {\n    print(\"检查完毕\");\n  }\n}"
+        },
+        {
+          'type': "h",
+          'text': "自定义异常与 rethrow"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "自定义异常与 rethrow",
+          'code': "// 自定义异常类\nclass AgeError implements Exception {\n  String msg;\n  AgeError(this.msg);\n  @override\n  String toString() => \"AgeError: $msg\";\n}\n\nvoid riskyOperation() {\n  try {\n    throw AgeError(\"业务出错\");\n  } catch (e) {\n    print(\"先在这里处理一下日志...\");\n    rethrow;   // 重新抛出，让上层继续处理\n  }\n}\n\nvoid main() {\n  try {\n    riskyOperation();\n  } on AgeError catch (e) {\n    print(\"上层捕获：$e\");\n  }\n}"
+        },
+        {
+          'type': "warn",
+          'title': "别空 catch",
+          'text': "写 <code.inline>catch (e) {}</code.inline> 空着什么都不做是最糟糕的：错误被吞掉，程序继续运行，但状态已经不对，后期极难排查。至少打印日志（print 或 log）。"
+        },
+        {
+          'type': "info",
+          'title': "异常 vs 错误",
+          'text': "在 Dart 里 Exception 是『可预期的业务错误』（如参数非法），Error 是『程序本身的严重问题』（如内存溢出）。日常代码处理 Exception 就够了，Error 一般无法也不应捕获。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"异常处理：try / catch / finally\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"异常处理：try / catch / finally\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"异常处理：try / catch / finally\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "throw 主动抛出异常",
+            "try/catch 捕获异常，finally 无论如何都执行",
+            "on 类型 catch 按异常类型捕获",
+            "rethrow 把异常重新抛给上层",
+            "可以自定义异常类 implements Exception",
+            "别写空 catch，至少要记录日志"
+          ]
+        }
       ],
-      templates: [
-        { name: "安全的除法", code: 'double safeDivide(int a, int b) {\n  if (b == 0) {\n    throw ArgumentError("除数不能为 0");\n  }\n  return a / b;\n}\n\nvoid main() {\n  try {\n    print(safeDivide(10, 0));\n  } catch (e) {\n    print("出错了：$e");\n  }\n}' },
-      ],
+      'templates': [
+        {
+          'name': "安全的除法",
+          'code': "double safeDivide(int a, int b) {\n  if (b == 0) {\n    throw ArgumentError(\"除数不能为 0\");\n  }\n  return a / b;\n}\n\nvoid main() {\n  try {\n    print(safeDivide(10, 0));\n  } catch (e) {\n    print(\"出错了：$e\");\n  }\n}"
+        }
+      ]
     },
     {
-      id: "dt-15",
-      title: "库与包：import 与 pub",
-      summary: "import 库、package: 依赖、pubspec.yaml、pub add、pub.dev 生态。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "没人从零写所有代码。Dart 把现成的代码组织成『库』（library）和『包』（package）。官方包仓库是 <a href='https://pub.dev' target='_blank' rel='noopener'>pub.dev</a>，几十万个免费包随便用，用 <code.inline>pub add</code.inline> 一条命令就能装。" },
-        { type: "h", text: "import 导入库" },
-        { type: "code", lang: "dart", title: "导入内置库与第三方包", code: 'import "dart:math";              // Dart 内置库\nimport "package:intl/intl.dart" as intl;  // 第三方包，用 as 起别名\n\nvoid main() {\n  // dart:math 库的功能\n  print(sqrt(16));          // 4.0\n  print(max(3, 7));         // 7\n  print(pow(2, 10));        // 1024\n\n  // intl 包（需要先 pub add intl）\n  var now = DateTime.now();\n  var formatter = intl.DateFormat("yyyy-MM-dd");\n  print(formatter.format(now));   // 如 2026-08-28\n}' },
-        { type: "h", text: "pubspec.yaml 与 pub add" },
-        { type: "p", text: "每个 Dart 项目根目录都有一个 <code.inline>pubspec.yaml</code.inline> 文件，它声明了项目信息和依赖。用 <code.inline>dart pub add 包名</code.inline> 装依赖，装完会自动更新 pubspec.yaml 并下载到本地。" },
-        { type: "code", lang: "yaml", title: "一个 pubspec.yaml 示例", code: 'name: my_app\ndescription: 我的第一个 Dart 项目\nenvironment:\n  sdk: ">=3.0.0 <4.0.0"\ndependencies:\n  http: ^1.1.0\n  intl: ^0.18.0' },
-        { type: "p", text: "带 ^ 的版本号如 <code.inline>^1.1.0</code.inline> 表示『兼容 1.1.0 且不跨大版本的最近版本』，这是 Dart 的语义化版本约定。<code.inline>dart pub get</code.inline> 会按 pubspec.yaml 下载所有依赖，<code.inline>dart pub upgrade</code.inline> 升级。" },
-        { type: "h", text: "怎么找好用的包" },
-        { type: "list", items: ["到 <a href='https://pub.dev' target='_blank' rel='noopener'>pub.dev</a> 搜索，关注『LIKES』（点赞数）和『POPULARITY』（使用量）", "常用包：http（网络请求）、intl（国际化/日期格式化）、path（路径处理）、uuid（唯一ID）、json_serializable（JSON 序列化）", "优先选官方推荐和长期维护的包，少用没人维护的旧包"] },
-        { type: "warn", title: "安装包后要重新加载", text: "在 VS Code 里 pub add 之后，有时需要重启 Dart 分析服务才能识别新包。如果 import 报错找不到包，先确认 pubspec.yaml 里已写入依赖，再运行 dart pub get。" },
-        { type: "keypoints", items: ["import 导入库，as 可以起别名", "pubspec.yaml 声明项目依赖", "pub add 包名 一键安装，pub get 下载依赖", "包仓库是 pub.dev，免费且海量", "^版本号 表示兼容的最近版本", "第三方包用 package: 前缀导入"] },
+      'id': "dt-15",
+      'title': "库与包：import 与 pub",
+      'summary': "import 库、package: 依赖、pubspec.yaml、pub add、pub.dev 生态。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "没人从零写所有代码。Dart 把现成的代码组织成『库』（library）和『包』（package）。官方包仓库是 <a href='https://pub.dev' target='_blank' rel='noopener'>pub.dev</a>，几十万个免费包随便用，用 <code.inline>pub add</code.inline> 一条命令就能装。"
+        },
+        {
+          'type': "h",
+          'text': "import 导入库"
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "导入内置库与第三方包",
+          'code': "import \"dart:math\";              // Dart 内置库\nimport \"package:intl/intl.dart\" as intl;  // 第三方包，用 as 起别名\n\nvoid main() {\n  // dart:math 库的功能\n  print(sqrt(16));          // 4.0\n  print(max(3, 7));         // 7\n  print(pow(2, 10));        // 1024\n\n  // intl 包（需要先 pub add intl）\n  var now = DateTime.now();\n  var formatter = intl.DateFormat(\"yyyy-MM-dd\");\n  print(formatter.format(now));   // 如 2026-08-28\n}"
+        },
+        {
+          'type': "h",
+          'text': "pubspec.yaml 与 pub add"
+        },
+        {
+          'type': "p",
+          'text': "每个 Dart 项目根目录都有一个 <code.inline>pubspec.yaml</code.inline> 文件，它声明了项目信息和依赖。用 <code.inline>dart pub add 包名</code.inline> 装依赖，装完会自动更新 pubspec.yaml 并下载到本地。"
+        },
+        {
+          'type': "code",
+          'lang': "yaml",
+          'title': "一个 pubspec.yaml 示例",
+          'code': "name: my_app\ndescription: 我的第一个 Dart 项目\nenvironment:\n  sdk: \">=3.0.0 <4.0.0\"\ndependencies:\n  http: ^1.1.0\n  intl: ^0.18.0"
+        },
+        {
+          'type': "p",
+          'text': "带 ^ 的版本号如 <code.inline>^1.1.0</code.inline> 表示『兼容 1.1.0 且不跨大版本的最近版本』，这是 Dart 的语义化版本约定。<code.inline>dart pub get</code.inline> 会按 pubspec.yaml 下载所有依赖，<code.inline>dart pub upgrade</code.inline> 升级。"
+        },
+        {
+          'type': "h",
+          'text': "怎么找好用的包"
+        },
+        {
+          'type': "list",
+          'items': [
+            "到 <a href='https://pub.dev' target='_blank' rel='noopener'>pub.dev</a> 搜索，关注『LIKES』（点赞数）和『POPULARITY』（使用量）",
+            "常用包：http（网络请求）、intl（国际化/日期格式化）、path（路径处理）、uuid（唯一ID）、json_serializable（JSON 序列化）",
+            "优先选官方推荐和长期维护的包，少用没人维护的旧包"
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "安装包后要重新加载",
+          'text': "在 VS Code 里 pub add 之后，有时需要重启 Dart 分析服务才能识别新包。如果 import 报错找不到包，先确认 pubspec.yaml 里已写入依赖，再运行 dart pub get。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"库与包：import 与 pub\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"库与包：import 与 pub\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"库与包：import 与 pub\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "import 导入库，as 可以起别名",
+            "pubspec.yaml 声明项目依赖",
+            "pub add 包名 一键安装，pub get 下载依赖",
+            "包仓库是 pub.dev，免费且海量",
+            "^版本号 表示兼容的最近版本",
+            "第三方包用 package: 前缀导入"
+          ]
+        }
       ],
-      templates: [
-        { name: "使用 math 库", code: 'import "dart:math";\n\nvoid main() {\n  print(sqrt(81));      // 9.0\n  print(max(3, 9));     // 9\n  print(min(3, 9));     // 3\n  print(pow(2, 5));     // 32\n}' },
-      ],
+      'templates': [
+        {
+          'name': "使用 math 库",
+          'code': "import \"dart:math\";\n\nvoid main() {\n  print(sqrt(81));      // 9.0\n  print(max(3, 9));     // 9\n  print(min(3, 9));     // 3\n  print(pow(2, 5));     // 32\n}"
+        }
+      ]
     },
     {
-      id: "dt-16",
-      title: "Flutter 入门与实战",
-      summary: "widget 概念、MaterialApp/Scaffold、常用组件、StatefulWidget、Hello Flutter。",
-      difficulty: "进阶",
-      blocks: [
-        { type: "p", text: "学 Dart 的终极目标是 Flutter。Flutter 里万物皆 <code.inline>Widget</code.inline>（组件）：一个按钮、一行文字、一个页面都是 Widget，小 Widget 套大 Widget，像搭积木一样拼出整个界面。" },
-        { type: "h", text: "Widget 的基本概念" },
-        { type: "list", items: ["<code.inline>StatelessWidget</code.inline>：无状态组件，内容固定不变", "<code.inline>StatefulWidget</code.inline>：有状态组件，数据变化会重新渲染", "<code.inline>MaterialApp</code.inline>：应用根组件，提供 Material 设计风格", "<code.inline>Scaffold</code.inline>：页面骨架，包含 AppBar（顶栏）和 body（正文）", "常用组件：Text（文字）、ElevatedButton（按钮）、Column（竖排）、Row（横排）"] },
-        { type: "code", lang: "dart", title: "Hello Flutter：计数器 App", code: 'import "package:flutter/material.dart";\n\nvoid main() {\n  runApp(const MyApp());\n}\n\nclass MyApp extends StatelessWidget {\n  const MyApp({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    return MaterialApp(\n      title: "我的第一个 Flutter 应用",\n      home: const HomePage(),\n    );\n  }\n}\n\n// 有状态组件：可以保存和修改数据\nclass HomePage extends StatefulWidget {\n  const HomePage({super.key});\n\n  @override\n  State<HomePage> createState() => _HomePageState();\n}\n\nclass _HomePageState extends State<HomePage> {\n  int count = 0;   // 状态数据\n\n  @override\n  Widget build(BuildContext context) {\n    return Scaffold(\n      appBar: AppBar(title: const Text("计数器")),\n      body: Center(\n        child: Column(\n          mainAxisAlignment: MainAxisAlignment.center,\n          children: [\n            Text("你点了 $count 次", style: const TextStyle(fontSize: 28)),\n            const SizedBox(height: 20),\n            ElevatedButton(\n              onPressed: () {\n                setState(() {\n                  count++;   // 修改状态\n                });\n              },\n              child: const Text("点我 +1"),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}' },
-        { type: "p", text: "想运行这个 App，需要安装 Flutter SDK（<a href='https://docs.flutter.dev/get-started/install' target='_blank' rel='noopener'>官方安装教程</a>），装好 flutter 后执行 <code.inline>flutter create 项目名</code.inline> 创建项目，把上面代码放进 lib/main.dart，然后 <code.inline>flutter run</code.inline> 就能在模拟器或真机上看到效果。" },
-        { type: "info", title: "setState 是核心", text: "有状态组件里，修改数据后必须调用 <code.inline>setState(() { ... })</code.inline>，Flutter 才知道界面需要重绘。不调 setState 直接改数据，界面不会变。" },
-        { type: "h", text: "学完 Dart 之后的学习路线" },
-        { type: "list", items: ["第一步：装好 Flutter SDK，跑通 flutter create 的默认项目", "第二步：学布局——Column/Row/Container/Padding/Stack", "第三步：学导航——Navigator、页面跳转、传参", "第四步：学状态管理——Provider / Riverpod / Bloc", "第五步：学网络与存储——http、shared_preferences、sqflite", "第六步：发布——Android/iOS 打包上架"] },
-        { type: "warn", title: "别急于求成", text: "Flutter 上手不难，但 App 开发涉及布局、状态、网络、异步一大堆知识。建议先用 DartPad 的 Flutter 模式（dartpad.dev）练小界面，把每一章语法都吃透，再碰真机项目。" },
-        { type: "keypoints", items: ["Flutter 万物皆 Widget，搭积木式拼界面", "StatelessWidget 无状态，StatefulWidget 有状态", "MaterialApp + Scaffold 是应用和页面的骨架", "修改状态必须调用 setState 才会重绘", "Column 竖排、Row 横排、Text 文字、Button 按钮", "学完 Dart 后按 布局→导航→状态→网络→发布 路线走"] },
+      'id': "dt-16",
+      'title': "Flutter 入门与实战",
+      'summary': "widget 概念、MaterialApp/Scaffold、常用组件、StatefulWidget、Hello Flutter。",
+      'difficulty': "进阶",
+      'blocks': [
+        {
+          'type': "p",
+          'text': "学 Dart 的终极目标是 Flutter。Flutter 里万物皆 <code.inline>Widget</code.inline>（组件）：一个按钮、一行文字、一个页面都是 Widget，小 Widget 套大 Widget，像搭积木一样拼出整个界面。"
+        },
+        {
+          'type': "h",
+          'text': "Widget 的基本概念"
+        },
+        {
+          'type': "list",
+          'items': [
+            "<code.inline>StatelessWidget</code.inline>：无状态组件，内容固定不变",
+            "<code.inline>StatefulWidget</code.inline>：有状态组件，数据变化会重新渲染",
+            "<code.inline>MaterialApp</code.inline>：应用根组件，提供 Material 设计风格",
+            "<code.inline>Scaffold</code.inline>：页面骨架，包含 AppBar（顶栏）和 body（正文）",
+            "常用组件：Text（文字）、ElevatedButton（按钮）、Column（竖排）、Row（横排）"
+          ]
+        },
+        {
+          'type': "code",
+          'lang': "dart",
+          'title': "Hello Flutter：计数器 App",
+          'code': "import \"package:flutter/material.dart\";\n\nvoid main() {\n  runApp(const MyApp());\n}\n\nclass MyApp extends StatelessWidget {\n  const MyApp({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    return MaterialApp(\n      title: \"我的第一个 Flutter 应用\",\n      home: const HomePage(),\n    );\n  }\n}\n\n// 有状态组件：可以保存和修改数据\nclass HomePage extends StatefulWidget {\n  const HomePage({super.key});\n\n  @override\n  State<HomePage> createState() => _HomePageState();\n}\n\nclass _HomePageState extends State<HomePage> {\n  int count = 0;   // 状态数据\n\n  @override\n  Widget build(BuildContext context) {\n    return Scaffold(\n      appBar: AppBar(title: const Text(\"计数器\")),\n      body: Center(\n        child: Column(\n          mainAxisAlignment: MainAxisAlignment.center,\n          children: [\n            Text(\"你点了 $count 次\", style: const TextStyle(fontSize: 28)),\n            const SizedBox(height: 20),\n            ElevatedButton(\n              onPressed: () {\n                setState(() {\n                  count++;   // 修改状态\n                });\n              },\n              child: const Text(\"点我 +1\"),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}"
+        },
+        {
+          'type': "p",
+          'text': "想运行这个 App，需要安装 Flutter SDK（<a href='https://docs.flutter.dev/get-started/install' target='_blank' rel='noopener'>官方安装教程</a>），装好 flutter 后执行 <code.inline>flutter create 项目名</code.inline> 创建项目，把上面代码放进 lib/main.dart，然后 <code.inline>flutter run</code.inline> 就能在模拟器或真机上看到效果。"
+        },
+        {
+          'type': "info",
+          'title': "setState 是核心",
+          'text': "有状态组件里，修改数据后必须调用 <code.inline>setState(() { ... })</code.inline>，Flutter 才知道界面需要重绘。不调 setState 直接改数据，界面不会变。"
+        },
+        {
+          'type': "h",
+          'text': "学完 Dart 之后的学习路线"
+        },
+        {
+          'type': "list",
+          'items': [
+            "第一步：装好 Flutter SDK，跑通 flutter create 的默认项目",
+            "第二步：学布局——Column/Row/Container/Padding/Stack",
+            "第三步：学导航——Navigator、页面跳转、传参",
+            "第四步：学状态管理——Provider / Riverpod / Bloc",
+            "第五步：学网络与存储——http、shared_preferences、sqflite",
+            "第六步：发布——Android/iOS 打包上架"
+          ]
+        },
+        {
+          'type': "warn",
+          'title': "别急于求成",
+          'text': "Flutter 上手不难，但 App 开发涉及布局、状态、网络、异步一大堆知识。建议先用 DartPad 的 Flutter 模式（dartpad.dev）练小界面，把每一章语法都吃透，再碰真机项目。"
+        },
+        {
+          'type': "info",
+          'title': "💡 学习建议",
+          'text': "学习\"Flutter 入门与实战\"时，最重要的是动手实践。先在编辑器中运行示例代码，观察输出结果，然后尝试修改代码中的参数，看看会发生什么变化。遇到错误不要害怕，仔细阅读错误信息，它通常会告诉你问题在哪一行。记住：编程能力来自持续的动手练习。"
+        },
+        {
+          'type': "code",
+          'lang': "javascript",
+          'title': "本章扩展练习",
+          'code': "// 练习：尝试修改下面的代码\nlet lesson = \"Flutter 入门与实战\";\nconsole.log(\"我正在学习:\", lesson);\nconsole.log(\"动手实践是学习编程的最好方式！\");"
+        },
+        {
+          'type': "warn",
+          'title': "⚠️ 常见误区",
+          'text': "学习\"Flutter 入门与实战\"时，新手常犯的错误：①只看不练——看懂了不代表会写；②跳过基础直接学高级内容；③遇到错误就放弃；④不善于利用文档和搜索引擎。每个程序员都是从新手过来的，多写多练才能进步。"
+        },
+        {
+          'type': "keypoints",
+          'items': [
+            "Flutter 万物皆 Widget，搭积木式拼界面",
+            "StatelessWidget 无状态，StatefulWidget 有状态",
+            "MaterialApp + Scaffold 是应用和页面的骨架",
+            "修改状态必须调用 setState 才会重绘",
+            "Column 竖排、Row 横排、Text 文字、Button 按钮",
+            "学完 Dart 后按 布局→导航→状态→网络→发布 路线走"
+          ]
+        }
       ],
-      templates: [
-        { name: "最小 Flutter 页面", code: 'import "package:flutter/material.dart";\n\nvoid main() {\n  runApp(\n    MaterialApp(\n      home: Scaffold(\n        appBar: AppBar(title: const Text("我的应用")),\n        body: const Center(\n          child: Text("Hello, Flutter!", style: TextStyle(fontSize: 24)),\n        ),\n      ),\n    ),\n  );\n}' },
-      ],
-    },
-  ],
+      'templates': [
+        {
+          'name': "最小 Flutter 页面",
+          'code': "import \"package:flutter/material.dart\";\n\nvoid main() {\n  runApp(\n    MaterialApp(\n      home: Scaffold(\n        appBar: AppBar(title: const Text(\"我的应用\")),\n        body: const Center(\n          child: Text(\"Hello, Flutter!\", style: TextStyle(fontSize: 24)),\n        ),\n      ),\n    ),\n  );\n}"
+        }
+      ]
+    }
+  ]
 });
+

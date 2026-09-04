@@ -26,6 +26,71 @@ function roughCount(src) {
   return n;
 }
 
+function loadConcept(filePath) {
+  const src = fs.readFileSync(filePath, 'utf8');
+  const idx = src.indexOf('window.');
+  if (idx === -1) return null;
+  const eqIdx = src.indexOf('=', idx);
+  const bodyStart = eqIdx + 1;
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+  let strChar = '';
+  for (let i = bodyStart; i < src.length; i++) {
+    const ch = src[i];
+    if (escape) { escape = false; continue; }
+    if (ch === '\\') { escape = true; continue; }
+    if (inString) {
+      if (ch === strChar) inString = false;
+      continue;
+    }
+    if (ch === '"' || ch === "'") {
+      inString = true;
+      strChar = ch;
+      continue;
+    }
+    if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) {
+        let j = i;
+        while (j < src.length && src[j] !== ';') j++;
+        const body = src.substring(bodyStart, j).trim();
+        try {
+          const fn = new Function('return ' + body);
+          return fn();
+        } catch(e) { return null; }
+      }
+    }
+  }
+  return null;
+}
+
+function walkCount(obj) {
+  if (obj === null || obj === undefined) return 0;
+  if (typeof obj === 'string') return obj.length;
+  if (typeof obj !== 'object') return 0;
+  let n = 0;
+  if (Array.isArray(obj)) {
+    for (const item of obj) n += walkCount(item);
+  } else {
+    for (const v of Object.values(obj)) n += walkCount(v);
+  }
+  return n;
+}
+
+function countLessons(data) {
+  let count = 0;
+  if (!data || typeof data !== 'object') return 0;
+  if (data.children) {
+    for (const child of data.children) {
+      if (child.lessons) count += child.lessons.length;
+    }
+  }
+  if (data.lessons) count += data.lessons.length;
+  return count;
+}
+
 const files = [
   'languages', 'python-full', 'javascript-full', 'htmlcss-full', 'java-full',
   'c-full', 'cpp-full', 'go-full', 'rust-full', 'sql-full', 'shell-full',
@@ -35,6 +100,8 @@ const files = [
   'cs-fundamentals', 'cs-advanced', 'toolchain', 'errors', 'cookbook', 'tools'
 ];
 
+const conceptFiles = ['cs-fundamentals', 'cs-advanced', 'toolchain', 'errors', 'cookbook', 'tools'];
+
 let grandChars = 0;
 let grandLessons = 0;
 
@@ -42,11 +109,22 @@ files.forEach((n) => {
   const p = 'd:/computer-learning/data/' + n + '.js';
   const src = fs.readFileSync(p, 'utf8');
   try { new Function(src); } catch (e) { console.log(n + ': 语法错误 ' + e.message); return; }
-  const c = roughCount(src);
-  const lessons = (src.match(/id:\s*"([a-z]+-\d+)"/g) || []).length;
-  grandChars += c;
-  grandLessons += lessons;
-  console.log('== ' + n + ' == 章节=' + lessons + ' 正文字符约 ' + c);
+  
+  let result;
+  if (conceptFiles.includes(n)) {
+    const data = loadConcept(p);
+    if (data) {
+      result = { chars: walkCount(data), lessons: countLessons(data) };
+    } else {
+      result = { chars: roughCount(src), lessons: (src.match(/id:\s*"([a-z]+-\d+)"/g) || []).length };
+    }
+  } else {
+    result = { chars: roughCount(src), lessons: (src.match(/id:\s*"([a-z]+-\d+)"/g) || []).length };
+  }
+  
+  grandChars += result.chars;
+  grandLessons += result.lessons;
+  console.log('== ' + n + ' == 章节=' + result.lessons + ' 正文字符约 ' + result.chars);
 });
 
 console.log('----------------------------------------------');
