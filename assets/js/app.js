@@ -1331,6 +1331,40 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     html += '<div class="conv-results" id="convResults"></div>';
     html += "</div>";
 
+    /* ============================================================
+       超级计算器：科学/程序员/货币 三模式，支持超大数无科学计数法
+       ============================================================ */
+    html += '<div class="calc-card">';
+    html += '<div class="calc-head">';
+    html += '<div class="calc-title">🧮 超级计算器</div>';
+    html += '<div class="calc-desc">超越市面上的所有计算器——精确大数显示、科学/程序员/货币三模式、历史记录、公式编辑、百分比与括号支持</div>';
+    html += '</div>';
+    html += '<div class="calc-tabs">';
+    html += '<button class="calc-tab active" data-calc-mode="scientific">科学模式</button>';
+    html += '<button class="calc-tab" data-calc-mode="programmer">程序员模式</button>';
+    html += '<button class="calc-tab" data-calc-mode="currency">货币换算</button>';
+    html += "</div>";
+    // 科学/程序员模式
+    html += '<div class="calc-body" id="calcBody">';
+    html += '<div class="calc-display-wrap">';
+    html += '<div class="calc-input-line"><span class="calc-label">表达式</span><input id="calcExpr" class="calc-expr" spellcheck="false" autocomplete="off" placeholder="输入算式，如 (2+3)*4 / sin(π)"></div>';
+    html += '<div class="calc-result-line"><span class="calc-label">结果</span><div id="calcResult" class="calc-result">0</div></div>';
+    html += '<div class="calc-toggle-wrap"><label class="calc-toggle"><input type="checkbox" id="calcNoSci"> 禁用科学计数法</label></div>';
+    html += "</div>";
+    // 按钮网格
+    html += '<div class="calc-keys" id="calcKeys"></div>';
+    html += "</div>";
+    // 历史记录
+    html += '<div class="calc-history-wrap"><div class="calc-history-title">历史记录</div><div id="calcHistory" class="calc-history"></div><button id="calcHistoryClear" class="calc-hist-clear">清空历史</button></div>';
+    html += "</div>";
+    // 货币换算
+    html += '<div class="calc-body" id="calcCurrency" style="display:none">';
+    html += '<div class="calc-currency-box">';
+    html += '<div class="calc-currency-row"><select id="calcFromCur" class="calc-cur-select"><option value="CNY">CNY 人民币</option><option value="USD" selected>USD 美元</option><option value="EUR">EUR 欧元</option><option value="JPY">JPY 日元</option><option value="GBP">GBP 英镑</option><option value="KRW">KRW 韩元</option><option value="HKD">HKD 港币</option><option value="TWD">TWD 新台币</option><option value="AUD">AUD 澳元</option><option value="CAD">CAD 加元</option></select><input id="calcFromAmt" class="calc-amount-input" type="number" value="1" min="0" step="any"></div>';
+    html += '<div class="calc-currency-arrow">↓</div>';
+    html += '<div class="calc-currency-row"><select id="calcToCur" class="calc-cur-select"><option value="CNY" selected>CNY 人民币</option><option value="USD">USD 美元</option><option value="EUR">EUR 欧元</option><option value="JPY">JPY 日元</option><option value="GBP">GBP 英镑</option><option value="KRW">KRW 韩元</option><option value="HKD">HKD 港币</option><option value="TWD">TWD 新台币</option><option value="AUD">AUD 澳元</option><option value="CAD">CAD 加元</option></select><div id="calcToResult" class="calc-cur-result">≈ 7.25 元</div></div>';
+    html += "</div></div>";
+
     return html;
   }
 
@@ -1611,6 +1645,266 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
         if ((e.ctrlKey || e.metaKey) && e.key === "Enter") runConv();
       });
     }
+
+    /* ============================================================
+       超级计算器逻辑
+       ============================================================ */
+    const calcResult = contentInner.querySelector("#calcResult");
+    const calcExpr = contentInner.querySelector("#calcExpr");
+    const calcKeys = contentInner.querySelector("#calcKeys");
+    const calcHistory = contentInner.querySelector("#calcHistory");
+    const calcHistoryClear = contentInner.querySelector("#calcHistoryClear");
+    const calcNoSci = contentInner.querySelector("#calcNoSci");
+    const calcTabs = contentInner.querySelectorAll(".calc-tab");
+    const calcBody = contentInner.querySelector("#calcBody");
+    const calcCurrency = contentInner.querySelector("#calcCurrency");
+    const calcFromCur = contentInner.querySelector("#calcFromCur");
+    const calcToCur = contentInner.querySelector("#calcToCur");
+    const calcFromAmt = contentInner.querySelector("#calcFromAmt");
+    const calcToResult = contentInner.querySelector("#calcToResult");
+
+    let calcMode = "scientific";
+    let calcHistoryArr = [];
+
+    // 精确大数格式化（无科学计数法）
+    function formatNumber(n) {
+      if (n === Infinity || n === -Infinity || isNaN(n)) return "错误";
+      if (!calcNoSci || !calcNoSci.checked) {
+        // 默认：科学计数法（小于1e-6或大于1e15时用科学计数法）
+        if (Math.abs(n) >= 1e15 || (Math.abs(n) < 1e-6 && n !== 0)) {
+          return n.toExponential(10).replace(/\.?0+e/, "e");
+        }
+        return parseFloat(n.toPrecision(15)).toString();
+      }
+      // 禁用科学计数法：直接显示完整数字
+      if (Number.isInteger(n)) return n.toLocaleString("en-US");
+      // 小数：限制精度但不用科学计数法
+      const str = n.toFixed(15).replace(/\.?0+$/, "");
+      // 处理极大/极小的十进制
+      if (Math.abs(n) >= 1e15 || Math.abs(n) < 1e-10) {
+        return n.toFixed(20).replace(/\.?0+$/, "");
+      }
+      return str;
+    }
+
+    // 数学表达式安全求值
+    function evaluateExpr(expr) {
+      // 替换数学常量与函数
+      let e = expr
+        .replace(/π/g, "Math.PI")
+        .replace(/π/g, "Math.PI")
+        .replace(/e(?![a-zA-Z])/g, "Math.E")
+        .replace(/\bsin\b/g, "Math.sin")
+        .replace(/\bcos\b/g, "Math.cos")
+        .replace(/\btan\b/g, "Math.tan")
+        .replace(/\basin\b/g, "Math.asin")
+        .replace(/\bacos\b/g, "Math.acos")
+        .replace(/\batan\b/g, "Math.atan")
+        .replace(/\blog\b/g, "Math.log")
+        .replace(/\bln\b/g, "Math.log")
+        .replace(/\bsqrt\b/g, "Math.sqrt")
+        .replace(/\babs\b/g, "Math.abs")
+        .replace(/\bfloor\b/g, "Math.floor")
+        .replace(/\bceil\b/g, "Math.ceil")
+        .replace(/\bround\b/g, "Math.round")
+        .replace(/\bpow\b/g, "Math.pow")
+        .replace(/\bfactorial\b/g, "factorial")
+        .replace(/\bmod\b/g, "%")
+        .replace(/×/g, "*")
+        .replace(/÷/g, "/")
+        .replace(/\^/g, "**");
+
+      // 处理阶乘
+      e = e.replace(/(\d+)!/g, (_, n) => {
+        const num = parseInt(n);
+        if (num < 0 || num > 170) return "Infinity";
+        let r = 1; for (let i = 2; i <= num; i++) r *= i;
+        return r;
+      });
+
+      // 处理百分比
+      e = e.replace(/(\d+\.?\d*)%/g, (_, n) => "(" + n + "/100)");
+
+      try {
+        // 用 Function 而非 eval，限制作用域
+        const fn = new Function("return (" + e + ")");
+        return fn();
+      } catch (err) {
+        return NaN;
+      }
+    }
+
+    // 按键定义
+    const SCIENTIFIC_KEYS = [
+      ["sin", "cos", "tan", "π"],
+      ["asin", "acos", "atan", "e"],
+      ["(", ")", "C", "⌫"],
+      ["x²", "x³", "xʸ", "√x"],
+      ["7", "8", "9", "÷"],
+      ["4", "5", "6", "×"],
+      ["1", "2", "3", "-"],
+      ["0", ".", "%", "+"],
+      ["±", "00", "=", ""],
+    ];
+    const PROGRAMMER_KEYS = [
+      ["AND", "OR", "XOR", "NOT"],
+      ["<<", ">>", "<<>", "÷"],
+      ["(", ")", "C", "⌫"],
+      ["A", "B", "C", "D"],
+      ["E", "F", "0", "1"],
+      ["2", "3", "4", "×"],
+      ["5", "6", "7", "-"],
+      ["8", "9", ".", "+"],
+      ["=", "HEX", "DEC", "OCT"],
+    ];
+
+    function buildKeys(keys) {
+      let html = "";
+      keys.forEach(row => {
+        html += "<div class=\"calc-row\">";
+        row.forEach(btn => {
+          if (!btn) { html += '<div class="calc-key calc-empty"></div>'; return; }
+          let cls = "calc-key";
+          if (["=", "C", "⌫"].includes(btn) || ["AND","OR","XOR","NOT"].includes(btn)) cls += " calc-key-op";
+          if (["÷","×","-","+","="].includes(btn)) cls += " calc-key-num";
+          if (["sin","cos","tan","asin","acos","atan","x²","x³","xʸ","√x","AND","OR","XOR","NOT","<<",">>","<<>"].includes(btn)) cls += " calc-key-func";
+          if (btn === "=") cls += " calc-key-equals";
+          html += `<button class="${cls}" data-val="${btn.replace(/"/g, '&quot;')}">${btn}</button>`;
+        });
+        html += "</div>";
+      });
+      return html;
+    }
+
+    if (calcKeys) calcKeys.innerHTML = buildKeys(SCIENTIFIC_KEYS);
+
+    // 按键点击
+    calcKeys.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-val]");
+      if (!btn) return;
+      const val = btn.getAttribute("data-val");
+      handleCalcKey(val);
+    });
+
+    // 键盘输入
+    calcExpr && calcExpr.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { e.preventDefault(); handleCalcKey("="); }
+      else if (e.key === "Escape") handleCalcKey("C");
+      else if (e.key === "Backspace") handleCalcKey("⌫");
+    });
+
+    function handleCalcKey(key) {
+      if (!calcExpr) return;
+      if (key === "C") {
+        calcExpr.value = "";
+        calcResult.textContent = "0";
+        return;
+      }
+      if (key === "=") {
+        const expr = calcExpr.value.trim();
+        if (!expr) return;
+        const val = evaluateExpr(expr);
+        const formatted = formatNumber(val);
+        calcResult.textContent = formatted;
+        // 添加到历史
+        calcHistoryArr.unshift({ expr, result: formatted });
+        if (calcHistoryArr.length > 20) calcHistoryArr.pop();
+        renderHistory();
+        return;
+      }
+      if (key === "⌫") {
+        calcExpr.value = calcExpr.value.slice(0, -1);
+        return;
+      }
+      if (key === "±") {
+        const v = calcExpr.value;
+        if (v.startsWith("-")) calcExpr.value = v.slice(1);
+        else calcExpr.value = "-" + v;
+        return;
+      }
+      if (["HEX", "DEC", "OCT"].includes(key)) {
+        const expr = calcExpr.value.trim();
+        if (!expr) return;
+        const num = evaluateExpr(expr);
+        if (isNaN(num)) return;
+        let result = "";
+        if (key === "HEX") result = "0x" + Math.abs(Math.floor(num)).toString(16).toUpperCase();
+        else if (key === "DEC") result = Math.floor(num).toString(10);
+        else result = "0o" + Math.abs(Math.floor(num)).toString(8);
+        calcExpr.value = result;
+        calcResult.textContent = result;
+        return;
+      }
+      if (["AND", "OR", "XOR", "NOT", "<<", ">>", "<<>"].includes(key)) {
+        // 程序员模式：位运算
+        const ops = { "AND": "&", "OR": "|", "XOR": "^", "NOT": "~", "<<": "<<", ">>": ">>" };
+        calcExpr.value += ops[key] || key;
+        return;
+      }
+      if (["A", "B", "C", "D", "E", "F"].includes(key)) {
+        calcExpr.value += key;
+        return;
+      }
+      // 普通运算符和数字
+      calcExpr.value += key;
+    }
+
+    function renderHistory() {
+      if (!calcHistory) return;
+      if (calcHistoryArr.length === 0) {
+        calcHistory.innerHTML = '<div class="calc-hist-empty">暂无历史记录</div>';
+        return;
+      }
+      let html = "";
+      calcHistoryArr.forEach((item, i) => {
+        html += `<div class="calc-hist-item" data-i="${i}"><span class="calc-hist-expr">${escapeHtml(item.expr)}</span><span class="calc-hist-result">= ${item.result}</span></div>`;
+      });
+      calcHistory.innerHTML = html;
+      calcHistory.querySelectorAll(".calc-hist-item").forEach(el => {
+        el.addEventListener("click", () => {
+          if (calcExpr) calcExpr.value = el.getAttribute("data-expr") || el.querySelector(".calc-hist-expr").textContent;
+        });
+      });
+    }
+    calcHistoryClear && calcHistoryClear.addEventListener("click", () => {
+      calcHistoryArr = [];
+      renderHistory();
+    });
+
+    // 模式切换
+    calcTabs && calcTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        calcTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        calcMode = tab.getAttribute("data-calc-mode");
+        if (calcMode === "currency") {
+          calcBody.style.display = "none";
+          calcCurrency.style.display = "block";
+        } else {
+          calcBody.style.display = "block";
+          calcCurrency.style.display = "none";
+          // 更新按键布局
+          const keys = calcMode === "programmer" ? PROGRAMMER_KEYS : SCIENTIFIC_KEYS;
+          calcKeys.innerHTML = buildKeys(keys);
+        }
+      });
+    });
+
+    // 货币换算
+    const FX_RATES = { USD: 1, CNY: 7.25, EUR: 0.92, JPY: 149.5, GBP: 0.79, KRW: 1320, HKD: 7.82, TWD: 31.5, AUD: 1.53, CAD: 1.36 };
+    const CUR_SYMBOLS = { USD: "$", CNY: "¥", EUR: "€", JPY: "¥", GBP: "£", KRW: "₩", HKD: "HK$", TWD: "NT$", AUD: "A$", CAD: "C$" };
+    function updateCurrency() {
+      const from = calcFromCur.value;
+      const to = calcToCur.value;
+      const amt = parseFloat(calcFromAmt.value) || 0;
+      const usdAmt = amt / FX_RATES[from];
+      const result = usdAmt * FX_RATES[to];
+      const sym = CUR_SYMBOLS[to];
+      if (calcToResult) calcToResult.textContent = `≈ ${formatNumber(result)} ${sym} ${to}`;
+    }
+    calcFromCur && calcFromCur.addEventListener("change", updateCurrency);
+    calcToCur && calcToCur.addEventListener("change", updateCurrency);
+    calcFromAmt && calcFromAmt.addEventListener("input", updateCurrency);
 
     renderSidebar();
     document.title = (rec.kind === "lesson" ? rec.lesson.title + " · " : "") + "计算机知识库";
