@@ -1840,7 +1840,6 @@ window.LANGUAGE_EXTRA.push({
         }
       ]
     },
-    null,
     {
       'id': "sql-21",
       'title': "HAVING 过滤分组",
@@ -3704,7 +3703,6 @@ window.LANGUAGE_EXTRA.push({
         }
       ]
     },
-    null,
     {
       'id': "sql-41",
       'title': "索引类型（普通/唯一/复合）与使用原则",
@@ -5548,7 +5546,6 @@ window.LANGUAGE_EXTRA.push({
         }
       ]
     },
-    null,
     {
       'id': "sql-61",
       'title': "窗口函数进阶（SUM() OVER、PARTITION BY）",
