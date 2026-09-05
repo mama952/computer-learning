@@ -787,7 +787,16 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   /* ---------- 侧边栏渲染 ---------- */
   function renderSidebar() {
     const activeLessonId = getRoute().lessonId;
+    const activePath = getRoute().categoryId ? getRoute().categoryId + "/" + (getRoute().subjectId || "") : "";
+    const convActive = activePath === "tools/converter" ? " active" : "";
     let html = "";
+    // 固定工具条目：编码转换器
+    html += '<div class="sidebar-section">';
+    html += '<button class="sidebar-link' + convActive + '" data-nav="tools/converter">';
+    html += '<span class="l-dot" style="background:linear-gradient(135deg,#6366f1,#22d3ee)"></span>';
+    html += '<span style="font-weight:600">🔢 编码转换器</span>';
+    html += "</button>";
+    html += "</div>";
     CATALOG.forEach((cat) => {
       html += '<div class="sidebar-section">';
       const isCatActive = cat.children.some((sub) =>
@@ -894,6 +903,10 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   function findRecord() {
     const r = getRoute();
     if (!r.categoryId) return { kind: "home" };
+    // 特殊工具路由：编码转换器独立页
+    if (r.categoryId === "tools" && (r.subjectId === "converter" || !r.subjectId)) {
+      return { kind: "converter" };
+    }
     const cat = CATALOG.find((c) => c.id === r.categoryId);
     if (!cat) return { kind: "home" };
     if (!r.subjectId) return { kind: "category", cat };
@@ -1369,6 +1382,41 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     return html;
   }
 
+  function renderConverter() {
+    let html = '<div class="breadcrumb"><span data-nav="">首页</span><span class="sep">/</span><span class="cur">编码转换器</span></div>';
+    html += '<div class="page-head"><h1>🔢 编码转换器</h1><p class="lead">支持 7 种文字编码（UTF-8/16/32/ASCII/Latin-1）、Base64、十六进制、URL 编码、Unicode 转义、ROT13 加密、位反转、字节交换、XOR 加解密。中文输入时自动展示所有编码结果。</p></div>';
+    html += '<div class="conv-card">';
+    html += '<div class="conv-head">';
+    html += '<div class="conv-title">🔢 编码转换器</div>';
+    html += '<div class="conv-desc">选择转换模式，输入内容后点击「转换」。</div>';
+    html += "</div>";
+    html += '<div class="conv-tabs">';
+    html += '<button class="conv-tab active" data-conv-mode="to" data-conv-type="binary">文字→二进制</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="binary">二进制→文字</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="base64">Base64</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="base64">Base64 解码</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="hex">十六进制</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="hex">十六进制解码</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="url">URL 编码</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="url">URL 解码</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="unicode">Unicode</button>';
+    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="unicode">Unicode 还原</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="rot13">ROT13</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="bitrev">位反转</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="swap">字节交换</button>';
+    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="xor">XOR 加密</button>';
+    html += "</div>";
+    html += '<div class="conv-input-row">';
+    html += '<textarea id="convInput" class="conv-input" rows="4" spellcheck="false" placeholder="输入文字或二进制串，或 Base64 / 十六进制 / URL 编码等"></textarea>';
+    html += '<div class="conv-actions">';
+    html += '<button class="run-btn" id="convRun">转换</button>';
+    html += '<button class="tool-btn" id="convClear">清空</button>';
+    html += "</div></div>";
+    html += '<div class="conv-results" id="convResults"></div>';
+    html += "</div>";
+    return html;
+  }
+
   function renderCategory(cat) {
     let html = breadcrumb(cat);
     html += '<div class="page-head">';
@@ -1508,6 +1556,8 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
 
     if (rec.kind === "home") {
       html = renderHome();
+    } else if (rec.kind === "converter") {
+      html = renderConverter();
     } else if (rec.kind === "category") {
       html = renderCategory(rec.cat);
     } else if (rec.kind === "subject") {
@@ -1908,7 +1958,9 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     calcFromAmt && calcFromAmt.addEventListener("input", updateCurrency);
 
     renderSidebar();
-    document.title = (rec.kind === "lesson" ? rec.lesson.title + " · " : "") + "计算机知识库";
+    document.title =
+      (rec.kind === "lesson" ? rec.lesson.title + " · " :
+       rec.kind === "converter" ? "编码转换器 · " : "") + "计算机知识库";
   }
 
   function getCodeBlockAt(lesson, idx) {
