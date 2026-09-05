@@ -1830,7 +1830,7 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     if (calcKeys) calcKeys.innerHTML = buildKeys(SCIENTIFIC_KEYS);
 
     // 按键点击
-    calcKeys.addEventListener("click", (e) => {
+    calcKeys && calcKeys.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-val]");
       if (!btn) return;
       const val = btn.getAttribute("data-val");
