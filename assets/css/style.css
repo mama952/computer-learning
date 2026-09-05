@@ -1547,6 +1547,17 @@ html, body {
   color: #fff;
   box-shadow: var(--shadow-sm);
 }
+.conv-hint-box {
+  margin: -6px 0 14px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-soft-2);
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.conv-hint-icon { margin-right: 4px; }
 .conv-input-row { display: flex; gap: 14px; align-items: stretch; }
 .conv-input {
   flex: 1;

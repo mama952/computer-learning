@@ -789,12 +789,20 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     const activeLessonId = getRoute().lessonId;
     const activePath = getRoute().categoryId ? getRoute().categoryId + "/" + (getRoute().subjectId || "") : "";
     const convActive = activePath === "tools/converter" ? " active" : "";
+    const calcActive = activePath === "tools/calculator" ? " active" : "";
     let html = "";
     // 固定工具条目：编码转换器
     html += '<div class="sidebar-section">';
     html += '<button class="sidebar-link' + convActive + '" data-nav="tools/converter">';
     html += '<span class="l-dot" style="background:linear-gradient(135deg,#6366f1,#22d3ee)"></span>';
     html += '<span style="font-weight:600">🔢 编码转换器</span>';
+    html += "</button>";
+    html += "</div>";
+    // 固定工具条目：超级计算器
+    html += '<div class="sidebar-section">';
+    html += '<button class="sidebar-link' + calcActive + '" data-nav="tools/calculator">';
+    html += '<span class="l-dot" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"></span>';
+    html += '<span style="font-weight:600">🧮 超级计算器</span>';
     html += "</button>";
     html += "</div>";
     CATALOG.forEach((cat) => {
@@ -906,6 +914,10 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     // 特殊工具路由：编码转换器独立页
     if (r.categoryId === "tools" && (r.subjectId === "converter" || !r.subjectId)) {
       return { kind: "converter" };
+    }
+    // 特殊工具路由：超级计算器独立页
+    if (r.categoryId === "tools" && r.subjectId === "calculator") {
+      return { kind: "calculator" };
     }
     const cat = CATALOG.find((c) => c.id === r.categoryId);
     if (!cat) return { kind: "home" };
@@ -1072,8 +1084,14 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   function bytesToUtf32Str(bytes, le) {
     const codepoints = [];
     for (let i = 0; i + 3 < bytes.length; i += 4) {
-      const cp = le ? bytes[i] | (bytes[i+1]<<8) | (bytes[i+2]<<16) | (bytes[i+3]<<24) : (bytes[i]<<24) | (bytes[i+1]<<16) | (bytes[i+2]<<8) | bytes[i+3];
-      if (cp >= 0x10000) { codepoints.push(0xD800 + ((cp - 0x10000) >> 10), 0xDC00 + ((cp - 0x10000) & 0x3FF)); } else { codepoints.push(cp); }
+      // 用 >>>0 转成无符号，避免高位字节使 32 位整数变负
+      let cp = le
+        ? (bytes[i] | (bytes[i+1]<<8) | (bytes[i+2]<<16) | (bytes[i+3]<<24)) >>> 0
+        : (bytes[i]<<24 | (bytes[i+1]<<16) | (bytes[i+2]<<8) | bytes[i+3]) >>> 0;
+      if (cp > 0x10FFFF) continue; // 超界码点丢弃，避免 String.fromCodePoint 抛错
+      if (cp >= 0x10000) { codepoints.push(0xD800 + ((cp - 0x10000) >> 10), 0xDC00 + ((cp - 0x10000) & 0x3FF)); }
+      else if (cp >= 0xD800 && cp <= 0xDFFF) continue; // 孤立代理项丢弃
+      else codepoints.push(cp);
     }
     return String.fromCodePoint(...codepoints);
   }
@@ -1126,19 +1144,37 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     return html;
   }
 
-  // === 二进制 → 文字（展示所有有效解码结果） ===
+  // === 二进制 → 文字 ===
   const DECODE_OPTIONS = ["utf8", "utf16be", "utf16le", "utf32be", "utf32le", "ascii", "latin1"];
   const DECODE_NAMES = {
     utf8: "UTF-8", utf16be: "UTF-16BE", utf16le: "UTF-16LE",
     utf32be: "UTF-32BE", utf32le: "UTF-32LE", ascii: "ASCII", latin1: "Latin-1"
   };
-  function renderBinToText(bin) {
+  // variant "plain" = 普通解码（仅 UTF-8 一次还原）；"auto" = 智能解码（多编码自动探测，支持中文）
+  function renderBinToText(bin, variant) {
+    variant = variant || "auto";
     const bytes = binToBytes(bin);
     if (!bytes.length) return '<div class="conv-empty">未识别到二进制数据，请检查输入</div>';
     const clean = String(bin).replace(/\s+/g, "");
     const remainder = clean.length % 8;
-    let html = `<div class="conv-note">解析出 ` + bytes.length + ` 个字节（共 ` + clean.length + ` 位` + (remainder ? `,末尾 ` + remainder + ` 位不足 8 位已忽略` : '') + `)</div>`;
-    html += '<div class="conv-note" style="color:var(--primary);font-weight:600;margin-bottom:8px">所有有效解码结果：</div>';
+
+    // ---------- 普通解码：仅按 UTF-8 还原 ----------
+    if (variant === "plain") {
+      const decoded = bytesToUtf8Str(bytes);
+      const readable = isValidReadable(decoded) && decoded.trim() !== "";
+      let html = `<div class="conv-note">解析出 ` + bytes.length + ` 个字节（共 ` + clean.length + ` 位` + (remainder ? `,末尾 ` + remainder + ` 位不足 8 位已忽略` : '') + `），按 UTF-8 普通解码：</div>`;
+      if (readable) {
+        html += '<div class="conv-result"><div class="conv-rt">UTF-8 解码结果</div><div class="conv-text">' + escapeHtml(decoded) + '</div></div>';
+        html += '<div class="conv-note" style="color:var(--text-muted);margin-top:6px">如果显示为乱码，说明这不是 UTF-8 编码的二进制，请改用「智能解码」或回到「文字→二进制」确认编码。</div>';
+      } else {
+        html += '<div class="conv-warn">⚠ 该二进制不是有效的 UTF-8 文本，普通解码无结果。<br/>· 中文请确认来源是 UTF-8 编码；<br/>· 若是 UTF-16/32 等编码，请切换到「智能解码」自动识别。</div>';
+        html += '<div class="conv-result"><div class="conv-rt">原始字节（HEX）</div><div class="conv-hex">' + bytesToHex(bytes) + '</div></div>';
+      }
+      return html;
+    }
+
+    // ---------- 智能解码：多编码自动探测 ----------
+    let html = `<div class="conv-note">解析出 ` + bytes.length + ` 个字节（共 ` + clean.length + ` 位` + (remainder ? `,末尾 ` + remainder + ` 位不足 8 位已忽略` : '') + `），自动探测出的所有有效解码结果：</div>`;
     let foundAny = false;
     DECODE_OPTIONS.forEach(enc => {
       let decoded = "";
@@ -1156,7 +1192,6 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
       }
     });
     if (!foundAny) {
-      // 尝试 Latin-1（永远有效，但可能不可读）
       const latin1 = bytesToLatin1Str(bytes);
       html += '<div class="conv-result"><div class="conv-rt">Latin-1（原始字节）</div><div class="conv-text">' + escapeHtml(latin1) + '</div></div>';
     }
@@ -1266,6 +1301,68 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     return '<div class="conv-result"><div class="conv-rt">XOR 解密（密钥：' + escapeHtml(key) + '）</div><div class="conv-text">' + escapeHtml(isValidReadable(decoded) ? decoded : "") + '</div></div>';
   }
 
+  // === 共享：转换模式配置（首页与独立页共用） ===
+  // 每个模式：type 决定解码分支，dir 决定方向，label 显示名，hint 动态功能说明
+  const CONV_MODES = [
+    { type: "binary", dir: "to",   label: "文字→二进制", hint: "将任意文字（含中文）按 UTF-8/UTF-16/UTF-32/ASCII/Latin-1 七种编码同时转为二进制串。输入中文可自动看到各编码结果。" },
+    { type: "binary", dir: "from", variant: "plain", label: "二进制→文字", hint: "普通解码：按 UTF-8 标准把二进制位串一次性还原为文字，中文直接显示。适合您自己按 UTF-8 编码/复制的二进制。" },
+    { type: "binary", dir: "from", variant: "auto",  label: "智能解码",       hint: "智能解码：自动探测 UTF-8 / UTF-16(大小端) / UTF-32(大小端) / ASCII / Latin-1，列出所有可读结果，中文（含 UTF-16 编码）也能识别。" },
+    { type: "base64", dir: "to",   label: "Base64",     hint: "将文字编码为 Base64（适合传输二进制/中文的安全文本形式）。" },
+    { type: "base64", dir: "from", label: "Base64 解码", hint: "把 Base64 文本还原为原始文字（支持中文），解码失败会提示。" },
+    { type: "hex",    dir: "to",   label: "十六进制",    hint: "将文字按字符 Unicode 码点转为十六进制表示（中文会显示 4 位/字）。" },
+    { type: "hex",    dir: "from", label: "十六进制解码", hint: "把十六进制串按两个字符一组还原为文字。" },
+    { type: "url",    dir: "to",   label: "URL 编码",    hint: "将文字做 URL 百分号编码（空格→%20、中文→%E4%BD%A0 等）。" },
+    { type: "url",    dir: "from", label: "URL 解码",     hint: "把 %20 / %E4%BD%A0 等 URL 编码还原为文字。" },
+    { type: "unicode",dir: "to",   label: "Unicode",      hint: "将文字转为 \\uXXXX 转义序列（中文尤其常用）。" },
+    { type: "unicode",dir: "from", label: "Unicode 还原", hint: "把 \\uXXXX 转义序列还原为文字。" },
+    { type: "rot13",  dir: "to",   label: "ROT13",        hint: "对 A-Z/a-z 字母移位 13 位（双向对称，再点一次即还原）。" },
+    { type: "rot13",  dir: "from", label: "ROT13 还原",   hint: "ROT13 是对称算法，还原与加密结果相同。" },
+    { type: "bitrev", dir: "to",   label: "位反转",       hint: "对每个字节的 8 个 bit 顺序颠倒后输出二进制。适合理解位序。" },
+    { type: "bitrev", dir: "from", label: "位反转还原",   hint: "把经过位反转的二进制串再次反转，并按 UTF-8 等还原为文字（支持中文）。" },
+    { type: "swap",   dir: "to",   label: "字节交换",     hint: "按 UTF-8 每两个字节交换顺序（Byte Swap）。" },
+    { type: "swap",   dir: "from", label: "字节交换还原", hint: "把交换过字节顺序的二进制串换回来，并按 UTF-8 等还原为文字（支持中文）。" },
+    { type: "xor",    dir: "to",   label: "XOR 加密",     hint: "用单字节密钥（默认 'k'，40 行源码可改）对每个字节做异或，输出二进制。" },
+    { type: "xor",    dir: "from", label: "XOR 解密",     hint: "对 XOR 加密的二进制串再做一次异或（密钥需一致），并按 UTF-8 还原为文字。" },
+  ];
+
+  function buildConvTabs() {
+    let html = '<div class="conv-tabs">';
+    CONV_MODES.forEach((m, i) => {
+      html +=
+        '<button class="conv-tab' + (i === 0 ? " active" : "") + '" data-conv-mode="' + m.dir + '" data-conv-type="' + m.type + '" data-conv-variant="' + (m.variant || "") + '" data-hint="' + escapeHtml(m.hint) + '" title="' + escapeHtml(m.hint) + '">' + m.label + "</button>";
+    });
+    html += "</div>";
+    return html;
+  }
+
+  // 根据当前选中模式显示功能说明
+  function updateConvHint(activeMode) {
+    const hintEl = (typeof contentInner !== "undefined" ? contentInner : document).querySelector("#convHint");
+    if (hintEl && activeMode) hintEl.textContent = activeMode.hint;
+  }
+
+  // 生成转换器卡片（head + tabs + 输入 + 说明条 + 结果），供首页与独立页共用
+  function buildConvCard(withHead) {
+    let html = '<div class="conv-card">';
+    html +=
+      '<div class="conv-head"><div class="conv-title">🔢 编码转换器</div><div class="conv-desc" id="convDesc">' +
+      (withHead
+        ? "选择上方任意转换方式，输入内容后点击「转换」。支持文字↔二进制、Base64、十六进制、URL、Unicode、ROT13、位反转、字节交换、XOR 共 18 种变换，均支持中文（UTF-8/16/32）。"
+        : "首页底部工具：文字↔二进制、Base64、十六进制、URL、Unicode、ROT13、位反转、字节交换、XOR 双向转换，支持中文。") +
+      "</div></div>";
+    html += buildConvTabs();
+    html += '<div class="conv-hint-box" id="convHint"></div>';
+    html += '<div class="conv-input-row">';
+    html += '<textarea id="convInput" class="conv-input" rows="4" spellcheck="false" placeholder="输入文字或二进制串，或 Base64 / 十六进制 / URL 编码等"></textarea>';
+    html += '<div class="conv-actions">';
+    html += '<button class="run-btn" id="convRun">转换</button>';
+    html += '<button class="tool-btn" id="convClear">清空</button>';
+    html += "</div></div>";
+    html += '<div class="conv-results" id="convResults"></div>';
+    html += "</div>";
+    return html;
+  }
+
   function renderHome() {
     const totalLessons = flatLessons.length;
     const totalSubjects = CATALOG.reduce((a, c) => a + (c.children || []).length, 0);
@@ -1315,43 +1412,27 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     });
 
     /* 二进制转换器（首页底部） */
-    html += '<div class="conv-card">';
-    html += '<div class="conv-head">';
-    html += '<div class="conv-title">🔢 编码转换器</div>';
-    html += '<div class="conv-desc">支持 7 种文字编码（UTF-8/16/32/ASCII/Latin-1）、Base64、十六进制、URL 编码、Unicode 转义、ROT13 加密、位反转、字节交换、XOR 加解密。中文输入时自动展示所有编码结果。</div>';
-    html += "</div>";
-    html += '<div class="conv-tabs">';
-    html += '<button class="conv-tab active" data-conv-mode="to" data-conv-type="binary">文字→二进制</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="binary">二进制→文字</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="base64">Base64</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="base64">Base64 解码</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="hex">十六进制</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="hex">十六进制解码</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="url">URL 编码</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="url">URL 解码</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="unicode">Unicode</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="unicode">Unicode 还原</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="rot13">ROT13</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="bitrev">位反转</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="swap">字节交换</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="xor">XOR 加密</button>';
-    html += "</div>";
-    html += '<div class="conv-input-row">';
-    html += '<textarea id="convInput" class="conv-input" rows="4" spellcheck="false" placeholder="输入文字或二进制串，或 Base64 / 十六进制 / URL 编码等"></textarea>';
-    html += '<div class="conv-actions">';
-    html += '<button class="run-btn" id="convRun">转换</button>';
-    html += '<button class="tool-btn" id="convClear">清空</button>';
-    html += "</div></div>";
-    html += '<div class="conv-results" id="convResults"></div>';
-    html += "</div>";
+    html += buildConvCard(false);
 
     /* ============================================================
        超级计算器：科学/程序员/货币 三模式，支持超大数无科学计数法
        ============================================================ */
-    html += '<div class="calc-card">';
+    html += buildCalcCard(false);
+
+    return html;
+  }
+
+  // 生成计算器卡片（head + 三模式 + 按键 + 历史 + 货币），供首页与独立页共用
+  function buildCalcCard(withHead) {
+    let html = '<div class="calc-card">';
     html += '<div class="calc-head">';
     html += '<div class="calc-title">🧮 超级计算器</div>';
-    html += '<div class="calc-desc">超越市面上的所有计算器——精确大数显示、科学/程序员/货币三模式、历史记录、公式编辑、百分比与括号支持</div>';
+    html +=
+      '<div class="calc-desc">' +
+      (withHead
+        ? "超越市面上的所有计算器——精确大数显示、科学/程序员/货币三模式、历史记录、公式编辑、百分比与括号支持。可计算超大数、位运算、进制转换与汇率换算。"
+        : "精确大数显示、科学/程序员/货币三模式、历史记录、公式编辑、百分比与括号支持") +
+      '</div>';
     html += '</div>';
     html += '<div class="calc-tabs">';
     html += '<button class="calc-tab active" data-calc-mode="scientific">科学模式</button>';
@@ -1378,42 +1459,20 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     html += '<div class="calc-currency-arrow">↓</div>';
     html += '<div class="calc-currency-row"><select id="calcToCur" class="calc-cur-select"><option value="CNY" selected>CNY 人民币</option><option value="USD">USD 美元</option><option value="EUR">EUR 欧元</option><option value="JPY">JPY 日元</option><option value="GBP">GBP 英镑</option><option value="KRW">KRW 韩元</option><option value="HKD">HKD 港币</option><option value="TWD">TWD 新台币</option><option value="AUD">AUD 澳元</option><option value="CAD">CAD 加元</option></select><div id="calcToResult" class="calc-cur-result">≈ 7.25 元</div></div>';
     html += "</div></div>";
-
     return html;
   }
 
   function renderConverter() {
     let html = '<div class="breadcrumb"><span data-nav="">首页</span><span class="sep">/</span><span class="cur">编码转换器</span></div>';
-    html += '<div class="page-head"><h1>🔢 编码转换器</h1><p class="lead">支持 7 种文字编码（UTF-8/16/32/ASCII/Latin-1）、Base64、十六进制、URL 编码、Unicode 转义、ROT13 加密、位反转、字节交换、XOR 加解密。中文输入时自动展示所有编码结果。</p></div>';
-    html += '<div class="conv-card">';
-    html += '<div class="conv-head">';
-    html += '<div class="conv-title">🔢 编码转换器</div>';
-    html += '<div class="conv-desc">选择转换模式，输入内容后点击「转换」。</div>';
-    html += "</div>";
-    html += '<div class="conv-tabs">';
-    html += '<button class="conv-tab active" data-conv-mode="to" data-conv-type="binary">文字→二进制</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="binary">二进制→文字</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="base64">Base64</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="base64">Base64 解码</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="hex">十六进制</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="hex">十六进制解码</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="url">URL 编码</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="url">URL 解码</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="unicode">Unicode</button>';
-    html += '<button class="conv-tab" data-conv-mode="from" data-conv-type="unicode">Unicode 还原</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="rot13">ROT13</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="bitrev">位反转</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="swap">字节交换</button>';
-    html += '<button class="conv-tab" data-conv-mode="to" data-conv-type="xor">XOR 加密</button>';
-    html += "</div>";
-    html += '<div class="conv-input-row">';
-    html += '<textarea id="convInput" class="conv-input" rows="4" spellcheck="false" placeholder="输入文字或二进制串，或 Base64 / 十六进制 / URL 编码等"></textarea>';
-    html += '<div class="conv-actions">';
-    html += '<button class="run-btn" id="convRun">转换</button>';
-    html += '<button class="tool-btn" id="convClear">清空</button>';
-    html += "</div></div>";
-    html += '<div class="conv-results" id="convResults"></div>';
-    html += "</div>";
+    html += '<div class="page-head"><h1>🔢 编码转换器</h1><p class="lead">将文字与二进制串、Base64、十六进制、URL 编码、Unicode、ROT13 等互转，支持位反转 / 字节交换 / XOR 双向加解密，中文（UTF-8/16/32）完整支持。</p></div>';
+    html += buildConvCard(true);
+    return html;
+  }
+
+  function renderCalculator() {
+    let html = '<div class="breadcrumb"><span data-nav="">首页</span><span class="sep">/</span><span class="cur">超级计算器</span></div>';
+    html += '<div class="page-head"><h1>🧮 超级计算器</h1><p class="lead">科学 / 程序员 / 货币三种模式一体：支持超大整数、复杂公式、三角函数、位运算与进制转换、多币种实时汇率换算。</p></div>';
+    html += buildCalcCard(true);
     return html;
   }
 
@@ -1558,6 +1617,8 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
       html = renderHome();
     } else if (rec.kind === "converter") {
       html = renderConverter();
+    } else if (rec.kind === "calculator") {
+      html = renderCalculator();
     } else if (rec.kind === "category") {
       html = renderCategory(rec.cat);
     } else if (rec.kind === "subject") {
@@ -1640,13 +1701,32 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     if (convRun && convInput) {
       let convMode = "to";
       let convType = "binary";
+      let convVariant = "";
+      const convHintEl = contentInner.querySelector("#convHint");
       convModeTabs.forEach((t) => {
         t.addEventListener("click", () => {
           convMode = t.getAttribute("data-conv-mode");
           convType = t.getAttribute("data-conv-type") || "binary";
+          convVariant = t.getAttribute("data-conv-variant") || "";
           convModeTabs.forEach((x) => x.classList.toggle("active", x === t));
+          if (convHintEl) {
+            const h = t.getAttribute("data-hint");
+            convHintEl.innerHTML = '<span class="conv-hint-icon">💡</span> ' + (h ? decodeHint(h) : "");
+          }
         });
       });
+      // 初始显示第一个 tab（文字→二进制）的说明
+      if (convHintEl) {
+        const firstTab = convModeTabs[0];
+        if (firstTab) convHintEl.innerHTML = '<span class="conv-hint-icon">💡</span> ' + decodeHint(firstTab.getAttribute("data-hint"));
+      }
+      // 将 HTML 转义的字符串还原（hint 在生成 tab 时经过 escapeHtml）
+      function decodeHint(str) {
+        if (!str) return "";
+        const d = document.createElement("div");
+        d.innerHTML = str;
+        return d.textContent;
+      }
       const runConv = () => {
         const val = convInput.value;
         if (!val.trim()) {
@@ -1656,7 +1736,7 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
         let result = "";
         switch (convType) {
           case "binary":
-            result = convMode === "to" ? renderTextToBin(val) : renderBinToText(val);
+            result = convMode === "to" ? renderTextToBin(val) : renderBinToText(val, convVariant);
             break;
           case "base64":
             result = convMode === "to" ? renderBase64(val, convMode) : renderBase64(val, convMode);
@@ -1960,7 +2040,8 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     renderSidebar();
     document.title =
       (rec.kind === "lesson" ? rec.lesson.title + " · " :
-       rec.kind === "converter" ? "编码转换器 · " : "") + "计算机知识库";
+       rec.kind === "converter" ? "编码转换器 · " :
+       rec.kind === "calculator" ? "超级计算器 · " : "") + "计算机知识库";
   }
 
   function getCodeBlockAt(lesson, idx) {
