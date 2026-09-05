@@ -1947,8 +1947,10 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   function buildSearchIndex() {
     const items = [];
     CATALOG.forEach((cat) => {
-      cat.children.forEach((sub) => {
+      (cat.children || []).forEach((sub) => {
+        if (!sub || !sub.lessons || !Array.isArray(sub.lessons)) return;
         sub.lessons.forEach((lesson) => {
+          if (!lesson || !lesson.id) return; // Skip invalid lessons (defense)
           items.push({
             type: "lesson",
             cat,
@@ -1962,7 +1964,8 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
         });
       });
       // 分类卡片
-      cat.children.forEach((sub) => {
+      (cat.children || []).forEach((sub) => {
+        if (!sub) return; // Skip invalid subjects (defense)
         items.push({
           type: "subject",
           cat,
