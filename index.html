@@ -8,7 +8,7 @@
   <title>计算机知识库 · 从零开始的计算机专业学习手册</title>
   <meta name="description" content="一个汇集编程语言、数据结构、算法、计算机网络、操作系统、数据库、工程化等全部计算机专业知识的交互式学习网站，内置在线编辑器与代码模板，支持手机/平板（含安卓）与本地编译器联动，新手友好。" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234f46e5'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>&lt;/&gt;</text></svg>" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260905c" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260905d" />
   <!-- CodeMirror 5 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/eclipse.min.css" />
@@ -25,9 +25,24 @@
       z-index: 9999; color: var(--text, #e2e8f0); font-size: 18px;
       font-family: system-ui, sans-serif;
     }
+    .loading-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; padding: 24px; }
+    .loading-spinner {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.25);
+      border-top-color: #fff;
+      animation: lspin 0.9s linear infinite;
+    }
+    @keyframes lspin { to { transform: rotate(360deg); } }
+    .loading-hint { font-size: 13px; opacity: 0.7; }
   </style>
 
-  <div class="loading-overlay" id="loadingOverlay">正在加载知识库…</div>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-inner">
+      <div class="loading-spinner"></div>
+      <div id="loadingText">正在加载知识库…</div>
+      <div class="loading-hint" id="loadingHint"></div>
+    </div>
+  </div>
 
   <div id="app">
     <!-- 顶部栏 -->
@@ -165,38 +180,68 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/r/r.min.js"></script>
 
   <!-- 数据 -->
-  <script src="data/languages.js?v=20260905c"></script>
-  <script src="data/javascript-full.js?v=20260905c"></script>
-  <script src="data/htmlcss-full.js?v=20260905c"></script>
-  <script src="data/java-full.js?v=20260905c"></script>
-  <script src="data/python-full.js?v=20260905c"></script>
-  <script src="data/c-full.js?v=20260905c"></script>
-  <script src="data/cpp-full.js?v=20260905c"></script>
-  <script src="data/go-full.js?v=20260905c"></script>
-  <script src="data/rust-full.js?v=20260905c"></script>
-  <script src="data/sql-full.js?v=20260905c"></script>
-  <script src="data/shell-full.js?v=20260905c"></script>
-  <script src="data/csharp-full.js?v=20260905c"></script>
-  <script src="data/typescript-full.js?v=20260905c"></script>
-  <script src="data/ruby-full.js?v=20260905c"></script>
-  <script src="data/php-full.js?v=20260905c"></script>
-  <script src="data/mobile-full.js?v=20260905c"></script>
-  <script src="data/node-full.js?v=20260905c"></script>
-  <script src="data/dart-full.js?v=20260905c"></script>
-  <script src="data/lua-full.js?v=20260905c"></script>
-  <script src="data/rlang-full.js?v=20260905c"></script>
-  <script src="data/scala-full.js?v=20260905c"></script>
-  <script src="data/julia-full.js?v=20260905c"></script>
-  <script src="data/others-full.js?v=20260905c"></script>
-  <script src="data/funclangs-full.js?v=20260905c"></script>
-  <script src="data/cs-fundamentals.js?v=20260905c"></script>
-  <script src="data/cs-advanced.js?v=20260905c"></script>
-  <script src="data/toolchain.js?v=20260905c"></script>
-  <script src="data/errors.js?v=20260905c"></script>
-  <script src="data/cookbook.js?v=20260905c"></script>
-  <script src="data/tools.js?v=20260905c"></script>
+  <script src="data/languages.js?v=20260905d"></script>
+  <script src="data/javascript-full.js?v=20260905d"></script>
+  <script src="data/htmlcss-full.js?v=20260905d"></script>
+  <script src="data/java-full.js?v=20260905d"></script>
+  <script src="data/python-full.js?v=20260905d"></script>
+  <script src="data/c-full.js?v=20260905d"></script>
+  <script src="data/cpp-full.js?v=20260905d"></script>
+  <script src="data/go-full.js?v=20260905d"></script>
+  <script src="data/rust-full.js?v=20260905d"></script>
+  <script src="data/sql-full.js?v=20260905d"></script>
+  <script src="data/shell-full.js?v=20260905d"></script>
+  <script src="data/csharp-full.js?v=20260905d"></script>
+  <script src="data/typescript-full.js?v=20260905d"></script>
+  <script src="data/ruby-full.js?v=20260905d"></script>
+  <script src="data/php-full.js?v=20260905d"></script>
+  <script src="data/mobile-full.js?v=20260905d"></script>
+  <script src="data/node-full.js?v=20260905d"></script>
+  <script src="data/dart-full.js?v=20260905d"></script>
+  <script src="data/lua-full.js?v=20260905d"></script>
+  <script src="data/rlang-full.js?v=20260905d"></script>
+  <script src="data/scala-full.js?v=20260905d"></script>
+  <script src="data/julia-full.js?v=20260905d"></script>
+  <script src="data/others-full.js?v=20260905d"></script>
+  <script src="data/funclangs-full.js?v=20260905d"></script>
+  <script src="data/cs-fundamentals.js?v=20260905d"></script>
+  <script src="data/cs-advanced.js?v=20260905d"></script>
+  <script src="data/toolchain.js?v=20260905d"></script>
+  <script src="data/errors.js?v=20260905d"></script>
+  <script src="data/cookbook.js?v=20260905d"></script>
+  <script src="data/tools.js?v=20260905d"></script>
 
   <!-- 应用 -->
-  <script src="assets/js/app.js?v=20260905c"></script>
+  <script src="assets/js/app.js?v=20260905d"></script>
+  <script>
+    /* 加载兜底：若 app.js 初始化失败/某数据脚本加载超时，最多 8 秒后强制解锁，
+       避免永远停留在"正在加载知识库"。正常加载时 app.js 会提前把遮罩隐藏，
+       此兜底几乎不会干扰正常用户。 */
+    (function () {
+      var T = 8000;
+      var ov = document.getElementById("loadingOverlay");
+      if (!ov) return;
+      var started = performance.now();
+      var timer = setInterval(function () {
+        if (window.__csAppReady === true) { clearInterval(timer); return; }
+        if (performance.now() - started >= T) {
+          clearInterval(timer);
+          var txt = document.getElementById("loadingText");
+          if (txt) txt.innerHTML = "加载超时，部分章节资源可能加载失败";
+          var hint = document.getElementById("loadingHint");
+          if (hint) hint.innerHTML = "请检查网络后点击下方按钮重试，或按 Ctrl+F5 强制刷新。";
+          var retry = document.createElement("button");
+          retry.textContent = "刷新重试";
+          retry.style.cssText =
+            "margin-top:10px;padding:10px 22px;border:none;border-radius:8px;" +
+            "background:#4f46e5;color:#fff;font-size:14px;font-weight:600;cursor:pointer;";
+          retry.onclick = function () { location.reload(true); };
+          (txt || ov).appendChild(retry);
+          // 即便部分数据缺失，也让主框架显示出来（未点重试也可见页面）
+          document.getElementById("app").classList.add("loaded");
+        }
+      }, 250);
+    })();
+  </script>
 </body>
 </html>
