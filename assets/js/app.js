@@ -330,6 +330,11 @@
       return;
     }
 
+    executeCode(code, lang);
+  }
+
+  /* 统一分发：编辑器运行、章节代码块「运行」按钮都走这里 */
+  function executeCode(code, lang) {
     const mode = runModeOf(lang);
     if (mode === "browser") {
       runInBrowser(code, lang);
@@ -342,6 +347,14 @@
     } else {
       showNotRunnable(lang, mode);
     }
+  }
+
+  /* 章节代码块里直接点「运行」：载入编辑器并执行 */
+  function executeCodeBlock(b) {
+    setEditorCode(b && b.code ? b.code : "", b && b.lang ? b.lang : "javascript");
+    loadTemplates((b && b.lang) || "javascript", []);
+    showEditor();
+    runCode();
   }
 
   function setRunning(on) {
@@ -430,17 +443,65 @@
 
   /* ---------- Python 在线运行（Pyodide / WASM） ---------- */
   let pyodidePromise = null;
-  const PYODIDE_BASE = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/";
+  // 多个 CDN 源按序回退：jsdelivr 在国内偶被墙，切换 fastly 节点与国内镜像，
+  // 任一个可通即可加载 Pyodide(WASM)，避免"Python 无法在线运行"。
+  const PYODIDE_SOURCES = [
+    "https://fastly.jsdelivr.net/pyodide/v0.26.4/full/",
+    "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/",
+    "https://jsdelivr.b-cdn.net/pyodide/v0.26.4/full/",
+    "https://unpkg.com/pyodide@0.26.4/full/",
+    "https://cdn.staticfile.net/pyodide/0.26.4/full/",
+    "https://pyodide-cdn2.iodide.io/v0.26.4/full/",
+    "https://unpkg.zhimg.com/pyodide@0.26.4/full/",
+    "https://cdn.bootcdn.net/ajax/libs/pyodide/0.26.4/full/",
+  ];
+
+  // 独立加载 <script>，失败即移除节点以便重试（避免 loadScript 的去重缓存）
+  function loadScriptTag(src) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = () => resolve();
+      s.onerror = () => { s.remove(); reject(new Error("加载失败: " + src)); };
+      document.head.appendChild(s);
+    });
+  }
+
+  // 给异步加载加超时：某个 CDN 卡住时快速失败，切到下一个源，避免无限转圈
+  function withTimeout(promise, ms, label) {
+    return new Promise((resolve, reject) => {
+      const t = setTimeout(() => reject(new Error(label + " 超时（" + Math.round(ms / 1000) + " 秒）")), ms);
+      promise.then(
+        (v) => { clearTimeout(t); resolve(v); },
+        (e) => { clearTimeout(t); reject(e); }
+      );
+    });
+  }
+
+  async function initPyodideFrom(base) {
+    await withTimeout(loadScriptTag(base + "pyodide.js"), 15000, "Pyodide 脚本");
+    const py = await withTimeout(window.loadPyodide({ indexURL: base }), 30000, "Pyodide 核心");
+    py.setStdout({ batched: (s) => appendOutput(String(s)) });
+    py.setStderr({ batched: (s) => appendOutput(String(s), true) });
+    return py;
+  }
 
   function getPyodide() {
     if (!pyodidePromise) {
       pyodidePromise = (async () => {
-        await loadScript(PYODIDE_BASE + "pyodide.js");
-        const py = await window.loadPyodide({ indexURL: PYODIDE_BASE });
-        py.setStdout({ batched: (s) => appendOutput(String(s)) });
-        py.setStderr({ batched: (s) => appendOutput(String(s), true) });
-        return py;
+        let lastErr = null;
+        for (const base of PYODIDE_SOURCES) {
+          try {
+            return await initPyodideFrom(base);
+          } catch (e) {
+            lastErr = e;
+            console.warn("Pyodide 源加载失败，尝试下一个：", base, e && e.message);
+          }
+        }
+        throw lastErr || new Error("所有 Pyodide CDN 源均不可用");
       })();
+      // 失败后重置缓存，下次点击「运行」可再次尝试
+      pyodidePromise.catch(() => { pyodidePromise = null; });
     }
     return pyodidePromise;
   }
@@ -456,7 +517,13 @@
       await py.runPythonAsync(code);
       appendOutput("执行完成（耗时 " + ((performance.now() - t0) / 1000).toFixed(2) + " 秒）", false);
     } catch (err) {
-      appendOutput("Python 运行出错：" + (err && err.message ? err.message : String(err)), true);
+      const m = err && err.message ? err.message : String(err);
+      appendOutput("Python 运行出错：" + m, true);
+      if (/超时|加载失败|Network|fetch|LoadError|Error loading/i.test(m)) {
+        appendOutput("小提示：Python 引擎需要在浏览器里下载约 12MB 的 WASM 组件。", true);
+        appendOutput("如果你在用公司/学校 Wi-Fi 或开启了强拦截的防火墙，可能被拦。可点击「运行」重试，或换一个网络（手机热点）再试。", true);
+        appendOutput("实在不行，代码在电脑上装 Python（python.org）后本地运行同样有效。", true);
+      }
     }
     finishRun();
   }
@@ -963,6 +1030,9 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
         case "h3":
           html += "<h3>" + b.text + "</h3>";
           break;
+        case "h4":
+          html += "<h4>" + b.text + "</h4>";
+          break;
         case "list":
           const tag = b.ordered ? "ol" : "ul";
           html += "<" + tag + ">";
@@ -1016,12 +1086,18 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   }
 
   function renderCodeBlock(b, ctx) {
-    const runnable = RUNNABLE.has((b.lang || "").toLowerCase());
+    const l = (b.lang || "").toLowerCase();
+    const runnable = RUNNABLE.has(l) || PYODIDE_LANGS.has(l) || SQLJS_LANGS.has(l);
     return (
       '<div class="code-block">' +
       '<div class="cb-head"><span class="lang-tag">' +
       (b.title || b.lang || "code") +
       '</span><div class="cb-actions">' +
+      (runnable
+        ? '<button class="cb-btn cb-run" data-run="1" data-code-idx="' +
+          (b._idx || 0) +
+          '">▶ 运行</button>'
+        : "") +
       '<button class="cb-btn" data-copy-idx="' +
       (b._idx || 0) +
       '">复制</button>' +
@@ -1673,6 +1749,18 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
             loadTemplates(b.lang, rec2.lesson.templates || []);
             showEditor();
           }
+        }
+      });
+    });
+
+    // 代码块直接「运行」
+    contentInner.querySelectorAll("[data-run]").forEach((el) => {
+      el.addEventListener("click", () => {
+        const idx = parseInt(el.getAttribute("data-code-idx"), 10);
+        const rec3 = findRecord();
+        if (rec3.kind === "lesson") {
+          const b = getCodeBlockAt(rec3.lesson, idx);
+          if (b) executeCodeBlock(b);
         }
       });
     });

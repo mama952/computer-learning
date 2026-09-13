@@ -549,6 +549,26 @@ button {
   margin: 20px 0 8px;
 }
 
+.lesson-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 18px 0 8px;
+  color: var(--primary);
+}
+
+/* 站内正文（#contentInner）直接渲染的标题也统一 */
+#contentInner h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 20px 0 8px;
+}
+#contentInner h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 18px 0 8px;
+  color: var(--primary);
+}
+
 .lesson-card p {
   color: var(--text-soft);
   font-size: 15px;
@@ -570,7 +590,9 @@ button {
   color: var(--text);
 }
 
-.lesson-card code.inline {
+.lesson-card code.inline,
+.lesson-card code,
+p code {
   font-family: var(--font-mono);
   font-size: 13px;
   background: var(--code-bg);
@@ -714,6 +736,19 @@ button {
   background: var(--primary-soft);
   color: var(--primary);
   border-color: var(--primary);
+}
+
+.cb-btn.cb-run {
+  color: #fff;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-color: transparent;
+}
+
+.cb-btn.cb-run:hover {
+  background: var(--primary-hover);
+  color: #fff;
+  border-color: transparent;
 }
 
 .code-block pre {
