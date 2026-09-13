@@ -71,6 +71,42 @@ avg = total / len(scores)
 print("平均分：", round(avg, 1))
 print("90 分以上的同学：", ", ".join(high))`,
     },
+    {
+      name: "NumPy 科学计算（自动装依赖）",
+      level: "进阶",
+      code: `# 在线环境会自动加载 numpy，无需本地安装！
+import numpy as np
+
+arr = np.array([1, 2, 3, 4, 5])
+print("数组：", arr)
+print("总和：", arr.sum())
+print("均值：", arr.mean())
+print("标准差：", round(float(arr.std()), 2))
+
+matrix = np.arange(1, 10).reshape(3, 3)
+print("3x3 矩阵：")
+print(matrix)
+print("矩阵对角线之和：", np.trace(matrix))`,
+    },
+    {
+      name: "Pandas 数据分析（自动装依赖）",
+      level: "进阶",
+      code: `# 在线环境会自动加载 pandas，无需本地安装！
+import pandas as pd
+
+data = {
+    "姓名": ["小明", "小红", "小刚"],
+    "成绩": [88, 95, 72],
+    "城市": ["北京", "上海", "广州"],
+}
+df = pd.DataFrame(data)
+print(df.to_string(index=False))
+
+print("\\n平均成绩：", df["成绩"].mean())
+print("最高分：", df["成绩"].max())
+print("\\n成绩 >= 85 的同学：")
+print(df[df["成绩"] >= 85]["姓名"].to_string(index=False))`,
+    },
   ],
 
   /* ---------------- JavaScript（浏览器在线运行） ---------------- */
@@ -123,6 +159,20 @@ console.log("及格人数：", pass.length);
 console.log("平均分：", avg.toFixed(1));
 console.log("最高分：", max);
 console.log("每人加 5 分后：", bonus);`,
+    },
+    {
+      name: "lodash 工具库（CDN 引入）",
+      level: "进阶",
+      code: `// cdn: lodash
+// 在线环境会自动从 CDN 引入 lodash，无需本地 npm！
+const _ = window._;
+
+const nums = [3, 1, 4, 1, 5, 9, 2, 6];
+console.log("去重：", _.uniq(nums));
+console.log("升序：", _.sortBy(nums));
+console.log("最大值：", _.max(nums));
+console.log("求和：", _.sum(nums));
+console.log("奇偶分组：", _.groupBy(nums, (n) => (n % 2 === 0 ? "偶数" : "奇数")));`,
     },
   ],
 

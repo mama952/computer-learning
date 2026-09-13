@@ -653,6 +653,10 @@
       if (usesInput) {
         appendOutput("检测到 input()：浏览器沙箱无法阻塞等待键盘输入，已跳过交互，直接把 input() 当空输入处理。", false);
       }
+      // 自动加载第三方依赖（numpy/pandas/matplotlib 等），用 # pip: 可强制指定
+      const pkgs = extractPyPkgs(code);
+      await ensurePyPackages(py, pkgs);
+      clearOutput();
       const t0 = performance.now();
       await py.runPythonAsync(code);
       appendOutput("执行完成（耗时 " + ((performance.now() - t0) / 1000).toFixed(2) + " 秒）", false);
@@ -669,6 +673,59 @@
       }
     }
     finishRun();
+  }
+
+  /* ---------- Python 依赖自动加载 ----------
+   在线环境也能用第三方库：识别代码里的 import，
+   自动 loadPackages(内置科学栈) 或 micropip(PyPI)。
+   也支持显式指令注释：  # pip: numpy, requests           */
+  const PY_STD_MODULES = new Set([
+    "sys", "os", "math", "random", "json", "re", "time", "datetime", "pathlib",
+    "io", "typing", "string", "textwrap", "collections", "functools", "itertools",
+    "decimal", "fractions", "statistics", "heapq", "bisect", "array", "struct",
+    "subprocess", "sysconfig", "getpass", "socket", "urlib", "http", "sqlite3",
+    "logging", "traceback", "warnings", "copy", "contextlib", "abc", "enum",
+    "dataclasses", "pprint", "glob", "shutil", "tempfile", "hashlib", "secrets",
+    "uuid", "csv", "html", "threading", "queue", "asyncio", "unittest",
+  ]);
+  const PY_PKG = {
+    numpy: "numpy", np: "numpy", pandas: "pandas", pd: "pandas",
+    matplotlib: "matplotlib", scipy: "scipy", sympy: "sympy",
+    requests: "requests", bs4: "beautifulsoup4",
+    PIL: "pillow", cv2: "opencv-python", sklearn: "scikit-learn",
+    statsmodels: "statsmodels", seaborn: "seaborn", plotly: "plotly",
+    networkx: "networkx", nltk: "nltk", pydantic: "pydantic",
+    sqlalchemy: "sqlalchemy", flask: "flask", django: "django",
+    aiohttp: "aiohttp", tqdm: "tqdm", openpyxl: "openpyxl", lxml: "lxml",
+  };
+
+  function extractPyPkgs(code) {
+    const mods = new Set();
+    const re1 = /^\s*import\s+([a-zA-Z_][\w\.]*)/gm;
+    const re2 = /^\s*from\s+([a-zA-Z_][\w\.]*)\s+import/gm;
+    let m;
+    while ((m = re1.exec(code))) mods.add(m[1].split(".")[0]);
+    while ((m = re2.exec(code))) mods.add(m[1].split(".")[0]);
+    const pip = (code.match(/#\s*pip\s*:\s*([^\n]+)/i) || [])[1] || "";
+    if (pip) pip.split(/[,，\s]+/).filter(Boolean).forEach((p) => mods.add(p));
+    const out = [];
+    mods.forEach((mod) => {
+      const pkg = PY_PKG[mod] || mod;
+      if (!PY_STD_MODULES.has(mod) && !out.includes(pkg)) out.push(pkg);
+    });
+    return out;
+  }
+
+  async function ensurePyPackages(py, pkgs) {
+    if (!pkgs.length) return;
+    appendOutput("正在加载 Python 依赖：" + pkgs.join(", ") + " …", false);
+    try {
+      await py.loadPackages(pkgs);
+    } catch (e) {
+      appendOutput("内置未包含，改用 PyPI 安装…", false);
+      await py.micropip.install(pkgs);
+    }
+    appendOutput("依赖已就绪：" + pkgs.join(", "), false);
   }
 
   /* ---------- SQL 在线运行（sql.js / WASM） ---------- */
@@ -743,6 +800,27 @@
     finishRun();
   }
 
+  // 浏览器 JS 模式的外置库：在代码首行写  // cdn: lodash, chart 即可引入
+  const JS_CDN = {
+    lodash: "https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js",
+    dayjs: "https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js",
+    moment: "https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js",
+    axios: "https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js",
+    jquery: "https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js",
+    chart: "https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js",
+    marked: "https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js",
+    three: "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.min.js",
+  };
+  function collectJsCdn(code) {
+    const m = (code || "").match(/\/\/\s*cdn\s*:\s*([^\n]+)/i);
+    if (!m) return "";
+    return m[1]
+      .split(/[,，\s]+/)
+      .filter((lib) => JS_CDN[lib])
+      .map((lib) => '<script src="' + JS_CDN[lib] + '"></script>')
+      .join("");
+  }
+
   function buildRunDoc(code, lang) {
     if (lang === "html" || lang === "htmlcss") {
       // 整个代码作为 HTML 文档
@@ -770,7 +848,8 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
     }
 
     // js / typescript / node
-    return `<!DOCTYPE html><html><head><meta charset='utf-8'></head><body>
+    const cdnTags = collectJsCdn(code);
+    return `<!DOCTYPE html><html><head><meta charset='utf-8'>${cdnTags}</head><body>
 <script>
 (function(){
   var __buf = [];
