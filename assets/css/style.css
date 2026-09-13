@@ -977,6 +977,41 @@ p code {
   border-color: var(--primary);
 }
 
+.lang-select {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--surface);
+  outline: none;
+  max-width: 138px;
+  cursor: pointer;
+  transition: all var(--dur-fast);
+}
+
+.lang-select:hover {
+  background: var(--primary-soft);
+}
+
+.lang-select option {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.eh-lang {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  white-space: nowrap;
+}
+
 .editor-body {
   flex: 1;
   min-height: 0;
@@ -1449,6 +1484,7 @@ html, body {
   .editor-head .eh-title { flex: 1; min-width: 0; }
   .eh-lang { display: none; }
   .tpl-select { max-width: 118px; height: 34px; }
+  .lang-select { max-width: 96px; height: 34px; }
   .run-btn { height: 34px; padding: 0 16px; font-size: 13.5px; }
   .editor-toolbar {
     gap: 6px;

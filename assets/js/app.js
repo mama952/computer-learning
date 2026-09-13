@@ -110,6 +110,27 @@
   /* 本地运行服务状态（run-server.js，仅当通过本地服务器打开时可用） */
   const LOCAL = { available: false, env: null };
 
+  /* ---------- 在线编译器环境切换 ----------
+     SUBJECT_RUN：目录里的语言科目 id → 编辑器可运行语言 key
+     RUN_SUBJECT：可运行语言 key → 科目 id（反向） */
+  const SUBJECT_RUN = {
+    python: "python", javascript: "javascript", typescript: "typescript",
+    htmlcss: "htmlcss", node: "node", sql: "sql", java: "java",
+    "c-lang": "c", cpp: "cpp", csharp: "csharp", go: "go", rust: "rust",
+    shell: "shell", ruby: "ruby", php: "php", dart: "dart", lua: "lua",
+    "r-lang": "r", scala: "scala", julia: "julia",
+  };
+  const RUN_SUBJECT = {};
+  Object.keys(SUBJECT_RUN).forEach((s) => { RUN_SUBJECT[SUBJECT_RUN[s]] = s; });
+  const SUBJECT_LABEL = {
+    python: "Python", javascript: "JavaScript", typescript: "TypeScript",
+    htmlcss: "HTML/CSS", node: "Node.js", sql: "SQL", java: "Java",
+    "c-lang": "C", cpp: "C++", csharp: "C#", go: "Go", rust: "Rust",
+    shell: "Shell", ruby: "Ruby", php: "PHP", dart: "Dart", lua: "Lua",
+    "r-lang": "R", scala: "Scala", julia: "Julia",
+  };
+  const MODE_BADGE = { browser: "浏览器", pyodide: "WASM", sqljs: "WASM", local: "本地", none: "演示" };
+
   /* ---------- DOM ---------- */
   const $ = (sel) => document.querySelector(sel);
   const sidebar = $("#sidebar");
@@ -120,6 +141,8 @@
   const editorPanel = $("#editorPanel");
   const editorTitle = $("#editorTitle");
   const tplSelect = $("#tplSelect");
+  const langSelect = $("#langSelect");
+  const tplCopyBtn = $("#tplCopyBtn");
   const runBtn = $("#runBtn");
   const runBtnText = $("#runBtnText");
   const outBody = $("#outBody");
@@ -203,8 +226,11 @@
   function updateEditorStatus() {
     const l = (currentLang || "javascript").toLowerCase();
     const disp = l === "c++" ? "C++" : l;
-    ehLang.textContent = disp;
+    ehLang.textContent = MODE_BADGE[runModeOf(l)] || disp;
     statusLang.textContent = disp;
+    // 语言环境下拉与当前编辑器语言保持一致
+    const subj = RUN_SUBJECT[l];
+    if (subj && langSelect && langSelect.value !== subj) langSelect.value = subj;
     const m = runModeOf(l);
     if (m === "browser") {
       statusMode.textContent = "在线运行";
@@ -233,28 +259,136 @@
 
   /* ---------- 模板 ---------- */
   let templateOptions = [];
+  let selectedTplIndex = 0;
 
+  // 模板下拉由「空白 + 内置模板(简单/进阶) + 章节模板」合并而成
   function loadTemplates(lang, templates) {
     currentTemplates = templates || [];
     const runnable = runModeOf(lang) !== "none";
-    const placeholder = runnable ? "空白（从零开始）" : "当前为演示代码，不含可编辑模板";
-    templateOptions = [{ name: placeholder, code: null }, ...currentTemplates];
+    const builtin = (window.EDITOR_TEMPLATES || {})[lang] || [];
+    const opts = [];
 
+    if (runnable) opts.push({ name: "空白（从零开始）", code: null, group: "" });
+    builtin.forEach((t) =>
+      opts.push({
+        name: t.name,
+        code: t.code,
+        group: t.level === "complex" ? "进阶" : "简单",
+        builtin: true,
+      })
+    );
+    (currentTemplates || []).forEach((t) =>
+      opts.push({ name: t.name, code: t.code, group: "章节", lesson: true })
+    );
+
+    templateOptions = opts;
+    const groups = ["", "简单", "进阶", "章节"];
     tplSelect.innerHTML = "";
-    templateOptions.forEach((t, i) => {
-      const opt = document.createElement("option");
-      opt.value = String(i);
-      opt.textContent = t.name;
-      tplSelect.appendChild(opt);
+    groups.forEach((g) => {
+      const items = templateOptions.filter((t) => t.group === g);
+      if (!items.length) return;
+      if (g === "") {
+        // 空白（无分组）
+        const opt = document.createElement("option");
+        opt.value = String(templateOptions.indexOf(items[0]));
+        opt.textContent = items[0].name;
+        tplSelect.appendChild(opt);
+      } else {
+        const og = document.createElement("optgroup");
+        og.label = g === "简单" ? "🧩 简单模板" : g === "进阶" ? "🔥 进阶模板" : "📚 章节模板";
+        items.forEach((t) => {
+          const opt = document.createElement("option");
+          opt.value = String(templateOptions.indexOf(t));
+          opt.textContent = t.name;
+          og.appendChild(opt);
+        });
+        tplSelect.appendChild(og);
+      }
     });
-    tplSelect.value = "0";
+    tplSelect.selectedIndex = 0;
+    selectedTplIndex = 0;
+    // 兜底：没有任何可选项时给一个占位
+    if (templateOptions.length === 0) {
+      templateOptions.push({ name: "（该语言暂无模板）", code: null, group: "" });
+      const opt = document.createElement("option");
+      opt.value = "0";
+      opt.textContent = templateOptions[0].name;
+      tplSelect.appendChild(opt);
+    }
+  }
+
+  function applyTemplate(i) {
+    const tpl = templateOptions[i];
+    if (!tpl) return;
+    selectedTplIndex = i;
+    if (tplSelect.value !== String(i)) tplSelect.value = String(i);
+    if (tpl.code != null) setEditorCode(tpl.code, currentLang);
   }
 
   tplSelect.addEventListener("change", () => {
-    const i = parseInt(tplSelect.value, 10);
-    const tpl = templateOptions[i];
-    if (tpl && tpl.code != null) setEditorCode(tpl.code, currentLang);
+    applyTemplate(parseInt(tplSelect.value, 10));
   });
+
+  // 复制当前所选模板（未选具体模板时复制编辑器全部代码）
+  if (tplCopyBtn) {
+    tplCopyBtn.addEventListener("click", () => {
+      const tpl = templateOptions[selectedTplIndex];
+      if (tpl && tpl.code != null) {
+        copyText(tpl.code);
+        showToast("已复制模板「" + tpl.name + "」");
+      } else {
+        ensureEditor();
+        copyText(cm.getValue());
+        showToast("已复制编辑器代码");
+      }
+    });
+  }
+
+  /* ---------- 在线编译器环境切换 ---------- */
+  // 用目录里真实存在的语言科目填充环境下拉框
+  function buildLangSelect() {
+    if (!langSelect) return;
+    const cat = window.LANGUAGE_DATA;
+    const ids = new Set((cat && cat.children || []).map((s) => s.id));
+    langSelect.innerHTML = "";
+    Object.keys(SUBJECT_LABEL).forEach((subjId) => {
+      if (!ids.has(subjId)) return; // 只列出项目里真实存在的语言
+      const opt = document.createElement("option");
+      opt.value = subjId;
+      opt.textContent = SUBJECT_LABEL[subjId];
+      langSelect.appendChild(opt);
+    });
+    langSelect.addEventListener("change", () => {
+      const run = SUBJECT_RUN[langSelect.value] || "javascript";
+      switchEditorLang(run);
+    });
+  }
+
+  function firstSimpleTemplate(lang) {
+    const builtin = (window.EDITOR_TEMPLATES || {})[lang] || [];
+    const s = builtin.find((t) => t.level !== "complex");
+    return (s && s.code) || "";
+  }
+
+  // 切换到某个语言环境：保存旧草稿 → 载入快速开始模板 → 刷新模板下拉
+  function switchEditorLang(runLang) {
+    if (runLang === (currentLang || "javascript").toLowerCase() && cm && cm.getValue()) return;
+    saveDraft(true);
+    const subjId = RUN_SUBJECT[runLang];
+    const rec = findRecord();
+    let lessonTpls = [];
+    if (rec && rec.kind === "lesson" && rec.sub && rec.sub.id === subjId) {
+      lessonTpls = (rec.lesson && rec.lesson.templates) || [];
+    }
+    currentLang = runLang;
+    setEditorCode(firstSimpleTemplate(runLang), runLang);
+    loadTemplates(runLang, lessonTpls);
+    // 让下拉选中「快速开始」模板（若有）
+    const idx = templateOptions.findIndex((t) => t.builtin && t.group === "简单");
+    if (idx > 0) applyTemplate(idx);
+    updateEditorStatus();
+    showEditor();
+  }
 
   /* ---------- 代码高亮（静态展示用） ---------- */
   function escapeHtml(s) {
@@ -2298,6 +2432,7 @@ window.onmessage=(e)=>{ if(e.data&&e.data.__cs==='run'){ document.body.style.css
   } catch (e) {}
   setEditorCode(initCode, "javascript");
   loadTemplates("javascript", []);
+  buildLangSelect(); // 填充语言环境下拉
   render();
   updateEditorStatus();
   clearOutput("点击「运行」查看代码执行结果（支持 JavaScript / HTML / CSS / Python / SQL，更多语言可联动本地编译器）。");
