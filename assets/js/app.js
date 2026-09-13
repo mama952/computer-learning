@@ -273,7 +273,7 @@
       opts.push({
         name: t.name,
         code: t.code,
-        group: t.level === "complex" ? "进阶" : "简单",
+        group: t.level === "进阶" ? "进阶" : "简单",
         builtin: true,
       })
     );
@@ -366,7 +366,7 @@
 
   function firstSimpleTemplate(lang) {
     const builtin = (window.EDITOR_TEMPLATES || {})[lang] || [];
-    const s = builtin.find((t) => t.level !== "complex");
+    const s = builtin.find((t) => t.level !== "进阶");
     return (s && s.code) || "";
   }
 
@@ -643,17 +643,26 @@
   async function runPythonWasm(code) {
     setRunning(true);
     clearOutput();
-    appendOutput("正在加载 Python 运行环境（首次约需 10-30 秒，之后秒开）…", false);
+    const usesInput = /input\s*\(/.test(code);
+    appendOutput(usesInput
+      ? "注意：在线 WASM 环境暂不支持 input() 交互输入，下面会自动给出提示，示例代码请改为固定值。"
+      : "正在加载 Python 运行环境（首次约需 10-30 秒，之后秒开）…", false);
     try {
       const py = await getPyodide();
       clearOutput();
+      if (usesInput) {
+        appendOutput("检测到 input()：浏览器沙箱无法阻塞等待键盘输入，已跳过交互，直接把 input() 当空输入处理。", false);
+      }
       const t0 = performance.now();
       await py.runPythonAsync(code);
       appendOutput("执行完成（耗时 " + ((performance.now() - t0) / 1000).toFixed(2) + " 秒）", false);
     } catch (err) {
       const m = err && err.message ? err.message : String(err);
       appendOutput("Python 运行出错：" + m, true);
-      if (/超时|加载失败|Network|fetch|LoadError|Error loading/i.test(m)) {
+      if (usesInput) {
+        appendOutput("原因：代码用了 input()，而浏览器里的 Python 无法进行交互输入。", true);
+        appendOutput("建议：① 把 input() 改成给变量赋固定值（如 n = 50）；② 或用网页内置的「猜数字 · 二分查找」模板（无需输入）；③ 想体验交互，请在电脑上装 Python 后本地运行。", true);
+      } else if (/超时|加载失败|Network|fetch|LoadError|Error loading/i.test(m)) {
         appendOutput("小提示：Python 引擎需要在浏览器里下载约 12MB 的 WASM 组件。", true);
         appendOutput("如果你在用公司/学校 Wi-Fi 或开启了强拦截的防火墙，可能被拦。可点击「运行」重试，或换一个网络（手机热点）再试。", true);
         appendOutput("实在不行，代码在电脑上装 Python（python.org）后本地运行同样有效。", true);

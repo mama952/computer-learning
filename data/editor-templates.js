@@ -33,27 +33,27 @@ print("整除：", a // b)
 print("取余：", a % b)`,
     },
     {
-      name: "猜数字游戏",
+      name: "猜数字 · 二分查找算法",
       level: "进阶",
-      code: `import random
+      code: `# 在线环境无法做交互键盘输入，这里演示猜数字游戏的
+# 核心算法——二分查找：让程序自动在 1~100 里猜出秘密数
+import random
 
-target = random.randint(1, 100)
-print("我心中想了一个 1~100 的数，你来猜！")
+secret = random.randint(1, 100)
+low, high = 1, 100
+tries = 0
 
-while True:
-    try:
-        guess = int(input("请输入你的猜测："))
-    except ValueError:
-        print("请输入一个整数！")
-        continue
-
-    if guess < target:
-        print("太小了，再大一点。")
-    elif guess > target:
-        print("太大了，再小一点。")
+while low <= high:
+    mid = (low + high) // 2     # 每次都猜区间正中间
+    tries += 1
+    print(f"第 {tries} 次：猜 {mid}")
+    if mid == secret:
+        print(f"猜中！秘密数字是 {mid}，共用了 {tries} 次。")
+        break
+    elif mid < secret:
+        low = mid + 1           # 猜小了 → 缩小到右半边
     else:
-        print("恭喜，猜中了！")
-        break`,
+        high = mid - 1          # 猜大了 → 缩小到左半边`,
     },
     {
       name: "学生成绩统计",
