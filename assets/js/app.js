@@ -724,7 +724,9 @@
       await py.loadPackages(pkgs);
     } catch (e) {
       appendOutput("内置未包含，改用 PyPI 安装…", false);
-      await py.micropip.install(pkgs);
+      const micropip = py.pyimport ? py.pyimport("micropip") : py.micropip;
+      if (!micropip) throw new Error("无法加载依赖安装器 micropip，请在电脑上本地运行");
+      await micropip.install(pkgs);
     }
     appendOutput("依赖已就绪：" + pkgs.join(", "), false);
   }
