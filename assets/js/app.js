@@ -25,6 +25,7 @@
     window.CS_ADVANCED,
     window.CS_PROJECT_ENG,
     window.CS_FRONTEND_ENG,
+    window.CS_CORE_DEEP,
     window.TOOLCHAIN,
     window.ERRORS_DATA,
     window.COOKBOOK_DATA,
